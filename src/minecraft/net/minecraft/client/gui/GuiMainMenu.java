@@ -4,6 +4,7 @@ import me.skrilled.ui.alt.GuiAltLogin;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +17,6 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
     int i = 1;
     boolean isMouseHover;
     int bAlpha = 75;
-    ResourceLocation resourceLocation;
 
     public void initGui() {
         int interval = 30;
@@ -48,9 +48,8 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int j = this.height / 2 ;
-        resourceLocation = new ResourceLocation("skrilled/bg/Image" + i + ".jpg");
         int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
-        RenderUtil.drawCustomImage(0, 0, width, height, resourceLocation);
+        RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i-1));
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
         sense.getFontBuffer().font36.drawStringWithShadow(sense.skrilledSense(), 30, j-90, new Color(68, 137, 204).getRGB());

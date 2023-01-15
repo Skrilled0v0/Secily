@@ -22,6 +22,7 @@ import net.minecraft.client.gui.achievement.GuiAchievement;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.gui.stream.GuiStreamUnavailable;
 import net.minecraft.client.main.GameConfiguration;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.multiplayer.ServerData;
@@ -778,8 +779,16 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
 
     }
-
+    boolean bginit = false;
     private void runGameLoop() throws IOException {
+        if(!bginit){
+            for (int i = 1; ; i++) {
+                if (i == 69) break;
+                ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".jpg");
+                Main.bgs.add(r1);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
+            }
+        }
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");
 

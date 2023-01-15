@@ -9,6 +9,7 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import me.skrilled.SenseHeader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
 
 import java.io.File;
@@ -17,9 +18,12 @@ import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    public static ArrayList<ResourceLocation> bgs = new ArrayList<ResourceLocation>();
+
     public static void main(String[] p_main_0_) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         OptionParser optionparser = new OptionParser();

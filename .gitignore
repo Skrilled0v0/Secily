@@ -1,2 +1,11 @@
 # 项目排除路径
-/eclipse/Client/bin/
+.idea
+.gitignore
+*.iml
+bin
+conf
+eclipse
+jars
+lib
+logs
+temp
