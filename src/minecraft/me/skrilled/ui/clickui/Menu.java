@@ -17,7 +17,6 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Collection;
 
 public class Menu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
@@ -43,7 +42,7 @@ public class Menu extends GuiScreen implements IMC {
     boolean clickDag = false;           //初始化点击判定布尔
     int modulePageIndex = 1;              //初始化页码
     int maxWCount = 3;                    //每行最多编辑区
-    int maxHCount = 2;                    //最多行数
+
     float[] modulePosInfo = {posX + moduleLRMargin, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth, posY + moduleUDMargin + moduleBoxHeight + upSide};
 
     /*
