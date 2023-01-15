@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class ModuleHeader implements IMC {
+    public float[] modulePosInfo = new float[]{0,0,0,0};
     String moduleName;
     String suffix = "";
     boolean isOpen;

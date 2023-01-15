@@ -50,9 +50,9 @@ public class Main {
         OptionSpec<String> optionspec11 = optionparser.accepts("accessToken").withRequiredArg().required();
         OptionSpec<String> optionspec12 = optionparser.accepts("version").withRequiredArg().required();
         OptionSpec<Integer> optionspec13 = optionparser.accepts("width").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(854));
+                .defaultsTo(Integer.valueOf(1920));
         OptionSpec<Integer> optionspec14 = optionparser.accepts("height").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(480));
+                .defaultsTo(Integer.valueOf(1080));
         OptionSpec<String> optionspec15 = optionparser.accepts("userProperties").withRequiredArg().defaultsTo("{}"
         );
         OptionSpec<String> optionspec16 = optionparser.accepts("profileProperties").withRequiredArg().defaultsTo("{}"

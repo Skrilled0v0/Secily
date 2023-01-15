@@ -17,6 +17,7 @@ import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Menu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
@@ -40,10 +41,13 @@ public class Menu extends GuiScreen implements IMC {
     int upSide = 50;                    //初始化上标题高度
     int downSide = 25;                  //初始化下标题高度
     boolean clickDag = false;           //初始化点击判定布尔
-    int modulePageIndex = 1;              //初始化页码
-    int maxWCount = 3;                    //每行最多编辑区
+    int modulePageIndex = 1;            //初始化页码
+    int maxWCount = 3;                  //每行最多编辑区
+    float pageNumBarX = 32.0f;               //初始化页码标签宽度
+    float pageNumBarY = 18;               //初始化页码标签高度
+    float pageNumBarInterval = 16.0f;          //初始化页码标签间距
+    ArrayList<pageNumBar> pageNumBars = new ArrayList<pageNumBar>();
 
-    float[] modulePosInfo = {posX + moduleLRMargin, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth, posY + moduleUDMargin + moduleBoxHeight + upSide};
 
     /*
     绘制开始
@@ -89,27 +93,64 @@ public class Menu extends GuiScreen implements IMC {
             if (moduleType == currentModuleType) {
                 RenderUtil.drawRound(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor, typeBoxColor);
                 minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
-                int drawCount = 0;
                  /*
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
                  */
-                for (ModuleHeader moduleHeader : sense.getModuleManager().getModuleListByModuleType(moduleType)) {
+                ArrayList<ModuleHeader> moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
 
-                    if (drawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size())
-                        modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * drawCount, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * drawCount, posY + moduleUDMargin + moduleBoxHeight + upSide};
-                    if (drawCount>=maxWCount)
-                        modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (drawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (drawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
-                    RenderUtil.drawRound(modulePosInfo[0], modulePosInfo[1], modulePosInfo[2], modulePosInfo[3], moduleBGColor, moduleBGColor);
-                    midFont.drawCenteredString(moduleHeader.getModuleName(), modulePosInfo[0] + moduleBoxWidth / 2f, modulePosInfo[1], -1);
-                    drawCount++;
-                    if (drawCount>=(maxWCount*maxWCount)) {
-                        modulePageIndex += 1;//绘制到第七个编辑区时重置计数器并将页码+1
+                    /*
+                    两if计算每个module的绘制位置
+                     */
+                for (int i = 0; i < moduleHeaders.size(); i++) {
+                    ModuleHeader moduleHeader = moduleHeaders.get(i);
+                    int nDrawCount = (i % 6);
+                    if (nDrawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
+
+                        moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + moduleBoxHeight + upSide};
                     }
-
+                    if (nDrawCount >= maxWCount) {
+                        moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
+                    }
                 }
-
-            }
-            GlStateManager.color(1, 1, 1, 0.5f);
+                /*
+                绘制module层
+                 */
+                for (int i = 0; i < moduleHeaders.size(); i++) {
+                    ModuleHeader moduleHeader = moduleHeaders.get(i);
+                    RenderUtil.drawRound(moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3], moduleBGColor, moduleBGColor);
+                    midFont.drawCenteredString(moduleHeaders.get(i).getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
+                }
+                /*
+                计算当前Module类型一共多少页
+                 */
+                float modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
+                /*
+                绘制页码标签
+                 */
+                float[] fstPageBarPos = new float[4];
+                fstPageBarPos[0] = posX + (windowWidth / 2) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
+                fstPageBarPos[1] = posY + windowHeight - (downSide / 2) - (pageNumBarY / 2);
+                fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
+                fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
+                pageNumBars = new ArrayList<pageNumBar>();
+                pageNumBars.add(new pageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3]));
+                for (int i = 0; i < modulePageMAXIndex; i++) {
+                    if (i != 0) {
+                        float[] P = new float[4];
+                        P[0] = fstPageBarPos[0] + (i * (pageNumBarX + pageNumBarInterval));
+                        P[1] = fstPageBarPos[1];
+                        P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
+                        P[3] = fstPageBarPos[3];
+                        pageNumBars.add(new pageNumBar(P[0], P[1], P[2], P[3]));
+                    }
+                }
+                for (int i = 0; i < modulePageMAXIndex; i++) {
+                    RenderUtil.drawRound(pageNumBars.get(i).x1, pageNumBars.get(i).y1, pageNumBars.get(i).x2, pageNumBars.get(i).y2, moduleBGColor, moduleBGColor);
+                    midFont.drawCenteredString(String.valueOf(i + 1), pageNumBars.get(i).x1 + pageNumBarX / 2f, pageNumBars.get(i).y1 + 2.0f, -1);
+                    fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
+                    fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
+                }
+            } GlStateManager.color(1, 1, 1, 0.5f);
             RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
             xAxis += moduleTypeInterval + typeSideSize;
         }
