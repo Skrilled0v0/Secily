@@ -133,7 +133,7 @@ public class Menu extends GuiScreen implements IMC {
                 fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
                 fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
                 pageNumBars = new ArrayList<pageNumBar>();
-                pageNumBars.add(new pageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3]));
+                pageNumBars.add(new pageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3], 1));
                 for (int i = 0; i < modulePageMAXIndex; i++) {
                     if (i != 0) {
                         float[] P = new float[4];
@@ -141,7 +141,7 @@ public class Menu extends GuiScreen implements IMC {
                         P[1] = fstPageBarPos[1];
                         P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
                         P[3] = fstPageBarPos[3];
-                        pageNumBars.add(new pageNumBar(P[0], P[1], P[2], P[3]));
+                        pageNumBars.add(new pageNumBar(P[0], P[1], P[2], P[3], i));
                     }
                 }
                 for (int i = 0; i < modulePageMAXIndex; i++) {
@@ -150,7 +150,8 @@ public class Menu extends GuiScreen implements IMC {
                     fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                     fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                 }
-            } GlStateManager.color(1, 1, 1, 0.5f);
+            }
+            GlStateManager.color(1, 1, 1, 0.5f);
             RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
             xAxis += moduleTypeInterval + typeSideSize;
         }
