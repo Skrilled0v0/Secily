@@ -177,7 +177,6 @@ public class Menu extends GuiScreen implements IMC {
         }
         for (PageNumBar page : PageNumBars) {
             if (mouseX > page.x1 && mouseY > page.y1 && mouseX < page.x2 && mouseY < page.y2) {
-                sense.printINFO( page.num);
                 currentPage = page.num;
             }
         }
