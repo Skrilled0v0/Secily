@@ -10,6 +10,8 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.BoundedAnimation;
+import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -35,7 +37,6 @@ public class Menu extends GuiScreen implements IMC {
     int posY = 0;                       //初始化窗口定位y轴
     int posInClickX;                    //初始化点击拖动定位x轴
     int posInClickY;                    //初始化点击拖动定位y轴
-    int windowAlpha = 125;              //初始化透明值
     int windowWidth = 650;              //初始化窗口宽度
     int windowHeight = 425;             //初始化窗口高度
     int upSide = 50;                    //初始化上标题高度
@@ -46,19 +47,24 @@ public class Menu extends GuiScreen implements IMC {
     float pageNumBarY = 18;               //初始化页码标签高度
     float pageNumBarInterval = 16.0f;          //初始化页码标签间距
     int currentPage = 1;//初始页码
+    int alphaMax = 255;
+    int alphaMin = 30;
+    float alphaSpeed = 1800f;
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-
+    BoundedAnimation windowAlpha = new BoundedAnimation(alphaMin, alphaMax, alphaSpeed, false, Easing.LINEAR);
     ArrayList<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
+    int theAlpha = 0;
+    //初始化透明值
 
     /*
     绘制开始
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int bcColor = new Color(175, 175, 175, windowAlpha).getRGB();       //定义背景颜色局部变量
-        int titleColor = new Color(52, 81, 129, windowAlpha).getRGB();      //定义标题背景颜色局部变量
-        int moduleBGColor = new Color(240, 240, 240, windowAlpha).getRGB(); //定义Module背景颜色局部变量
-        int typeBoxColor = new Color(94, 164, 255, windowAlpha).getRGB();
+        int bcColor = new Color(175, 175, 175, theAlpha).getRGB();       //定义背景颜色局部变量
+        int titleColor = new Color(52, 81, 129, theAlpha).getRGB();      //定义标题背景颜色局部变量
+        int moduleBGColor = new Color(240, 240, 240, theAlpha).getRGB(); //定义Module背景颜色局部变量
+        int typeBoxColor = new Color(94, 164, 255, theAlpha).getRGB();
         int width = posX + windowWidth;                                             //更新窗口宽度
         int height = posY + windowHeight;                                           //更新窗口高度
         CFontRenderer minFont = sense.getFontBuffer().font16;
@@ -66,12 +72,15 @@ public class Menu extends GuiScreen implements IMC {
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */
+        theAlpha = (int) windowAlpha.getAnimationValue();
         if (Mouse.isButtonDown(0)) {
-            if (windowAlpha < 200) {
-                windowAlpha++;
+            windowAlpha.setState(true);
+            theAlpha = (int) windowAlpha.getAnimationValue();
+            if (windowAlpha.getAnimationValue() == 100) {
+                windowAlpha.setState(false);
             }
-        } else if (windowAlpha > 125) {
-            windowAlpha--;
+        } else {
+            windowAlpha.setState(false);
         }
         /*
         在mouseClicked方法中判断鼠标点击事件的触发
@@ -116,7 +125,7 @@ public class Menu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
-                for (int i = 6*(currentPage-1) ; i<((currentPage*6)<moduleHeaders.size()?(currentPage*6):moduleHeaders.size());i++) {
+                for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
                     ModuleHeader moduleHeader = moduleHeaders.get(i);
                     RenderUtil.drawRound(moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3], moduleBGColor, moduleBGColor);
                     midFont.drawCenteredString(moduleHeader.getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
@@ -142,7 +151,7 @@ public class Menu extends GuiScreen implements IMC {
                         P[1] = fstPageBarPos[1];
                         P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
                         P[3] = fstPageBarPos[3];
-                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i+1));
+                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i + 1));
                     }
                 }
                 for (int i = 0; i < modulePageMAXIndex; i++) {

@@ -10,6 +10,8 @@ import com.darkmagician6.eventapi.EventManager;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
+import me.surge.animation.Animation;
+import me.surge.animation.Easing;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class ModuleHeader implements IMC {
     ArrayList<ValueHeader> valueList;
     int key;
     ModuleType moduleType;
-
+    Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
 
     public ModuleHeader(String moduleName, boolean isOpen, ModuleType moduleType) {
         this.valueList = new ArrayList<>();
@@ -33,7 +35,6 @@ public class ModuleHeader implements IMC {
         this.isOpen = isOpen;
         this.moduleType = moduleType;
     }
-
 
 
     public Object getValue(ValueHeader valueHeader) {
@@ -72,11 +73,13 @@ public class ModuleHeader implements IMC {
 
     public void setIsOpen(boolean isOpen) {
         this.isOpen = isOpen;
+        arrayWidth.setState(isOpen);
         if (isOpen) this.onOpen();
         else this.isNotOpen();
         if (!moduleName.equals("SettingMenu"))
             SenseHeader.getSense.printINFO(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"));
     }
+
 
     public String getSuffix() {
         return suffix;
@@ -88,6 +91,10 @@ public class ModuleHeader implements IMC {
 
     public void toggle() {
         setIsOpen(!isOpen);
+    }
+
+    public Animation getArrayWidth() {
+        return arrayWidth;
     }
 
     public ArrayList<ValueHeader> getValueList() {

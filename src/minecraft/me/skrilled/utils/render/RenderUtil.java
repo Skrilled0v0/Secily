@@ -4,6 +4,8 @@ import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
+import me.surge.animation.Animation;
+import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -33,6 +35,7 @@ public class RenderUtil implements IMC {
     private static final Consumer<Integer> DISABLE_CLIENT_STATE;
     private static final Map<Integer, Boolean> glCapMap = new HashMap<>();
     public static Tessellation tessellator;
+    static Animation nametagHP = new Animation(1000f, true, Easing.LINEAR);
 
     static {
         tessellator = Tessellation.createExpanding(4, 1.0f, 2.0f);
@@ -141,6 +144,7 @@ public class RenderUtil implements IMC {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
+
     public static void drawCircle(float x, float y, float radius, int color) {
         float alpha = (color >> 24 & 0xFF) / 255.0F;
         float red = (color >> 16 & 0xFF) / 255.0F;
@@ -229,7 +233,6 @@ public class RenderUtil implements IMC {
         GL11.glDisable(3042);
         GL11.glEnable(2929);
     }
-
 
 
     public static void drawEntityOnScreen(int p_147046_0_, int p_147046_1_, int Size, float Yaw, float pitch, EntityLivingBase e) {
@@ -698,6 +701,7 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawNameTag(EntityLivingBase entity) {
+
         CFontRenderer font = sense.getFontBuffer().font36;
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
@@ -724,7 +728,8 @@ public class RenderUtil implements IMC {
         setGLCap(2929, false);
         setGLCap(3042, true);
         GL11.glBlendFunc(770, 771);
-        drawBorderedRectNameTag(rectPos[0], rectPos[1], rectPos[2], rectPos[3],2,new Color(0, 0, 0, 70).getRGB());
+        drawBorderedRectNameTag(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 2, new Color(0, 0, 0, 70).getRGB());
+
         drawRect(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], Color.green.getRGB());
         font.drawStringWithShadow(entityDisplayName, -nameWidth, -fontHeight + 3, -1);
         if (isPlayer) {//判断是玩家继续画ItemList

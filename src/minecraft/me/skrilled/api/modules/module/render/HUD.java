@@ -40,15 +40,14 @@ public class HUD extends ModuleHeader {
         if ((Boolean) this.getValue(malist)) {
             ArrayList<ModuleHeader> sortedList = new ArrayList<>();
             for (ModuleHeader moduleHeader : sense.getModuleManager().mList)
-                if (moduleHeader.isIsOpen()&&moduleHeader.isCanView())
-                    sortedList.add(moduleHeader);
+                if (moduleHeader.isCanView()) sortedList.add(moduleHeader);
 
 
             sortedList.sort(Comparator.comparingInt(module -> -arrayFont.getStringWidth(module.getModuleDisplay())));
             int yAxis = 5;
             for (ModuleHeader moduleHeader : sortedList) {
-                arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w-5 - arrayFont.getStringWidth(moduleHeader.getModuleDisplay()), yAxis, -1);
-                yAxis += arrayFont.getHeight(false);
+                arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w - moduleHeader.getArrayWidth().getAnimationFactor() * (arrayFont.getStringWidth(moduleHeader.getModuleDisplay()) + 5), yAxis, -1);
+                yAxis += arrayFont.getHeight(false) * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
 
