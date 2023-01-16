@@ -110,6 +110,12 @@ public class Menu extends GuiScreen implements IMC {
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
                  */
                 moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
+                /*
+                防止从已经翻到第n页后切换module类型导致而页码未重置导致的显示bug
+                 */
+                if (6 * (currentPage - 1) >= (moduleHeaders.size() - 1) && currentPage > 1) {
+                    currentPage = 1;
+                }
 
                     /*
                     两if计算每个module的绘制位置
@@ -143,7 +149,7 @@ public class Menu extends GuiScreen implements IMC {
                  */
                 int modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
                 /*
-                绘制页码标签
+                计算页码标签坐标
                  */
                 float[] fstPageBarPos = new float[4];
                 fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
@@ -162,6 +168,9 @@ public class Menu extends GuiScreen implements IMC {
                         PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i + 1));
                     }
                 }
+                /*
+                绘制页码标签
+                 */
                 for (int i = 0; i < modulePageMAXIndex; i++) {
                     RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
                     midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
