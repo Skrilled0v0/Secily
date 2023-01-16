@@ -177,7 +177,7 @@ public class Menu extends GuiScreen implements IMC {
                 计算页码标签坐标
                  */
                     float[] fstPageBarPos = new float[4];
-                    fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
+                    fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2f) * pageNumBarX) - (((modulePageMAXIndex / 2f) - 0.5f) * pageNumBarInterval);
                     fstPageBarPos[1] = posY + windowHeight - (downSide / 2f) - (pageNumBarY / 2);
                     fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
                     fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
