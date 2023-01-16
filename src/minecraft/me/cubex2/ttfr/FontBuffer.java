@@ -7,6 +7,7 @@ import java.awt.*;
 import java.io.InputStream;
 
 public class FontBuffer implements IMC {
+    public CFontRenderer font10 = this.getFont("font", 10, true);
     public CFontRenderer font16 = this.getFont("font", 16, true);
     public CFontRenderer font18 = this.getFont("font", 18, true);
     public CFontRenderer font24 = this.getFont("font", 24, true);

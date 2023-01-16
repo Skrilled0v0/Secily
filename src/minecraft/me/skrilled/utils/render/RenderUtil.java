@@ -701,7 +701,6 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawNameTag(EntityLivingBase entity) {
-
         CFontRenderer font = sense.getFontBuffer().font36;
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
@@ -724,68 +723,20 @@ public class RenderUtil implements IMC {
         GL11.glRotatef(-RenderManager.playerViewY, 0.0F, 1.0F, 0.0F);//转向
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-autoScale, -autoScale, autoScale);                    //调整大小
-        setGLCap(2896, false);
-        setGLCap(2929, false);
-        setGLCap(3042, true);
         GL11.glBlendFunc(770, 771);
-        drawBorderedRectNameTag(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 2, new Color(0, 0, 0, 70).getRGB());
-        GL11.glColor4f(1, 1, 1, 0);
-        drawBorderedRectNameTag(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], 1, Color.green.getRGB());
-        GL11.glColor4f(1, 1, 1, 0);
+        GL11.glPushMatrix();
+        drawRect(rectPos[0], rectPos[1], rectPos[2], rectPos[3], new Color(0, 0, 0, 70).getRGB());
+        drawRect(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], Color.green.getRGB());
+        GL11.glPopMatrix();
+        GL11.glPushMatrix();
         font.drawStringWithShadow(entityDisplayName, -nameWidth, -fontHeight + 3, -1);
-        GL11.glColor4f(1, 1, 1, 0);
+        GL11.glPopMatrix();
         if (isPlayer) {//判断是玩家继续画ItemList
             GL11.glScaled(1.5, 1.5, 1.5);
             drawPlayerArmorList((EntityPlayer) entity, -nameWidth / 2 - 10, -fontHeight * 2 + 5, nameWidth / 4, false);
         }
         GL11.glColor4f(1, 1, 1, 0);
-        revertAllCaps();
         GL11.glPopMatrix();
-    }
-
-    public void theFuckOpGLFix() {
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
-    }
-
-    public static void revertAllCaps() {
-        for (Integer integer : glCapMap.keySet()) {
-            int cap = integer;
-            revertGLCap(cap);
-        }
-    }
-
-    public static void revertGLCap(int cap) {
-        Boolean origCap = glCapMap.get(cap);
-        if (origCap != null) {
-            if (origCap) {
-                GL11.glEnable(cap);
-            } else {
-                GL11.glDisable(cap);
-            }
-        }
-    }
-
-    public static void setGLCap(int cap, boolean flag) {
-        glCapMap.put(cap, GL11.glGetBoolean(cap));
-        if (flag) {
-            GL11.glEnable(cap);
-        } else {
-            GL11.glDisable(cap);
-        }
     }
 
     public static void drawPlayerArmorList(EntityPlayer entityPlayer, int x, int y, int /*间隔*/interval, boolean /*是/否纵向绘制*/vORh) {
@@ -848,11 +799,11 @@ public class RenderUtil implements IMC {
         final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
         final float f3 = (col1 >> 8 & 0xFF) / 255.0f;
         final float f4 = (col1 & 0xFF) / 255.0f;
+        GL11.glPushMatrix();
         GL11.glEnable(3042);
         GL11.glDisable(3553);
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(2848);
-        GL11.glPushMatrix();
         GL11.glColor4f(f2, f3, f4, f);
         GL11.glLineWidth(l1);
         GL11.glBegin(1);
@@ -865,9 +816,9 @@ public class RenderUtil implements IMC {
         GL11.glVertex2d(x, y2);
         GL11.glVertex2d(x2, y2);
         GL11.glEnd();
-        GL11.glPopMatrix();
         GL11.glEnable(3553);
         GL11.glDisable(3042);
         GL11.glDisable(2848);
+        GL11.glPopMatrix();
     }
 }

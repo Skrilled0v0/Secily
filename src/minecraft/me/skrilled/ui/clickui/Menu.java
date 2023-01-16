@@ -8,6 +8,7 @@ package me.skrilled.ui.clickui;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
+import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
@@ -56,24 +58,25 @@ public class Menu extends GuiScreen implements IMC {
     List<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
     int windows_Alpha = 0;    //初始窗口背景化透明值
     int module_Alpha = 0;        //初始Module背景透明质
-
+    boolean closeed;
 
     /*
     绘制开始
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        float scale = (float) MenuMotion.getMenuMotion().getAnimationFactor();
         int bcColor = new Color(175, 175, 175, windows_Alpha).getRGB();         //定义背景颜色局部变量
         int titleColor = new Color(52, 81, 129, windows_Alpha).getRGB();        //定义标题背景颜色局部变量
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
         int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
-//        int moduleColor = new Color(205, 174, 161, 175).getRGB();                    //Module颜色-背景暗色
+//        int moduleColor = new Color(205, 174, 161, 175).getRGB();                     //Module颜色-背景暗色
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
         int moduleColor = new Color(74, 38, 255, 130).getRGB();
-        int width = posX + windowWidth;                                             //更新窗口宽度
-        int height = posY + windowHeight;                                           //更新窗口高度
+        int width = posX + windowWidth;                                 //更新窗口宽度
+        int height = posY + windowHeight;                               //更新窗口高度
         CFontRenderer minFont = sense.fontBuffer.font16;
         CFontRenderer midFont = sense.fontBuffer.font24;
         CFontRenderer valueFont = sense.fontBuffer.font18;
@@ -97,111 +100,118 @@ public class Menu extends GuiScreen implements IMC {
             posX = mouseX - posInClickX;
             posY = mouseY - posInClickY;
         }
+        GlStateManager.pushMatrix();
         //背景
+        GL11.glScaled(scale, scale, 1);
         RenderUtil.drawRound(posX, posY, width, height, bcColor, bcColor);
         //上标题背景
         RenderUtil.drawRound(posX, posY, width, posY + upSide, titleColor, titleColor);
         //下标题背景
         RenderUtil.drawRound(posX, posY + windowHeight - downSide, width, posY + windowHeight, titleColor, titleColor);
-        float xAxis = 0;
-        for (ModuleType moduleType : ModuleType.values()) {
-            //通过x坐标+(窗口宽度-绘制ModuleType选择区的宽度)/2的算法进行遍历，计算ModuleType图标绘制区域坐标
-            float[] moduleTypePosInfo = {posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
-            if (moduleType == currentModuleType) {
-                RenderUtil.drawRound(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor, typeBoxColor);
-                minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
+        GlStateManager.popMatrix();
+        if (MenuMotion.getMenuMotion().getAnimationFactor() == 1) {
+            float xAxis = 0;
+            for (ModuleType moduleType : ModuleType.values()) {
+                //通过x坐标+(窗口宽度-绘制ModuleType选择区的宽度)/2的算法进行遍历，计算ModuleType图标绘制区域坐标
+                float[] moduleTypePosInfo = {posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
+                if (moduleType == currentModuleType) {
+                    RenderUtil.drawRound(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor, typeBoxColor);
+                    minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
                  /*
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
                  */
-                moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
+                    moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
                 /*
                 防止从已经翻到第n页后切换module类型导致而页码未重置导致的显示bug
                  */
-                if (6 * (currentPage - 1) >= (moduleHeaders.size() - 1) && currentPage > 1) {
-                    currentPage = 1;
-                }
+                    if (6 * (currentPage - 1) >= (moduleHeaders.size() - 1) && currentPage > 1) {
+                        currentPage = 1;
+                    }
 
                     /*
                     两if计算每个module的绘制位置
                      */
-                for (int i = 0; i < moduleHeaders.size(); i++) {
-                    ModuleHeader moduleHeader = moduleHeaders.get(i);
-                    int nDrawCount = (i % 6);
-                    if (nDrawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
+                    for (int i = 0; i < moduleHeaders.size(); i++) {
+                        ModuleHeader moduleHeader = moduleHeaders.get(i);
+                        int nDrawCount = (i % 6);
+                        if (nDrawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
 
-                        moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + moduleBoxHeight + upSide};
+                            moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + moduleBoxHeight + upSide};
+                        }
+                        if (nDrawCount >= maxWCount) {
+                            moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
+                        }
+
+
                     }
-                    if (nDrawCount >= maxWCount) {
-                        moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
-                    }
-
-
-                }
                 /*
                 绘制module层
                  */
 
-                for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
-                    int moduleCurrentBGColor = 1;
-                    ModuleHeader modules = moduleHeaders.get(i);
-                    if (Mouse.isButtonDown(0) && modules.menuFlag) {
-                        moduleAlpha.setState(true);
-                        module_Alpha = (int) moduleAlpha.getAnimationValue();
-                    } else moduleAlpha.setState(false);
-                    moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
-                    RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], modules.menuFlag ? moduleCurrentBGColor : moduleBGColor, modules.menuFlag ? moduleCurrentBGColor : moduleBGColor);
-                    bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                    for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
+                        int moduleCurrentBGColor;
+                        ModuleHeader modules = moduleHeaders.get(i);
+                        if (Mouse.isButtonDown(0) && modules.menuFlag) {
+                            moduleAlpha.setState(true);
+                            module_Alpha = (int) moduleAlpha.getAnimationValue();
+                        } else moduleAlpha.setState(false);
+                        moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
+                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], modules.menuFlag ? moduleCurrentBGColor : moduleBGColor, modules.menuFlag ? moduleCurrentBGColor : moduleBGColor);
+                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
                 /*
                 Values绘制
                  */
-                    int yAxsi = 0;
-
-                    for (ValueHeader valueHeader : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
-                        String valueStr = valueHeader.getValueName() + ":";
-                        midFont.drawString(valueStr, modules.modulePosInfo[0] + 20, modules.modulePosInfo[1] + yAxsi, valueFontColor);
-                        yAxsi += (valueListUDInterval + midFont.getHeight(false));
+                        int yAxsi = 0;
+                        for (ValueHeader valueHeader : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                            String valueStr = valueHeader.getValueName() + ":";
+                            midFont.drawString(valueStr, modules.modulePosInfo[0] + 20, modules.modulePosInfo[1] + yAxsi + bigFont.getHeight(false), valueFontColor);
+                            yAxsi += (valueListUDInterval + midFont.getHeight(false));
+                        }
                     }
-                }
 
                 /*
                 计算当前Module类型一共多少页
                  */
-                int modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
+                    int modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
                 /*
                 计算页码标签坐标
                  */
-                float[] fstPageBarPos = new float[4];
-                fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
-                fstPageBarPos[1] = posY + windowHeight - (downSide / 2f) - (pageNumBarY / 2);
-                fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
-                fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
-                PageNumBars = new ArrayList<>();
-                PageNumBars.add(new PageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3], 1));
-                for (int i = 0; i < modulePageMAXIndex; i++) {
-                    if (i != 0) {
-                        float[] P = new float[4];
-                        P[0] = fstPageBarPos[0] + (i * (pageNumBarX + pageNumBarInterval));
-                        P[1] = fstPageBarPos[1];
-                        P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
-                        P[3] = fstPageBarPos[3];
-                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i + 1));
+                    float[] fstPageBarPos = new float[4];
+                    fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
+                    fstPageBarPos[1] = posY + windowHeight - (downSide / 2f) - (pageNumBarY / 2);
+                    fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
+                    fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
+                    PageNumBars = new ArrayList<>();
+                    PageNumBars.add(new PageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3], 1));
+                    for (int i = 0; i < modulePageMAXIndex; i++) {
+                        if (i != 0) {
+                            float[] P = new float[4];
+                            P[0] = fstPageBarPos[0] + (i * (pageNumBarX + pageNumBarInterval));
+                            P[1] = fstPageBarPos[1];
+                            P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
+                            P[3] = fstPageBarPos[3];
+                            PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i + 1));
+                        }
                     }
-                }
                 /*
                 绘制页码标签
                  */
-                for (int i = 0; i < modulePageMAXIndex; i++) {
-                    RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
-                    midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
-                    fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
-                    fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
+                    for (int i = 0; i < modulePageMAXIndex; i++) {
+                        RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
+                        midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
+                        fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
+                        fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
+                    }
                 }
+                GlStateManager.color(1, 1, 1, 0.5f);
+                RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
+                xAxis += moduleTypeInterval + typeSideSize;
             }
-            GlStateManager.color(1, 1, 1, 0.5f);
-            RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
-            xAxis += moduleTypeInterval + typeSideSize;
         }
-
+        if (closeed) {
+            if (MenuMotion.getMenuMotion().getAnimationFactor() == 0)
+                IMC.mc.displayGuiScreen(null);
+        }
     }
 
     @Override
@@ -238,5 +248,12 @@ public class Menu extends GuiScreen implements IMC {
         super.mouseReleased(mouseX, mouseY, state);
     }
 
-
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == 1) {
+            closeed = true;
+            sense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
+        }
+        super.keyTyped(typedChar, keyCode);
+    }
 }

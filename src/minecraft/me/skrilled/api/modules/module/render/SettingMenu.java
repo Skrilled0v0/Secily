@@ -7,10 +7,11 @@ package me.skrilled.api.modules.module.render;
 
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.ui.clickui.Menu;
+import me.skrilled.ui.clickui.MenuMotion;
 import org.lwjgl.input.Keyboard;
 
 public class SettingMenu extends ModuleHeader {
-    Menu menu = new Menu();
+    public static Menu menu = new Menu();
 
     public SettingMenu() {
         super("SettingMenu", false, ModuleType.RENDER);
@@ -21,8 +22,14 @@ public class SettingMenu extends ModuleHeader {
 
     @Override
     public void onOpen() {
-        mc.displayGuiScreen(menu);
-        this.toggle();
+        MenuMotion.setMenuMotion();
         super.onOpen();
+    }
+
+
+    @Override
+    public void isNotOpen() {
+        MenuMotion.setMenuMotion();
+        super.isNotOpen();
     }
 }

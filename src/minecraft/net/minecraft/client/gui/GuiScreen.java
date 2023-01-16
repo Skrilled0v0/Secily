@@ -3,6 +3,7 @@ package net.minecraft.client.gui;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import me.skrilled.api.modules.module.render.SettingMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.renderer.GlStateManager;
@@ -32,7 +33,6 @@ import org.lwjgl.input.Mouse;
 import tv.twitch.chat.ChatUserInfo;
 
 import java.awt.*;
-import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
@@ -40,7 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -124,7 +124,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1) {
+        if (keyCode == 1 && (mc.currentScreen != SettingMenu.menu)) {
             this.mc.displayGuiScreen(null);
 
             if (this.mc.currentScreen == null) {
@@ -148,7 +148,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     protected void drawCreativeTabHoveringText(String tabName, int mouseX, int mouseY) {
-        this.drawHoveringText(Arrays.asList(tabName), mouseX, mouseY);
+        this.drawHoveringText(Collections.singletonList(tabName), mouseX, mouseY);
     }
 
     protected void drawHoveringText(List<String> textLines, int x, int y) {
@@ -365,16 +365,12 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
         this.mc.thePlayer.sendChatMessage(msg);
     }
 
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    {
-        if (mouseButton == 0)
-        {
-            for (int i = 0; i < this.buttonList.size(); ++i)
-            {
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton == 0) {
+            for (int i = 0; i < this.buttonList.size(); ++i) {
                 GuiButton guibutton = this.buttonList.get(i);
 
-                if (guibutton.mousePressed(this.mc, mouseX, mouseY))
-                {
+                if (guibutton.mousePressed(this.mc, mouseX, mouseY)) {
                     this.selectedButton = guibutton;
                     guibutton.playPressSound(this.mc.getSoundHandler());
                     this.actionPerformed(guibutton);
