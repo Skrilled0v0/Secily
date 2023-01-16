@@ -194,7 +194,6 @@ public class Nametags extends ModuleHeader {
 
     private String getColor(int level) {
         if (level == 1) {
-
         } else if (level == 2) {
             return "\247a";
         } else if (level == 3) {
@@ -225,10 +224,7 @@ public class Nametags extends ModuleHeader {
                 y += ent.height + 0.2D;
                 System.out.println(convertTo2D(x, y, z)[0]);
 //                if ((convertTo2D(x, y, z)[2] >= 0.0D) && (convertTo2D(x, y, z)[2] < 1.0D)) {
-                double[] pos = {convertTo2D(x, y, z)[0],
-                        convertTo2D(x, y, z)[1],
-                        Math.abs(convertTo2D(x, y + 1.0D, z, ent)[1] - convertTo2D(x, y, z, ent)[1]),
-                        convertTo2D(x, y, z)[2]};
+                double[] pos = {convertTo2D(x, y, z)[0], convertTo2D(x, y, z)[1], Math.abs(convertTo2D(x, y + 1.0D, z, ent)[1] - convertTo2D(x, y, z, ent)[1]), convertTo2D(x, y, z)[2]};
                 entityPositions.put((EntityPlayer) ent, pos);
 //                }
             }

@@ -27,37 +27,124 @@ import java.util.List;
 
 public class Menu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
-    public static int moduleTypeInterval = 40;         //初始化ModuleType的间隔
-    int typeSideSize = 40;               //初始化ModuleType的盒子宽度
-    int typeICONSize = 30;               //初始化ModuleType的ICON宽度
-    int typeSideHeight = 40;             //初始化ModuleType的盒子高度
-    float moduleBoxLRInterval = 37.5f;   //初始化Module左右间距
-    int moduleBoxUDInterval = 20;        //初始化Module上下间距
-    int moduleBoxWidth = 175;           //初始化ModuleBox宽度
-    int moduleBoxHeight = 150;          //初始化ModuleBox高度
-    int moduleUDMargin = 15;            //初始化Module上下窗口边距
-    int moduleLRMargin = 25;            //初始化Module左右窗口边距
-    int posX = 0;                       //初始化窗口定位x轴
-    int posY = 0;                       //初始化窗口定位y轴
-    int posInClickX;                    //初始化点击拖动定位x轴
-    int posInClickY;                    //初始化点击拖动定位y轴
-    int windowWidth = 650;              //初始化窗口宽度
-    int windowHeight = 425;             //初始化窗口高度
-    int upSide = 50;                    //初始化上标题高度
-    int downSide = 25;                  //初始化下标题高度
-    boolean clickDag = false;           //初始化点击判定布尔
-    int maxWCount = 3;                  //每行最多编辑区
-    float pageNumBarX = 32.0f;          //初始化页码标签宽度
-    float pageNumBarY = 18;             //初始化页码标签高度
-    float pageNumBarInterval = 16.0f;   //初始化页码标签间距
-    int currentPage = 1;                //初始页码
-    int valueListUDInterval = 10;         //ValueList的上下间隔
+    /**
+     * ModuleType的间隔
+     */
+    public static int moduleTypeInterval = 40;
+    /**
+     * ModuleType的盒子宽度
+     */
+    int typeSideSize = 40;
+    /**
+     * ModuleType的ICON宽度
+     */
+    int typeICONSize = 30;
+    /**
+     * ModuleType的盒子高度
+     */
+    int typeSideHeight = 40;
+    /**
+     * Module左右间距
+     */
+    float moduleBoxLRInterval = 37.5f;
+    /**
+     * Module上下间距
+     */
+    int moduleBoxUDInterval = 20;
+    /**
+     * ModuleBox宽度
+     */
+    int moduleBoxWidth = 175;
+    /**
+     * ModuleBox高度
+     */
+    int moduleBoxHeight = 150;
+    /**
+     * Module上下窗口边距
+     */
+    int moduleUDMargin = 15;
+    /**
+     * Module左右窗口边距
+     */
+    int moduleLRMargin = 25;
+    /**
+     * GUI窗口定位x轴
+     */
+    int posX = 0;
+    /**
+     * GUI窗口定位y轴
+     */
+    int posY = 0;
+    /**
+     * 点击拖动定位x轴
+     */
+    int posInClickX;
+    /**
+     * 点击拖动定位y轴
+     */
+    int posInClickY;
+    /**
+     * 窗口宽度
+     */
+    int windowWidth = 650;
+    /**
+     * 窗口高度
+     */
+    int windowHeight = 425;
+    /**
+     * 上标题高度
+     */
+    int upSide = 50;
+    /**
+     * 下标题高度
+     */
+    int downSide = 25;
+    /**
+     * 是否在拖动gui页面
+     */
+    boolean clickDag = false;
+    /**
+     * 每行最多编辑数
+     */
+    int maxWCount = 3;
+    /**
+     * 页码标签宽度
+     */
+    float pageNumBarX = 32.0f;
+    /**
+     * 页码标签高度
+     */
+    float pageNumBarY = 18;
+    /**
+     * 页码标签间距
+     */
+    float pageNumBarInterval = 16.0f;
+    /**
+     * 页码
+     */
+    int currentPage = 1;
+    /**
+     * ValueList的上下间隔
+     */
+    int valueListUDInterval = 10;
+    /**
+     * 该moduleType下module总和
+     */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
     BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1800f, false, Easing.LINEAR);
     BoundedAnimation moduleAlpha = new BoundedAnimation(120, 250, 800f, false, Easing.LINEAR);
+    /**
+     * 该moduleType下moduleHeader总和
+     */
     List<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
-    int windows_Alpha = 0;    //初始窗口背景化透明值
-    int module_Alpha = 0;        //初始Module背景透明质
+    /**
+     * 窗口背景化透明值
+     */
+    int windows_Alpha = 0;
+    /**
+     * Module背景透明质
+     */
+    int module_Alpha = 0;
     boolean closeed;
 
     /*
@@ -209,14 +296,13 @@ public class Menu extends GuiScreen implements IMC {
             }
         }
         if (closeed) {
-            if (MenuMotion.getMenuMotion().getAnimationFactor() == 0)
-                IMC.mc.displayGuiScreen(null);
+            if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) IMC.mc.displayGuiScreen(null);
         }
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        clickDag = mouseButton == 0 && mouseX > posX && mouseX < width && mouseY > posY && mouseY < posY + 50;
+        clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
         int moduleTypeInterval = Menu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
         float xAxis = 0;
