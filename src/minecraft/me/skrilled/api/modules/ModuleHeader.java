@@ -16,6 +16,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleHeader implements IMC {
     public float[] modulePosInfo = new float[]{0, 0, 0, 0};
@@ -36,6 +38,11 @@ public class ModuleHeader implements IMC {
         this.moduleType = moduleType;
     }
 
+    public List<ValueHeader> getValueListByValueType(ValueHeader.ValueType valueType) {
+
+        return valueList.stream().filter(value -> value.getValueType() == valueType).collect(Collectors.toList());
+
+    }
 
     public Object getValue(ValueHeader valueHeader) {
         if (valueHeader.getValueType() == ValueHeader.ValueType.BOOLEAN) return valueHeader.isOptionOpen();

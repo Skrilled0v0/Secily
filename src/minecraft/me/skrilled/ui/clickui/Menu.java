@@ -20,6 +20,7 @@ import org.lwjgl.input.Mouse;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Menu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
@@ -43,16 +44,14 @@ public class Menu extends GuiScreen implements IMC {
     int downSide = 25;                  //初始化下标题高度
     boolean clickDag = false;           //初始化点击判定布尔
     int maxWCount = 3;                  //每行最多编辑区
-    float pageNumBarX = 32.0f;               //初始化页码标签宽度
-    float pageNumBarY = 18;               //初始化页码标签高度
-    float pageNumBarInterval = 16.0f;          //初始化页码标签间距
-    int currentPage = 1;//初始页码
-    int alphaMax = 255;
-    int alphaMin = 30;
-    float alphaSpeed = 1800f;
+    float pageNumBarX = 32.0f;          //初始化页码标签宽度
+    float pageNumBarY = 18;             //初始化页码标签高度
+    float pageNumBarInterval = 16.0f;   //初始化页码标签间距
+    int currentPage = 1;                //初始页码
+    int valueListUDInterval = 10;         //ValueList的上下间隔
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-    BoundedAnimation windowAlpha = new BoundedAnimation(alphaMin, alphaMax, alphaSpeed, false, Easing.LINEAR);
-    ArrayList<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
+    BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1800f, false, Easing.LINEAR);
+    List<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
     int theAlpha = 0;
     //初始化透明值
 
@@ -65,10 +64,14 @@ public class Menu extends GuiScreen implements IMC {
         int titleColor = new Color(52, 81, 129, theAlpha).getRGB();      //定义标题背景颜色局部变量
         int moduleBGColor = new Color(240, 240, 240, theAlpha).getRGB(); //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, theAlpha).getRGB();
+        int fontColor = new Color(39, 37, 42).getRGB();
+
         int width = posX + windowWidth;                                             //更新窗口宽度
         int height = posY + windowHeight;                                           //更新窗口高度
-        CFontRenderer minFont = sense.getFontBuffer().font16;
-        CFontRenderer midFont = sense.getFontBuffer().font24;
+        CFontRenderer minFont = sense.fontBuffer.font16;
+        CFontRenderer midFont = sense.fontBuffer.font24;
+        CFontRenderer valueFont = sense.fontBuffer.font18;
+        CFontRenderer bigFont = sense.fontBuffer.font36;
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */
@@ -121,15 +124,20 @@ public class Menu extends GuiScreen implements IMC {
                     if (nDrawCount >= maxWCount) {
                         moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
                     }
+
+
                 }
                 /*
                 绘制module层
                  */
                 for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
-                    ModuleHeader moduleHeader = moduleHeaders.get(i);
-                    RenderUtil.drawRound(moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3], moduleBGColor, moduleBGColor);
-                    midFont.drawCenteredString(moduleHeader.getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
+                    ModuleHeader modules = moduleHeaders.get(i);
+                    RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], moduleBGColor, moduleBGColor);
+                    bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1], -1);
+
                 }
+
+
                 /*
                 计算当前Module类型一共多少页
                  */
@@ -155,8 +163,8 @@ public class Menu extends GuiScreen implements IMC {
                     }
                 }
                 for (int i = 0; i < modulePageMAXIndex; i++) {
-                    RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, moduleBGColor, moduleBGColor);
-                    midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? typeBoxColor : bcColor);
+                    RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
+                    midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
                     fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                     fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                 }

@@ -28,6 +28,8 @@ import me.skrilled.api.modules.module.render.SettingMenu;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModuleManager {
     public ArrayList<ModuleHeader> mList = new ArrayList<>();
@@ -77,12 +79,8 @@ public class ModuleManager {
         return null;
     }
 
-    public ArrayList<ModuleHeader> getModuleListByModuleType(ModuleHeader.ModuleType moduleType) {
-        ArrayList<ModuleHeader> list = new ArrayList<>();
-        for (ModuleHeader moduleHeader : mList) {
-            if (moduleHeader.getModuleType() == moduleType) list.add(moduleHeader);
-        }
-        return list;
+    public List<ModuleHeader> getModuleListByModuleType(ModuleHeader.ModuleType moduleType) {
+        return mList.stream().filter(moduleHeader -> moduleHeader.getModuleType() == moduleType).collect(Collectors.toList());
     }
 
     @EventTarget
