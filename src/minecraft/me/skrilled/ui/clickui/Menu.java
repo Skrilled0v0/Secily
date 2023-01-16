@@ -116,14 +116,15 @@ public class Menu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
-                for (ModuleHeader moduleHeader : moduleHeaders) {
+                for (int i = 6*(currentPage-1) ; i<((currentPage*6)<moduleHeaders.size()?(currentPage*6):moduleHeaders.size());i++) {
+                    ModuleHeader moduleHeader = moduleHeaders.get(i);
                     RenderUtil.drawRound(moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3], moduleBGColor, moduleBGColor);
                     midFont.drawCenteredString(moduleHeader.getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
                 }
                 /*
                 计算当前Module类型一共多少页
                  */
-                float modulePageMAXIndex = (moduleHeaders.size() / 6f) + 1;
+                int modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
                 /*
                 绘制页码标签
                  */
@@ -141,7 +142,7 @@ public class Menu extends GuiScreen implements IMC {
                         P[1] = fstPageBarPos[1];
                         P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
                         P[3] = fstPageBarPos[3];
-                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i));
+                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i+1));
                     }
                 }
                 for (int i = 0; i < modulePageMAXIndex; i++) {
@@ -175,7 +176,8 @@ public class Menu extends GuiScreen implements IMC {
             moduleHeader.menuFlag = mouseX > moduleHeader.modulePosInfo[0] && mouseY > moduleHeader.modulePosInfo[1] && mouseX < moduleHeader.modulePosInfo[2] && mouseY < moduleHeader.modulePosInfo[3];
         }
         for (PageNumBar page : PageNumBars) {
-            if (mouseX > page.x1 && mouseY > page.y1 && mouseX < page.x2 && mouseY < page.y2 && mouseButton == 0) {
+            if (mouseX > page.x1 && mouseY > page.y1 && mouseX < page.x2 && mouseY < page.y2) {
+                sense.printINFO( page.num);
                 currentPage = page.num;
             }
         }
