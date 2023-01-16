@@ -14,10 +14,10 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class ModuleHeader implements IMC {
-    public float[] modulePosInfo = new float[]{0,0,0,0};
+    public float[] modulePosInfo = new float[]{0, 0, 0, 0};
+    public boolean menuFlag;
     String moduleName;
     String suffix = "";
     boolean isOpen;

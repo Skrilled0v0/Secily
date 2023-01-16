@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class Menu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
-    int moduleTypeInterval = 40;         //初始化ModuleType的间隔
+    public static int moduleTypeInterval = 40;         //初始化ModuleType的间隔
     int typeSideSize = 40;               //初始化ModuleType的盒子宽度
     int typeICONSize = 30;               //初始化ModuleType的ICON宽度
     int typeSideHeight = 40;             //初始化ModuleType的盒子高度
@@ -41,13 +41,14 @@ public class Menu extends GuiScreen implements IMC {
     int upSide = 50;                    //初始化上标题高度
     int downSide = 25;                  //初始化下标题高度
     boolean clickDag = false;           //初始化点击判定布尔
-    int modulePageIndex = 1;            //初始化页码
     int maxWCount = 3;                  //每行最多编辑区
     float pageNumBarX = 32.0f;               //初始化页码标签宽度
     float pageNumBarY = 18;               //初始化页码标签高度
     float pageNumBarInterval = 16.0f;          //初始化页码标签间距
-    ArrayList<pageNumBar> pageNumBars = new ArrayList<pageNumBar>();
+    int currentPage = 1;//初始页码
+    ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
 
+    ArrayList<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
 
     /*
     绘制开始
@@ -96,7 +97,7 @@ public class Menu extends GuiScreen implements IMC {
                  /*
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
                  */
-                ArrayList<ModuleHeader> moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
+                moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
 
                     /*
                     两if计算每个module的绘制位置
@@ -115,25 +116,24 @@ public class Menu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
-                for (int i = 0; i < moduleHeaders.size(); i++) {
-                    ModuleHeader moduleHeader = moduleHeaders.get(i);
+                for (ModuleHeader moduleHeader : moduleHeaders) {
                     RenderUtil.drawRound(moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3], moduleBGColor, moduleBGColor);
-                    midFont.drawCenteredString(moduleHeaders.get(i).getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
+                    midFont.drawCenteredString(moduleHeader.getModuleName(), moduleHeader.modulePosInfo[0] + moduleBoxWidth / 2f, moduleHeader.modulePosInfo[1], -1);
                 }
                 /*
                 计算当前Module类型一共多少页
                  */
-                float modulePageMAXIndex = (moduleHeaders.size() / 6) + 1;
+                float modulePageMAXIndex = (moduleHeaders.size() / 6f) + 1;
                 /*
                 绘制页码标签
                  */
                 float[] fstPageBarPos = new float[4];
-                fstPageBarPos[0] = posX + (windowWidth / 2) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
-                fstPageBarPos[1] = posY + windowHeight - (downSide / 2) - (pageNumBarY / 2);
+                fstPageBarPos[0] = posX + (windowWidth / 2f) - ((modulePageMAXIndex / 2) * pageNumBarX) - (((modulePageMAXIndex / 2) - 0.5f) * pageNumBarInterval);
+                fstPageBarPos[1] = posY + windowHeight - (downSide / 2f) - (pageNumBarY / 2);
                 fstPageBarPos[2] = fstPageBarPos[0] + pageNumBarX;
                 fstPageBarPos[3] = fstPageBarPos[1] + pageNumBarY;
-                pageNumBars = new ArrayList<pageNumBar>();
-                pageNumBars.add(new pageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3], 1));
+                PageNumBars = new ArrayList<>();
+                PageNumBars.add(new PageNumBar(fstPageBarPos[0], fstPageBarPos[1], fstPageBarPos[2], fstPageBarPos[3], 1));
                 for (int i = 0; i < modulePageMAXIndex; i++) {
                     if (i != 0) {
                         float[] P = new float[4];
@@ -141,12 +141,12 @@ public class Menu extends GuiScreen implements IMC {
                         P[1] = fstPageBarPos[1];
                         P[2] = fstPageBarPos[2] + (i * (pageNumBarX + pageNumBarInterval));
                         P[3] = fstPageBarPos[3];
-                        pageNumBars.add(new pageNumBar(P[0], P[1], P[2], P[3], i));
+                        PageNumBars.add(new PageNumBar(P[0], P[1], P[2], P[3], i));
                     }
                 }
                 for (int i = 0; i < modulePageMAXIndex; i++) {
-                    RenderUtil.drawRound(pageNumBars.get(i).x1, pageNumBars.get(i).y1, pageNumBars.get(i).x2, pageNumBars.get(i).y2, moduleBGColor, moduleBGColor);
-                    midFont.drawCenteredString(String.valueOf(i + 1), pageNumBars.get(i).x1 + pageNumBarX / 2f, pageNumBars.get(i).y1 + 2.0f, -1);
+                    RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, moduleBGColor, moduleBGColor);
+                    midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? typeBoxColor : bcColor);
                     fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                     fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                 }
@@ -161,7 +161,7 @@ public class Menu extends GuiScreen implements IMC {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < width && mouseY > posY && mouseY < posY + 50;
-        int moduleTypeInterval = this.moduleTypeInterval;//ModuleType间隔
+        int moduleTypeInterval = Menu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
         float xAxis = 0;
         for (ModuleType value : ModuleType.values()) {
@@ -170,6 +170,14 @@ public class Menu extends GuiScreen implements IMC {
 
             }
             xAxis += moduleTypeInterval + typeSideSize;
+        }
+        for (ModuleHeader moduleHeader : moduleHeaders) {
+            moduleHeader.menuFlag = mouseX > moduleHeader.modulePosInfo[0] && mouseY > moduleHeader.modulePosInfo[1] && mouseX < moduleHeader.modulePosInfo[2] && mouseY < moduleHeader.modulePosInfo[3];
+        }
+        for (PageNumBar page : PageNumBars) {
+            if (mouseX > page.x1 && mouseY > page.y1 && mouseX < page.x2 && mouseY < page.y2 && mouseButton == 0) {
+                currentPage = page.num;
+            }
         }
         if (clickDag) {
             posInClickX = mouseX - posX;
@@ -184,11 +192,5 @@ public class Menu extends GuiScreen implements IMC {
         super.mouseReleased(mouseX, mouseY, state);
     }
 
-    enum ModulePage {
-        P1(1), P2(2), P3(3);
 
-        ModulePage(int i) {
-
-        }
-    }
 }
