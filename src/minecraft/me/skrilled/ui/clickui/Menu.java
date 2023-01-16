@@ -171,6 +171,7 @@ public class Menu extends GuiScreen implements IMC {
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */
+
         windows_Alpha = (int) windowAlpha.getAnimationValue();
         if (Mouse.isButtonDown(0)) {
             windowAlpha.setState(true);
@@ -302,22 +303,23 @@ public class Menu extends GuiScreen implements IMC {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+
+        sense.printINFO(Math.random());
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
         int moduleTypeInterval = Menu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
         float xAxis = 0;
         for (ModuleType value : ModuleType.values()) {
-            if (mouseButton == 0 && mouseX > posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f && mouseY > posY + 5 && mouseX < posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize && mouseY < posY + 5 + typeSideSize) {
+            if (mouseButton == 0 && isMouseInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
                 currentModuleType = value;
-
             }
             xAxis += moduleTypeInterval + typeSideSize;
         }
         for (ModuleHeader moduleHeader : moduleHeaders) {
-            moduleHeader.menuFlag = mouseX > moduleHeader.modulePosInfo[0] && mouseY > moduleHeader.modulePosInfo[1] && mouseX < moduleHeader.modulePosInfo[2] && mouseY < moduleHeader.modulePosInfo[3];
+            moduleHeader.menuFlag = isMouseInside(mouseX, mouseY, moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3]);
         }
         for (PageNumBar page : PageNumBars) {
-            if (mouseX > page.x1 && mouseY > page.y1 && mouseX < page.x2 && mouseY < page.y2) {
+            if (isMouseInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {
                 currentPage = page.num;
             }
         }
@@ -326,6 +328,10 @@ public class Menu extends GuiScreen implements IMC {
             posInClickY = mouseY - posY;
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
     @Override
