@@ -8,6 +8,7 @@ package me.skrilled.ui.clickui;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
+import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
@@ -51,21 +52,26 @@ public class Menu extends GuiScreen implements IMC {
     int valueListUDInterval = 10;         //ValueList的上下间隔
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
     BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1800f, false, Easing.LINEAR);
+    BoundedAnimation moduleAlpha = new BoundedAnimation(120, 250, 800f, false, Easing.LINEAR);
     List<ModuleHeader> moduleHeaders = new ArrayList<>();//初始化加载ModuleType类型的ModuleList
-    int theAlpha = 0;
-    //初始化透明值
+    int windows_Alpha = 0;    //初始窗口背景化透明值
+    int module_Alpha = 0;        //初始Module背景透明质
+
 
     /*
     绘制开始
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int bcColor = new Color(175, 175, 175, theAlpha).getRGB();       //定义背景颜色局部变量
-        int titleColor = new Color(52, 81, 129, theAlpha).getRGB();      //定义标题背景颜色局部变量
-        int moduleBGColor = new Color(240, 240, 240, theAlpha).getRGB(); //定义Module背景颜色局部变量
-        int typeBoxColor = new Color(94, 164, 255, theAlpha).getRGB();
-        int fontColor = new Color(39, 37, 42).getRGB();
-
+        int bcColor = new Color(175, 175, 175, windows_Alpha).getRGB();         //定义背景颜色局部变量
+        int titleColor = new Color(52, 81, 129, windows_Alpha).getRGB();        //定义标题背景颜色局部变量
+        int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
+        int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
+        int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
+//        int moduleColor = new Color(205, 174, 161, 175).getRGB();                    //Module颜色-背景暗色
+//        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
+        int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
+        int moduleColor = new Color(74, 38, 255, 130).getRGB();
         int width = posX + windowWidth;                                             //更新窗口宽度
         int height = posY + windowHeight;                                           //更新窗口高度
         CFontRenderer minFont = sense.fontBuffer.font16;
@@ -75,16 +81,14 @@ public class Menu extends GuiScreen implements IMC {
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */
-        theAlpha = (int) windowAlpha.getAnimationValue();
+        windows_Alpha = (int) windowAlpha.getAnimationValue();
         if (Mouse.isButtonDown(0)) {
             windowAlpha.setState(true);
-            theAlpha = (int) windowAlpha.getAnimationValue();
-            if (windowAlpha.getAnimationValue() == 100) {
-                windowAlpha.setState(false);
-            }
+            windows_Alpha = (int) windowAlpha.getAnimationValue();
         } else {
             windowAlpha.setState(false);
         }
+
         /*
         在mouseClicked方法中判断鼠标点击事件的触发
         修正鼠标位置与窗口的坐标关系
@@ -136,13 +140,28 @@ public class Menu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
+
                 for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
+                    int moduleCurrentBGColor = 1;
                     ModuleHeader modules = moduleHeaders.get(i);
-                    RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], moduleBGColor, moduleBGColor);
-                    bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1], -1);
+                    if (Mouse.isButtonDown(0) && modules.menuFlag) {
+                        moduleAlpha.setState(true);
+                        module_Alpha = (int) moduleAlpha.getAnimationValue();
+                    } else moduleAlpha.setState(false);
+                    moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
+                    RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], modules.menuFlag ? moduleCurrentBGColor : moduleBGColor, modules.menuFlag ? moduleCurrentBGColor : moduleBGColor);
+                    bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                /*
+                Values绘制
+                 */
+                    int yAxsi = 0;
 
+                    for (ValueHeader valueHeader : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                        String valueStr = valueHeader.getValueName() + ":";
+                        midFont.drawString(valueStr, modules.modulePosInfo[0] + 20, modules.modulePosInfo[1] + yAxsi, valueFontColor);
+                        yAxsi += (valueListUDInterval + midFont.getHeight(false));
+                    }
                 }
-
 
                 /*
                 计算当前Module类型一共多少页

@@ -172,6 +172,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     long debugUpdateTime = getSystemTime();
     int fpsCounter;
     long prevFrameTime = -1L;
+    boolean bginit = false;
     private ServerData currentServerData;
     private boolean fullscreen;
     private boolean hasCrashed;
@@ -658,7 +659,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                             continue label53;
                         }
 
-                        displaymode3 = (DisplayMode) iterator.next();
+                        displaymode3 = iterator.next();
 
                         if (displaymode3.getBitsPerPixel() == 32 && displaymode3.getWidth() == displaymode1.getWidth() / 2 && displaymode3.getHeight() == displaymode1.getHeight() / 2) {
                             break;
@@ -779,15 +780,16 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
 
     }
-    boolean bginit = false;
+
     private void runGameLoop() throws IOException {
-        if(!bginit){
+        if (!bginit) {
             for (int i = 1; ; i++) {
                 if (i == 69) break;
                 ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".jpg");
                 Main.bgs.add(r1);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
             }
+            bginit = true;
         }
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");

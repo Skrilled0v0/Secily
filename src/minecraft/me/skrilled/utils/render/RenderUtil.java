@@ -729,15 +729,36 @@ public class RenderUtil implements IMC {
         setGLCap(3042, true);
         GL11.glBlendFunc(770, 771);
         drawBorderedRectNameTag(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 2, new Color(0, 0, 0, 70).getRGB());
-
-        drawRect(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], Color.green.getRGB());
+        GL11.glColor4f(1, 1, 1, 0);
+        drawBorderedRectNameTag(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], 1, Color.green.getRGB());
+        GL11.glColor4f(1, 1, 1, 0);
         font.drawStringWithShadow(entityDisplayName, -nameWidth, -fontHeight + 3, -1);
+        GL11.glColor4f(1, 1, 1, 0);
         if (isPlayer) {//判断是玩家继续画ItemList
             GL11.glScaled(1.5, 1.5, 1.5);
             drawPlayerArmorList((EntityPlayer) entity, -nameWidth / 2 - 10, -fontHeight * 2 + 5, nameWidth / 4, false);
         }
+        GL11.glColor4f(1, 1, 1, 0);
         revertAllCaps();
         GL11.glPopMatrix();
+    }
+
+    public void theFuckOpGLFix() {
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.disableBlend();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
     }
 
     public static void revertAllCaps() {

@@ -10,7 +10,6 @@ import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -34,27 +33,11 @@ public class Nametag extends ModuleHeader {
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (canDrawNameTag(entity)) {
                 RenderUtil.drawNameTag((EntityLivingBase) entity);
-                theFuckOpGLFix();
+//                theFuckOpGLFix();
             }
         }
     }
-    public void theFuckOpGLFix() {
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableBlend();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
-        GlStateManager.enableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableLighting();
-        GlStateManager.enableDepth();
-    }
+
     private boolean canDrawNameTag(Entity entity) {
         if(entity==mc.thePlayer)return false;
         if (entity instanceof EntityPlayer && (Boolean) this.getValue(renderPlayers)) return true;
