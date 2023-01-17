@@ -23,7 +23,9 @@ import java.util.List;
 
 public class Main {
     public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
-    public final static int BACKGROUNDMAXINDEX = 200;
+    public final static int BACKGROUNDMAXINDEX = 79;
+    public static ArrayList<ResourceLocation> ldbgs = new ArrayList<>();
+
     public static void main(String[] p_main_0_) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         OptionParser optionparser = new OptionParser();
@@ -50,9 +52,9 @@ public class Main {
         OptionSpec<String> optionspec11 = optionparser.accepts("accessToken").withRequiredArg().required();
         OptionSpec<String> optionspec12 = optionparser.accepts("version").withRequiredArg().required();
         OptionSpec<Integer> optionspec13 = optionparser.accepts("width").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(1920));
+                .defaultsTo(Integer.valueOf(1280));
         OptionSpec<Integer> optionspec14 = optionparser.accepts("height").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(1080));
+                .defaultsTo(Integer.valueOf(720));
         OptionSpec<String> optionspec15 = optionparser.accepts("userProperties").withRequiredArg().defaultsTo("{}"
         );
         OptionSpec<String> optionspec16 = optionparser.accepts("profileProperties").withRequiredArg().defaultsTo("{}"

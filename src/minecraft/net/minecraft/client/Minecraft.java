@@ -11,6 +11,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventKey;
+import me.skrilled.ui.clickui.LoadingGui;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -305,7 +306,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     public void run() {
         this.running = true;
-
+        for (int i = 1; i <= 15; i++) {
+            Main.ldbgs.add(new ResourceLocation("skrilled/loading/blur" + i + ".png"));
+        }
         try {
             this.startGame();
         } catch (Throwable throwable) {
@@ -379,24 +382,28 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.refreshResources();
         this.renderEngine = new TextureManager(this.mcResourceManager);
         this.mcResourceManager.registerReloadListener(this.renderEngine);
-        this.drawSplashScreen();
+        this.drawSplashScreen(0);
         this.initStream();
         this.skinManager = new SkinManager(this.renderEngine, new File(this.fileAssets, "skins"), this.sessionService);
         this.saveLoader = new AnvilSaveConverter(new File(this.mcDataDir, "saves"));
         this.mcSoundHandler = new SoundHandler(this.mcResourceManager, this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.mcSoundHandler);
+        this.drawSplashScreen(1);
         this.mcMusicTicker = new MusicTicker(this);
         this.fontRendererObj = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii.png"), this.renderEngine, false);
-
+        this.drawSplashScreen(2);
         if (this.gameSettings.language != null) {
             this.fontRendererObj.setUnicodeFlag(this.isUnicode());
             this.fontRendererObj.setBidiFlag(this.mcLanguageManager.isCurrentLanguageBidirectional());
         }
-
+        this.drawSplashScreen(3);
         this.standardGalacticFontRenderer = new FontRenderer(this.gameSettings, new ResourceLocation("textures/font/ascii_sga.png"), this.renderEngine, false);
+        this.drawSplashScreen(4);
         this.mcResourceManager.registerReloadListener(this.fontRendererObj);
         this.mcResourceManager.registerReloadListener(this.standardGalacticFontRenderer);
+        this.drawSplashScreen(5);
         this.mcResourceManager.registerReloadListener(new GrassColorReloadListener());
+        this.drawSplashScreen(6);
         this.mcResourceManager.registerReloadListener(new FoliageColorReloadListener());
         AchievementList.openInventory.setStatStringFormatter(str -> {
             try {
@@ -405,19 +412,25 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 return "Error: " + exception.getLocalizedMessage();
             }
         });
+        this.drawSplashScreen(7);
         this.mouseHelper = new MouseHelper();
+        this.drawSplashScreen(8);
         this.checkGLError("Pre startup");
+
         GlStateManager.enableTexture2D();
         GlStateManager.shadeModel(7425);
         GlStateManager.clearDepth(1.0D);
         GlStateManager.enableDepth();
         GlStateManager.depthFunc(515);
         GlStateManager.enableAlpha();
+        this.drawSplashScreen(9);
         GlStateManager.alphaFunc(516, 0.1F);
         GlStateManager.cullFace(1029);
         GlStateManager.matrixMode(5889);
+        this.drawSplashScreen(10);
         GlStateManager.loadIdentity();
         GlStateManager.matrixMode(5888);
+        this.drawSplashScreen(11);
         this.checkGLError("Startup");
         this.textureMapBlocks = new TextureMap("textures");
         this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
@@ -425,9 +438,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         this.textureMapBlocks.setBlurMipmapDirect(false, this.gameSettings.mipmapLevels > 0);
         ModelManager modelManager = new ModelManager(this.textureMapBlocks);
+        this.drawSplashScreen(12);
         this.mcResourceManager.registerReloadListener(modelManager);
         this.renderItem = new RenderItem(this.renderEngine, modelManager);
         this.renderManager = new RenderManager(this.renderEngine, this.renderItem);
+        this.drawSplashScreen(13);
         this.itemRenderer = new ItemRenderer(this);
         this.mcResourceManager.registerReloadListener(this.renderItem);
         this.entityRenderer = new EntityRenderer(this, this.mcResourceManager);
@@ -435,6 +450,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.blockRenderDispatcher = new BlockRendererDispatcher(modelManager.getBlockModelShapes(), this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.blockRenderDispatcher);
         this.renderGlobal = new RenderGlobal(this);
+        this.drawSplashScreen(14);
         this.mcResourceManager.registerReloadListener(this.renderGlobal);
         this.guiAchievement = new GuiAchievement(this);
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
@@ -445,7 +461,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         if (this.serverName != null) {
             this.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), this, this.serverName, this.serverPort));
         } else {
-            this.displayGuiScreen(new GuiMainMenu());
+            this.displayGuiScreen(new LoadingGui());
         }
 
         this.renderEngine.deleteTexture(this.mojangLogo);
@@ -676,7 +692,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.displayHeight = displaymode.getHeight();
     }
 
-    private void drawSplashScreen() {
+    private void drawSplashScreen(int loadingCount) {
         ScaledResolution scaledresolution = new ScaledResolution(this);
         int w = RenderUtil.width();
         int h = RenderUtil.height();
@@ -689,7 +705,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
         GlStateManager.disableDepth();
-        RenderUtil.drawImage(loadingBG, 0, 0, w, h);
+        RenderUtil.drawImage(Main.ldbgs.get(loadingCount), 0, 0, w, h);
         RenderUtil.drawRect(w / 2f, h / 2f, w / 2f + 100, h / 2f + 100, -1);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
