@@ -37,7 +37,7 @@ public class Nametags extends ModuleHeader {
     public static Map<EntityLivingBase, double[]> entityPositions = new HashMap<>();
 
     public ValueHeader invis = new ValueHeader("Invisible", false);
-    public ValueHeader armor = new ValueHeader("Armor", false);
+    public ValueHeader armor = new ValueHeader("Armor", true);
 
     public Nametags() {
         super("Nametags", false, ModuleType.RENDER);

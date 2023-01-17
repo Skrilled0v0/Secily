@@ -13,24 +13,29 @@ import me.skrilled.utils.math.TimerUtil;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class AutoClicker extends ModuleHeader {
     TimerUtil timerUtil = new TimerUtil();
-    double[] ap = {1.0, 6.0, 20.0};
-    ValueHeader aps = new ValueHeader("APS", ap);
+    double[] ip = {1.0, 6.0, 20.0, 1.0};
+    double[] ap = {1.0, 6.0, 20.0, 1.0};
+    ValueHeader ma_cps = new ValueHeader("MaxCPS", ap);
+    ValueHeader mi_cps = new ValueHeader("MinCPS", ip);
+
     int key = mc.gameSettings.keyBindAttack.getKeyCode();
 
     public AutoClicker() {
         super("AutoClicker", false, ModuleType.COMBAT);
         this.setKey(Keyboard.KEY_R);
-        this.addValueList(aps);
+        this.addValueList(ma_cps, mi_cps);
     }
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-        double theAPS = (Double) this.getValue(aps);
-        if (timerUtil.hasReached((int) (theAPS * 1000)))
-            mc.thePlayer.swingItem();
+        double cps = ThreadLocalRandom.current().nextDouble((double) this.getValue(ma_cps));
+        if (timerUtil.hasReached((int) (cps / 1000L)) && Mouse.isButtonDown(key)) {
+            mc.clickMouse();
+        }
     }
-
 
 }

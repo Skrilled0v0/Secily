@@ -783,11 +783,12 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     private void runGameLoop() throws IOException {
         if (!bginit) {
-            for (int i = 1; ; i++) {
-                if (i == 69) break;
+            int i = 1;
+            while (i < 200) {
                 ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".jpg");
                 Main.bgs.add(r1);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
+                i++;
             }
             bginit = true;
         }
@@ -936,7 +937,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     }
 
     public int getLimitFramerate() {
-        return this.theWorld == null && this.currentScreen != null ? 30 : this.gameSettings.limitFramerate;
+        return this.gameSettings.limitFramerate;
     }
 
     public boolean isFramerateLimitBelowMax() {
@@ -947,13 +948,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         try {
             memoryReserve = new byte[0];
             this.renderGlobal.deleteAllDisplayLists();
-        } catch (Throwable var3) {
+        } catch (Throwable ignored) {
         }
 
         try {
 
             this.loadWorld(null);
-        } catch (Throwable var2) {
+        } catch (Throwable ignored) {
         }
 
 
@@ -1136,7 +1137,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         }
     }
 
-    private void clickMouse() {
+    public void clickMouse() {
         if (this.leftClickCounter <= 0) {
             this.thePlayer.swingItem();
 

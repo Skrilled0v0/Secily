@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static ArrayList<ResourceLocation> bgs = new ArrayList<ResourceLocation>();
+    public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
 
     public static void main(String[] p_main_0_) {
         System.setProperty("java.net.preferIPv4Stack", "true");

@@ -16,11 +16,14 @@ public class ValueHeader {
     double maxValue;
     double minValue;
     double settingValue;
+    double incValue;
     ArrayList<String> enumTypes;
     String currentEnumType;
     Color colorValue;
     String strValue;
-
+    int Banim = 55;
+    int Eanim = 55;
+    int Nanim = 55;
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;
@@ -28,6 +31,7 @@ public class ValueHeader {
         this.minValue = doubles[0];
         this.settingValue = doubles[1];
         this.maxValue = doubles[2];
+        this.incValue = doubles[3];
         this.doubles = doubles;
     }
 
@@ -68,6 +72,13 @@ public class ValueHeader {
         this.currentEnumType = currentEnumType;
     }
 
+    public double getIncValue() {
+        return incValue;
+    }
+
+    public void setIncValue(double incValue) {
+        this.incValue = incValue;
+    }
 
     public double getMaxValue() {
         return maxValue;
@@ -149,6 +160,19 @@ public class ValueHeader {
         this.strValue = strValue;
     }
 
+    public int getAinm(ValueType valueType) {
+        if (valueType == ValueType.BOOLEAN) return this.Banim;
+        if (valueType == ValueType.DOUBLE) return this.Nanim;
+        if (valueType == ValueType.ENUM_TYPE) return this.Eanim;
+        return 1134;
+    }
+
+    public void setAinm(ValueType valueType, int var) {
+        if (valueType == ValueType.BOOLEAN) this.Banim = var;
+        if (valueType == ValueType.DOUBLE) this.Nanim = var;
+        if (valueType == ValueType.ENUM_TYPE) this.Eanim = var;
+
+    }
 
     public enum ValueType {
         DOUBLE, ENUM_TYPE, COLOR, STRING, BOOLEAN

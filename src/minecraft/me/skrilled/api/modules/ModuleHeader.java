@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 public class ModuleHeader implements IMC {
     public float[] modulePosInfo = new float[]{0, 0, 0, 0};
     public boolean menuFlag;
+    public int key, anim, clickanim;
     String moduleName;
     String suffix = "";
     boolean isOpen;
     boolean canView = true;
     ArrayList<ValueHeader> valueList;
-    int key;
     ModuleType moduleType;
     Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
 

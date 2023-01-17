@@ -2,18 +2,19 @@ package net.minecraft.client.gui;
 
 import me.skrilled.ui.alt.GuiAltLogin;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.io.IOException;
 
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
     private final Minecraft mc = IMC.mc;
+    TimerUtil timerUtil = new TimerUtil();
     int i = 1;
     boolean isMouseHover;
     int bAlpha = 75;
@@ -47,15 +48,18 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
 
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        int j = this.height / 2 ;
+        int j = this.height / 2;
         int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
-        RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i-1));
+        RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i - 1));
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
-        sense.getFontBuffer().font36.drawStringWithShadow(sense.skrilledSense(), 30, j-90, new Color(68, 137, 204).getRGB());
+        sense.getFontBuffer().font36.drawStringWithShadow(sense.skrilledSense(), 30, j - 90, new Color(68, 137, 204).getRGB());
         GlStateManager.popMatrix();
-        i++;
-        if (i > 68) i = 1;
+        if (timerUtil.hasReached(45)) {
+            i++;
+            timerUtil.reset();
+        }
+        if (i > 199) i = 1;
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
