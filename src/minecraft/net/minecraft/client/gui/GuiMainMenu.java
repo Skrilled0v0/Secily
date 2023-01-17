@@ -16,7 +16,6 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
     private final Minecraft mc = IMC.mc;
     TimerUtil timerUtil = new TimerUtil();
     int i = 1;
-    boolean isMouseHover;
     int bAlpha = 75;
 
     public void initGui() {
@@ -55,11 +54,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
         sense.getFontBuffer().font36.drawStringWithShadow(sense.skrilledSense(), 30, j - 90, new Color(68, 137, 204).getRGB());
         GlStateManager.popMatrix();
-        if (timerUtil.hasReached(45)) {
+        if (timerUtil.hasReached(50)) {
             i++;
             timerUtil.reset();
         }
-        if (i > 199) i = 1;
+        if (i >= Main.BACKGROUNDMAXINDEX) i = 1;
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

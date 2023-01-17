@@ -783,12 +783,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     private void runGameLoop() throws IOException {
         if (!bginit) {
-            int i = 1;
-            while (i < 200) {
-                ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".jpg");
+            for (int i = 1; ; i++) {
+                if (i == Main.BACKGROUNDMAXINDEX) break;
+                ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".png");
                 Main.bgs.add(r1);
                 Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
-                i++;
             }
             bginit = true;
         }
@@ -948,13 +947,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         try {
             memoryReserve = new byte[0];
             this.renderGlobal.deleteAllDisplayLists();
-        } catch (Throwable ignored) {
+        } catch (Throwable var3) {
         }
 
         try {
 
             this.loadWorld(null);
-        } catch (Throwable ignored) {
+        } catch (Throwable var2) {
         }
 
 

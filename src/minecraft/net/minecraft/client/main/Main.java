@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Main {
     public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
-
+    public final static int BACKGROUNDMAXINDEX = 200;
     public static void main(String[] p_main_0_) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         OptionParser optionparser = new OptionParser();
