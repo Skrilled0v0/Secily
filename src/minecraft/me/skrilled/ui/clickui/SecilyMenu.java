@@ -251,7 +251,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
-                    int mouseWheel = Mouse.getDWheel();
                     for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
                         int moduleCurrentBGColor;
                         int moduleCurrentTitleOPorDis;
@@ -262,9 +261,14 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             module_Alpha = (int) moduleAlpha.getAnimationValue();
                         } else moduleAlpha.setState(false);
                         moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
+                        //滚轮处理
+                        int mouseWheel = Mouse.getDWheel();
                         if (isMouseInside(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
-                            modules.valueWheelY -= mouseWheel;
-                            sense.printINFO(mouseWheel);
+                            if ((mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1) || (mouseWheel > 0 && modules.valueWheelY > 0)) {
+                                modules.valueWheelY -= mouseWheel / Math.abs(mouseWheel);
+                            }
+                            sense.printINFO(mouseWheel / Math.abs(mouseWheel));
+                            sense.printINFO("modules.valueWheelY" + modules.valueWheelY);
                         }
 
                         /*
@@ -284,8 +288,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 /*
                 Values绘制
                  */
-                        int yValue = modules.valueWheelY;
+                        int yValue = 0;
+                        int skipValue = 0;
                         for (ValueHeader booleanValue : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                            if (modules.valueWheelY > 0 && skipValue < modules.valueWheelY) {
+                                skipValue++;
+                                continue;
+                            }
                             float valueX = modules.modulePosInfo[0] + 20;
                             float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
                             if (valueY + valueFont.getHeight(false) > (modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
