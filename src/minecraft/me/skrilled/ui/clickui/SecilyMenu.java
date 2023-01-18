@@ -261,15 +261,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             module_Alpha = (int) moduleAlpha.getAnimationValue();
                         } else moduleAlpha.setState(false);
                         moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
-                        //滚轮处理
-                        int mouseWheel = Mouse.getDWheel();
-                        if (isMouseInside(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
-                            if ((mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1) || (mouseWheel > 0 && modules.valueWheelY > 0)) {
-                                modules.valueWheelY -= mouseWheel / Math.abs(mouseWheel);
-                            }
-                            sense.printINFO(mouseWheel / Math.abs(mouseWheel));
-                            sense.printINFO("modules.valueWheelY" + modules.valueWheelY);
-                        }
+
 
                         /*
                         背景
@@ -285,6 +277,18 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
 
                         bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                        if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3])) {
+                            sense.printINFO(modules.getModuleName());
+                        }
+//                        //滚轮处理
+//                        int mouseWheel = Mouse.getDWheel();
+//                        if (isMouseInside(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
+//                            if ((mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1) || (mouseWheel > 0 && modules.valueWheelY > 0)) {
+//                                modules.valueWheelY -= mouseWheel / Math.abs(mouseWheel);
+//                            }
+//                            sense.printINFO(mouseWheel / Math.abs(mouseWheel));
+//                            sense.printINFO("modules.valueWheelY" + modules.valueWheelY);
+//                        }
                 /*
                 Values绘制
                  */
@@ -385,11 +389,8 @@ public class SecilyMenu extends GuiScreen implements IMC {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
-    boolean isMouseInside(float x1, float y1, float x2, float y2) {
-        int Mx = Mouse.getEventX() * this.width / sense.mc.displayWidth;
-        int My = this.height - Mouse.getEventY() * this.height / sense.mc.displayHeight - 1;
-        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
-
+    private boolean isHovering(int mouseX, int mouseY, float xLeft, float yUp, float xRight, float yBottom) {
+        return mouseX > xLeft && mouseX < xRight && mouseY > yUp && mouseY < yBottom;
     }
 
     @Override
