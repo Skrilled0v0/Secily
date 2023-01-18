@@ -164,10 +164,10 @@ public class Menu extends GuiScreen implements IMC {
         int moduleColor = new Color(74, 38, 255, 130).getRGB();
         int width = posX + windowWidth;                                 //更新窗口宽度
         int height = posY + windowHeight;                               //更新窗口高度
-        CFontRenderer minFont = sense.fontBuffer.font16;
-        CFontRenderer midFont = sense.fontBuffer.font24;
-        CFontRenderer valueFont = sense.fontBuffer.font18;
-        CFontRenderer bigFont = sense.fontBuffer.font36;
+        CFontRenderer minFont = sense.fontBuffer.EN16;
+        CFontRenderer midFont = sense.fontBuffer.EN24;
+        CFontRenderer valueFont = sense.fontBuffer.EN18;
+        CFontRenderer bigFont = sense.fontBuffer.EN36;
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */

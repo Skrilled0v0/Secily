@@ -67,7 +67,7 @@ public class Nametags extends ModuleHeader {
                         continue;
                     }
 
-                    CFontRenderer font = sense.getFontBuffer().font18;
+                    CFontRenderer font = sense.getFontBuffer().CN18;
 
                     GlStateManager.translate(renderPositions[0] / scaledRes.getScaleFactor(), renderPositions[1] / scaledRes.getScaleFactor(), 0.0D);
                     scale();
@@ -82,12 +82,12 @@ public class Nametags extends ModuleHeader {
                     str = str + suff;
 
                     float strWidth = font.getStringWidth(str.replaceAll("\247.", ""));
-                    float strWidth2 = sense.getFontBuffer().font10.getStringWidth(health);
+                    float strWidth2 = sense.getFontBuffer().EN10.getStringWidth(health);
                     float allWidth = (Math.max(strWidth, strWidth2)) + 8;
                     RenderUtil.drawRect(-allWidth / 2, -25.0f, allWidth / 2, 0, Colors.getColor(0, 130));
                     font.drawString(str, -allWidth / 2 + 4, -22.0F, Colors.WHITE.c);
 
-                    sense.getFontBuffer().font10.drawString(health, -allWidth / 2 + 4, -10.0F, Colors.WHITE.c);
+                    sense.getFontBuffer().EN10.drawString(health, -allWidth / 2 + 4, -10.0F, Colors.WHITE.c);
 
                     EntityLivingBase entity = (EntityLivingBase) ent;
                     float nowhealth = (float) Math.ceil(entity.getHealth() + entity.getAbsorptionAmount());
@@ -187,7 +187,7 @@ public class Nametags extends ModuleHeader {
         GlStateManager.disableDepth();
         x = (int) (x * 1.05D);
         y -= 6;
-        sense.getFontBuffer().font10.drawString(text, x + 9, -30 - y, Colors.getColor(255));
+        sense.getFontBuffer().EN10.drawString(text, x + 9, -30 - y, Colors.getColor(255));
         GlStateManager.enableDepth();
         GlStateManager.popMatrix();
     }

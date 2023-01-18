@@ -84,7 +84,7 @@ public class SkrilledGui extends GuiScreen {
             }
         }
         // wheel
-        sense.getFontBuffer().font24.drawCenteredString(currentModuleType.toString() + "/" + currentModule.getModuleName(), startX + 175, startY + 45, color);
+        sense.getFontBuffer().EN24.drawCenteredString(currentModuleType.toString() + "/" + currentModule.getModuleName(), startX + 175, startY + 45, color);
         float mY = startY + 30;
         for (int i = 0; i < sense.moduleManager.getModuleListByModuleType(currentModuleType).size(); i++) {
             ModuleHeader module = sense.moduleManager.getModuleListByModuleType(currentModuleType).get(i);
@@ -113,7 +113,7 @@ public class SkrilledGui extends GuiScreen {
                 RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
                 RenderUtil.drawFilledCircle(startX + module.clickanim, mY + 58, 5, color, 5);
             }
-            sense.getFontBuffer().font18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
+            sense.getFontBuffer().EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
             if (isSettingsButtonHovered(startX + 110, mY + 54, startX + 125, mY + 62, mouseX, mouseY)) {
                 if (!this.previousmouse && Mouse.isButtonDown(0)) {
                     module.setIsOpen(!module.isIsOpen());
@@ -145,7 +145,7 @@ public class SkrilledGui extends GuiScreen {
 
         // modules
         mY = startY + 30;
-        CFontRenderer font = sense.getFontBuffer().font18;
+        CFontRenderer font = sense.getFontBuffer().EN18;
         for (int i = 0; i < currentModule.getValueList().size(); i++) {
             if (mY > startY + 350) break;
             if (i < valueStart) {
@@ -277,7 +277,7 @@ public class SkrilledGui extends GuiScreen {
         RenderUtil.drawRect(0, 0, 160, sr.getScaledHeight_double(), f3c);
 
         RenderUtil.drawRect(160, 0, 161, sr.getScaledHeight_double(), color);
-        sense.getFontBuffer().font36.drawCenteredString(sense.skrilledSense(), 75, 87, color);
+        sense.getFontBuffer().EN36.drawCenteredString(sense.skrilledSense(), 75, 87, color);
         int j = 60;
         int l = 45;
         int k = 100;
@@ -301,7 +301,7 @@ public class SkrilledGui extends GuiScreen {
                 RenderUtil.drawRect(35, k - 15 + j + sidey, 120, k + 15 + j + sidey, color);
 
             }
-            sense.getFontBuffer().font24.drawCenteredString(iterator[i].toString(), xx + 40, k + 53 + l * i, new Color(255, 255, 255).getRGB());
+            sense.getFontBuffer().EN24.drawCenteredString(iterator[i].toString(), xx + 40, k + 53 + l * i, new Color(255, 255, 255).getRGB());
             RenderUtil.drawImageWithColor(new ResourceLocation("skrilled/MenuICON/" + iterator[i].toString() + ".png"), xx - 10, k + 48 + l * i, 25, 25, -1);
             try {
                 if (this.isCategoryHovered(+15, +k - 10 + j + i * l, +120, +k + 20 + j + i * l, mouseX, mouseY) && Mouse.isButtonDown(0)) {

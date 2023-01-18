@@ -1,6 +1,5 @@
 package me.skrilled.utils.render;
 
-import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
@@ -700,44 +699,6 @@ public class RenderUtil implements IMC {
         return new double[]{entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - RenderManager.renderPosX, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - RenderManager.renderPosY, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - RenderManager.renderPosZ,};
     }
 
-    public static void drawNameTag(EntityLivingBase entity) {
-        CFontRenderer font = sense.getFontBuffer().font36;
-        double posX = getEntityRenderPos(entity)[0];
-        double posY = getEntityRenderPos(entity)[1];
-        double posZ = getEntityRenderPos(entity)[2];
-        float autoScale = mc.thePlayer.getDistanceToEntity(entity);         //获取自动调整大小值
-        autoScale /= 200f;
-        if (autoScale >= 0.06f) autoScale = 0.06f;
-        if (autoScale <= 0.01f) autoScale = 0.01f;
-        posY += entity.isSneaking() ? 0.5D : 0.7D;
-        boolean isPlayer = entity instanceof EntityPlayer;
-        float health = entity.getHealth() + entity.getAbsorptionAmount();
-        float hpWidth = health / (entity.getMaxHealth() + entity.getAbsorptionAmount());
-        String entityDisplayName = entity.getDisplayName().getFormattedText() + " \u00a77[\u00a7r" + Math.round(entity.getHealth() + entity.getAbsorptionAmount()) + "\u00a7c❤\u00a77]";
-        int nameWidth = font.getStringWidth(entityDisplayName) / 2;
-        int fontHeight = font.getHeight(true);
-        int[] rectPos = {-nameWidth - 5, -fontHeight - 5, nameWidth + 5, 0};
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float) posX, (float) posY + 1.4f, (float) posZ);//定位
-        GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-RenderManager.playerViewY, 0.0F, 1.0F, 0.0F);//转向
-        GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(-autoScale, -autoScale, autoScale);                    //调整大小
-        GL11.glBlendFunc(770, 771);
-        GL11.glPushMatrix();
-        drawRect(rectPos[0], rectPos[1], rectPos[2], rectPos[3], new Color(0, 0, 0, 70).getRGB());
-        drawRect(rectPos[0], rectPos[1] + fontHeight, (int) (rectPos[0] + hpWidth * rectPos[2] * 2), rectPos[3], Color.green.getRGB());
-        GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        font.drawStringWithShadow(entityDisplayName, -nameWidth, -fontHeight + 3, -1);
-        GL11.glPopMatrix();
-        if (isPlayer) {//判断是玩家继续画ItemList
-            GL11.glScaled(1.5, 1.5, 1.5);
-            drawPlayerArmorList((EntityPlayer) entity, -nameWidth / 2 - 10, -fontHeight * 2 + 5, nameWidth / 4, false);
-        }
-        GL11.glColor4f(1, 1, 1, 0);
-        GL11.glPopMatrix();
-    }
 
     public static void drawPlayerArmorList(EntityPlayer entityPlayer, int x, int y, int /*间隔*/interval, boolean /*是/否纵向绘制*/vORh) {
         GL11.glPushMatrix();

@@ -58,7 +58,7 @@ public class GuiButton extends Gui implements IMC {
             } else if (this.hovered) {
                 j= new Color(50,100,200).getRGB();
             }
-            CFontRenderer font = sense.getFontBuffer().font18;
+            CFontRenderer font = sense.getFontBuffer().CN18;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             int i = this.getHoverState(this.hovered);
             RenderUtil.drawBorderedRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height,1.5f, j, new Color(50, 50, 50, 170).getRGB());

@@ -33,9 +33,8 @@ public class HUD extends ModuleHeader {
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         double[] pos = sense.getPlayerPos();
-        CFontRenderer font = sense.getFontBuffer().font16;
-        CFontRenderer arrayFont = sense.getFontBuffer().font24;
-        CFontRenderer bigFont = sense.getFontBuffer().font36;
+        CFontRenderer font = sense.getFontBuffer().EN16;
+        CFontRenderer arrayFont = sense.getFontBuffer().EN24;
         //ArrayList
         if ((Boolean) this.getValue(malist)) {
             ArrayList<ModuleHeader> sortedList = new ArrayList<>();

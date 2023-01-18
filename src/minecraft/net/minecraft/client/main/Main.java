@@ -54,7 +54,7 @@ public class Main {
         OptionSpec<Integer> optionspec13 = optionparser.accepts("width").withRequiredArg().ofType(Integer.class)
                 .defaultsTo(Integer.valueOf(1280));
         OptionSpec<Integer> optionspec14 = optionparser.accepts("height").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(720));
+                .defaultsTo(Integer.valueOf(700));
         OptionSpec<String> optionspec15 = optionparser.accepts("userProperties").withRequiredArg().defaultsTo("{}"
         );
         OptionSpec<String> optionspec16 = optionparser.accepts("profileProperties").withRequiredArg().defaultsTo("{}"

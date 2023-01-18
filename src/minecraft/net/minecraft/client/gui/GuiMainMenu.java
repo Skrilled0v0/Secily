@@ -1,5 +1,6 @@
 package net.minecraft.client.gui;
 
+import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.ui.alt.GuiAltLogin;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.math.TimerUtil;
@@ -49,10 +50,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int j = this.height / 2;
         int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
+        CFontRenderer font = sense.getFontBuffer().EN48;
         RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i - 1));
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
-        sense.getFontBuffer().font36.drawStringWithShadow(sense.skrilledSense(), 30, j - 90, new Color(68, 137, 204).getRGB());
+        font.drawStringWithShadow(sense.skrilledSense(), 10, j - 90, new Color(68, 137, 204).getRGB());
         GlStateManager.popMatrix();
         if (timerUtil.hasReached(50)) {
             i++;

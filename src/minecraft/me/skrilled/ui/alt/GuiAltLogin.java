@@ -34,7 +34,7 @@ public class GuiAltLogin extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float z) {
-        CFontRenderer font = SenseHeader.getSense.getFontBuffer().font16;
+        CFontRenderer font = SenseHeader.getSense.getFontBuffer().CN18;
         this.drawDefaultBackground();
         this.username.drawTextBox();
         this.password.drawTextBox();

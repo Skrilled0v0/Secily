@@ -19,7 +19,7 @@ import java.awt.*;
 import java.util.List;
 
 public class SenseHeader implements IMC {
-    public static String[] clientInfo = {"SkrilledSense", "230104", "Eclipse"};
+    public static String[] clientInfo = {"SkrilledSense", "230117", "Genshin Impact"};
     public static SenseHeader getSense = new SenseHeader();
     public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
@@ -41,7 +41,7 @@ public class SenseHeader implements IMC {
     }
 
     public void clientStart() {
-        Display.setTitle(getClientName() + " code by " + skrilledSense() + " Build in" + getClientUpdate());
+        Display.setTitle(getClientName());
         FileManager.init();
         moduleManager = new ModuleManager();
         moduleManager.load();
