@@ -280,15 +280,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3])) {
                             sense.printINFO(modules.getModuleName());
                         }
-//                        //滚轮处理
-//                        int mouseWheel = Mouse.getDWheel();
-//                        if (isMouseInside(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
-//                            if ((mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1) || (mouseWheel > 0 && modules.valueWheelY > 0)) {
-//                                modules.valueWheelY -= mouseWheel / Math.abs(mouseWheel);
-//                            }
-//                            sense.printINFO(mouseWheel / Math.abs(mouseWheel));
-//                            sense.printINFO("modules.valueWheelY" + modules.valueWheelY);
-//                        }
+                        //滚轮处理
+                        int mouseWheel = Mouse.getDWheel();
+                        if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
+                            if ((mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1) || (mouseWheel > 0 && modules.valueWheelY > 0)) {
+                                modules.valueWheelY -= mouseWheel / Math.abs(mouseWheel);
+                            }
+                        }
                 /*
                 Values绘制
                  */
