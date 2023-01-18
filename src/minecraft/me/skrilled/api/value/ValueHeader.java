@@ -90,6 +90,13 @@ public class ValueHeader {
         }
     }
 
+    public void posDel() {
+        x1 = 0;
+        y1 = 0;
+        x2 = 0;
+        y2 = 0;
+    }
+
     public ValueType getValueType() {
         return valueType;
     }

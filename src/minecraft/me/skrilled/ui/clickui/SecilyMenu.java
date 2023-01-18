@@ -286,6 +286,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         int skipValue = 0;
                         for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
+                                booleanValue.posDel();
                                 skipValue++;
                                 continue;
                             }
