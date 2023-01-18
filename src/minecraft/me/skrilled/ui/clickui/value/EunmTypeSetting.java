@@ -5,5 +5,10 @@
  */
 package me.skrilled.ui.clickui.value;
 
-public class EunmTypeSetting {
+public class EunmTypeSetting extends CanDraw {
+    @Override
+    public void draw() {
+
+
+    }
 }

@@ -5,5 +5,9 @@
  */
 package me.skrilled.ui.clickui.value;
 
-public class ColorSetting {
+public class ColorSetting  extends CanDraw{
+    @Override
+    public void draw() {
+
+    }
 }

@@ -5,7 +5,11 @@
  */
 package me.skrilled.ui.clickui.value;
 
-public class StringSetting {
+public class StringSetting extends CanDraw {
 
 
+    @Override
+    public void draw() {
+
+    }
 }

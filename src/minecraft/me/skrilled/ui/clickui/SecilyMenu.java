@@ -28,11 +28,6 @@ import java.util.List;
 
 public class SecilyMenu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
-
-    /**
-     *mouseX
-     */
-
     /**
      * ModuleType的间隔
      */
@@ -171,9 +166,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
         int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
-        int valueButtonBoleanColor = new Color(0, 136, 255).getRGB();
-        int valueBoleanOPColor = new Color(74, 74, 74).getRGB();
-        int valueBoleanDisColor = new Color(25, 25, 25).getRGB();
+        int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();
+        int valueBooleanOPColor = new Color(74, 74, 74).getRGB();
+        int valueBooleanDisColor = new Color(25, 25, 25).getRGB();
 //        int moduleColor = new Color(205, 174, 161, 175).getRGB();                     //Module颜色-背景暗色
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
@@ -276,7 +271,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                          */
                         RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
 
-                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 3f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
                         if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3])) {
@@ -296,17 +291,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = modules.modulePosInfo[0] + 20;
-                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
+                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
                             if (valueY + valueFont.getHeight(false) > (modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = booleanValue.getValueName() + ":";
 
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (modules.modulePosInfo[2] - 55), (int) valueY);
-//                            valueUI.motion.setState(!booleanValue.isOptionOpen());
-                            sense.printINFO(BooleanSetting.motion.getState() + " - " + booleanValue.getValueName());
-                            valueUI.draw(valueButtonBoleanColor, valueBoleanOPColor, valueBoleanDisColor);
-                            yValue += (valueFont.getHeight(false) * 1.5);
+                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (valueX + 40), (int) valueY);
+                            valueUI.motion.setState(booleanValue.isOptionOpen());
+                            valueUI.draw();
+                            yValue += (valueFont.getHeight(false) * 2f);
                         }
 
                     }
