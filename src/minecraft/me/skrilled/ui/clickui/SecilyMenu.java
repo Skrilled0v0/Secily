@@ -10,7 +10,6 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.clickui.value.BooleanSetting;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
@@ -28,6 +27,7 @@ import java.util.List;
 
 public class SecilyMenu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
+    public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
     /**
      * ModuleType的间隔
      */
@@ -249,9 +249,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
                         int moduleCurrentBGColor;
                         int moduleCurrentTitleOPorDis;
-                        ModuleHeader modules = moduleHeaders.get(i);
+                        ModuleHeader module = moduleHeaders.get(i);
                         moduleCurrentTitleOPorDis = moduleHeaders.get(i).isIsOpen() ? new Color(0, 255, 169, 150).getRGB() : new Color(76, 76, 76, 100).getRGB();
-                        if (Mouse.isButtonDown(0) && modules.menuFlag) {
+                        if (Mouse.isButtonDown(0) && module.menuFlag) {
                             moduleAlpha.setState(true);
                             module_Alpha = (int) moduleAlpha.getAnimationValue();
                         } else moduleAlpha.setState(false);
@@ -261,45 +261,46 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         背景
                          */
-                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], modules.menuFlag ? moduleCurrentBGColor : moduleBGColor, modules.menuFlag ? moduleCurrentBGColor : moduleBGColor);
+                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3], module.menuFlag ? moduleCurrentBGColor : moduleBGColor, module.menuFlag ? moduleCurrentBGColor : moduleBGColor);
                         /*
                         上标题背景
                          */
-                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxTitleHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxTitleHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
                         /*
                         下标题背景
                          */
-                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
 
-                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                        bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 2f, module.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
-                        if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3])) {
+                        if (isHovering(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3])) {
+                            currentModule = module;
                             int mouseWheel = Mouse.getDWheel();
-                            if (mouseWheel > 0 && modules.valueWheelY > 0) modules.valueWheelY -= 1;
-                            if (mouseWheel < 0 && modules.valueWheelY < modules.getValueList().size() - 1)
-                                modules.valueWheelY += 1;
+                            if (mouseWheel > 0 && module.valueWheelY > 0) module.valueWheelY -= 1;
+                            if (mouseWheel < 0 && module.valueWheelY < module.getValueList().size() - 1)
+                                module.valueWheelY += 1;
                         }
                 /*
                 Values绘制
                  */
                         int yValue = 0;
                         int skipValue = 0;
-                        for (ValueHeader booleanValue : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
-                            if (modules.valueWheelY > 0 && skipValue < modules.valueWheelY) {
+                        for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                            if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 skipValue++;
                                 continue;
                             }
-                            float valueX = modules.modulePosInfo[0] + 20;
-                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
-                            if (valueY + valueFont.getHeight(false) > (modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                            float valueX = module.modulePosInfo[0] + 20;
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false);
+                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = booleanValue.getValueName() + ":";
 
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (valueX + 40), (int) valueY);
-                            valueUI.motion.setState(booleanValue.isOptionOpen());
-                            valueUI.draw();
+                            booleanValue.x1=(int) (valueX + 40);
+                            booleanValue.y1=(int) valueY;
+                            booleanValue.draw();
                             yValue += (valueFont.getHeight(false) * 2f);
                         }
 
@@ -363,6 +364,18 @@ public class SecilyMenu extends GuiScreen implements IMC {
         }
         for (ModuleHeader moduleHeader : moduleHeaders) {
             moduleHeader.menuFlag = isMouseClickedInside(mouseX, mouseY, moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3]);
+            /*
+            调value的判定
+             */
+            for (ValueHeader valueHeader : moduleHeader.getValueList()) {
+                if (isMouseClickedInside(mouseX,mouseY,valueHeader.x1,valueHeader.y1,valueHeader.x2,valueHeader.y2)){
+                    /*
+                    boolean开关
+                     */
+                    if (valueHeader.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
+                    valueHeader.setOptionOpen(!valueHeader.isOptionOpen());
+                }
+            }
         }
         for (PageNumBar page : PageNumBars) {
             if (isMouseClickedInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {

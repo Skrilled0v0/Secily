@@ -5,12 +5,21 @@
  */
 package me.skrilled.api.value;
 
-import me.skrilled.ui.clickui.value.BooleanSetting;
+
+import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.Animation;
+import me.surge.animation.BoundedAnimation;
+import me.surge.animation.Easing;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ValueHeader {
+    public int x1 = 0;
+    public int y1 = 0;
+    public int x2 = 0;
+    public int y2 = 0;
+    public boolean visible = true;
     String valueName;
     boolean optionOpen;
     ValueType valueType;
@@ -26,6 +35,7 @@ public class ValueHeader {
     int Banim = 55;
     int Eanim = 55;
     int Nanim = 55;
+    Animation motion = new Animation(1000f, false, Easing.LINEAR);
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;
@@ -60,6 +70,24 @@ public class ValueHeader {
         this.valueType = ValueType.BOOLEAN;
         this.valueName = valueName;
         this.optionOpen = optionOpen;
+    }
+
+    public void draw() {
+        switch (valueType) {
+            case DOUBLE:
+            case COLOR:
+            case STRING:
+            case BOOLEAN:
+                int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();
+                int valueBooleanOPColor = new Color(74, 74, 74).getRGB();
+                int valueBooleanDisColor = new Color(25, 25, 25).getRGB();
+                int BGColor = this.isOptionOpen() ? valueBooleanOPColor : valueBooleanDisColor;
+                x2 = x1 + 35;
+                y2 = y1 + 10;
+                RenderUtil.drawRound(x1, y1, x2, y2, BGColor, BGColor);
+                RenderUtil.drawRound((float) ((x1 - 2 )*motion.getAnimationFactor()), (float) (y1 - 2), (float) ((x1 + 12)*motion.getAnimationFactor()), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
+            case ENUM_TYPE:
+        }
     }
 
     public ValueType getValueType() {
@@ -119,26 +147,22 @@ public class ValueHeader {
         return optionOpen;
     }
 
-
     public void setOptionOpen(boolean optionOpen) {
-        BooleanSetting.motion.setState(optionOpen);
         this.optionOpen = optionOpen;
+        motion.setState(optionOpen);
     }
 
     public double[] getDoubles() {
         return doubles;
     }
 
-
     public void setDoubles(double[] doubles) {
         this.doubles = doubles;
     }
 
-
     public ArrayList<String> getEnumTypes() {
         return enumTypes;
     }
-
 
     public void setEnumTypes(ArrayList<String> enumTypes) {
         this.enumTypes = enumTypes;
@@ -148,16 +172,13 @@ public class ValueHeader {
         return colorValue;
     }
 
-
     public void setColorValue(Color colorValue) {
         this.colorValue = colorValue;
     }
 
-
     public String getStrValue() {
         return strValue;
     }
-
 
     public void setStrValue(String strValue) {
         this.strValue = strValue;
@@ -178,6 +199,6 @@ public class ValueHeader {
     }
 
     public enum ValueType {
-        DOUBLE, ENUM_TYPE, COLOR, STRING, BOOLEAN
+        DOUBLE, ENUM_TYPE, COLOR, STRING, BOOLEAN;
     }
 }
