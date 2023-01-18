@@ -8,7 +8,6 @@ package me.skrilled.api.value;
 
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
-import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 
 import java.awt.*;
@@ -35,7 +34,7 @@ public class ValueHeader {
     int Banim = 55;
     int Eanim = 55;
     int Nanim = 55;
-    Animation motion = new Animation(1000f, false, Easing.LINEAR);
+    Animation motion = new Animation(600f, false, Easing.LINEAR);
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;
@@ -85,8 +84,9 @@ public class ValueHeader {
                 x2 = x1 + 35;
                 y2 = y1 + 10;
                 RenderUtil.drawRound(x1, y1, x2, y2, BGColor, BGColor);
-                RenderUtil.drawRound((float) ((x1 - 2 )*motion.getAnimationFactor()), (float) (y1 - 2), (float) ((x1 + 12)*motion.getAnimationFactor()), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
+                RenderUtil.drawRound((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
             case ENUM_TYPE:
+
         }
     }
 
@@ -199,6 +199,6 @@ public class ValueHeader {
     }
 
     public enum ValueType {
-        DOUBLE, ENUM_TYPE, COLOR, STRING, BOOLEAN;
+        DOUBLE, ENUM_TYPE, COLOR, STRING, BOOLEAN
     }
 }

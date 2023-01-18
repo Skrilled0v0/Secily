@@ -136,8 +136,8 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 该moduleType下module总和
      */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-    BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1300f, false, Easing.LINEAR);
-    BoundedAnimation moduleAlpha = new BoundedAnimation(120, 250, 800f, false, Easing.LINEAR);
+    BoundedAnimation windowAlpha = new BoundedAnimation(125, 220, 888f, false, Easing.LINEAR);
+    BoundedAnimation moduleAlpha = new BoundedAnimation(165, 250, 550f, false, Easing.LINEAR);
     /**
      * 该moduleType下moduleHeader总和
      */
@@ -166,9 +166,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
         int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
-        int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();
-        int valueBooleanOPColor = new Color(74, 74, 74).getRGB();
-        int valueBooleanDisColor = new Color(25, 25, 25).getRGB();
+
 //        int moduleColor = new Color(205, 174, 161, 175).getRGB();                     //Module颜色-背景暗色
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
@@ -271,7 +269,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                          */
                         RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
 
-                        bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 2f, module.menuFlag ? moduleCurrentColor : moduleColor);
+                        bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
                         if (isHovering(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3])) {
@@ -292,16 +290,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = module.modulePosInfo[0] + 20;
-                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false);
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = booleanValue.getValueName() + ":";
 
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            booleanValue.x1=(int) (valueX + 40);
-                            booleanValue.y1=(int) valueY;
+                            booleanValue.x1 = (int) (module.modulePosInfo[2] - 55);
+                            booleanValue.y1 = (int) valueY;
                             booleanValue.draw();
-                            yValue += (valueFont.getHeight(false) * 2f);
+                            yValue += (valueFont.getHeight(false) * 1.5f);
                         }
 
                     }
