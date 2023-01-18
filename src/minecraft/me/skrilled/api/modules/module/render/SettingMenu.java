@@ -7,15 +7,15 @@ package me.skrilled.api.modules.module.render;
 
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.clickui.Menu;
+import me.skrilled.ui.clickui.EclipseMenu;
 import me.skrilled.ui.clickui.MenuMotion;
-import me.skrilled.ui.clickui.SkrilledGui;
+import me.skrilled.ui.clickui.SecilyMenu;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
 public class SettingMenu extends ModuleHeader {
-    public static Menu menu = new Menu();
+    public static SecilyMenu menu = new SecilyMenu();
     static ArrayList<String> cmode = new ArrayList<>();
     public static ValueHeader colorMode = new ValueHeader("ColorMode", "Dark", cmode);
 
@@ -35,7 +35,7 @@ public class SettingMenu extends ModuleHeader {
     @Override
     public void onOpen() {
         if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) {
-            mc.displayGuiScreen(new SkrilledGui());
+            mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
         }
         MenuMotion.setMenuMotion();

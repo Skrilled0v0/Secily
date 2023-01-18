@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import static me.skrilled.utils.IMC.sense;
 
-public class SkrilledGui extends GuiScreen {
+public class EclipseMenu extends GuiScreen {
     public static ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
     public static ModuleType currentModuleType = ModuleType.COMBAT;
     public static ModuleHeader currentModule = SenseHeader.sense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);

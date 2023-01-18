@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Menu extends GuiScreen implements IMC {
+public class SecilyMenu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
     /**
      * ModuleType的间隔
@@ -145,7 +145,11 @@ public class Menu extends GuiScreen implements IMC {
      * Module背景透明质
      */
     int module_Alpha = 0;
-    boolean closeed;
+    /**
+     * Value Y坐标增值存储
+     */
+    int yValue = 0;
+    boolean closed;
 
     /*
     绘制开始
@@ -158,6 +162,7 @@ public class Menu extends GuiScreen implements IMC {
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
         int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
+//        new Color()
 //        int moduleColor = new Color(205, 174, 161, 175).getRGB();                     //Module颜色-背景暗色
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
@@ -249,11 +254,13 @@ public class Menu extends GuiScreen implements IMC {
                 /*
                 Values绘制
                  */
-                        int yAxsi = 0;
                         for (ValueHeader valueHeader : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             String valueStr = valueHeader.getValueName() + ":";
-                            midFont.drawString(valueStr, modules.modulePosInfo[0] + 20, modules.modulePosInfo[1] + yAxsi + bigFont.getHeight(false), valueFontColor);
-                            yAxsi += (valueListUDInterval + midFont.getHeight(false));
+                            float valueX = modules.modulePosInfo[0] + 20;
+                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
+                            valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
+//                            new BooleanSetting(valueHeader.isOptionOpen(),valueX+valueFont.getStringWidth(valueStr),valueY).draw();
+                            yValue += (valueListUDInterval + midFont.getHeight(false));
                         }
                     }
 
@@ -296,7 +303,7 @@ public class Menu extends GuiScreen implements IMC {
                 xAxis += moduleTypeInterval + typeSideSize;
             }
         }
-        if (closeed) {
+        if (closed) {
             if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) IMC.mc.displayGuiScreen(null);
         }
     }
@@ -306,7 +313,7 @@ public class Menu extends GuiScreen implements IMC {
 
         sense.printINFO(Math.random());
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
-        int moduleTypeInterval = Menu.moduleTypeInterval;//ModuleType间隔
+        int moduleTypeInterval = SecilyMenu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
         float xAxis = 0;
         for (ModuleType value : ModuleType.values()) {
@@ -343,7 +350,7 @@ public class Menu extends GuiScreen implements IMC {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) {
-            closeed = true;
+            closed = true;
             sense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
         }
         super.keyTyped(typedChar, keyCode);

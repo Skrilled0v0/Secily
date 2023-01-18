@@ -3,7 +3,7 @@
  *Code by SkrilledSense
  *20230118
  */
-package me.skrilled.ui.clickui;
+package me.skrilled.ui;
 
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.SenseHeader;

@@ -11,7 +11,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventKey;
-import me.skrilled.ui.clickui.LoadingGui;
+import me.skrilled.ui.LoadingGui;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
