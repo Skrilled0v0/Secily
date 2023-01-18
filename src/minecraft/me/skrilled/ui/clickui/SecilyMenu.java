@@ -10,6 +10,7 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.ValueHeader;
+import me.skrilled.ui.clickui.value.BooleanSetting;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
@@ -27,6 +28,11 @@ import java.util.List;
 
 public class SecilyMenu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
+
+    /**
+     *mouseX
+     */
+
     /**
      * ModuleType的间隔
      */
@@ -67,6 +73,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * Module左右窗口边距
      */
     int moduleLRMargin = 25;
+    /**
+     * Modules标题区域高度
+     */
+    int moduleBoxTitleHeight = 20;
     /**
      * GUI窗口定位x轴
      */
@@ -131,7 +141,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 该moduleType下module总和
      */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-    BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1800f, false, Easing.LINEAR);
+    BoundedAnimation windowAlpha = new BoundedAnimation(75, 220, 1300f, false, Easing.LINEAR);
     BoundedAnimation moduleAlpha = new BoundedAnimation(120, 250, 800f, false, Easing.LINEAR);
     /**
      * 该moduleType下moduleHeader总和
@@ -148,7 +158,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
     /**
      * Value Y坐标增值存储
      */
-    int yValue = 0;
     boolean closed;
 
     /*
@@ -162,7 +171,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
         int valueFontColor = new Color(39, 37, 42, 130).getRGB();            //定义Value字体颜色局部变量
-//        new Color()
+        int valueButtonBoleanColor = new Color(0, 136, 255).getRGB();
+        int valueBoleanOPColor = new Color(74, 74, 74).getRGB();
+        int valueBoleanDisColor = new Color(25, 25, 25).getRGB();
 //        int moduleColor = new Color(205, 174, 161, 175).getRGB();                     //Module颜色-背景暗色
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
@@ -240,28 +251,54 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 /*
                 绘制module层
                  */
-
+                    int mouseWheel = Mouse.getDWheel();
                     for (int i = 6 * (currentPage - 1); i < (Math.min((currentPage * 6), moduleHeaders.size())); i++) {
                         int moduleCurrentBGColor;
+                        int moduleCurrentTitleOPorDis;
                         ModuleHeader modules = moduleHeaders.get(i);
+                        moduleCurrentTitleOPorDis = moduleHeaders.get(i).isIsOpen() ? new Color(0, 255, 169, 150).getRGB() : new Color(76, 76, 76, 100).getRGB();
                         if (Mouse.isButtonDown(0) && modules.menuFlag) {
                             moduleAlpha.setState(true);
                             module_Alpha = (int) moduleAlpha.getAnimationValue();
                         } else moduleAlpha.setState(false);
                         moduleCurrentBGColor = new Color(200, 200, 240, module_Alpha).getRGB();
+                        if (isMouseInside(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxTitleHeight, modules.modulePosInfo[3], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight) && mouseWheel != 0) {
+                            modules.valueWheelY -= mouseWheel;
+                            sense.printINFO(mouseWheel);
+                        }
+
+                        /*
+                        背景
+                         */
                         RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3], modules.menuFlag ? moduleCurrentBGColor : moduleBGColor, modules.menuFlag ? moduleCurrentBGColor : moduleBGColor);
+                        /*
+                        上标题背景
+                         */
+                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxTitleHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+                        /*
+                        下标题背景
+                         */
+                        RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+
                         bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
                 /*
                 Values绘制
                  */
-                        for (ValueHeader valueHeader : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
-                            String valueStr = valueHeader.getValueName() + ":";
+                        int yValue = modules.valueWheelY;
+                        for (ValueHeader booleanValue : modules.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             float valueX = modules.modulePosInfo[0] + 20;
                             float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
+                            if (valueY + valueFont.getHeight(false) > (modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                                break;
+                            String valueStr = booleanValue.getValueName() + ":";
+
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-//                            new BooleanSetting(valueHeader.isOptionOpen(),valueX+valueFont.getStringWidth(valueStr),valueY).draw();
-                            yValue += (valueListUDInterval + midFont.getHeight(false));
+                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (valueX + 40), (int) valueY);
+                            valueUI.motion.setState(booleanValue.isOptionOpen());
+                            valueUI.draw(valueButtonBoleanColor, valueBoleanOPColor, valueBoleanDisColor);
+                            yValue += (valueFont.getHeight(false) * 2f);
                         }
+
                     }
 
                 /*
@@ -310,23 +347,21 @@ public class SecilyMenu extends GuiScreen implements IMC {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-
-        sense.printINFO(Math.random());
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
         int moduleTypeInterval = SecilyMenu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
         float xAxis = 0;
         for (ModuleType value : ModuleType.values()) {
-            if (mouseButton == 0 && isMouseInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
+            if (mouseButton == 0 && isMouseClickedInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
                 currentModuleType = value;
             }
             xAxis += moduleTypeInterval + typeSideSize;
         }
         for (ModuleHeader moduleHeader : moduleHeaders) {
-            moduleHeader.menuFlag = isMouseInside(mouseX, mouseY, moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3]);
+            moduleHeader.menuFlag = isMouseClickedInside(mouseX, mouseY, moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3]);
         }
         for (PageNumBar page : PageNumBars) {
-            if (isMouseInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {
+            if (isMouseClickedInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {
                 currentPage = page.num;
             }
         }
@@ -337,8 +372,15 @@ public class SecilyMenu extends GuiScreen implements IMC {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+    boolean isMouseClickedInside(int Mx, int My, float x1, float y1, float x2, float y2) {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
+    }
+
+    boolean isMouseInside(float x1, float y1, float x2, float y2) {
+        int Mx = Mouse.getEventX() * this.width / sense.mc.displayWidth;
+        int My = this.height - Mouse.getEventY() * this.height / sense.mc.displayHeight - 1;
+        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
+
     }
 
     @Override

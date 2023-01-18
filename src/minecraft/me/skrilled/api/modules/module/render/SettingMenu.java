@@ -20,7 +20,7 @@ public class SettingMenu extends ModuleHeader {
     public static ValueHeader colorMode = new ValueHeader("ColorMode", "Dark", cmode);
 
     ArrayList<String> mode = new ArrayList<>();
-    ValueHeader sideMode = new ValueHeader("Mode", "Eclipse", mode);
+    ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
 
     public SettingMenu() {
         super("SettingMenu", false, ModuleType.RENDER);

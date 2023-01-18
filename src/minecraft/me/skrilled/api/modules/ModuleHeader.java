@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ModuleHeader implements IMC {
     public float[] modulePosInfo = new float[]{0, 0, 0, 0};
     public boolean menuFlag;
-    public int key, anim, clickanim;
+    public int key, anim, clickanim, valueWheelY = 0;
     String moduleName;
     String suffix = "";
     boolean isOpen;
@@ -60,6 +60,7 @@ public class ModuleHeader implements IMC {
     public void addValueList(ValueHeader... valueHeader) {
         this.valueList.addAll(Arrays.asList(valueHeader));
     }
+
 
     public void addEnumTypes(ArrayList<String> enumTypes, String... values) {
         enumTypes.addAll(Arrays.asList(values));
