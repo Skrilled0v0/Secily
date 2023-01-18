@@ -276,7 +276,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                          */
                         RenderUtil.drawRound(modules.modulePosInfo[0], modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, modules.modulePosInfo[2], modules.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
 
-                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 2f, modules.menuFlag ? moduleCurrentColor : moduleColor);
+                        bigFont.drawCenteredString(modules.getModuleName(), modules.modulePosInfo[0] + moduleBoxWidth / 2f, modules.modulePosInfo[1] + bigFont.getHeight(false) / 3f, modules.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
                         if (isHovering(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3])) {
@@ -296,16 +296,17 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = modules.modulePosInfo[0] + 20;
-                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false);
+                            float valueY = modules.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = booleanValue.getValueName() + ":";
 
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (valueX + 40), (int) valueY);
-                            valueUI.motion.setState(booleanValue.isOptionOpen());
+                            BooleanSetting valueUI = new BooleanSetting(booleanValue.isOptionOpen(), (int) (modules.modulePosInfo[2] - 55), (int) valueY);
+//                            valueUI.motion.setState(!booleanValue.isOptionOpen());
+                            sense.printINFO(BooleanSetting.motion.getState() + " - " + booleanValue.getValueName());
                             valueUI.draw(valueButtonBoleanColor, valueBoleanOPColor, valueBoleanDisColor);
-                            yValue += (valueFont.getHeight(false) * 2f);
+                            yValue += (valueFont.getHeight(false) * 1.5);
                         }
 
                     }
@@ -339,7 +340,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                  */
                     for (int i = 0; i < modulePageMAXIndex; i++) {
                         RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
-                        midFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + 2.0f, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
+                        bigFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + bigFont.getHeight(false) / 2f - 5, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
                         fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                         fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                     }

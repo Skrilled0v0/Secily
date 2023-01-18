@@ -5,6 +5,8 @@
  */
 package me.skrilled.api.value;
 
+import me.skrilled.ui.clickui.value.BooleanSetting;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -119,6 +121,7 @@ public class ValueHeader {
 
 
     public void setOptionOpen(boolean optionOpen) {
+        BooleanSetting.motion.setState(optionOpen);
         this.optionOpen = optionOpen;
     }
 

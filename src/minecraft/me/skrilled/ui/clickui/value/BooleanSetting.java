@@ -10,7 +10,7 @@ import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 
 public class BooleanSetting {
-    public BoundedAnimation motion = new BoundedAnimation(0, 10, 1000f, false, Easing.LINEAR);
+    public static BoundedAnimation motion = new BoundedAnimation(0, 10, 1000f, false, Easing.LINEAR);
     boolean value;
     int x, y;
 
