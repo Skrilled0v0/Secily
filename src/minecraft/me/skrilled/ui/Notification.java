@@ -63,7 +63,7 @@ public class Notification implements IMC {
     public void draw() {
 //        sense.printINFO("    public void draw() ");
         String msg = this.message;
-        String info = "Type:" + this.type + "  Time remaining:" + (Math.floor((1f - timerAnim.getLinearFactor()) * stayTime / 1000f) * 100) / 100 + "s";
+        String info = "Type:" + this.type + "  Time remaining:" + Math.floor(((1f-timerAnim.getAnimationFactor())*stayTime)/10f)/100f + "s";
         CFontRenderer messageFont = sense.fontBuffer.EN24;
         CFontRenderer infoFont = sense.fontBuffer.EN12;
         //字体高度
