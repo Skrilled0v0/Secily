@@ -411,9 +411,14 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             if (enumType == value.getCurrentEnumType()) break;
                             index++;
                         }
-                        if (value.getEnumTypes().size() > (index + 1))
-                            value.setCurrentEnumType(value.getEnumTypes().get(index + 1));
-                        else value.setCurrentEnumType(value.getEnumTypes().get(0));
+                        if (mouseButton == 0) {
+                            if (value.getEnumTypes().size() > (index + 1))
+                                value.setCurrentEnumType(value.getEnumTypes().get(index + 1));
+                            else value.setCurrentEnumType(value.getEnumTypes().get(0));
+                        } else if (mouseButton == 1) {
+                            if (index > 0) value.setCurrentEnumType(value.getEnumTypes().get(index - 1));
+                            else value.setCurrentEnumType(value.getEnumTypes().get(value.getEnumTypes().size()-1));
+                        }
                     }
                 }
             }
