@@ -90,12 +90,21 @@ public class ValueHeader {
                 RenderUtil.drawRound((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
                 break;
             case ENUM_TYPE:
-                SenseHeader.sense.printINFO("dawdawdawfawfaf");
                 int enumBGColor = new Color(63, 63, 63).getRGB();
-                x2 = x1 + 35;
                 y2 = y1 + 10;
-                RenderUtil.drawRound(x1, y1, x2, y2, enumBGColor, enumBGColor);
-                font.drawCenteredString(this.getCurrentEnumType(), x1 + 17.5f, y1, -1);
+                String str = "";
+                int index = 0;
+                for (String enumType : this.getEnumTypes()) {
+                    if (enumType == this.getCurrentEnumType()) break;
+                    index++;
+                }
+                if (this.getEnumTypes().size() > (index + 1)) str += (this.getEnumTypes().get(index + 1));
+                else str = (this.getEnumTypes().get(0));
+                str += "  " + this.currentEnumType + "  ";
+                if (index > 0) str += (this.getEnumTypes().get(index - 1));
+                else str += (this.getEnumTypes().get(this.getEnumTypes().size() - 1));
+                RenderUtil.drawRound(((x1 + x2 - 1.1f * font.getStringWidth(str)) / 2), y1, ((x1 + x2 + 1.1f * font.getStringWidth(str)) / 2), y2, enumBGColor, enumBGColor);
+                font.drawCenteredString(str, (x1 + x2) / 2, y1, -1);
                 break;
 
 

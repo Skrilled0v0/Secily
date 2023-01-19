@@ -287,6 +287,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                  */
                         int yValue = 0;
                         int skipValue = 0;
+                        /*
+                        boolean类型value绘制
+                         */
                         for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 booleanValue.posDel();
@@ -304,6 +307,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             booleanValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }
+                        /*
+                        enum类型value绘制
+                         */
                         for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
                             int enumTypes = enumValue.getEnumTypes().size();
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
@@ -315,10 +321,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
-                            String valueStr = enumValue.getValueName() + ":";
+                            String valueStr = enumValue.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            enumValue.x1 = (int) (module.modulePosInfo[2] - 55);
+                            enumValue.x1 = (int) ((valueX + valueFont.getStringWidth(valueStr)));
                             enumValue.y1 = (int) valueY;
+                            enumValue.x2 = (int) (module.modulePosInfo[2] - 20);
                             enumValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }
@@ -406,7 +413,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         value.setOptionOpen(!value.isOptionOpen());
                     if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
                         int index = 0;
-
                         for (String enumType : value.getEnumTypes()) {
                             if (enumType == value.getCurrentEnumType()) break;
                             index++;
@@ -417,7 +423,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             else value.setCurrentEnumType(value.getEnumTypes().get(0));
                         } else if (mouseButton == 1) {
                             if (index > 0) value.setCurrentEnumType(value.getEnumTypes().get(index - 1));
-                            else value.setCurrentEnumType(value.getEnumTypes().get(value.getEnumTypes().size()-1));
+                            else value.setCurrentEnumType(value.getEnumTypes().get(value.getEnumTypes().size() - 1));
                         }
                     }
                 }
