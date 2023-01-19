@@ -31,8 +31,7 @@ public class HUD extends ModuleHeader {
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {
-        Notification nt = new Notification();
-        nt.drawNotification();
+        Notification.drawNotifications();
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         double[] pos = sense.getPlayerPos();

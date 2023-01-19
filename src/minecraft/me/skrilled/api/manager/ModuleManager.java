@@ -56,7 +56,7 @@ public class ModuleManager {
     public ModuleHeader getModuleByName(String mName) {
         for (ModuleHeader moduleHeader : this.mList) {
             if (moduleHeader.getModuleName().equalsIgnoreCase(mName)) {
-                System.out.println("成功-返还->" + moduleHeader.getModuleName());
+//                System.out.println("成功-返还->" + moduleHeader.getModuleName());
                 return moduleHeader;
             }
         }

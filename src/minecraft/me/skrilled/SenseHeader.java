@@ -23,7 +23,6 @@ public class SenseHeader implements IMC {
     public static SenseHeader getSense = new SenseHeader();
     public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
-
     public String getClientUpdate() {
         return clientInfo[1];
     }
@@ -67,22 +66,27 @@ public class SenseHeader implements IMC {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
 
     }
+
     public void printINFO(double str) {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
 
     }
+
     public void printINFO(int str) {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
 
     }
+
     public void printINFO(float str) {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
 
     }
+
     public void printINFO(Object str) {
         mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
 
     }
+
     public ModuleManager getModuleManager() {
         return moduleManager;
     }
@@ -112,7 +116,7 @@ public class SenseHeader implements IMC {
                     moduleIsOpen = s.split(" ")[2];
                     ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
                     module.setKey(Integer.parseInt(moduleKey));
-                    module.setIsOpen(Boolean.parseBoolean(moduleIsOpen));
+                    module.setIsOpenWithOutNotification(Boolean.parseBoolean(moduleIsOpen));
                 }
                 if (s.startsWith("V-")) {
                     moduleName = s.split(" ")[0].substring(2);
