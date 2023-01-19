@@ -11,9 +11,11 @@ import me.skrilled.SenseHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
 import me.surge.animation.Animation;
+import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class ModuleHeader implements IMC {
     public float[] modulePosInfo = new float[]{0, 0, 0, 0};
+    public ColourAnimation moduleMotionColor = new ColourAnimation(new Color(74, 74, 74, 150), new Color(0, 255, 169, 150), 1000f, false, Easing.LINEAR);
     public boolean menuFlag;
     public int key, anim, clickanim, valueWheelY = 0;
     String moduleName;

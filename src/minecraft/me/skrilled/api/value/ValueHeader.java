@@ -6,6 +6,8 @@
 package me.skrilled.api.value;
 
 
+import me.cubex2.ttfr.CFontRenderer;
+import me.skrilled.SenseHeader;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
@@ -72,6 +74,7 @@ public class ValueHeader {
     }
 
     public void draw() {
+        CFontRenderer font = SenseHeader.getSense.getFontBuffer().EN12;
         switch (valueType) {
             case DOUBLE:
             case COLOR:
@@ -85,7 +88,16 @@ public class ValueHeader {
                 y2 = y1 + 10;
                 RenderUtil.drawRound(x1, y1, x2, y2, BGColor, BGColor);
                 RenderUtil.drawRound((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
+                break;
             case ENUM_TYPE:
+                SenseHeader.sense.printINFO("dawdawdawfawfaf");
+                int enumBGColor = new Color(63, 63, 63).getRGB();
+                x2 = x1 + 35;
+                y2 = y1 + 10;
+                RenderUtil.drawRound(x1, y1, x2, y2, enumBGColor, enumBGColor);
+                font.drawCenteredString(this.getCurrentEnumType(), x1 + 17.5f, y1, -1);
+                break;
+
 
         }
     }

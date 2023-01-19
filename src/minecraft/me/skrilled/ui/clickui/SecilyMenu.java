@@ -27,11 +27,11 @@ import java.util.List;
 
 public class SecilyMenu extends GuiScreen implements IMC {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
-    public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
     /**
      * ModuleType的间隔
      */
     public static int moduleTypeInterval = 40;
+    public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
     /**
      * ModuleType的盒子宽度
      */
@@ -128,16 +128,14 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 页码
      */
     int currentPage = 1;
-    /**
-     * ValueList的上下间隔
-     */
-    int valueListUDInterval = 10;
+
     /**
      * 该moduleType下module总和
      */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
     BoundedAnimation windowAlpha = new BoundedAnimation(125, 220, 888f, false, Easing.LINEAR);
     BoundedAnimation moduleAlpha = new BoundedAnimation(165, 250, 550f, false, Easing.LINEAR);
+
     /**
      * 该moduleType下moduleHeader总和
      */
@@ -248,7 +246,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         int moduleCurrentBGColor;
                         int moduleCurrentTitleOPorDis;
                         ModuleHeader module = moduleHeaders.get(i);
-                        moduleCurrentTitleOPorDis = moduleHeaders.get(i).isIsOpen() ? new Color(0, 255, 169, 150).getRGB() : new Color(76, 76, 76, 100).getRGB();
+                        moduleCurrentTitleOPorDis = module.moduleMotionColor.getColour().getRGB();
                         if (Mouse.isButtonDown(0) && module.menuFlag) {
                             moduleAlpha.setState(true);
                             module_Alpha = (int) moduleAlpha.getAnimationValue();
@@ -267,8 +265,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         下标题背景
                          */
+                        String str = module.isIsOpen() ? "Enabled" : "Disabled";
                         RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
-
+                        //E/D
+                        if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
+                            RenderUtil.drawRound(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor, moduleBGColor);
+                            midFont.drawString(str, module.modulePosInfo[0] + 10, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight / 1.5f, 1);
+                        }
                         bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
@@ -295,11 +298,28 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = booleanValue.getValueName() + ":";
-
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
                             booleanValue.x1 = (int) (module.modulePosInfo[2] - 55);
                             booleanValue.y1 = (int) valueY;
                             booleanValue.draw();
+                            yValue += (valueFont.getHeight(false) * 1.5f);
+                        }
+                        for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
+                            int enumTypes = enumValue.getEnumTypes().size();
+                            if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
+                                enumValue.posDel();
+                                skipValue++;
+                                continue;
+                            }
+                            float valueX = module.modulePosInfo[0] + 20;
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
+                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                                break;
+                            String valueStr = enumValue.getValueName() + ":";
+                            valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
+                            enumValue.x1 = (int) (module.modulePosInfo[2] - 55);
+                            enumValue.y1 = (int) valueY;
+                            enumValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }
 
@@ -354,25 +374,47 @@ public class SecilyMenu extends GuiScreen implements IMC {
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
         int moduleTypeInterval = SecilyMenu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
+        CFontRenderer midFont = sense.fontBuffer.EN24;
         float xAxis = 0;
+        /*
+        ModuleType切换判定
+         */
         for (ModuleType value : ModuleType.values()) {
             if (mouseButton == 0 && isMouseClickedInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
                 currentModuleType = value;
             }
             xAxis += moduleTypeInterval + typeSideSize;
         }
-        for (ModuleHeader moduleHeader : moduleHeaders) {
-            moduleHeader.menuFlag = isMouseClickedInside(mouseX, mouseY, moduleHeader.modulePosInfo[0], moduleHeader.modulePosInfo[1], moduleHeader.modulePosInfo[2], moduleHeader.modulePosInfo[3]);
+        for (ModuleHeader modules : moduleHeaders) {
+            String str = modules.isIsOpen() ? "Enabled" : "Disabled";
+            //切换选中Module
+            modules.menuFlag = isMouseClickedInside(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3]);
+            //开关Module
+            if (isMouseClickedInside(mouseX, mouseY, modules.modulePosInfo[0] + 7, modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, modules.modulePosInfo[0] + midFont.getStringWidth(str) + 13, modules.modulePosInfo[1] + moduleBoxHeight - 1.5f) && modules != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
+                modules.moduleMotionColor.setState(!modules.isIsOpen());
+                modules.toggle();
+            }
             /*
             调value的判定
              */
-            for (ValueHeader valueHeader : moduleHeader.getValueList()) {
-                if (isMouseClickedInside(mouseX,mouseY,valueHeader.x1,valueHeader.y1,valueHeader.x2,valueHeader.y2)){
+            for (ValueHeader value : modules.getValueList()) {
+                if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) {
                     /*
                     boolean开关
                      */
-                    if (valueHeader.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
-                    valueHeader.setOptionOpen(!valueHeader.isOptionOpen());
+                    if (value.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
+                        value.setOptionOpen(!value.isOptionOpen());
+                    if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
+                        int index = 0;
+
+                        for (String enumType : value.getEnumTypes()) {
+                            if (enumType == value.getCurrentEnumType()) break;
+                            index++;
+                        }
+                        if (value.getEnumTypes().size() > (index + 1))
+                            value.setCurrentEnumType(value.getEnumTypes().get(index + 1));
+                        else value.setCurrentEnumType(value.getEnumTypes().get(0));
+                    }
                 }
             }
         }
