@@ -51,7 +51,7 @@ public class ValueHeader {
     /**
      * 用于Gui中拖动double条
      */
-    public boolean clicked = false;
+    public boolean onClicking = false;
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;

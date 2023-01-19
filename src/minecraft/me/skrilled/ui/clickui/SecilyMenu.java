@@ -215,6 +215,22 @@ public class SecilyMenu extends GuiScreen implements IMC {
             }
             clickDag1 = false;
         }
+        //double类型拖动
+        for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)){
+            for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
+                if (valueHeader.onClicking){
+                    double[] ds = valueHeader.getDoubles();
+                    int finalX;
+                    int barLength;
+                    finalX=mouseX<valueHeader.x1?valueHeader.x1:mouseX;
+                    finalX=finalX>valueHeader.x2?valueHeader.x2:finalX;
+                    barLength=valueHeader.x2-valueHeader.x1;
+                    double factor = (finalX-valueHeader.x1)/barLength;
+
+                }
+            }
+        }
+
         GlStateManager.pushMatrix();
         //背景
         GL11.glScaled(scale, scale, 1);
@@ -314,12 +330,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                  */
                         int yValue = 0;
                         int skipValue = 0;
-                        /*
-                         初始化value可视性
-                         */
-                        for (ValueHeader valueHeader : module.getValueList()) {
-                            valueHeader.visible = false;
-                        }
                         /*
                         boolean类型value绘制
                          */
@@ -497,7 +507,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 //double拖动调整
                 if (value.getValueType().equals(ValueHeader.ValueType.DOUBLE)) {
                     if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2))
-                        value.clicked = true;
+                        value.onClicking = true;
                 }
             }
         }
