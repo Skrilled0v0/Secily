@@ -37,6 +37,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 是否在拖动gui页面
      */
     public static boolean clickDag = false;
+    public static boolean clickDag1 = true;
     public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
     /**
      * ModuleType的盒子宽度
@@ -196,7 +197,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
         if (clickDag) {
             posX = mouseX - posInClickX;
             posY = mouseY - posInClickY;
-
             //enumSelected动画更新
             for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
                 for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
@@ -204,6 +204,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
                 }
             }
+        }
+        if (clickDag1) {
+            //enumSelected动画更新
+            for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
+                for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
+                    SubEnumValueHeader subEnumValueHeader = valueHeader.getCurrentSubEnumHeader();
+                    valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
+                }
+            }
+            clickDag1 = false;
         }
         GlStateManager.pushMatrix();
         //背景
@@ -460,6 +470,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         clickDag = false;
+        clickDag1 = true;
         super.mouseReleased(mouseX, mouseY, state);
     }
 
