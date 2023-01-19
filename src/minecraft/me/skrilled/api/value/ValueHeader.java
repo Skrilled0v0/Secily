@@ -100,7 +100,8 @@ public class ValueHeader {
                 RenderUtil.drawRound(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, bgColor, bgColor);
                 double[] ds = this.getDoubles();
                 RenderUtil.drawCircle((float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), (y1 + y2) / 2, 5, buttonColor);
-                font.drawCenteredString(Double.toString(ds[1]), (float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), 0.1f * y1 + 0.9f * y2, -1);
+                String value = Double.toString((Math.floor(ds[1] * 10) / 10));
+                font.drawCenteredString(value, (float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), 0.1f * y1 + 0.9f * y2, -1);
 
                 break;
             case COLOR:

@@ -227,7 +227,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     barLength = valueHeader.x2 - valueHeader.x1;
                     double factor = (double) (finalX - valueHeader.x1) / (double) barLength;
                     factor = Math.floor((factor * (ds[2] - ds[0])) / ds[3]);
-                    valueHeader.setDoubles(new double[]{ds[0], ds[0] + factor * ds[3], ds[2], ds[3]});
+                    valueHeader.setDoubles(new double[]{ds[0], (ds[0] + factor * ds[3]), ds[2], ds[3]});
                 }
             }
         }
