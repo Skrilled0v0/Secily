@@ -290,10 +290,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         boolean类型value绘制
                          */
-                        int index = 0;
-                        List<ValueHeader> list = module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN);
-                        for (; index < list.size(); index++) {
-                            ValueHeader booleanValue = list.get(index);
+                        for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 booleanValue.posDel();
                                 skipValue++;
@@ -309,10 +306,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             booleanValue.y1 = (int) valueY;
                             booleanValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
-                        }
-                        for (; index < list.size(); index++) {
-                            ValueHeader booleanValue = list.get(index);
-                            booleanValue.posDel();
                         }
                         /*
                         enum类型value绘制
@@ -330,8 +323,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 break;
                             String valueStr = enumValue.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
+                            String newStr = enumValue.getEnumTypes().toString().replace(",", " ").replace("[", "").replace("]", "");
+                            System.out.println(newStr);
+                            enumValue.x1 = (int) module.modulePosInfo[2];
                             enumValue.y1 = (int) valueY;
-                            enumValue.x2 = (int) (module.modulePosInfo[2] - 20);
+                            enumValue.x2 = (int) (module.modulePosInfo[2] - 16);
                             enumValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }

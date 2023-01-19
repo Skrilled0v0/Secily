@@ -9,6 +9,7 @@ package me.skrilled.api.modules;
 import com.darkmagician6.eventapi.EventManager;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.value.ValueHeader;
+import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
@@ -87,8 +88,10 @@ public class ModuleHeader implements IMC {
         arrayWidth.setState(isOpen);
         if (isOpen) this.onOpen();
         else this.isNotOpen();
-        if (!moduleName.equals("SettingMenu"))
+        if (!moduleName.equals("SettingMenu")) {
+            new Notification(moduleName + " was" + (isOpen ? " Enabled" : "Disabled"), 2000L, isOpen ? Notification.Type.INFO : Notification.Type.WARNING);
             SenseHeader.getSense.printINFO(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"));
+        }
     }
 
 

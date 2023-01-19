@@ -12,6 +12,8 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 
+import java.awt.*;
+
 public class Notification implements IMC {
     String message;
     TimerUtil timer = new TimerUtil();
@@ -24,6 +26,11 @@ public class Notification implements IMC {
         this.message = message;
         this.stayTime = stayTime;
         this.type = type;
+        motionX.setState(true);
+        motionY.setState(true);
+    }
+
+    public Notification() {
     }
 
     public void drawNotification() {
@@ -31,9 +38,9 @@ public class Notification implements IMC {
         CFontRenderer infoFont = sense.getFontBuffer().EN16;
         int w = RenderUtil.width();
         int h = RenderUtil.height();
-        double boxWidth = (messageFont.getStringWidth(message) + 20) * motionX.getAnimationFactor();
+        double boxWidth = (messageFont.getStringWidth(this.message) + 20) * motionX.getAnimationFactor();
         double boxHeight = messageFont.getHeight(false) + infoFont.getHeight(false) + 10;
-//        RenderUtil.drawRound();
+        RenderUtil.drawRound((float) (w - boxWidth), (float) (h - boxHeight), w, h, new Color(36, 36, 36).getRGB(), new Color(36, 36, 36).getRGB());
 
 
     }

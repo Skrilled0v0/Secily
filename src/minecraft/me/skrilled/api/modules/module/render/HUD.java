@@ -10,6 +10,7 @@ import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
+import me.skrilled.ui.Notification;
 import me.skrilled.utils.render.RenderUtil;
 import org.lwjgl.input.Keyboard;
 
@@ -30,6 +31,8 @@ public class HUD extends ModuleHeader {
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {
+        Notification nt = new Notification();
+        nt.drawNotification();
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         double[] pos = sense.getPlayerPos();

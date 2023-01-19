@@ -92,20 +92,9 @@ public class ValueHeader {
             case ENUM_TYPE:
                 int enumBGColor = new Color(63, 63, 63).getRGB();
                 y2 = y1 + 10;
-                String str = "";
-                int index = 0;
-                for (String enumType : this.getEnumTypes()) {
-                    if (enumType == this.getCurrentEnumType()) break;
-                    index++;
-                }
-                if (this.getEnumTypes().size() > (index + 1)) str += (this.getEnumTypes().get(index + 1));
-                else str = (this.getEnumTypes().get(0));
-                str += "  " + this.currentEnumType + "  ";
-                if (index > 0) str += (this.getEnumTypes().get(index - 1));
-                else str += (this.getEnumTypes().get(this.getEnumTypes().size() - 1));
-                x1 = x2 - (int) 1.1f * font.getStringWidth(str);
-                RenderUtil.drawRound(((x1 + x2 - 1.1f * font.getStringWidth(str)) / 2), y1, ((x1 + x2 + 1.1f * font.getStringWidth(str)) / 2), y2, enumBGColor, enumBGColor);
-                font.drawCenteredString(str, (x1 + x2) / 2, y1, -1);
+                String newStr = this.getEnumTypes().toString().replace(",", " ").replace("[", "").replace("]", "");
+                RenderUtil.drawRound(x2 - font.getStringWidth(newStr) - 2f, y1, x2 + 2f, y2, enumBGColor, enumBGColor);
+                font.drawString(newStr, x2 - font.getStringWidth(newStr), y1, -1);
                 break;
 
 
