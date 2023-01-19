@@ -21,6 +21,10 @@ public class ValueHeader {
     public int x2 = 0;
     public int y2 = 0;
     public boolean visible = true;
+    /**
+     * 构造的valueHeader属于enum时存储子enum对象
+     */
+    public ArrayList<SubEnumValueHeader> subEnumValueHeaders = new ArrayList<>();
     String valueName;
     boolean optionOpen;
     ValueType valueType;
@@ -91,13 +95,36 @@ public class ValueHeader {
                 break;
             case ENUM_TYPE:
                 int enumBGColor = new Color(63, 63, 63).getRGB();
+                //x2+16=x1=右边界
                 y2 = y1 + 10;
                 String newStr = this.getEnumTypes().toString().replace(",", " ").replace("[", "").replace("]", "");
-                RenderUtil.drawRound(x2 - font.getStringWidth(newStr) - 2f, y1, x2 + 2f, y2, enumBGColor, enumBGColor);
-                font.drawString(newStr, x2 - font.getStringWidth(newStr), y1, -1);
+                //x：右边界-18-字宽;x1：右边界-14
+//                RenderUtil.drawRound(x2 - font.getStringWidth(newStr) - 2f, y1, x2 + 2f, y2, enumBGColor, enumBGColor);
+                //x:右边界-16-字宽,color:-1
+//                font.drawString(newStr, x2 - font.getStringWidth(newStr), y1, -1);
+                for (int i = 0; i < subEnumValueHeaders.size(); i++) {
+                    SubEnumValueHeader subEnumValueHeader = subEnumValueHeaders.get(i);
+                    //坐标计算
+                    if (i == 0) {
+                        subEnumValueHeader.x1 = x2 - font.getStringWidth(newStr) - 2f;
+                    } else {
+                        SubEnumValueHeader lastSubEnumValueHeader = subEnumValueHeaders.get(i - 1);
+                        subEnumValueHeader.x1 = lastSubEnumValueHeader.x2 - 4f + 2f * font.getStringWidth("  ");
+                    }
+                    subEnumValueHeader.y1 = y1;
+                    subEnumValueHeader.x2 = subEnumValueHeader.x1 + font.getStringWidth(subEnumValueHeader.name) + 4f;
+                    subEnumValueHeader.y2 = y2;
+                    //绘制背景框和文字
+                    RenderUtil.drawRound(subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2, enumBGColor, enumBGColor);
+                    font.drawString(subEnumValueHeader.name, subEnumValueHeader.x1 + 2f, y1, -1);
+                }
                 break;
+        }
+    }
 
-
+    public void initSubEnumValueHeaders() {
+        for (String enumType : this.getEnumTypes()) {
+            subEnumValueHeaders.add(new SubEnumValueHeader(enumType, this));
         }
     }
 

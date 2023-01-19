@@ -9,6 +9,7 @@ import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.api.value.SubEnumValueHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
@@ -311,7 +312,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         enum类型value绘制
                          */
                         for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
-                            int enumTypes = enumValue.getEnumTypes().size();
+                            if (enumValue.subEnumValueHeaders.size() == 0) enumValue.initSubEnumValueHeaders();
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 enumValue.posDel();
                                 skipValue++;
@@ -323,8 +324,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 break;
                             String valueStr = enumValue.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            String newStr = enumValue.getEnumTypes().toString().replace(",", " ").replace("[", "").replace("]", "");
-                            System.out.println(newStr);
+
                             enumValue.x1 = (int) module.modulePosInfo[2];
                             enumValue.y1 = (int) valueY;
                             enumValue.x2 = (int) (module.modulePosInfo[2] - 16);
@@ -410,25 +410,17 @@ public class SecilyMenu extends GuiScreen implements IMC {
             调value的判定
              */
             for (ValueHeader value : modules.getValueList()) {
+                //boolean切换
                 if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) {
-                    /*
-                    boolean开关
-                     */
                     if (value.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
                         value.setOptionOpen(!value.isOptionOpen());
-                    if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
-                        int index = 0;
-                        for (String enumType : value.getEnumTypes()) {
-                            if (enumType == value.getCurrentEnumType()) break;
-                            index++;
-                        }
-                        if (mouseButton == 0) {
-                            if (value.getEnumTypes().size() > (index + 1))
-                                value.setCurrentEnumType(value.getEnumTypes().get(index + 1));
-                            else value.setCurrentEnumType(value.getEnumTypes().get(0));
-                        } else if (mouseButton == 1) {
-                            if (index > 0) value.setCurrentEnumType(value.getEnumTypes().get(index - 1));
-                            else value.setCurrentEnumType(value.getEnumTypes().get(value.getEnumTypes().size() - 1));
+                }
+                //enum切换
+                if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
+                    for (SubEnumValueHeader subEnumValueHeader : value.subEnumValueHeaders) {
+                        if (isMouseClickedInside(mouseX, mouseY, subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2)) {
+                            sense.printINFO("MouseClickedInsideEnumBox: " + subEnumValueHeader.name);
+                            value.setCurrentEnumType(subEnumValueHeader.name);
                         }
                     }
                 }
