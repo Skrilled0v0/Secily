@@ -4,6 +4,7 @@ import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
+import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -20,23 +21,24 @@ public class Notification implements IMC {
     String message;//信息
     Animation timerAnim = null;//计时器
     int maxHeight = RenderUtil.height() / 2;//最高到半屏幕直接抽离
-    Animation motionX = new Animation(1000f, false, Easing.LINEAR);//动画
-    Animation motionY = new Animation(1000f, false, Easing.LINEAR);//动画
-    Animation motionLastTimer;
+    Animation motionX = new Animation(1000f, false, Easing.CIRC_OUT);//动画
+    Animation motionY = new Animation(1000f, false, Easing.CIRC_OUT);//动画
+
+    ColourAnimation motionBGColor;
+    ColourAnimation motionColor;
     int boxHeight;//Notification Y坐标目标值
-    int boxWidth;//Notification X坐标目标值
     int getBoxHeightAdd = 0;
-    int currentHeight;//当前Notification Y值
     int stayTime;//停留时间
     Type type;//类型
 
     public Notification(String message, int stayTime, Type type) {
         image = new ResourceLocation("skrilled/NotificationICON/" + type.name() + ".png");
-        motionLastTimer = new Animation(stayTime, false, Easing.LINEAR);
         this.message = message;
         this.stayTime = stayTime;
         this.type = type;
         timerAnim = new Animation(stayTime, false, Easing.LINEAR);
+        motionBGColor = new ColourAnimation(new Color(30, 30, 30, 20), new Color(30, 30, 30, 200), stayTime, false, Easing.LINEAR);
+        motionColor = new ColourAnimation(new Color(0, 255, 169, 200), new Color(255, 59, 59, 120), stayTime, false, Easing.LINEAR);
     }
 
     public static void sendNotification(String message, int stayTime, Type type) {
@@ -61,7 +63,7 @@ public class Notification implements IMC {
     public void draw() {
 //        sense.printINFO("    public void draw() ");
         String msg = this.message;
-        String info = "Type:" + this.type + "  LastTimer:" + this.stayTime + "ms";
+        String info = "Type:" + this.type + "  Time remaining:" + (Math.floor((1f - timerAnim.getLinearFactor()) * stayTime / 1000f) * 100) / 100 + "s";
         CFontRenderer messageFont = sense.fontBuffer.EN24;
         CFontRenderer infoFont = sense.fontBuffer.EN12;
         //字体高度
@@ -73,7 +75,7 @@ public class Notification implements IMC {
       */
         boxHeight = messageFont.getHeight(false) + infoFont.getHeight(false) * 2 + 6;
 //        boxWidth=messageFont.getStringWidth(message)+;
-        motionX.setState(true);
+        setMotion(true);
         int w = RenderUtil.width();
         int h = RenderUtil.height() - 30;
         int width = messageFont.getStringWidth(msg) + 5 + 5 + 30 + 5;
@@ -85,9 +87,9 @@ public class Notification implements IMC {
 //            sense.printINFO(timerAnim.getAnimationFactor());
         }
         //背景框
-        RenderUtil.drawRect(x, y, w, y+height, new Color(48, 48, 48, 100).getRGB());
+        RenderUtil.drawRect(x, y, w, y + height, motionBGColor.getColour().getRGB());
         //读条
-        RenderUtil.drawRect(x, y + this.height, w - width * timerAnim.getAnimationFactor(), y + height + 3, new Color(50, 200, 150, 175).getRGB());
+        RenderUtil.drawRect(x, y + this.height, w - width * timerAnim.getAnimationFactor(), y + height + 3, motionColor.getColour().getRGB());
         //图标
         GL11.glColor4f(1, 1, 1, 0.7f);
         RenderUtil.drawIcon(x + 5, y + 2.5f, 30, 30, image);
@@ -96,14 +98,20 @@ public class Notification implements IMC {
         //infoType
         infoFont.drawString(info, x + 40, y + this.height - 5 - ifH, -1);
         if (timerAnim.getAnimationFactor() == 1) {
-            motionX.setState(false);
+            setMotion(false);
             this.leave = true;
         }
-        if (y<maxHeight){
-            motionX.setState(false);
+        if (y < maxHeight) {
+            setMotion(false);
             this.leave = true;
         }
         if (this.leave && motionX.getAnimationFactor() == 0) notifications.remove(this);
+    }
+
+    void setMotion(boolean set) {
+        motionX.setState(set);
+        motionBGColor.setState(set);
+        motionColor.setState(set);
     }
 
     public enum Type {

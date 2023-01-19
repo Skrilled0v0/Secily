@@ -7,7 +7,6 @@
 package me.skrilled.api.modules;
 
 import com.darkmagician6.eventapi.EventManager;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
@@ -89,8 +88,7 @@ public class ModuleHeader implements IMC {
         if (isOpen) this.onOpen();
         else this.isNotOpen();
         if (!moduleName.equals("SettingMenu")) {
-//            SenseHeader.getSense.printINFO(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"));
-            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"),1000,Notification.Type.INFO);
+            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 2000, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
         }
     }
 
