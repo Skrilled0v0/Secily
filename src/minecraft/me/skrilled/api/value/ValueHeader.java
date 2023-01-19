@@ -31,6 +31,10 @@ public class ValueHeader {
      */
     public BoundedAnimation selectedEnumBGAnim = null;
     public SubEnumValueHeader lastSelectedSubEnumValueHeader = null;
+    /**
+     * 用于Gui中拖动double条
+     */
+    public boolean onClicking = false;
     String valueName;
     boolean optionOpen;
     ValueType valueType;
@@ -47,11 +51,6 @@ public class ValueHeader {
     int Eanim = 55;
     int Nanim = 55;
     Animation motion = new Animation(600f, false, Easing.LINEAR);
-
-    /**
-     * 用于Gui中拖动double条
-     */
-    public boolean onClicking = false;
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;
@@ -94,13 +93,14 @@ public class ValueHeader {
             case DOUBLE:
 
                 int buttonColor = new Color(0, 136, 255).getRGB();
-                int bgColor = new Color(25, 25, 25,150).getRGB();
+                int bgColor = new Color(25, 25, 25, 150).getRGB();
 
                 y2 = y1 + 10;
 
                 RenderUtil.drawRound(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, bgColor, bgColor);
                 double[] ds = this.getDoubles();
-                RenderUtil.drawCircle((float) (x1+(x2-x1)*((ds[1]-ds[0])/(ds[2]-ds[0]))), (y1 + y2) / 2, 5, buttonColor);
+                RenderUtil.drawCircle((float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), (y1 + y2) / 2, 5, buttonColor);
+                font.drawCenteredString(Double.toString(ds[1]), (float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), 0.1f * y1 + 0.9f * y2, -1);
 
                 break;
             case COLOR:
