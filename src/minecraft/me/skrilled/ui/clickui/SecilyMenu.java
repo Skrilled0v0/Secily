@@ -216,16 +216,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
             clickDag1 = false;
         }
         //double类型拖动
-        for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)){
+        for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
             for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
-                if (valueHeader.onClicking){
+                if (valueHeader.onClicking) {
                     double[] ds = valueHeader.getDoubles();
                     int finalX;
                     int barLength;
-                    finalX=mouseX<valueHeader.x1?valueHeader.x1:mouseX;
-                    finalX=finalX>valueHeader.x2?valueHeader.x2:finalX;
-                    barLength=valueHeader.x2-valueHeader.x1;
-                    double factor = (finalX-valueHeader.x1)/barLength;
+                    finalX = mouseX < valueHeader.x1 ? valueHeader.x1 : mouseX;
+                    finalX = finalX > valueHeader.x2 ? valueHeader.x2 : finalX;
+                    barLength = valueHeader.x2 - valueHeader.x1;
+                    double factor = (finalX - valueHeader.x1) / barLength;
 
                 }
             }
@@ -336,6 +336,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 booleanValue.posDel();
+                                booleanValue.visible = false;
                                 skipValue++;
                                 continue;
                             }
@@ -357,6 +358,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 enumValue.posDel();
+                                enumValue.visible = false;
                                 skipValue++;
                                 continue;
                             }
@@ -384,6 +386,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         for (ValueHeader doubleValue : module.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 doubleValue.posDel();
+                                doubleValue.visible = false;
                                 skipValue++;
                                 continue;
                             }
