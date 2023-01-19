@@ -8,8 +8,6 @@ package me.skrilled.api.value;
 
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.SenseHeader;
-import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.ui.clickui.SecilyMenu;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.BoundedAnimation;
@@ -23,7 +21,7 @@ public class ValueHeader {
     public int y1 = 0;
     public int x2 = 0;
     public int y2 = 0;
-    public boolean visible = true;
+    public boolean visible = false;
     /**
      * 构造的valueHeader属于enum时存储子enum对象
      */
@@ -49,6 +47,11 @@ public class ValueHeader {
     int Eanim = 55;
     int Nanim = 55;
     Animation motion = new Animation(600f, false, Easing.LINEAR);
+
+    /**
+     * 用于Gui中拖动double条
+     */
+    public boolean clicked = false;
 
     public ValueHeader(String valueName, double[] doubles) {
         this.valueType = ValueType.DOUBLE;
@@ -90,13 +93,23 @@ public class ValueHeader {
         switch (valueType) {
             case DOUBLE:
 
+                int buttonColor = new Color(0, 136, 255).getRGB();
+                int bgColor = new Color(25, 25, 25,150).getRGB();
 
+                y2 = y1 + 10;
+
+                RenderUtil.drawRound(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, bgColor, bgColor);
+                double[] ds = this.getDoubles();
+                RenderUtil.drawCircle((float) (x1+(x2-x1)*((ds[1]-ds[0])/(ds[2]-ds[0]))), (y1 + y2) / 2, 5, buttonColor);
+
+                break;
             case COLOR:
 
 
+                break;
             case STRING:
 
-
+//                break;
             case BOOLEAN:
 
                 int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();

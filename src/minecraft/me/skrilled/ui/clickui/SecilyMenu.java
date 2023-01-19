@@ -228,7 +228,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
             float xAxis = 0;
             for (ModuleType moduleType : ModuleType.values()) {
                 //通过x坐标+(窗口宽度-绘制ModuleType选择区的宽度)/2的算法进行遍历，计算ModuleType图标绘制区域坐标
-                float[] moduleTypePosInfo = {posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
+                float[] moduleTypePosInfo = new float[]{posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
                 if (moduleType == currentModuleType) {
                     RenderUtil.drawRound(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor, typeBoxColor);
                     minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
@@ -251,10 +251,17 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         int nDrawCount = (i % 6);
                         if (nDrawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
 
-                            moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + upSide, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount, posY + moduleUDMargin + moduleBoxHeight + upSide};
+                            moduleHeader.modulePosInfo = new float[]{0f, 0f, 0f, posY + moduleUDMargin + moduleBoxHeight + upSide};
+                            moduleHeader.modulePosInfo[0] = posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount;
+                            moduleHeader.modulePosInfo[1] = posY + moduleUDMargin + upSide;
+                            moduleHeader.modulePosInfo[2] = posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount;
                         }
                         if (nDrawCount >= maxWCount) {
-                            moduleHeader.modulePosInfo = new float[]{posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval, posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount), posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval};
+                            moduleHeader.modulePosInfo = new float[4];
+                            moduleHeader.modulePosInfo[0] = posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount);
+                            moduleHeader.modulePosInfo[1] = posY + moduleUDMargin + upSide + moduleBoxHeight + moduleBoxUDInterval;
+                            moduleHeader.modulePosInfo[2] = posX + moduleLRMargin + moduleBoxWidth + (moduleBoxLRInterval + moduleBoxWidth) * (nDrawCount - maxWCount);
+                            moduleHeader.modulePosInfo[3] = posY + moduleUDMargin + moduleBoxHeight + upSide + moduleBoxHeight + moduleBoxUDInterval;
                         }
 
 
@@ -308,6 +315,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         int yValue = 0;
                         int skipValue = 0;
                         /*
+                         初始化value可视性
+                         */
+                        for (ValueHeader valueHeader : module.getValueList()) {
+                            valueHeader.visible = false;
+                        }
+                        /*
                         boolean类型value绘制
                          */
                         for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
@@ -325,6 +338,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             booleanValue.x1 = (int) (module.modulePosInfo[2] - 55);
                             booleanValue.y1 = (int) valueY;
                             booleanValue.draw();
+                            booleanValue.visible = true;
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }
                         /*
@@ -347,6 +361,35 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             enumValue.y1 = (int) valueY;
                             enumValue.x2 = (int) (module.modulePosInfo[2] - 16);
                             enumValue.draw();
+                            if (!enumValue.visible) {
+                                SubEnumValueHeader subEnumValueHeader = enumValue.getCurrentSubEnumHeader();
+                                enumValue.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
+                            }
+                            enumValue.visible = true;
+                            yValue += (valueFont.getHeight(false) * 1.5f);
+                        }
+                        /*
+                        double类型value绘制
+                         */
+                        for (ValueHeader doubleValue : module.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
+                            if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
+                                doubleValue.posDel();
+                                skipValue++;
+                                continue;
+                            }
+                            float valueX = module.modulePosInfo[0] + 20;
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
+                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                                break;
+                            String valueStr = doubleValue.getValueName() + ": ";
+                            valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
+
+                            doubleValue.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
+                            doubleValue.y1 = (int) valueY;
+                            doubleValue.x2 = (int) (module.modulePosInfo[2] - 16);
+                            doubleValue.draw();
+                            doubleValue.visible = true;
+
                             yValue += (valueFont.getHeight(false) * 1.5f);
                         }
 
@@ -420,7 +463,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
             //切换选中Module
             modules.menuFlag = isMouseClickedInside(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3]);
             //开关Module
-            if (isMouseClickedInside(mouseX, mouseY, modules.modulePosInfo[0] + 7, modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, modules.modulePosInfo[0] + midFont.getStringWidth(str) + 13, modules.modulePosInfo[1] + moduleBoxHeight - 1.5f) && modules != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
+            float p1, p2, p3, p4 = 0;
+            p1 = modules.modulePosInfo[0] + 7;
+            p2 = modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
+            p3 = modules.modulePosInfo[0] + midFont.getStringWidth(str) + 13;
+            p4 = modules.modulePosInfo[1] + moduleBoxHeight - 1.5f;
+            boolean p5 = modules != sense.getModuleManager().getModuleByClass(SettingMenu.class);
+            if (isMouseClickedInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
                 modules.moduleMotionColor.setState(!modules.isIsOpen());
                 modules.toggle();
             }
@@ -444,6 +493,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             }
                         }
                     }
+                }
+                //double拖动调整
+                if (value.getValueType().equals(ValueHeader.ValueType.DOUBLE)) {
+                    if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2))
+                        value.clicked = true;
                 }
             }
         }
