@@ -103,6 +103,7 @@ public class ValueHeader {
                 str += "  " + this.currentEnumType + "  ";
                 if (index > 0) str += (this.getEnumTypes().get(index - 1));
                 else str += (this.getEnumTypes().get(this.getEnumTypes().size() - 1));
+                x1 = x2 - (int) 1.1f * font.getStringWidth(str);
                 RenderUtil.drawRound(((x1 + x2 - 1.1f * font.getStringWidth(str)) / 2), y1, ((x1 + x2 + 1.1f * font.getStringWidth(str)) / 2), y2, enumBGColor, enumBGColor);
                 font.drawCenteredString(str, (x1 + x2) / 2, y1, -1);
                 break;

@@ -32,8 +32,8 @@ public class TestModule001 extends ModuleHeader {
 
     public TestModule001() {
         super("TestModule001", true, ModuleType.MISC);
-        this.addEnumTypes(typeList, "Test1", "Test2", "Test3");
-        this.addValueList(testType, testBoolean, testDouble, testString, testColor, test1Boolean, test2Boolean, test3Boolean, tes4tBoolean, tes4tBoolean, testB5oolean, test6Boolean, te7tBoolean, test8Boolean);
+        this.addEnumTypes(typeList, "Test1", "Test22", "Test3333");
+        this.addValueList(testType, testBoolean, testDouble, testString, testColor, test1Boolean, test2Boolean, test3Boolean, tes4tBoolean, testB5oolean, test6Boolean, te7tBoolean, test8Boolean);
     }
 
     @Override

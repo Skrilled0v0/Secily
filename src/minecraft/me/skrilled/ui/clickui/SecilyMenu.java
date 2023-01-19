@@ -290,7 +290,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         boolean类型value绘制
                          */
-                        for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                        int index = 0;
+                        List<ValueHeader> list = module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN);
+                        for (; index < list.size(); index++) {
+                            ValueHeader booleanValue = list.get(index);
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 booleanValue.posDel();
                                 skipValue++;
@@ -306,6 +309,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             booleanValue.y1 = (int) valueY;
                             booleanValue.draw();
                             yValue += (valueFont.getHeight(false) * 1.5f);
+                        }
+                        for (; index < list.size(); index++) {
+                            ValueHeader booleanValue = list.get(index);
+                            booleanValue.posDel();
                         }
                         /*
                         enum类型value绘制
@@ -323,7 +330,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 break;
                             String valueStr = enumValue.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            enumValue.x1 = (int) ((valueX + valueFont.getStringWidth(valueStr)));
                             enumValue.y1 = (int) valueY;
                             enumValue.x2 = (int) (module.modulePosInfo[2] - 20);
                             enumValue.draw();
@@ -391,6 +397,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 currentModuleType = value;
             }
             xAxis += moduleTypeInterval + typeSideSize;
+            for (ModuleHeader moduleHeader : sense.getModuleManager().getModuleListByModuleType(currentModuleType)) {
+                if (moduleHeader.isIsOpen()) moduleHeader.moduleMotionColor.setState(true);
+            }
         }
         for (ModuleHeader modules : moduleHeaders) {
             String str = modules.isIsOpen() ? "Enabled" : "Disabled";
