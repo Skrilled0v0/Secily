@@ -6,6 +6,7 @@
 package me.skrilled.ui.clickui;
 
 import me.cubex2.ttfr.CFontRenderer;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleHeader.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
@@ -32,6 +33,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * ModuleType的间隔
      */
     public static int moduleTypeInterval = 40;
+    /**
+     * 是否在拖动gui页面
+     */
+    public static boolean clickDag = false;
     public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
     /**
      * ModuleType的盒子宽度
@@ -105,10 +110,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 下标题高度
      */
     int downSide = 25;
-    /**
-     * 是否在拖动gui页面
-     */
-    boolean clickDag = false;
     /**
      * 每行最多编辑数
      */
@@ -195,6 +196,14 @@ public class SecilyMenu extends GuiScreen implements IMC {
         if (clickDag) {
             posX = mouseX - posInClickX;
             posY = mouseY - posInClickY;
+
+            //enumSelected动画更新
+            for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
+                for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
+                    SubEnumValueHeader subEnumValueHeader = valueHeader.getCurrentSubEnumHeader();
+                    valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
+                }
+            }
         }
         GlStateManager.pushMatrix();
         //背景
@@ -312,7 +321,6 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         enum类型value绘制
                          */
                         for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
-                            if (enumValue.subEnumValueHeaders.size() == 0) enumValue.initSubEnumValueHeaders();
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
                                 enumValue.posDel();
                                 skipValue++;
@@ -419,8 +427,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
                     for (SubEnumValueHeader subEnumValueHeader : value.subEnumValueHeaders) {
                         if (isMouseClickedInside(mouseX, mouseY, subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2)) {
-                            sense.printINFO("MouseClickedInsideEnumBox: " + subEnumValueHeader.name);
-                            value.setCurrentEnumType(subEnumValueHeader.name);
+                            if (!value.getCurrentEnumType().equalsIgnoreCase(subEnumValueHeader.name)) {
+                                value.selectedEnumBGAnim = new BoundedAnimation(value.getCurrentSubEnumHeader().x1, subEnumValueHeader.x1, 660f, false, Easing.LINEAR);
+                                value.selectedEnumBGAnim.setState(true);
+                                value.setCurrentEnumType(subEnumValueHeader.name);
+                            }
                         }
                     }
                 }

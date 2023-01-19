@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class TestModule004 extends ModuleHeader {
     private final ValueHeader testBoolean = new ValueHeader("TestBoolean", true);
     private final ArrayList<String> typeList = new ArrayList<>();
-    private final ValueHeader testType = new ValueHeader("TestType", "Skrilled", typeList);
+    private final ValueHeader testType = new ValueHeader("TestType", "Test1", typeList);
     private final double[] value = {0.1, 0.7, 5.0, 0.1};
     private final ValueHeader testDouble = new ValueHeader("TestDouble", value);
     private final String testStr = "";

@@ -26,7 +26,7 @@ public class ModuleHeader implements IMC {
     public float[] modulePosInfo = new float[]{0, 0, 0, 0};
     public ColourAnimation moduleMotionColor = new ColourAnimation(new Color(74, 74, 74, 150), new Color(0, 255, 169, 150), 1000f, false, Easing.LINEAR);
     public boolean menuFlag;
-    public int key, anim, clickanim, valueWheelY = 0;
+    public int key, anim, clickAnim, valueWheelY = 0;
     String moduleName;
     String suffix = "";
     boolean isOpen;

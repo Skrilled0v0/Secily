@@ -22,7 +22,7 @@ public class TestModule001 extends ModuleHeader {
     private final ValueHeader te7tBoolean = new ValueHeader("TestdBoolean", true);
     private final ValueHeader test8Boolean = new ValueHeader("TestBsaoolean", true);
     private final ArrayList<String> typeList = new ArrayList<>();
-    private final ValueHeader testType = new ValueHeader("TestType", "Skrilled", typeList);
+    private final ValueHeader testType = new ValueHeader("TestType", "Test1", typeList);
     private final double[] value = {0.1, 0.7, 5.0, 0.1};
     private final ValueHeader testDouble = new ValueHeader("TestDouble", value);
     private final String testStr = "";

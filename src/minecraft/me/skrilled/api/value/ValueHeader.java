@@ -8,8 +8,11 @@ package me.skrilled.api.value;
 
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.SenseHeader;
+import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.ui.clickui.SecilyMenu;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
+import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 
 import java.awt.*;
@@ -25,6 +28,11 @@ public class ValueHeader {
      * 构造的valueHeader属于enum时存储子enum对象
      */
     public ArrayList<SubEnumValueHeader> subEnumValueHeaders = new ArrayList<>();
+    /**
+     * enum类value框的x1动画
+     */
+    public BoundedAnimation selectedEnumBGAnim = null;
+    public SubEnumValueHeader lastSelectedSubEnumValueHeader = null;
     String valueName;
     boolean optionOpen;
     ValueType valueType;
@@ -95,6 +103,7 @@ public class ValueHeader {
                 break;
             case ENUM_TYPE:
                 int enumBGColor = new Color(63, 63, 63).getRGB();
+                int selectedEnumColor = new Color(0, 136, 255).getRGB();
                 //x2+16=x1=右边界
                 y2 = y1 + 10;
                 String newStr = this.getEnumTypes().toString().replace(",", " ").replace("[", "").replace("]", "");
@@ -114,8 +123,24 @@ public class ValueHeader {
                     subEnumValueHeader.y1 = y1;
                     subEnumValueHeader.x2 = subEnumValueHeader.x1 + font.getStringWidth(subEnumValueHeader.name) + 4f;
                     subEnumValueHeader.y2 = y2;
-                    //绘制背景框和文字
+                    //绘制背景框
                     RenderUtil.drawRound(subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2, enumBGColor, enumBGColor);
+                }
+                //初始化动画
+                if (selectedEnumBGAnim == null) {
+                    for (SubEnumValueHeader subEnumValueHeader : this.subEnumValueHeaders) {
+                        if (this.getCurrentEnumType().equalsIgnoreCase(subEnumValueHeader.name)) {
+                            this.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
+
+                            this.lastSelectedSubEnumValueHeader = subEnumValueHeader;
+                        }
+                    }
+                }
+
+                //绘制选中enum背景框
+                RenderUtil.drawRound((float) selectedEnumBGAnim.getAnimationValue(), y1, (float) (selectedEnumBGAnim.getAnimationValue() + font.getStringWidth(this.getCurrentEnumType()) + 4f), y2, selectedEnumColor, selectedEnumColor);
+                //绘制文字
+                for (SubEnumValueHeader subEnumValueHeader : subEnumValueHeaders) {
                     font.drawString(subEnumValueHeader.name, subEnumValueHeader.x1 + 2f, y1, -1);
                 }
                 break;
@@ -145,6 +170,14 @@ public class ValueHeader {
 
     public void setCurrentEnumType(String currentEnumType) {
         this.currentEnumType = currentEnumType;
+    }
+
+    public SubEnumValueHeader getCurrentSubEnumHeader() {
+        if (this.subEnumValueHeaders.size() == 0) this.initSubEnumValueHeaders();
+        for (SubEnumValueHeader subEnumValueHeader : this.subEnumValueHeaders) {
+            if (subEnumValueHeader.name.equalsIgnoreCase(currentEnumType)) return subEnumValueHeader;
+        }
+        return this.subEnumValueHeaders.get(0);
     }
 
     public double getIncValue() {

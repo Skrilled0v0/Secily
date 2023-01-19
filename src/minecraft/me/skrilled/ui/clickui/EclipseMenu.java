@@ -96,22 +96,22 @@ public class EclipseMenu extends GuiScreen {
             RenderUtil.drawFilledCircle(startX + 12, mY + 58, 10, bc, 10);
             RenderUtil.drawFilledCircle(startX + 142, mY + 58, 10, bc, 10);
             if (!module.isIsOpen()) {
-                if (module.clickanim > 110) {
-                    module.clickanim--;
+                if (module.clickAnim > 110) {
+                    module.clickAnim--;
                 }
 
                 RenderUtil.drawRect(startX + 110, mY + 54, startX + 125, mY + 62, f4c);
                 RenderUtil.drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
                 RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + module.clickanim, mY + 58, 5, bcc, 5);
+                RenderUtil.drawFilledCircle(startX + module.clickAnim, mY + 58, 5, bcc, 5);
             } else {
-                if (module.clickanim < 125) {
-                    module.clickanim++;
+                if (module.clickAnim < 125) {
+                    module.clickAnim++;
                 }
                 RenderUtil.drawRect(startX + 110, mY + 54, startX + 125, mY + 62, f4c);
                 RenderUtil.drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
                 RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + module.clickanim, mY + 58, 5, color, 5);
+                RenderUtil.drawFilledCircle(startX + module.clickAnim, mY + 58, 5, color, 5);
             }
             sense.getFontBuffer().EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
             if (isSettingsButtonHovered(startX + 110, mY + 54, startX + 125, mY + 62, mouseX, mouseY)) {
@@ -135,7 +135,7 @@ public class EclipseMenu extends GuiScreen {
                     }
                 }
                 for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
-                    mod.clickanim = 115;
+                    mod.clickAnim = 115;
                 }
                 currentModule = module;
                 valueStart = 0;
@@ -316,7 +316,7 @@ public class EclipseMenu extends GuiScreen {
                         }
                     }
                     for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
-                        mod.clickanim = 115;
+                        mod.clickAnim = 115;
                     }
                 }
             } catch (Exception e) {
@@ -334,7 +334,7 @@ public class EclipseMenu extends GuiScreen {
             }
         }
         for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
-            mod.clickanim = 115;
+            mod.clickAnim = 115;
         }
         int l = 45;
         for (int i = 0; i < ModuleType.values().length; i++) {
