@@ -89,9 +89,16 @@ public class ValueHeader {
         CFontRenderer font = SenseHeader.getSense.getFontBuffer().EN12;
         switch (valueType) {
             case DOUBLE:
+
+
             case COLOR:
+
+
             case STRING:
+
+
             case BOOLEAN:
+
                 int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();
                 int valueBooleanOPColor = new Color(74, 74, 74).getRGB();
                 int valueBooleanDisColor = new Color(25, 25, 25).getRGB();
@@ -102,6 +109,7 @@ public class ValueHeader {
                 RenderUtil.drawRound((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
                 break;
             case ENUM_TYPE:
+
                 int enumBGColor = new Color(63, 63, 63).getRGB();
                 int selectedEnumColor = new Color(0, 136, 255).getRGB();
                 //x2+16=x1=右边界

@@ -469,8 +469,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
+        if (clickDag) {
+            clickDag1 = true;
+        }
         clickDag = false;
-        clickDag1 = true;
         super.mouseReleased(mouseX, mouseY, state);
     }
 
