@@ -225,8 +225,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     finalX = mouseX < valueHeader.x1 ? valueHeader.x1 : mouseX;
                     finalX = finalX > valueHeader.x2 ? valueHeader.x2 : finalX;
                     barLength = valueHeader.x2 - valueHeader.x1;
-                    double factor = (finalX - valueHeader.x1) / barLength;
-
+                    double factor = (double) (finalX - valueHeader.x1) / (double) barLength;
+                    factor = Math.floor((factor * (ds[2] - ds[0])) / ds[3]);
+                    valueHeader.setDoubles(new double[]{ds[0], ds[0] + factor * ds[3], ds[2], ds[3]});
                 }
             }
         }
@@ -540,6 +541,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
             clickDag1 = true;
         }
         clickDag = false;
+        for (ModuleHeader moduleHeader : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
+            for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
+                valueHeader.onClicking = false;
+            }
+        }
         super.mouseReleased(mouseX, mouseY, state);
     }
 
