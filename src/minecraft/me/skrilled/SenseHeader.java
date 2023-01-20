@@ -128,7 +128,7 @@ public class SenseHeader implements IMC {
                             if (value.getValueType() == ValueHeader.ValueType.BOOLEAN)
                                 value.setOptionOpen(Boolean.parseBoolean(values));
                             if (value.getValueType() == ValueHeader.ValueType.DOUBLE)
-                                value.setSettingValue(Double.parseDouble(values));
+                                value.setDoubleCurrentValue(Double.parseDouble(values));
                             if (value.getValueType() == ValueHeader.ValueType.ENUM_TYPE)
                                 value.setCurrentEnumType(values);
                             if (value.getValueType() == ValueHeader.ValueType.COLOR)
