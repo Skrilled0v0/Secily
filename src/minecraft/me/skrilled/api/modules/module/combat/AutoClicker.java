@@ -32,7 +32,7 @@ public class AutoClicker extends ModuleHeader {
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
         pressed = mc.gameSettings.keyBindAttack.pressed;
-        double cps = ThreadLocalRandom.current().nextDouble((double) this.getValue(ma_cps));
+        double cps = (double) this.getValue(mi_cps)+Math.random()*((double) this.getValue(ma_cps)-(double) this.getValue(mi_cps));
         if (timerUtil.hasReached((int) (1000L / cps)) && pressed) {
 //            sense.printINFO("Clicked");
             mc.clickMouse();

@@ -23,6 +23,7 @@ public class SenseHeader implements IMC {
     public static SenseHeader getSense = new SenseHeader();
     public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
+
     public String getClientUpdate() {
         return clientInfo[1];
     }
@@ -46,7 +47,6 @@ public class SenseHeader implements IMC {
         moduleManager.load();
         readSettings();
         fontBuffer = new FontBuffer();
-
     }
 
     public String getPlayerName() {
