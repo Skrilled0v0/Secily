@@ -154,12 +154,12 @@ public class EclipseMenu extends GuiScreen {
             ValueHeader value = currentModule.getValueList().get(i);
             if (value.getValueType() == ValueHeader.ValueType.DOUBLE) {
                 float x = startX + 270;
-                double render = 68.0F * (value.getSettingValue() - value.getMinValue()) / (value.getMaxValue() - value.getMinValue());
+                double render = 68.0F * (value.getDoubleCurrentValue() - value.getMinValue()) / (value.getMaxValue() - value.getMinValue());
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + 75), mY + 53, f1c);
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + render + 6.5D), mY + 53, color);
                 RenderUtil.drawFilledCircle((float) ((double) x + render + 2D) + 3, mY + 52.25, 3.7, color, 5);
                 RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
-                font.drawString(value.getValueName() + ": " + value.getSettingValue(), startX + 170, mY + 48, f1c);
+                font.drawString(value.getValueName() + ": " + value.getDoubleCurrentValue(), startX + 170, mY + 48, f1c);
                 if (!Mouse.isButtonDown(0)) {
                     this.previousmouse = false;
                 }
@@ -174,7 +174,7 @@ public class EclipseMenu extends GuiScreen {
                         double valRel = (max - render) * perc;
                         double val = render + valRel;
                         val = (double) Math.round(val * (1.0D / inc)) / (1.0D / inc);
-                        value.setSettingValue(val);
+                        value.setDoubleCurrentValue(val);
                     }
                     if (!Mouse.isButtonDown(0)) {
                         this.previousmouse = false;

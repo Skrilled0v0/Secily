@@ -18,7 +18,6 @@ import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -222,12 +221,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     double[] ds = valueHeader.getDoubles();
                     int finalX;
                     int barLength;
-                    finalX = mouseX < valueHeader.x1 ? valueHeader.x1 : mouseX;
-                    finalX = finalX > valueHeader.x2 ? valueHeader.x2 : finalX;
+                    finalX = Math.max(mouseX, valueHeader.x1);
+                    finalX = Math.min(finalX, valueHeader.x2);
                     barLength = valueHeader.x2 - valueHeader.x1;
                     double factor = (double) (finalX - valueHeader.x1) / (double) barLength;
                     factor = Math.floor((factor * (ds[2] - ds[0])) / ds[3]);
-                    valueHeader.setDoubles(new double[]{ds[0], (ds[0] + factor * ds[3]), ds[2], ds[3]});
+                    valueHeader.setDoubleCurrentValue(ds[0] + factor * ds[3]);
                 }
             }
         }
@@ -468,8 +467,25 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                     }
                 }
-                GlStateManager.color(1, 1, 1, 0.5f);
-                RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
+                Character icon = 'A';
+                switch (moduleType) {
+                    case COMBAT:
+                        icon = 'A';
+                        break;
+                    case MISC:
+                        icon = 'B';
+                        break;
+                    case MOVE:
+                        icon = 'C';
+                        break;
+                    case PLAYER:
+                        icon = 'D';
+                        break;
+                    case RENDER:
+                        icon = 'E';
+                        break;
+                }
+                sense.fontBuffer.ICON64.drawString(String.valueOf(icon), moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f + 3, moduleTypePosInfo[3] - sense.fontBuffer.ICON64.getHeight(false) / 3f - 3, -1);
                 xAxis += moduleTypeInterval + typeSideSize;
 
             }
