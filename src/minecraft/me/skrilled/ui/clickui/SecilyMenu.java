@@ -316,14 +316,9 @@ public class SecilyMenu extends GuiScreen implements IMC {
                          */
                         String str = module.isIsOpen() ? "Enabled" : "Disabled";
                         RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
-                        //Bind
+                        //Bind键位显示
                         RenderUtil.drawRect(module.modulePosInfo[2] - midFont.getStringWidth(str) - 13, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[2] - 7, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
-                        if (onKeyBinding[1] && onKeyBinding[0] && currentModule == moduleOnKeyBinding) {
-                            String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
-                            midFont.drawCenteredString(editingStr, (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
-                        } else {
-                            midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
-                        }
+                        midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
                         //E/D
                         if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
                             RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
@@ -502,7 +497,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 }
                 sense.fontBuffer.ICON64.drawString(String.valueOf(icon), moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f + 3, moduleTypePosInfo[3] - sense.fontBuffer.ICON64.getHeight(false) / 3f - 3, -1);
                 xAxis += moduleTypeInterval + typeSideSize;
-
+            }
+            //Key Binding提示
+            if (onKeyBinding[0] && onKeyBinding[1]) {
+                int bgColor = new Color(25, 25, 25, 200).getRGB();
+                String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
+                RenderUtil.drawRect(0, 0, RenderUtil.width(), RenderUtil.height(), bgColor);
+                sense.fontBuffer.EN36.drawCenteredString(editingStr, (float) (RenderUtil.width() / 2), (float) (0 - sense.fontBuffer.EN36.getHeight(false) + RenderUtil.height() / 2), -1);
             }
         }
         if (closed) {
