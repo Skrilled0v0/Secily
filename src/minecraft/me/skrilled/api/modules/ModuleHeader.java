@@ -54,7 +54,7 @@ public class ModuleHeader implements IMC {
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.DOUBLE) {
             return valueHeader.getDoubles()[1];
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.COLOR) {
-            return valueHeader.getColorValue();
+            return valueHeader.getColorValue().getRGB();
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.STRING) {
             return valueHeader.getStrValue();
         } else return "getERROR";
