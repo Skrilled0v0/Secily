@@ -18,6 +18,7 @@ import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -130,6 +131,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 页码
      */
     int currentPage = 1;
+    /**
+     * 第一个：按下时是否在框中，第二个：松开时是否在框中
+     */
+    boolean[] onKeyBinding = new boolean[]{false, false};
+    ModuleHeader moduleOnKeyBinding = null;
 
     /**
      * 该moduleType下module总和
@@ -310,11 +316,15 @@ public class SecilyMenu extends GuiScreen implements IMC {
                          */
                         String str = module.isIsOpen() ? "Enabled" : "Disabled";
                         RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
+                        //Bind
+                        RenderUtil.drawRect(module.modulePosInfo[2] - midFont.getStringWidth(str) - 13, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[2] - 7, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
+                        midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
                         //E/D
                         if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
                             RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
-                            midFont.drawString(str, module.modulePosInfo[0] + 10, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight / 1.5f, 1);
+                            midFont.drawString(str, module.modulePosInfo[0] + 10, module.modulePosInfo[1] + moduleBoxHeight - (moduleBoxTitleHeight / 1.5f), 1);
                         }
+                        //ModuleName
                         bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
@@ -514,25 +524,33 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 if (moduleHeader.isIsOpen()) moduleHeader.moduleMotionColor.setState(true);
             }
         }
-        for (ModuleHeader modules : moduleHeaders) {
-            String str = modules.isIsOpen() ? "Enabled" : "Disabled";
+        for (ModuleHeader module : moduleHeaders) {
+            String str = module.isIsOpen() ? "Enabled" : "Disabled";
             //切换选中Module
-            modules.menuFlag = isMouseClickedInside(mouseX, mouseY, modules.modulePosInfo[0], modules.modulePosInfo[1], modules.modulePosInfo[2], modules.modulePosInfo[3]);
+            module.menuFlag = isMouseClickedInside(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3]);
             //开关Module
             float p1, p2, p3, p4 = 0;
-            p1 = modules.modulePosInfo[0] + 7;
-            p2 = modules.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
-            p3 = modules.modulePosInfo[0] + midFont.getStringWidth(str) + 13;
-            p4 = modules.modulePosInfo[1] + moduleBoxHeight - 1.5f;
-            boolean p5 = modules != sense.getModuleManager().getModuleByClass(SettingMenu.class);
+            p1 = module.modulePosInfo[0] + 7;
+            p2 = module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
+            p3 = module.modulePosInfo[0] + midFont.getStringWidth(str) + 13;
+            p4 = module.modulePosInfo[1] + moduleBoxHeight - 1.5f;
+            boolean p5 = module != sense.getModuleManager().getModuleByClass(SettingMenu.class);
             if (isMouseClickedInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
-                modules.moduleMotionColor.setState(!modules.isIsOpen());
-                modules.toggle();
+                module.moduleMotionColor.setState(!module.isIsOpen());
+                module.toggle();
+            }
+            //绑定键位
+            float middle = (module.modulePosInfo[0] + module.modulePosInfo[2]) / 2;
+            if (isMouseClickedInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
+                onKeyBinding[0] = true;
+                moduleOnKeyBinding = module;
+            } else {
+                onKeyBinding[0] = false;
             }
             /*
             调value的判定
              */
-            for (ValueHeader value : modules.getValueList()) {
+            for (ValueHeader value : module.getValueList()) {
                 //boolean切换
                 if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) {
                     if (value.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
@@ -579,6 +597,21 @@ public class SecilyMenu extends GuiScreen implements IMC {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
+        if (moduleOnKeyBinding != null) {
+            float p1, p2, p3, p4 = 0;
+            p1 = moduleOnKeyBinding.modulePosInfo[0] + 7;
+            p2 = moduleOnKeyBinding.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
+            p3 = moduleOnKeyBinding.modulePosInfo[0] + sense.fontBuffer.EN24.getStringWidth("Enabled") + 13;
+            p4 = moduleOnKeyBinding.modulePosInfo[1] + moduleBoxHeight - 1.5f;
+            float middle = (moduleOnKeyBinding.modulePosInfo[0] + moduleOnKeyBinding.modulePosInfo[2]) / 2;
+            if (isMouseClickedInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
+                onKeyBinding[1] = true;
+            } else {
+                moduleOnKeyBinding = null;
+                onKeyBinding[1] = false;
+            }
+        }
+
         if (clickDag) {
             clickDag1 = true;
         }
@@ -593,9 +626,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        //ESC键退出
         if (keyCode == 1) {
             closed = true;
             sense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
+        } else {
+            if (onKeyBinding[0] && onKeyBinding[1]) {
+                moduleOnKeyBinding.setKey(keyCode);
+                onKeyBinding = new boolean[]{false, false};
+                moduleOnKeyBinding = null;
+            }
         }
         super.keyTyped(typedChar, keyCode);
     }
