@@ -471,6 +471,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 GlStateManager.color(1, 1, 1, 0.5f);
                 RenderUtil.drawIcon(moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f, moduleTypePosInfo[1], typeICONSize, typeICONSize, new ResourceLocation("skrilled/MenuICON/" + moduleType + ".png"));
                 xAxis += moduleTypeInterval + typeSideSize;
+
             }
         }
         if (closed) {
