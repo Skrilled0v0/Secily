@@ -55,7 +55,7 @@ public class Nametags extends ModuleHeader {
     public void onRender2D(EventRender2D event) {
         GlStateManager.pushMatrix();
         ScaledResolution scaledRes = new ScaledResolution(mc);
-        for (Entity ent : entityPositions.keySet()) {
+        for (EntityLivingBase ent : entityPositions.keySet()) {
             if (ent != mc.thePlayer && ((boolean) this.getValue(invis) || !ent.isInvisible())) {
 
                 GlStateManager.pushMatrix();
@@ -73,7 +73,7 @@ public class Nametags extends ModuleHeader {
                     scale();
                     GlStateManager.translate(0.0D, -2.5D, 0.0D);
 
-                    String health = "Health: " + Math.round(((EntityLivingBase) ent).getHealth() * 10) / 10;
+                    String health = "Health: " + Math.round(ent.getHealth() * 10) / 10;
 //                    (AntiBot.isBot(ent) ? "\2479[BOT]" : "") + (Teams.isOnSameTeam(ent) ? "\247b[TEAM]" : "") + "\247r" +
                     String str = ent.getDisplayName().getUnformattedText();
                     String suff = "";
@@ -89,7 +89,7 @@ public class Nametags extends ModuleHeader {
 
                     sense.getFontBuffer().EN10.drawString(health, -allWidth / 2 + 4, -10.0F, Colors.WHITE.c);
 
-                    EntityLivingBase entity = (EntityLivingBase) ent;
+                    EntityLivingBase entity = ent;
                     float nowhealth = (float) Math.ceil(entity.getHealth() + entity.getAbsorptionAmount());
                     float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
                     float healthP = nowhealth / maxHealth;
@@ -99,7 +99,7 @@ public class Nametags extends ModuleHeader {
                     if ((boolean) this.getValue(armor)) {
                         List<ItemStack> itemsToRender = new ArrayList<>();
                         for (int i = 0; i < 5; i++) {
-                            ItemStack stack = ((EntityPlayer) ent).getEquipmentInSlot(i);
+                            ItemStack stack = ent.getEquipmentInSlot(i);
                             if (stack != null) {
                                 itemsToRender.add(stack);
                             }
@@ -222,7 +222,7 @@ public class Nametags extends ModuleHeader {
                 double y = ent.lastTickPosY + (ent.posY - ent.lastTickPosY) * pTicks - mc.getRenderManager().viewerPosY;
                 double z = ent.lastTickPosZ + (ent.posZ - ent.lastTickPosZ) * pTicks - mc.getRenderManager().viewerPosZ;
                 y += ent.height + 0.2D;
-                System.out.println(convertTo2D(x, y, z)[0]);
+//                System.out.println(convertTo2D(x, y, z)[0]);
 //                if ((convertTo2D(x, y, z)[2] >= 0.0D) && (convertTo2D(x, y, z)[2] < 1.0D)) {
                 double[] pos = {convertTo2D(x, y, z)[0], convertTo2D(x, y, z)[1], Math.abs(convertTo2D(x, y + 1.0D, z, ent)[1] - convertTo2D(x, y, z, ent)[1]), convertTo2D(x, y, z)[2]};
                 entityPositions.put((EntityPlayer) ent, pos);

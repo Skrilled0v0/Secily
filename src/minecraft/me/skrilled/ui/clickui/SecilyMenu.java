@@ -234,11 +234,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
         GlStateManager.pushMatrix();
         //背景
         GL11.glScaled(scale, scale, 1);
-        RenderUtil.drawRound(posX, posY, width, height, bcColor, bcColor);
+        RenderUtil.drawRect(posX, posY, width, height, bcColor);
         //上标题背景
-        RenderUtil.drawRound(posX, posY, width, posY + upSide, titleColor, titleColor);
+        RenderUtil.drawRect(posX, posY, width, posY + upSide, titleColor);
         //下标题背景
-        RenderUtil.drawRound(posX, posY + windowHeight - downSide, width, posY + windowHeight, titleColor, titleColor);
+        RenderUtil.drawRect(posX, posY + windowHeight - downSide, width, posY + windowHeight, titleColor);
         GlStateManager.popMatrix();
         if (MenuMotion.getMenuMotion().getAnimationFactor() == 1) {
             float xAxis = 0;
@@ -246,7 +246,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 //通过x坐标+(窗口宽度-绘制ModuleType选择区的宽度)/2的算法进行遍历，计算ModuleType图标绘制区域坐标
                 float[] moduleTypePosInfo = new float[]{posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
                 if (moduleType == currentModuleType) {
-                    RenderUtil.drawRound(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor, typeBoxColor);
+                    RenderUtil.drawRect(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor);
                     minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
                  /*
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
@@ -300,19 +300,19 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         背景
                          */
-                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3], module.menuFlag ? moduleCurrentBGColor : moduleBGColor, module.menuFlag ? moduleCurrentBGColor : moduleBGColor);
+                        RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3], module.menuFlag ? moduleCurrentBGColor : moduleBGColor);
                         /*
                         上标题背景
                          */
-                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxTitleHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+                        RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxTitleHeight, moduleCurrentTitleOPorDis);
                         /*
                         下标题背景
                          */
                         String str = module.isIsOpen() ? "Enabled" : "Disabled";
-                        RenderUtil.drawRound(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis, moduleCurrentTitleOPorDis);
+                        RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
                         //E/D
                         if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
-                            RenderUtil.drawRound(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor, moduleBGColor);
+                            RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
                             midFont.drawString(str, module.modulePosInfo[0] + 10, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight / 1.5f, 1);
                         }
                         bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
@@ -461,7 +461,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 绘制页码标签
                  */
                     for (int i = 0; i < modulePageMAXIndex; i++) {
-                        RenderUtil.drawRound(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor, typeBoxColor);
+                        RenderUtil.drawRect(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor);
                         bigFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + bigFont.getHeight(false) / 2f - 5, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
                         fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                         fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
