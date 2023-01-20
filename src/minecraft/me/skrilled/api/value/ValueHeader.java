@@ -74,6 +74,7 @@ public class ValueHeader {
         this.valueType = ValueType.COLOR;
         this.valueName = valueName;
         this.colorValue = colorValue;
+
     }
 
     public ValueHeader(String valueName, String strValue) {
