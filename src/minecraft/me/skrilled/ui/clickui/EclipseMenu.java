@@ -131,7 +131,7 @@ public class EclipseMenu extends GuiScreen {
                 for (int j = 0; j < currentModule.getValueList().size(); j++) {
                     ValueHeader value = currentModule.getValueList().get(j);
                     if (value.getValueType() == ValueHeader.ValueType.BOOLEAN) {
-                        value.setAinm(ValueHeader.ValueType.BOOLEAN, 55);
+                        value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
                     }
                 }
                 for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
@@ -190,21 +190,21 @@ public class EclipseMenu extends GuiScreen {
                 RenderUtil.drawBorderedRect(1, 1, 1, 1, 1, new Color(0, 0, 0, 0).getRGB(), 77);
                 if (value.isOptionOpen()) {
 
-                    if (value.getAinm(ValueHeader.ValueType.BOOLEAN) < x2x) {
-                        value.setAinm(ValueHeader.ValueType.BOOLEAN, value.getAinm(ValueHeader.ValueType.BOOLEAN) + 1);
+                    if (value.getAnim(ValueHeader.ValueType.BOOLEAN) < x2x) {
+                        value.setAnim(ValueHeader.ValueType.BOOLEAN, value.getAnim(ValueHeader.ValueType.BOOLEAN) + 1);
                     }
                     RenderUtil.drawRect(x + xx, mY + 50, x + x2x, mY + 59, va);
                     RenderUtil.drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
                     RenderUtil.drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + value.getAinm(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, color, 10);
+                    RenderUtil.drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, color, 10);
                 } else {
-                    if (value.getAinm(ValueHeader.ValueType.BOOLEAN) > xx) {
-                        value.setAinm(ValueHeader.ValueType.BOOLEAN, value.getAinm(ValueHeader.ValueType.BOOLEAN) - 1);
+                    if (value.getAnim(ValueHeader.ValueType.BOOLEAN) > xx) {
+                        value.setAnim(ValueHeader.ValueType.BOOLEAN, value.getAnim(ValueHeader.ValueType.BOOLEAN) - 1);
                     }
                     RenderUtil.drawRect(x + xx, mY + 50, x + x2x, mY + 59, va);
                     RenderUtil.drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
                     RenderUtil.drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + value.getAinm(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, new Color(177, 177, 177).getRGB(), 10);
+                    RenderUtil.drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, new Color(177, 177, 177).getRGB(), 10);
                 }
                 if (this.isCheckBoxHovered(x + xx - 5, mY + 50, x + x2x + 6, mY + 59, mouseX, mouseY)) {
                     if (!this.previousmouse && Mouse.isButtonDown(0)) {
@@ -312,7 +312,7 @@ public class EclipseMenu extends GuiScreen {
                     for (int x = 0; x < currentModule.getValueList().size(); x++) {
                         ValueHeader value = currentModule.getValueList().get(x);
                         if (value.getValueType() == ValueHeader.ValueType.BOOLEAN) {
-                            value.setAinm(ValueHeader.ValueType.BOOLEAN, 55);
+                            value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
                         }
                     }
                     for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
@@ -330,7 +330,7 @@ public class EclipseMenu extends GuiScreen {
         for (int i = 0; i < currentModule.getValueList().size(); i++) {
             ValueHeader value = currentModule.getValueList().get(i);
             if (value.getValueType() == ValueHeader.ValueType.BOOLEAN) {
-                value.setAinm(ValueHeader.ValueType.BOOLEAN, 55);
+                value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
             }
         }
         for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {

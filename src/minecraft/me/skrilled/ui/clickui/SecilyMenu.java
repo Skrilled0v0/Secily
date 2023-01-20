@@ -334,10 +334,10 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         boolean类型value绘制
                          */
-                        for (ValueHeader booleanValue : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
+                        for (ValueHeader valueHeader : module.getValueListByValueType(ValueHeader.ValueType.BOOLEAN)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
-                                booleanValue.posDel();
-                                booleanValue.visible = false;
+                                valueHeader.posDel();
+                                valueHeader.visible = false;
                                 skipValue++;
                                 continue;
                             }
@@ -345,21 +345,22 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
-                            String valueStr = booleanValue.getValueName() + ":";
+                            String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-                            booleanValue.x1 = (int) (module.modulePosInfo[2] - 55);
-                            booleanValue.y1 = (int) valueY;
-                            booleanValue.draw();
-                            booleanValue.visible = true;
+                            valueHeader.visible = true;
                             yValue += (valueFont.getHeight(false) * 1.5f);
+
+                            valueHeader.x1 = (int) (module.modulePosInfo[2] - 55);
+                            valueHeader.y1 = (int) valueY;
+                            valueHeader.draw();
                         }
                         /*
                         enum类型value绘制
                          */
-                        for (ValueHeader enumValue : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
+                        for (ValueHeader valueHeader : module.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
-                                enumValue.posDel();
-                                enumValue.visible = false;
+                                valueHeader.posDel();
+                                valueHeader.visible = false;
                                 skipValue++;
                                 continue;
                             }
@@ -367,27 +368,27 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
-                            String valueStr = enumValue.getValueName() + ": ";
+                            String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-
-                            enumValue.x1 = (int) module.modulePosInfo[2];
-                            enumValue.y1 = (int) valueY;
-                            enumValue.x2 = (int) (module.modulePosInfo[2] - 16);
-                            enumValue.draw();
-                            if (!enumValue.visible) {
-                                SubEnumValueHeader subEnumValueHeader = enumValue.getCurrentSubEnumHeader();
-                                enumValue.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
-                            }
-                            enumValue.visible = true;
+                            valueHeader.visible = true;
                             yValue += (valueFont.getHeight(false) * 1.5f);
+
+                            valueHeader.x1 = (int) module.modulePosInfo[2];
+                            valueHeader.y1 = (int) valueY;
+                            valueHeader.x2 = (int) (module.modulePosInfo[2] - 16);
+                            valueHeader.draw();
+                            if (!valueHeader.visible) {
+                                SubEnumValueHeader subEnumValueHeader = valueHeader.getCurrentSubEnumHeader();
+                                valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
+                            }
                         }
                         /*
                         double类型value绘制
                          */
-                        for (ValueHeader doubleValue : module.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
+                        for (ValueHeader valueHeader : module.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
                             if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
-                                doubleValue.posDel();
-                                doubleValue.visible = false;
+                                valueHeader.posDel();
+                                valueHeader.visible = false;
                                 skipValue++;
                                 continue;
                             }
@@ -395,16 +396,40 @@ public class SecilyMenu extends GuiScreen implements IMC {
                             float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
                             if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
-                            String valueStr = doubleValue.getValueName() + ": ";
+                            String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
-
-                            doubleValue.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
-                            doubleValue.y1 = (int) valueY;
-                            doubleValue.x2 = (int) (module.modulePosInfo[2] - 16);
-                            doubleValue.draw();
-                            doubleValue.visible = true;
-
+                            valueHeader.visible = true;
                             yValue += (valueFont.getHeight(false) * 1.5f);
+
+                            valueHeader.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
+                            valueHeader.y1 = (int) valueY;
+                            valueHeader.x2 = (int) (module.modulePosInfo[2] - 16);
+                            valueHeader.draw();
+
+                        }
+                        /*
+                        String类型value绘制
+                         */
+                        for (ValueHeader valueHeader : module.getValueListByValueType(ValueHeader.ValueType.STRING)) {
+                            if (module.valueWheelY > 0 && skipValue < module.valueWheelY) {
+                                valueHeader.posDel();
+                                valueHeader.visible = false;
+                                skipValue++;
+                                continue;
+                            }
+                            float valueX = module.modulePosInfo[0] + 20;
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
+                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                                break;
+                            String valueStr = valueHeader.getValueName() + ": ";
+                            valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
+                            valueHeader.visible = true;
+                            yValue += (valueFont.getHeight(false) * 1.5f);
+
+                            valueHeader.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
+                            valueHeader.y1 = (int) valueY;
+                            valueHeader.x2 = (int) (module.modulePosInfo[2] - 16);
+                            valueHeader.draw();
                         }
 
                     }

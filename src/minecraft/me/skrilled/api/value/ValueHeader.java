@@ -22,6 +22,7 @@ public class ValueHeader {
     public int x2 = 0;
     public int y2 = 0;
     public boolean visible = false;
+    public String strInFieldBox = null;
     /**
      * 构造的valueHeader属于enum时存储子enum对象
      */
@@ -47,9 +48,9 @@ public class ValueHeader {
     String currentEnumType;
     Color colorValue;
     String strValue;
-    int Banim = 55;
-    int Eanim = 55;
-    int Nanim = 55;
+    int bAnim = 55;
+    int eAnim = 55;
+    int dAnim = 55;
     Animation motion = new Animation(600f, false, Easing.LINEAR);
 
     public ValueHeader(String valueName, double[] doubles) {
@@ -99,7 +100,7 @@ public class ValueHeader {
 
                 RenderUtil.drawRound(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, bgColor, bgColor);
                 double[] ds = this.getDoubles();
-                RenderUtil.drawCircle((float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), (y1 + y2) / 2, 5, buttonColor);
+                RenderUtil.drawCircle((float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), (y1 + y2) / 2f, 5, buttonColor);
                 String value = Double.toString((Math.floor(ds[1] * 10) / 10));
                 font.drawCenteredString(value, (float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), 0.1f * y1 + 0.9f * y2, -1);
 
@@ -110,7 +111,15 @@ public class ValueHeader {
                 break;
             case STRING:
 
-//                break;
+                int fieldBGColor = new Color(25, 25, 25, 150).getRGB();
+                y2 = y1 + 10;
+
+                RenderUtil.drawRect(x1, y1, x2, y2, fieldBGColor);
+                if (strInFieldBox == null) {
+                    strInFieldBox = strValue;
+                }
+                font.drawString(strInFieldBox, x1, y1, -1);
+                break;
             case BOOLEAN:
 
                 int valueButtonBooleanColor = new Color(0, 136, 255).getRGB();
@@ -160,6 +169,7 @@ public class ValueHeader {
                 }
 
                 //绘制选中enum背景框
+                assert selectedEnumBGAnim != null;
                 RenderUtil.drawRound((float) selectedEnumBGAnim.getAnimationValue(), y1, (float) (selectedEnumBGAnim.getAnimationValue() + font.getStringWidth(this.getCurrentEnumType()) + 4f), y2, selectedEnumColor, selectedEnumColor);
                 //绘制文字
                 for (SubEnumValueHeader subEnumValueHeader : subEnumValueHeaders) {
@@ -284,17 +294,17 @@ public class ValueHeader {
         this.strValue = strValue;
     }
 
-    public int getAinm(ValueType valueType) {
-        if (valueType == ValueType.BOOLEAN) return this.Banim;
-        if (valueType == ValueType.DOUBLE) return this.Nanim;
-        if (valueType == ValueType.ENUM_TYPE) return this.Eanim;
+    public int getAnim(ValueType valueType) {
+        if (valueType == ValueType.BOOLEAN) return this.bAnim;
+        if (valueType == ValueType.DOUBLE) return this.dAnim;
+        if (valueType == ValueType.ENUM_TYPE) return this.eAnim;
         return 1134;
     }
 
-    public void setAinm(ValueType valueType, int var) {
-        if (valueType == ValueType.BOOLEAN) this.Banim = var;
-        if (valueType == ValueType.DOUBLE) this.Nanim = var;
-        if (valueType == ValueType.ENUM_TYPE) this.Eanim = var;
+    public void setAnim(ValueType valueType, int var) {
+        if (valueType == ValueType.BOOLEAN) this.bAnim = var;
+        if (valueType == ValueType.DOUBLE) this.dAnim = var;
+        if (valueType == ValueType.ENUM_TYPE) this.eAnim = var;
 
     }
 

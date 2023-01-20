@@ -17,7 +17,7 @@ public class TestModule004 extends ModuleHeader {
     private final ValueHeader testType = new ValueHeader("TestType", "Test1", typeList);
     private final double[] value = {0.1, 0.7, 5.0, 0.1};
     private final ValueHeader testDouble = new ValueHeader("TestDouble", value);
-    private final String testStr = "";
+    private final String testStr = "1122339";
     private final Color testC = new Color(0);
     private final ValueHeader testString = new ValueHeader("TestString", testStr);
     private final ValueHeader testColor = new ValueHeader("TestColor", testC);
