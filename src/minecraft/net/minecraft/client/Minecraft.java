@@ -11,6 +11,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventKey;
+import me.skrilled.api.modules.module.combat.AutoClicker;
 import me.skrilled.ui.LoadingGui;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.block.Block;
@@ -1602,6 +1603,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             if (this.thePlayer.isUsingItem()) {
                 if (!this.gameSettings.keyBindUseItem.isKeyDown()) {
                     this.playerController.onStoppedUsingItem(this.thePlayer);
+
                 }
 
                 while (this.gameSettings.keyBindAttack.isPressed()) {
@@ -1615,6 +1617,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             } else {
                 while (this.gameSettings.keyBindAttack.isPressed()) {
                     this.clickMouse();
+
                 }
 
                 while (this.gameSettings.keyBindUseItem.isPressed()) {
