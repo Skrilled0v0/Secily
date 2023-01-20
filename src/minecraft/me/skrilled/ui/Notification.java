@@ -6,8 +6,6 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,14 +14,14 @@ import java.util.ArrayList;
 public class Notification implements IMC {
     public static ArrayList<Notification> notifications = new ArrayList<>();//列表
     public int height = 0;
-    boolean up, leave;
-    ResourceLocation image;//图片
+    boolean leave;
     String message;//信息
     Animation timerAnim = null;//计时器
     int maxHeight = RenderUtil.height() / 2;//最高到半屏幕直接抽离
     Animation motionX = new Animation(1000f, false, Easing.CIRC_OUT);//动画
     Animation motionY = new Animation(1000f, false, Easing.CIRC_OUT);//动画
-
+    Character ICON;
+    Color ICONCOLOR;
     ColourAnimation motionBGColor;
     ColourAnimation motionColor;
     int boxHeight;//Notification Y坐标目标值
@@ -32,13 +30,19 @@ public class Notification implements IMC {
     Type type;//类型
 
     public Notification(String message, int stayTime, Type type) {
-        image = new ResourceLocation("skrilled/NotificationICON/" + type.name() + ".png");
+        if (type.name().equals("INFO") || type.name().equals("SUCCESS")) ICON = 'G';
+        if (type.name().equals("WARNING") || type.name().equals("ERROR")) ICON = 'F';
+        if (type.name().equals("INFO")) ICONCOLOR = new Color(104, 169, 255);
+        if (type.name().equals("WARNING")) ICONCOLOR = new Color(255, 255, 120);
+        if (type.name().equals("ERROR")) ICONCOLOR = new Color(255, 104, 104);
+        if (type.name().equals("SUCCESS")) ICONCOLOR = new Color(0, 167, 0);
+
         this.message = message;
         this.stayTime = stayTime;
         this.type = type;
         timerAnim = new Animation(stayTime, false, Easing.LINEAR);
         motionBGColor = new ColourAnimation(new Color(30, 30, 30, 20), new Color(30, 30, 30, 200), stayTime, false, Easing.LINEAR);
-        motionColor = new ColourAnimation(new Color(0, 255, 169, 200), new Color(255, 59, 59, 120), stayTime, false, Easing.LINEAR);
+        motionColor = new ColourAnimation(new Color(0, 255, 169, 200), new Color(255, 59, 59, 120), stayTime * 2, false, Easing.LINEAR);
     }
 
     public static void sendNotification(String message, int stayTime, Type type) {
@@ -63,9 +67,10 @@ public class Notification implements IMC {
     public void draw() {
 //        sense.printINFO("    public void draw() ");
         String msg = this.message;
-        String info = "Type:" + this.type + "  Time remaining:" + Math.floor(((1f-timerAnim.getAnimationFactor())*stayTime)/10f)/100f + "s";
+        String info = "Type:" + this.type + "  Time remaining:" + Math.floor(((1f - timerAnim.getAnimationFactor()) * stayTime) / 10f) / 100f + "s";
         CFontRenderer messageFont = sense.fontBuffer.EN24;
-        CFontRenderer infoFont = sense.fontBuffer.EN12;
+        CFontRenderer infoFont = sense.fontBuffer.EN16;
+        CFontRenderer ICONFont = sense.fontBuffer.ICON64;
         //字体高度
         int mfH = messageFont.getHeight(false);
         int ifH = infoFont.getHeight(false);
@@ -78,7 +83,7 @@ public class Notification implements IMC {
         setMotion(true);
         int w = RenderUtil.width();
         int h = RenderUtil.height() - 30;
-        int width = messageFont.getStringWidth(msg) + 5 + 5 + 30 + 5;
+        int width = messageFont.getStringWidth(msg) + 60;
         height = mfH + ifH + 10;
         int x = (int) (w - width * motionX.getAnimationFactor());
         int y = (int) (h - height - getBoxHeightAdd * motionY.getAnimationFactor());
@@ -91,8 +96,7 @@ public class Notification implements IMC {
         //读条
         RenderUtil.drawRect(x, y + this.height, w - width * timerAnim.getAnimationFactor(), y + height + 3, motionColor.getColour().getRGB());
         //图标
-        GL11.glColor4f(1, 1, 1, 0.7f);
-        RenderUtil.drawIcon(x + 5, y + 2.5f, 30, 30, image);
+        ICONFont.drawString(String.valueOf(ICON), x + 5, y + this.height - ICONFont.getHeight(false) / 3, ICONCOLOR.getRGB());
         //message
         messageFont.drawString(msg, x + 40, y + this.height - ifH - mfH, -1);
         //infoType

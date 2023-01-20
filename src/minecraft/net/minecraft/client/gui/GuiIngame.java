@@ -88,6 +88,7 @@ public class GuiIngame extends Gui {
     }
 
     public void renderGameOverlay(float partialTicks) {
+
         ScaledResolution scaledresolution = new ScaledResolution(this.mc);
         int i = scaledresolution.getScaledWidth();
         int j = scaledresolution.getScaledHeight();

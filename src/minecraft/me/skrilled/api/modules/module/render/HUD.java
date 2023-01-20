@@ -21,17 +21,17 @@ public class HUD extends ModuleHeader {
 
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
-
+    ValueHeader not = new ValueHeader("Notifications", true);
 
     public HUD() {
         super("HUD", true, ModuleType.RENDER);
-        this.addValueList(info, malist);
+        this.addValueList(info, malist, not);
         this.setKey(Keyboard.KEY_H);
     }
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {
-        Notification.drawNotifications();
+
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         double[] pos = sense.getPlayerPos();
@@ -57,6 +57,7 @@ public class HUD extends ModuleHeader {
             font.drawString(sense.getClientName() + " " + sense.getClientUpdate() + " " + sense.skrilledSense(), 0, h - font.FONT_HEIGHT, -1);
             font.drawString(sense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + sense.getClientFPS(), 0, h - font.FONT_HEIGHT * 2, -1);
         }
-
+        if (not.isOptionOpen())
+            Notification.drawNotifications();
     }
 }

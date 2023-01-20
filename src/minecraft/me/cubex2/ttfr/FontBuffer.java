@@ -21,6 +21,11 @@ public class FontBuffer implements IMC {
     public CFontRenderer EN64 = this.getFont("EN", 64, true);
     public CFontRenderer EN72 = this.getFont("EN", 72, true);
     public CFontRenderer EN128 = this.getFont("EN", 128, true);
+    public CFontRenderer ICON64 = this.getFont("ICON", 64, true);
+    public CFontRenderer ICON128 = this.getFont("ICON", 128, true);
+    public CFontRenderer ICON32 = this.getFont("ICON", 32, true);
+    public CFontRenderer ICON48 = this.getFont("ICON", 48, true);
+
 
     public CFontRenderer getFont(String fontName, int size) {
         Font font;

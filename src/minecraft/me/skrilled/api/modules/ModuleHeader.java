@@ -88,12 +88,14 @@ public class ModuleHeader implements IMC {
         if (isOpen) this.onOpen();
         else this.isNotOpen();
         if (!moduleName.equals("SettingMenu")) {
-            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 2000, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
+            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 1500, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
         }
     }
 
     public void setIsOpenWithOutNotification(boolean isOpen) {
         this.isOpen = isOpen;
+        if (isOpen) this.onOpen();
+        else this.isNotOpen();
         System.out.println(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"));
     }
 
