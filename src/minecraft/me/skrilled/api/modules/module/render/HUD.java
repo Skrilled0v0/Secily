@@ -9,6 +9,8 @@ import com.darkmagician6.eventapi.EventTarget;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.render.RenderUtil;
@@ -17,17 +19,13 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+@ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
 
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader not = new ValueHeader("Notifications", true);
 
-    public HUD() {
-        super("HUD", true, ModuleType.RENDER);
-        this.addValueList(info, malist, not);
-        this.setKey(Keyboard.KEY_H);
-    }
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {

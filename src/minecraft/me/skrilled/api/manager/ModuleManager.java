@@ -17,8 +17,10 @@ import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
 import me.skrilled.api.event.EventKey;
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.combat.AutoClicker;
-import me.skrilled.api.modules.module.misc.*;
+import me.skrilled.api.modules.module.misc.TestModule001;
+import me.skrilled.api.modules.module.misc.TestModule002;
 import me.skrilled.api.modules.module.move.AutoJump;
 import me.skrilled.api.modules.module.move.AutoSprint;
 import me.skrilled.api.modules.module.render.ESP;
@@ -48,9 +50,10 @@ public class ModuleManager {
         //Combat
         mList.add(new AutoClicker());
         //Test
-        Collections.addAll(mList, new TestModule001(), new TestModule002(), new TestModule003(), new TestModule004(), new TestModule005(), new TestModule006(), new TestModule007(), new TestModule008());
-
-
+        Collections.addAll(mList, new TestModule001(), new TestModule002());
+        for (ModuleHeader moduleHeader : mList) {
+            moduleHeader.loadValueLists();
+        }
     }
 
     public ModuleHeader getModuleByName(String mName) {
@@ -79,7 +82,7 @@ public class ModuleManager {
         return null;
     }
 
-    public List<ModuleHeader> getModuleListByModuleType(ModuleHeader.ModuleType moduleType) {
+    public List<ModuleHeader> getModuleListByModuleType(ModuleType moduleType) {
         return mList.stream().filter(moduleHeader -> moduleHeader.getModuleType() == moduleType).collect(Collectors.toList());
     }
 

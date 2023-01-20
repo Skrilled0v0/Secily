@@ -3,7 +3,7 @@ package me.skrilled.ui.clickui;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.modules.ModuleHeader.ModuleType;
+import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;

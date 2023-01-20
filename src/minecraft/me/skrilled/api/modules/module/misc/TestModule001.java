@@ -6,11 +6,14 @@
 package me.skrilled.api.modules.module.misc;
 
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 
 import java.awt.*;
 import java.util.ArrayList;
 
+@ModuleInitialize(name = "TestModule01", type = ModuleType.MISC)
 public class TestModule001 extends ModuleHeader {
     private final ValueHeader testBoolean = new ValueHeader("TesdastBoolean", true);
     private final ValueHeader test1Boolean = new ValueHeader("Test2Boodsalean", true);
@@ -31,9 +34,7 @@ public class TestModule001 extends ModuleHeader {
     private final ValueHeader testColor = new ValueHeader("TestColor", testC);
 
     public TestModule001() {
-        super("TestModule001", true, ModuleType.MISC);
         this.addEnumTypes(typeList, "Test1", "Test22", "Test3333");
-        this.addValueList(testType, testBoolean, testDouble, testString, testColor, test1Boolean, test2Boolean, test3Boolean, tes4tBoolean, testB5oolean, test6Boolean, te7tBoolean, test8Boolean);
     }
 
     @Override

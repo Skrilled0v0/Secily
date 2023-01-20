@@ -8,7 +8,7 @@ package me.skrilled.ui.clickui;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.modules.ModuleHeader.ModuleType;
+import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.SubEnumValueHeader;
 import me.skrilled.api.value.ValueHeader;
@@ -318,7 +318,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
                         //Bind
                         RenderUtil.drawRect(module.modulePosInfo[2] - midFont.getStringWidth(str) - 13, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[2] - 7, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
-                        midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
+                        if (onKeyBinding[1] && onKeyBinding[0] && currentModule == moduleOnKeyBinding) {
+                            String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
+                            midFont.drawCenteredString(editingStr, (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
+                        } else {
+                            midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
+                        }
                         //E/D
                         if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
                             RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
@@ -632,9 +637,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
             sense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
         } else {
             if (onKeyBinding[0] && onKeyBinding[1]) {
-                moduleOnKeyBinding.setKey(keyCode);
-                onKeyBinding = new boolean[]{false, false};
-                moduleOnKeyBinding = null;
+                if (keyCode == Keyboard.KEY_DELETE) moduleOnKeyBinding.setKey(0);
+                else {
+                    moduleOnKeyBinding.setKey(keyCode);
+                    onKeyBinding = new boolean[]{false, false};
+                    moduleOnKeyBinding = null;
+                }
             }
         }
         super.keyTyped(typedChar, keyCode);

@@ -10,9 +10,8 @@ import me.surge.animation.Easing;
 import java.awt.*;
 import java.util.ArrayList;
 
-
 public class Notification implements IMC {
-    public static ArrayList<Notification> notifications = new ArrayList<>();//列表
+    public volatile static ArrayList<Notification> notifications = new ArrayList<>();//列表
     public int height = 0;
     boolean leave;
     String message;//信息

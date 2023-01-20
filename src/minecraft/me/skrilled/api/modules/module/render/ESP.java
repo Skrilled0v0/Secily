@@ -8,6 +8,8 @@ package me.skrilled.api.modules.module.render;
 import com.darkmagician6.eventapi.EventTarget;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.entity.Entity;
@@ -19,6 +21,7 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.ArrayList;
 
+@ModuleInitialize(name = "ESP", type = ModuleType.RENDER, key = Keyboard.KEY_J)
 public class ESP extends ModuleHeader {
     ValueHeader renderMobs = new ValueHeader("Mobs", true);
     ValueHeader renderAnimals = new ValueHeader("Animals", true);
@@ -27,10 +30,7 @@ public class ESP extends ModuleHeader {
     ValueHeader espMode = new ValueHeader("Mode", "3DBox", espModeList);
 
     public ESP() {
-        super("ESP", false, ModuleType.RENDER);
         this.addEnumTypes(espModeList, "3DBox", "2DBox", "Outline");
-        this.addValueList(renderMobs, renderAnimals, renderPlayers, espMode);
-        this.setKey(Keyboard.KEY_J);
         this.setSuffix(espMode.getCurrentEnumType());
     }
 

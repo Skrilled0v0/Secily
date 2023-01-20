@@ -6,21 +6,15 @@
 package me.skrilled.api.modules.module.move;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventUpdate;
 import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.value.ValueHeader;
-import me.skrilled.utils.player.MovementUtils;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
-
+@ModuleInitialize(name = "AutoSprint", type = ModuleType.MOVE, key = Keyboard.KEY_V)
 public class AutoSprint extends ModuleHeader {
 
-    public AutoSprint() {
-        super("AutoSprint", true,  ModuleType.MOVE);
-        this.setKey(Keyboard.KEY_V);
-    }
 
     @EventTarget
     public void onOpen(EventUpdate eventUpdate) {

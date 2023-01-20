@@ -5,6 +5,8 @@ import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.event.EventUpdate;
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.Colors;
 import me.skrilled.utils.render.RenderUtil;
@@ -33,22 +35,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ModuleInitialize(name = "NameTags", type = ModuleType.RENDER, key = Keyboard.KEY_N)
 public class Nametags extends ModuleHeader {
     public static Map<EntityLivingBase, double[]> entityPositions = new HashMap<>();
 
     public ValueHeader invis = new ValueHeader("Invisible", false);
     public ValueHeader armor = new ValueHeader("Armor", true);
 
-    public Nametags() {
-        super("Nametags", false, ModuleType.RENDER);
-        this.addValueList(invis, armor);
-        setKey(Keyboard.KEY_N);
-    }
-
     @EventTarget
     public void update(EventUpdate event) {
         updatePositions();
-
     }
 
     @EventTarget
@@ -158,17 +154,6 @@ public class Nametags extends ModuleHeader {
                                     }
                                 } else if (stack.getRarity() == EnumRarity.EPIC) {
                                     drawEnchantTag("\2476\247lGod", x - 2, y);
-                                }
-                                int var7 = (int) Math.round(255.0D - (double) stack.getItemDamage() * 255.0D / (double) stack.getMaxDamage());
-                                int var10 = 255 - var7 << 16 | var7 << 8;
-
-                                float x2 = (float) (x * 1.05D) - 2;
-                                if ((stack.getMaxDamage() - stack.getItemDamage()) > 0) {
-                                    GlStateManager.pushMatrix();
-                                    GlStateManager.disableDepth();
-                                    //Hanabi.INSTANCE.fontManager.comfortaa12.drawString("" + (stack.getMaxDamage() - stack.getItemDamage()), x2 + 6, -32, customColor.getRGB());
-                                    GlStateManager.enableDepth();
-                                    GlStateManager.popMatrix();
                                 }
 
                                 x += 12;

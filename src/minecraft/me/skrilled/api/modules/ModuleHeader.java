@@ -7,6 +7,7 @@
 package me.skrilled.api.modules;
 
 import com.darkmagician6.eventapi.EventManager;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
@@ -16,6 +17,7 @@ import me.surge.animation.Easing;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,18 +29,19 @@ public class ModuleHeader implements IMC {
     public boolean menuFlag;
     public int key, anim, clickAnim, valueWheelY = 0;
     public String moduleName;
-    String suffix = "";
     public boolean isOpen;
+    public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
+    String suffix = "";
     boolean canView = true;
     ArrayList<ValueHeader> valueList;
     ModuleType moduleType;
-    public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
 
-    public ModuleHeader(String moduleName, boolean isOpen, ModuleType moduleType) {
+    public ModuleHeader() {
         this.valueList = new ArrayList<>();
-        this.moduleName = moduleName;
-        this.isOpen = isOpen;
-        this.moduleType = moduleType;
+        this.moduleName = this.getClass().getAnnotation(ModuleInitialize.class).name();
+        this.moduleType = this.getClass().getAnnotation(ModuleInitialize.class).type();
+        this.key = this.getClass().getAnnotation(ModuleInitialize.class).key();
+
     }
 
     public List<ValueHeader> getValueListByValueType(ValueHeader.ValueType valueType) {
@@ -46,6 +49,21 @@ public class ModuleHeader implements IMC {
         return valueList.stream().filter(value -> value.getValueType() == valueType).collect(Collectors.toList());
 
     }
+
+    public void loadValueLists() {
+        try {
+            for (Field declaredField : this.getClass().getDeclaredFields()) {
+                if (declaredField.getType().isAssignableFrom(ValueHeader.class)) {
+                    if (!declaredField.isAccessible()) declaredField.setAccessible(true);
+                    this.getValueList().add((ValueHeader) declaredField.get(this));
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public Object getValue(ValueHeader valueHeader) {
         if (valueHeader.getValueType() == ValueHeader.ValueType.BOOLEAN) return valueHeader.isOptionOpen();
@@ -91,7 +109,6 @@ public class ModuleHeader implements IMC {
             Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 1500, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
         }
     }
-
 
 
     public String getSuffix() {
@@ -144,8 +161,5 @@ public class ModuleHeader implements IMC {
         EventManager.unregister(this);
     }
 
-    public enum ModuleType {
-        COMBAT, MISC, MOVE, PLAYER, RENDER
-    }
 
 }

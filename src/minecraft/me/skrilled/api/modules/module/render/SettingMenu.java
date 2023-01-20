@@ -6,6 +6,8 @@
 package me.skrilled.api.modules.module.render;
 
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.clickui.EclipseMenu;
 import me.skrilled.ui.clickui.MenuMotion;
@@ -14,6 +16,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 
+@ModuleInitialize(name = "SettingMenu", type = ModuleType.RENDER, key = Keyboard.KEY_RSHIFT)
 public class SettingMenu extends ModuleHeader {
     public static SecilyMenu menu = new SecilyMenu();
     static ArrayList<String> cmode = new ArrayList<>();
@@ -23,12 +26,9 @@ public class SettingMenu extends ModuleHeader {
     ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
 
     public SettingMenu() {
-        super("SettingMenu", false, ModuleType.RENDER);
-        this.setKey(Keyboard.KEY_RSHIFT);
         this.setCanView(false);
         this.addEnumTypes(cmode, "Dark", "White");
         this.addEnumTypes(mode, "Secily", "Eclipse");
-        this.addValueList(colorMode, sideMode);
     }
 
 
