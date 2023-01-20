@@ -9,12 +9,14 @@ import com.darkmagician6.eventapi.EventTarget;
 import me.skrilled.api.event.EventUpdate;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
+import me.skrilled.ui.Notification;
 import me.skrilled.utils.math.TimerUtil;
 import org.lwjgl.input.Keyboard;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AutoClicker extends ModuleHeader {
+    public static boolean pressed = false;
     TimerUtil timerUtil = new TimerUtil();
     double[] ip = {1.0, 6.0, 20.0, 1.0};
     double[] ap = {1.0, 6.0, 20.0, 1.0};
@@ -29,11 +31,23 @@ public class AutoClicker extends ModuleHeader {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
+        pressed = mc.gameSettings.keyBindAttack.pressed;
         double cps = ThreadLocalRandom.current().nextDouble((double) this.getValue(ma_cps));
-        if (timerUtil.hasReached((int) (cps / 1000L)) && mc.gameSettings.keyBindAttack.isPressed()) {
-            sense.printINFO("Clicked");
+        if (timerUtil.hasReached((int) (1000L / cps)) && pressed) {
+//            sense.printINFO("Clicked");
             mc.clickMouse();
             timerUtil.reset();
+        }
+    }
+    @Override
+    public void setIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+
+        arrayWidth.setState(isOpen);
+        if (isOpen) this.onOpen();
+        else this.isNotOpen();
+        if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
+            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 1500, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
         }
     }
 

@@ -26,13 +26,13 @@ public class ModuleHeader implements IMC {
     public ColourAnimation moduleMotionColor = new ColourAnimation(new Color(74, 74, 74, 150), new Color(0, 255, 169, 150), 1000f, false, Easing.LINEAR);
     public boolean menuFlag;
     public int key, anim, clickAnim, valueWheelY = 0;
-    String moduleName;
+    public String moduleName;
     String suffix = "";
-    boolean isOpen;
+    public boolean isOpen;
     boolean canView = true;
     ArrayList<ValueHeader> valueList;
     ModuleType moduleType;
-    Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
+    public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
 
     public ModuleHeader(String moduleName, boolean isOpen, ModuleType moduleType) {
         this.valueList = new ArrayList<>();
