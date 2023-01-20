@@ -116,7 +116,7 @@ public class SenseHeader implements IMC {
                     moduleIsOpen = s.split(" ")[2];
                     ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
                     module.setKey(Integer.parseInt(moduleKey));
-                    module.setIsOpenWithOutNotification(Boolean.parseBoolean(moduleIsOpen));
+                    module.setIsOpen(Boolean.parseBoolean(moduleIsOpen));
                 }
                 if (s.startsWith("V-")) {
                     moduleName = s.split(" ")[0].substring(2);
