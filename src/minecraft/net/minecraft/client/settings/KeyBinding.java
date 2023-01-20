@@ -16,7 +16,7 @@ public class KeyBinding implements Comparable<KeyBinding>
     private final int keyCodeDefault;
     private final String keyCategory;
     private int keyCode;
-    public boolean pressed;
+    public volatile boolean pressed;
     private int pressTime;
 
     public static void onTick(int keyCode)
