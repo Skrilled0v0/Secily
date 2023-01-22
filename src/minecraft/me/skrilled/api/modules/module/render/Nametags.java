@@ -51,17 +51,17 @@ public class Nametags extends ModuleHeader {
     public void onRender2D(EventRender2D event) {
         GlStateManager.pushMatrix();
         ScaledResolution scaledRes = new ScaledResolution(mc);
-        for (EntityLivingBase ent : entityPositions.keySet()) {
-            if (ent != mc.thePlayer && ((boolean) this.getValue(invis) || !ent.isInvisible())) {
+            for (EntityLivingBase ent : entityPositions.keySet()) {
+                if (ent != mc.thePlayer && ((boolean) this.getValue(invis) || !ent.isInvisible())) {
 
-                GlStateManager.pushMatrix();
-                if ((ent instanceof EntityPlayer)) {
+                    GlStateManager.pushMatrix();
+                    if ((ent instanceof EntityPlayer)) {
 
-                    double[] renderPositions = entityPositions.get(ent);
-                    if ((renderPositions[3] < 0.0D) || (renderPositions[3] >= 1.0D)) {
-                        GlStateManager.popMatrix();
-                        continue;
-                    }
+                        double[] renderPositions = entityPositions.get(ent);
+                        if ((renderPositions[3] < 0.0D) || (renderPositions[3] >= 1.0D)) {
+                            GlStateManager.popMatrix();
+                            continue;
+                        }
 
                     CFontRenderer font = sense.getFontBuffer().CN18;
 
@@ -208,10 +208,10 @@ public class Nametags extends ModuleHeader {
                 double z = ent.lastTickPosZ + (ent.posZ - ent.lastTickPosZ) * pTicks - mc.getRenderManager().viewerPosZ;
                 y += ent.height + 0.2D;
 //                System.out.println(convertTo2D(x, y, z)[0]);
-//                if ((convertTo2D(x, y, z)[2] >= 0.0D) && (convertTo2D(x, y, z)[2] < 1.0D)) {
-                double[] pos = {convertTo2D(x, y, z)[0], convertTo2D(x, y, z)[1], Math.abs(convertTo2D(x, y + 1.0D, z, ent)[1] - convertTo2D(x, y, z, ent)[1]), convertTo2D(x, y, z)[2]};
-                entityPositions.put((EntityPlayer) ent, pos);
-//                }
+                if ((convertTo2D(x, y, z)[2] >= 0.0D) && (convertTo2D(x, y, z)[2] < 1.0D)) {
+                    double[] pos = {convertTo2D(x, y, z)[0], convertTo2D(x, y, z)[1], Math.abs(convertTo2D(x, y + 1.0D, z, ent)[1] - convertTo2D(x, y, z, ent)[1]), convertTo2D(x, y, z)[2]};
+                    entityPositions.put((EntityPlayer) ent, pos);
+                }
             }
         }
     }

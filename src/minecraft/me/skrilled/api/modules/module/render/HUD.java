@@ -52,7 +52,7 @@ public class HUD extends ModuleHeader {
 
         //Information
         if ((Boolean) this.getValue(info)) {
-            font.drawString(sense.getClientName() + " " + sense.getClientUpdate() + " " + sense.skrilledSense(), 0, h - font.FONT_HEIGHT, -1);
+            font.drawString(sense.getClientName() + " LastUpdate:" + sense.getClientUpdate(), 0, h - font.FONT_HEIGHT, -1);
             font.drawString(sense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + sense.getClientFPS(), 0, h - font.FONT_HEIGHT * 2, -1);
         }
         if (not.isOptionOpen())

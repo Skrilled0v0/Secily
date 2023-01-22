@@ -6,6 +6,7 @@
 package me.skrilled;
 
 import me.cubex2.ttfr.FontBuffer;
+import me.skrilled.api.manager.CommandManager;
 import me.skrilled.api.manager.FileManager;
 import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
@@ -19,7 +20,7 @@ import java.awt.*;
 import java.util.List;
 
 public class SenseHeader implements IMC {
-    public static String[] clientInfo = {"SkrilledSense", "230117", "Genshin Impact"};
+    public static String[] clientInfo = {"SkrilledSense & Prohect", "230122", "Secily"};
     public static SenseHeader getSense = new SenseHeader();
     public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
@@ -32,7 +33,7 @@ public class SenseHeader implements IMC {
         return clientInfo[2];
     }
 
-    public String skrilledSense() {
+    public String getAuthor() {
         return clientInfo[0];
     }
 
@@ -41,6 +42,7 @@ public class SenseHeader implements IMC {
     }
 
     public void clientStart() {
+        CommandManager.loadCommands();
         Display.setTitle(getClientName());
         FileManager.init();
         moduleManager = new ModuleManager();
@@ -63,28 +65,27 @@ public class SenseHeader implements IMC {
 
     //输出信息
     public void printINFO(String str) {
-        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
-
-    }
-
-    public void printINFO(double str) {
-        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
+        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(getClientPrefix() + str));
 
     }
 
     public void printINFO(int str) {
-        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
+        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(getClientPrefix() + str));
 
     }
 
-    public void printINFO(float str) {
-        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
-
-    }
 
     public void printINFO(Object str) {
-        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText("\u00a77[\u00a7c" + getClientName() + "\u00a77]\u00a7r " + str));
+        mc.ingameGUI.getChatGUI().printChatMessage(new ChatComponentText(getClientPrefix() + str));
 
+    }
+
+    public String getClientPrefix() {
+        return "§6[§d" + clientInfo[2] + "§6]§r";
+    }
+
+    public void setClientPrefix(String str) {
+        clientInfo[2] = str;
     }
 
     public ModuleManager getModuleManager() {

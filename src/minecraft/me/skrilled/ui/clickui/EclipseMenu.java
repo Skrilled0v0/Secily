@@ -277,7 +277,7 @@ public class EclipseMenu extends GuiScreen {
         RenderUtil.drawRect(0, 0, 160, sr.getScaledHeight_double(), f3c);
 
         RenderUtil.drawRect(160, 0, 161, sr.getScaledHeight_double(), color);
-        sense.getFontBuffer().EN36.drawCenteredString(sense.skrilledSense(), 75, 87, color);
+        sense.getFontBuffer().EN36.drawCenteredString(sense.getClientName(), 75, 87, color);
         int j = 60;
         int l = 45;
         int k = 100;
@@ -290,10 +290,10 @@ public class EclipseMenu extends GuiScreen {
             RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
             if (iterator[i] == currentModuleType) {
                 if (sidey < i * l) {
-                    sidey = sidey + 10 > i * l ? i * l : sidey + 10;
+                    sidey = Math.min(sidey + 10, i * l);
                 }
                 if (sidey > i * l) {
-                    sidey = sidey - 10 < i * l ? i * l : sidey - 10;
+                    sidey = Math.max(sidey - 10, i * l);
                 }
 
                 RenderUtil.drawFilledCircle(+35, k + j + sidey, 15, color, 5);

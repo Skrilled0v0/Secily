@@ -3,6 +3,7 @@ package net.minecraft.client.entity;
 import com.darkmagician6.eventapi.EventManager;
 import me.skrilled.api.event.EventMotion;
 import me.skrilled.api.event.EventUpdate;
+import me.skrilled.api.manager.CommandManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSoundMinecartRiding;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -171,7 +172,8 @@ public class EntityPlayerSP extends AbstractClientPlayer {
     }
 
     public void sendChatMessage(String message) {
-        this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
+        if (message.startsWith(".")) CommandManager.sendClientCommand(message);
+        else this.sendQueue.addToSendQueue(new C01PacketChatMessage(message));
     }
 
     public void swingItem() {

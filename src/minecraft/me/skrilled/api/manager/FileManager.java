@@ -11,7 +11,7 @@ public class FileManager implements IMC {
 
     static {
         final File mcDataDir = mc.mcDataDir;
-        FileManager.dir = new File(mcDataDir, sense.skrilledSense());
+        FileManager.dir = new File(mcDataDir, sense.getClientName());
     }
 
 

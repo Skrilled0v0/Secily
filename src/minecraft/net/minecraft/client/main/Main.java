@@ -7,7 +7,6 @@ import com.mojang.authlib.properties.PropertyMap.Serializer;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import me.skrilled.SenseHeader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
@@ -22,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
     public final static int BACKGROUNDMAXINDEX = 79;
+    public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
     public static ArrayList<ResourceLocation> ldbgs = new ArrayList<>();
 
     public static void main(String[] p_main_0_) {
@@ -47,14 +46,14 @@ public class Main {
         OptionSpec<String> optionspec7 = optionparser.accepts("proxyUser").withRequiredArg();
         OptionSpec<String> optionspec8 = optionparser.accepts("proxyPass").withRequiredArg();
         OptionSpec<String> optionspec9 = optionparser.accepts("username").withRequiredArg()
-                .defaultsTo(SenseHeader.clientInfo[0]);
+                .defaultsTo("Skrilled");
         OptionSpec<String> optionspec10 = optionparser.accepts("uuid").withRequiredArg();
         OptionSpec<String> optionspec11 = optionparser.accepts("accessToken").withRequiredArg().required();
         OptionSpec<String> optionspec12 = optionparser.accepts("version").withRequiredArg().required();
         OptionSpec<Integer> optionspec13 = optionparser.accepts("width").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(1280));
+                .defaultsTo(1280);
         OptionSpec<Integer> optionspec14 = optionparser.accepts("height").withRequiredArg().ofType(Integer.class)
-                .defaultsTo(Integer.valueOf(700));
+                .defaultsTo(680);
         OptionSpec<String> optionspec15 = optionparser.accepts("userProperties").withRequiredArg().defaultsTo("{}"
         );
         OptionSpec<String> optionspec16 = optionparser.accepts("profileProperties").withRequiredArg().defaultsTo("{}"
@@ -92,8 +91,8 @@ public class Main {
                 }
             });
         }
-        int i = optionset.valueOf(optionspec13).intValue();
-        int j = optionset.valueOf(optionspec14).intValue();
+        int i = optionset.valueOf(optionspec13);
+        int j = optionset.valueOf(optionspec14);
         boolean flag = optionset.has("fullscreen");
         boolean flag1 = optionset.has("checkGlErrors");
         boolean flag2 = optionset.has("demo");

@@ -42,7 +42,7 @@ public class ValueHeader {
     double[] doubles;
     double maxValue;
     double minValue;
-    double doublueCurrentValue;
+    double doubleCurrentValue;
     double incValue;
     ArrayList<String> enumTypes;
     String currentEnumType;
@@ -57,7 +57,7 @@ public class ValueHeader {
         this.valueType = ValueType.DOUBLE;
         this.valueName = valueName;
         this.minValue = doubles[0];
-        this.doublueCurrentValue = doubles[1];
+        this.doubleCurrentValue = doubles[1];
         this.maxValue = doubles[2];
         this.incValue = doubles[3];
         this.doubles = doubles;
@@ -217,42 +217,24 @@ public class ValueHeader {
         return incValue;
     }
 
-    public void setIncValue(double incValue) {
-        this.incValue = incValue;
-    }
-
     public double getMaxValue() {
         return maxValue;
-    }
-
-    public void setMaxValue(double maxValue) {
-        this.maxValue = maxValue;
     }
 
     public double getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(double minValue) {
-        this.minValue = minValue;
-    }
-
     public double getDoubleCurrentValue() {
-        return doublueCurrentValue;
+        return doubleCurrentValue;
     }
 
     public void setDoubleCurrentValue(double settingValue) {
-        this.doublueCurrentValue = settingValue;
+        this.doubleCurrentValue = settingValue;
     }
-
     public String getValueName() {
         return valueName;
     }
-
-    public void setValueName(String valueName) {
-        this.valueName = valueName;
-    }
-
 
     public boolean isOptionOpen() {
         return optionOpen;

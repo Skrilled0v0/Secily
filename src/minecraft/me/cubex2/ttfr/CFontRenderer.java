@@ -743,7 +743,7 @@ public class CFontRenderer implements IResourceManagerReloadListener, IBFFontRen
                     this.underlineStyle = true;
                 } else if (l == 20) {
                     this.italicStyle = true;
-                } else if (l == 21) {
+                } else {
                     this.randomStyle = false;
                     this.boldStyle = false;
                     this.strikethroughStyle = false;
