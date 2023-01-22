@@ -95,7 +95,7 @@ public class EclipseMenu extends GuiScreen {
             RenderUtil.drawRect(startX + 10, mY + 48, startX + 140, mY + 68, bc);
             RenderUtil.drawFilledCircle(startX + 12, mY + 58, 10, bc, 10);
             RenderUtil.drawFilledCircle(startX + 142, mY + 58, 10, bc, 10);
-            if (!module.isIsOpen()) {
+            if (!module.isEnabled()) {
                 if (module.clickAnim > 110) {
                     module.clickAnim--;
                 }
@@ -116,7 +116,7 @@ public class EclipseMenu extends GuiScreen {
             sense.getFontBuffer().EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
             if (isSettingsButtonHovered(startX + 110, mY + 54, startX + 125, mY + 62, mouseX, mouseY)) {
                 if (!this.previousmouse && Mouse.isButtonDown(0)) {
-                    module.setIsOpen(!module.isIsOpen());
+                    module.setEnabled(!module.isEnabled());
                     previousmouse = true;
                 }
                 if (!this.previousmouse && Mouse.isButtonDown(1)) {
@@ -360,7 +360,7 @@ public class EclipseMenu extends GuiScreen {
             this.bind = false;
         } else if (keyCode == 1) {
             this.mc.displayGuiScreen(null);
-            sense.moduleManager.getModuleByClass(SettingMenu.class).setIsOpen(false);
+            sense.moduleManager.getModuleByClass(SettingMenu.class).setEnabled(false);
             if (this.mc.currentScreen == null) {
                 this.mc.setIngameFocus();
             }

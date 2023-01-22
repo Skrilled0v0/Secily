@@ -314,7 +314,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         下标题背景
                          */
-                        String str = module.isIsOpen() ? "Enabled" : "Disabled";
+                        String str = module.isEnabled() ? "Enabled" : "Disabled";
                         RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
                         //Bind
                         //Bind键位显示
@@ -531,11 +531,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
             }
             xAxis += moduleTypeInterval + typeSideSize;
             for (ModuleHeader moduleHeader : sense.getModuleManager().getModuleListByModuleType(currentModuleType)) {
-                if (moduleHeader.isIsOpen()) moduleHeader.moduleMotionColor.setState(true);
+                if (moduleHeader.isEnabled()) moduleHeader.moduleMotionColor.setState(true);
             }
         }
         for (ModuleHeader module : moduleHeaders) {
-            String str = module.isIsOpen() ? "Enabled" : "Disabled";
+            String str = module.isEnabled() ? "Enabled" : "Disabled";
             //切换选中Module
             module.menuFlag = isMouseClickedInside(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3]);
             //开关Module
@@ -546,7 +546,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
             p4 = module.modulePosInfo[1] + moduleBoxHeight - 1.5f;
             boolean p5 = module != sense.getModuleManager().getModuleByClass(SettingMenu.class);
             if (isMouseClickedInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
-                module.moduleMotionColor.setState(!module.isIsOpen());
+                module.moduleMotionColor.setState(!module.isEnabled());
                 module.toggle();
             }
             //绑定键位

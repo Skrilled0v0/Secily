@@ -3,6 +3,9 @@ package net.minecraft.client.gui;
 import me.cubex2.ttfr.CFontRenderer;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.Animation;
+import me.surge.animation.ColourAnimation;
+import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
@@ -21,6 +24,11 @@ public class GuiButton extends Gui implements IMC {
     protected int width;
     protected int height;
     protected boolean hovered;
+    Animation motion = new Animation(1000f, false, Easing.LINEAR);
+    ColourAnimation upBgMotion = new ColourAnimation(new Color(255, 255, 255, 50), new Color(108, 108, 255, 125), 1000f, false, Easing.LINEAR);
+    ColourAnimation downBgMotion = new ColourAnimation(new Color(108, 108, 255, 50), new Color(255, 255, 255, 125), 1000f, false, Easing.LINEAR);
+    ColourAnimation rectMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 102, 102), 1000f, false, Easing.LINEAR);
+    ColourAnimation strMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 140, 0), 1000f, false, Easing.LINEAR);
 
     public GuiButton(int buttonId, int x, int y, String buttonText) {
         this(buttonId, x, y, 200, 20, buttonText);
@@ -37,36 +45,38 @@ public class GuiButton extends Gui implements IMC {
         this.displayString = buttonText;
     }
 
-    protected int getHoverState(boolean mouseOver) {
-        int i = 1;
-
-        if (!this.enabled) {
-            i = 0;
-        } else if (mouseOver) {
-            i = 2;
-        }
-
-        return i;
-    }
 
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
 
         if (this.visible) {
-            int j = -1;
-            if (!this.enabled) {
-                j = Color.gray.getRGB();
-            } else if (this.hovered) {
-                j= new Color(50,100,200).getRGB();
-            }
+//            if (!this.enabled) {
+//                j = Color.gray.getRGB();
+//            }
+            startMotion(hovered);
+            float lineWidth = 1;
             CFontRenderer font = sense.getFontBuffer().CN18;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-            int i = this.getHoverState(this.hovered);
-            RenderUtil.drawBorderedRect(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height,1.5f, j, new Color(50, 50, 50, 170).getRGB());
-
+            RenderUtil.drawGradientSideways(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, upBgMotion.getColour().getRGB(), downBgMotion.getColour().getRGB());
+            //up line
+            RenderUtil.drawRect(this.xPosition, this.yPosition, this.xPosition + width * motion.getAnimationFactor(), this.yPosition + lineWidth, rectMotion.getColour().getRGB());
+            //right line
+            RenderUtil.drawRect(this.xPosition + width - lineWidth, this.yPosition, this.xPosition + width, this.yPosition + height * motion.getAnimationFactor(), rectMotion.getColour().getRGB());
+            //down line
+            RenderUtil.drawRect(this.xPosition + width - width * motion.getAnimationFactor(), this.yPosition + height, this.xPosition + width, this.yPosition + height + lineWidth, rectMotion.getColour().getRGB());
+            //left line
+            RenderUtil.drawRect(this.xPosition, this.yPosition + height - height * motion.getAnimationFactor(), this.xPosition + lineWidth, this.yPosition + height, rectMotion.getColour().getRGB());
             this.mouseDragged(mc, mouseX, mouseY);
 
-            font.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 8) / 2f,-1);
+            font.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 8) / 2f, strMotion.getColour().getRGB());
         }
+    }
+
+    public void startMotion(boolean flag) {
+        upBgMotion.setState(flag);
+        downBgMotion.setState(flag);
+        rectMotion.setState(flag);
+        motion.setState(flag);
+        strMotion.setState(flag);
     }
 
     protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {

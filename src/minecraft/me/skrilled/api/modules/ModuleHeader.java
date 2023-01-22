@@ -29,7 +29,7 @@ public class ModuleHeader implements IMC {
     public boolean menuFlag;
     public int key, anim, clickAnim, valueWheelY = 0;
     public String moduleName;
-    public boolean isOpen;
+    public boolean Enabled;
     public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
     String suffix = "";
     boolean canView = true;
@@ -70,16 +70,12 @@ public class ModuleHeader implements IMC {
         else if (valueHeader.getValueType() == ValueHeader.ValueType.ENUM_TYPE) {
             return valueHeader.getCurrentEnumType();
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.DOUBLE) {
-            return valueHeader.getDoubles()[1];
+            return valueHeader.getDoubleCurrentValue();
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.COLOR) {
             return valueHeader.getColorValue().getRGB();
         } else if (valueHeader.getValueType() == ValueHeader.ValueType.STRING) {
             return valueHeader.getStrValue();
         } else return "getERROR";
-    }
-
-    public void addValueList(ValueHeader... valueHeader) {
-        this.valueList.addAll(Arrays.asList(valueHeader));
     }
 
 
@@ -96,17 +92,18 @@ public class ModuleHeader implements IMC {
         else return moduleName;
     }
 
-    public boolean isIsOpen() {
-        return isOpen;
+    public boolean isEnabled() {
+        return Enabled;
     }
 
-    public void setIsOpen(boolean isOpen) {
-        this.isOpen = isOpen;
-        arrayWidth.setState(isOpen);
-        if (isOpen) this.onOpen();
-        else this.isNotOpen();
+    public void setEnabled(boolean isEnabled) {
+        sense.saveSettings();
+        this.Enabled = isEnabled;
+        arrayWidth.setState(isEnabled);
+        if (isEnabled) this.onEnabled();
+        else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
-            Notification.sendNotification(getModuleName() + (this.isOpen ? " Was Open!" : " Was not Open!"), 1500, (this.isOpen ? Notification.Type.SUCCESS : Notification.Type.WARNING));
+            Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Open!" : " Was not Open!"), 1500, (this.Enabled ? Notification.Type.SUCCESS : Notification.Type.WARNING));
         }
     }
 
@@ -120,7 +117,7 @@ public class ModuleHeader implements IMC {
     }
 
     public void toggle() {
-        setIsOpen(!isOpen);
+        setEnabled(!Enabled);
     }
 
     public Animation getArrayWidth() {
@@ -153,11 +150,11 @@ public class ModuleHeader implements IMC {
     }
 
 
-    public void onOpen() {
+    public void onEnabled() {
         EventManager.register(this);
     }
 
-    public void isNotOpen() {
+    public void onDisabled() {
         EventManager.unregister(this);
     }
 

@@ -33,19 +33,19 @@ public class SettingMenu extends ModuleHeader {
 
 
     @Override
-    public void onOpen() {
+    public void onEnabled() {
         if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) {
             mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
         }
         MenuMotion.setMenuMotion();
-        super.onOpen();
+        super.onEnabled();
     }
 
 
     @Override
-    public void isNotOpen() {
+    public void onDisabled() {
         if (!sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) MenuMotion.setMenuMotion();
-        super.isNotOpen();
+        super.onDisabled();
     }
 }

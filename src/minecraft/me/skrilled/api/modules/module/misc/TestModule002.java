@@ -30,11 +30,11 @@ public class TestModule002 extends ModuleHeader {
     }
 
     @Override
-    public void onOpen() {
+    public void onEnabled() {
         for (ValueHeader valueHeader : this.getValueList()) {
             sense.printINFO("TestModule is Open!  ->");
             sense.printINFO(this.getValue(valueHeader));
         }
-        super.onOpen();
+        super.onEnabled();
     }
 }

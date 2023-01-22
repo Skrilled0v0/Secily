@@ -3,8 +3,6 @@ package me.skrilled.utils.render;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
-import me.surge.animation.Animation;
-import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -34,7 +32,6 @@ public class RenderUtil implements IMC {
     private static final Consumer<Integer> DISABLE_CLIENT_STATE;
     private static final Map<Integer, Boolean> glCapMap = new HashMap<>();
     public static Tessellation tessellator;
-    static Animation nametagHP = new Animation(1000f, true, Easing.LINEAR);
 
     static {
         tessellator = Tessellation.createExpanding(4, 1.0f, 2.0f);
@@ -45,7 +42,7 @@ public class RenderUtil implements IMC {
 
     public static Color rainbow(long time, float count, float fade) {
         float hue = ((float) time + (1.0F + count) * 2.0E8F) / 1.0E10F % 1.0F;
-        long color = Long.parseLong(Integer.toHexString(Integer.valueOf(Color.HSBtoRGB(hue, 1.0005F, 1.0F)).intValue()), 16);
+        long color = Long.parseLong(Integer.toHexString(Color.HSBtoRGB(hue, 1.0005F, 1.0F)), 16);
         Color c = new Color((int) color);
         return new Color((float) c.getRed() / 255.0F * fade, (float) c.getGreen() / 255.0F * fade, (float) c.getBlue() / 255.0F * fade, (float) c.getAlpha() / 255.0F);
     }
@@ -70,7 +67,7 @@ public class RenderUtil implements IMC {
 
     public static int rainbow(int delay) {
         double rainbow = Math.ceil((double) (System.currentTimeMillis() + (long) delay) / 5.0);
-        return Color.getHSBColor((float) ((rainbow %= 720.0) / 720.0), 0.5f, 0.7f).brighter().getRGB();
+        return Color.getHSBColor((float) (rainbow % 720.0 / 720.0), 0.5f, 0.7f).brighter().getRGB();
     }
 
     public static void drawGradientSideways(double left, double top, double right, double bottom, int col1, int col2) {

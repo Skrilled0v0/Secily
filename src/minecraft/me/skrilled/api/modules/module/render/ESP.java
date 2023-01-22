@@ -23,19 +23,21 @@ import java.util.ArrayList;
 
 @ModuleInitialize(name = "ESP", type = ModuleType.RENDER, key = Keyboard.KEY_J)
 public class ESP extends ModuleHeader {
+    static ArrayList<String> espModeList = new ArrayList<>();
+    public static ValueHeader espMode = new ValueHeader("Mode", "3DBox", espModeList);
     ValueHeader renderMobs = new ValueHeader("Mobs", true);
     ValueHeader renderAnimals = new ValueHeader("Animals", true);
     ValueHeader renderPlayers = new ValueHeader("Players", true);
-    ArrayList<String> espModeList = new ArrayList<>();
-    ValueHeader espMode = new ValueHeader("Mode", "3DBox", espModeList);
+
 
     public ESP() {
         this.addEnumTypes(espModeList, "3DBox", "2DBox", "Outline");
-        this.setSuffix(espMode.getCurrentEnumType());
+
     }
 
     @EventTarget
     public void onEvent3D(EventRender3D eventRender3D) {
+        this.setSuffix(espMode.getCurrentEnumType());
         Color boxColor = new Color(255, 255, 255, 50);
         Color lineColor = new Color(255, 255, 255, 255);
         for (Entity entity : mc.theWorld.loadedEntityList) {

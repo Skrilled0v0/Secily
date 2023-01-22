@@ -16,7 +16,6 @@ import org.lwjgl.input.Keyboard;
 
 @ModuleInitialize(name = "AutoClicker", key = Keyboard.KEY_R, type = ModuleType.COMBAT)
 public class AutoClicker extends ModuleHeader {
-    public static boolean pressed = false;
     TimerUtil timerUtil = new TimerUtil();
     double[] ip = {1.0, 6.0, 20.0, 1.0};
     double[] ap = {1.0, 6.0, 20.0, 1.0};
@@ -25,10 +24,8 @@ public class AutoClicker extends ModuleHeader {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-        pressed = mc.gameSettings.keyBindAttack.pressed;
         double cps = (double) this.getValue(mi_cps) + Math.random() * ((double) this.getValue(ma_cps) - (double) this.getValue(mi_cps));
-        if (timerUtil.hasReached((int) (1000L / cps)) && pressed) {
-//            sense.printINFO("Clicked");
+        if (timerUtil.hasReached((int) (1000L / cps)) && mc.gameSettings.keyBindAttack.pressed) {
             mc.clickMouse();
             timerUtil.reset();
         }

@@ -19,6 +19,8 @@ import me.skrilled.api.event.EventKey;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.combat.AutoClicker;
+import me.skrilled.api.modules.module.combat.HitBox;
+import me.skrilled.api.modules.module.combat.Reach;
 import me.skrilled.api.modules.module.misc.TestModule001;
 import me.skrilled.api.modules.module.misc.TestModule002;
 import me.skrilled.api.modules.module.move.AutoJump;
@@ -49,6 +51,8 @@ public class ModuleManager {
         mList.add(new AutoJump());
         //Combat
         mList.add(new AutoClicker());
+        mList.add(new Reach());
+        mList.add(new HitBox());
         //Test
         Collections.addAll(mList, new TestModule001(), new TestModule002());
         for (ModuleHeader moduleHeader : mList) {

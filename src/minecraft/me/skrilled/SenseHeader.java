@@ -7,21 +7,19 @@ package me.skrilled;
 
 import me.cubex2.ttfr.FontBuffer;
 import me.skrilled.api.manager.CommandManager;
-import me.skrilled.api.manager.FileManager;
 import me.skrilled.api.manager.ModuleManager;
-import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import org.lwjgl.opengl.Display;
 
-import java.awt.*;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SenseHeader implements IMC {
     public static String[] clientInfo = {"SkrilledSense & Prohect", "230122", "Secily"};
     public static SenseHeader getSense = new SenseHeader();
+    public final Path directory = Paths.get(mc.mcDataDir.getAbsolutePath(), getClientName());
     public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
 
@@ -42,13 +40,14 @@ public class SenseHeader implements IMC {
     }
 
     public void clientStart() {
-        CommandManager.loadCommands();
+
         Display.setTitle(getClientName());
-        FileManager.init();
+//        FileManager.init();
         moduleManager = new ModuleManager();
         moduleManager.load();
         readSettings();
         fontBuffer = new FontBuffer();
+        CommandManager.loadCommands();
     }
 
     public String getPlayerName() {
@@ -94,55 +93,56 @@ public class SenseHeader implements IMC {
 
     //存档
     public void saveSettings() {
-        StringBuilder values = new StringBuilder();
-        for (ModuleHeader m : this.getModuleManager().mList) {
-            values.append(String.format("M-%s %s %s%s", m.getModuleName(), m.getKey(), m.isIsOpen(), System.lineSeparator()));
-            for (ValueHeader v : m.getValueList()) {
-                values.append(String.format("V-%s %s %s%s", m.getModuleName(), v.getValueName(), m.getValue(v), System.lineSeparator()));
-            }
-        }
-        FileManager.save("Config.txt", values.toString());
+//        System.out.println("Save !");
+//        StringBuilder values = new StringBuilder();
+//        for (ModuleHeader m : this.getModuleManager().mList) {
+//            values.append(String.format("M-%s %s %s%s", m.getModuleName(), m.getKey(), m.isEnabled(), System.lineSeparator()));
+//            for (ValueHeader v : m.getValueList()) {
+//                values.append(String.format("V-%s %s %s%s", m.getModuleName(), v.getValueName(), m.getValue(v), System.lineSeparator()));
+//            }
+//        }
+//        FileManager.save("Config.txt", values.toString());
     }
 
     //读档
     public void readSettings() {
-        try {
-            List<String> cfg = FileManager.read("Config.txt");
-            String moduleName, moduleKey, moduleIsOpen;
-            String valueName, values;
-            for (String s : cfg) {
-                if (s.startsWith("M-")) {
-                    moduleName = s.split(" ")[0].substring(2);
-                    moduleKey = s.split(" ")[1];
-                    moduleIsOpen = s.split(" ")[2];
-                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
-                    System.out.println(s);
-                    module.setKey(Integer.parseInt(moduleKey));
-                    module.setIsOpen(Boolean.parseBoolean(moduleIsOpen));
-                }
-                if (s.startsWith("V-")) {
-                    moduleName = s.split(" ")[0].substring(2);
-                    valueName = s.split(" ")[1];
-                    values = s.split(" ")[2];
-                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
-                    for (ValueHeader value : module.getValueList()) {
-                        if (valueName.equals(value.getValueName())) {
-                            if (value.getValueType() == ValueHeader.ValueType.BOOLEAN)
-                                value.setOptionOpen(Boolean.parseBoolean(values));
-                            if (value.getValueType() == ValueHeader.ValueType.DOUBLE)
-                                value.setDoubleCurrentValue(Double.parseDouble(values));
-                            if (value.getValueType() == ValueHeader.ValueType.ENUM_TYPE)
-                                value.setCurrentEnumType(values);
-                            if (value.getValueType() == ValueHeader.ValueType.COLOR)
-                                value.setColorValue(Color.decode(values));
-                            if (value.getValueType() == ValueHeader.ValueType.STRING) value.setStrValue(values);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            List<String> cfg = FileManager.read("Config.txt");
+//            String moduleName, moduleKey, moduleIsOpen;
+//            String valueName, values;
+//            for (String s : cfg) {
+//                if (s.startsWith("M-")) {
+//                    moduleName = s.split(" ")[0].substring(2);
+//                    moduleKey = s.split(" ")[1];
+//                    moduleIsOpen = s.split(" ")[2];
+//                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
+//                    System.out.println(s);
+//                    module.setKey(Integer.parseInt(moduleKey));
+//                    module.setEnabled(Boolean.parseBoolean(moduleIsOpen));
+//                }
+//                if (s.startsWith("V-")) {
+//                    moduleName = s.split(" ")[0].substring(2);
+//                    valueName = s.split(" ")[1];
+//                    values = s.split(" ")[2];
+//                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
+//                    for (ValueHeader value : module.getValueList()) {
+//                        if (valueName.equals(value.getValueName())) {
+//                            if (value.getValueType() == ValueHeader.ValueType.BOOLEAN)
+//                                value.setOptionOpen(Boolean.parseBoolean(values));
+//                            if (value.getValueType() == ValueHeader.ValueType.DOUBLE)
+//                                value.setDoubleCurrentValue(Double.parseDouble(values));
+//                            if (value.getValueType() == ValueHeader.ValueType.ENUM_TYPE)
+//                                value.setCurrentEnumType(values);
+//                            if (value.getValueType() == ValueHeader.ValueType.COLOR)
+//                                value.setColorValue(Color.decode(values));
+//                            if (value.getValueType() == ValueHeader.ValueType.STRING) value.setStrValue(values);
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     //关闭
@@ -151,4 +151,7 @@ public class SenseHeader implements IMC {
         mc.shutdown();
     }
 
+    public Path getDirectory() {
+        return directory;
+    }
 }

@@ -3,7 +3,6 @@ package net.minecraft.client.gui;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;

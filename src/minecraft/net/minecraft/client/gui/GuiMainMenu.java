@@ -54,7 +54,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
         RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i - 1));
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
-        font.drawStringWithShadow(sense.getClientName(), 10, j - 90, new Color(68, 137, 204).getRGB());
+        font.drawRainbowString(sense.getClientName(), 30, j - 90);
         GlStateManager.popMatrix();
         if (timerUtil.hasReached(50)) {
             i++;

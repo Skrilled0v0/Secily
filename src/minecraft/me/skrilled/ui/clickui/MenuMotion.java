@@ -18,11 +18,11 @@ public class MenuMotion implements IMC {
     }
 
     public static void setMenuMotion() {
-        if (sense.moduleManager.getModuleByClass(SettingMenu.class).isIsOpen()) {
+        if (sense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled()) {
             mc.displayGuiScreen(SettingMenu.menu);
             MenuMotion.setState(true);
         }
-        if (!sense.moduleManager.getModuleByClass(SettingMenu.class).isIsOpen())
+        if (!sense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled())
             MenuMotion.setState(false);
     }
 }

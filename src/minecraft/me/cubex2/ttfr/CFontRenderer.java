@@ -3,6 +3,7 @@ package me.cubex2.ttfr;
 import com.ibm.icu.text.ArabicShaping;
 import com.ibm.icu.text.ArabicShapingException;
 import com.ibm.icu.text.Bidi;
+import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -506,6 +507,15 @@ public class CFontRenderer implements IResourceManagerReloadListener, IBFFontRen
         this.drawString(text, x, y + .5, 0x000000);
 
         this.drawString(text, x, y, color);
+    }
+
+    public void drawRainbowString(String str, float x, float y) {
+        float posX = x;
+        for (int i = 0; i < str.length(); i++) {
+            String ch = str.charAt(i) + "";
+            this.drawString(ch, posX, y, RenderUtil.rainbow(i * 100));
+            posX += this.getStringWidth(ch);
+        }
     }
 
     public int drawStringWithShadow(String text, int x, int y, int color) {

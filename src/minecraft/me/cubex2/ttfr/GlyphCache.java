@@ -30,7 +30,7 @@ import java.util.List;
  * hanzi, Simplified Chinese hanzi, Japanese kanji, and Korean hanja
  */
 //todo Should have a separate glyph cache and a separate smaller point size font for rendering the GUI at its smallest size
-//todo Need to have a config file that allows overring the font search order by locale to properly support Traditional Chinese
+//todo Need to have a me.skrilled.config file that allows overring the font search order by locale to properly support Traditional Chinese
 public class GlyphCache
 {
     /**

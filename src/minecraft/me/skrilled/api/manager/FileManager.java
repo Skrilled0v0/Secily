@@ -27,8 +27,14 @@ public class FileManager implements IMC {
     }
 
     public static void init() {
-        if (!FileManager.dir.exists()) {
-            FileManager.dir.mkdir();
+        try {
+
+
+            if (!FileManager.dir.exists()) {
+                FileManager.dir.mkdir();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -4,7 +4,9 @@ import com.darkmagician6.eventapi.EventManager;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender3D;
+import me.skrilled.api.modules.module.combat.Reach;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -346,7 +348,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             if (this.mc.playerController.extendedReach()) {
                 d0 = 6.0D;
                 d1 = 6.0D;
-            } else if (d0 > 3.0D) {
+            } else if (SenseHeader.sense.moduleManager.getModuleByClass(Reach.class).isEnabled()) {
+                d0 = d1 = ((Reach) SenseHeader.sense.moduleManager.getModuleByClass(Reach.class)).build.getDoubleCurrentValue();
+            } else if (d0 > (SenseHeader.sense.moduleManager.getModuleByClass(Reach.class).isEnabled() ? ((Reach) SenseHeader.sense.moduleManager.getModuleByClass(Reach.class)).combat.getDoubleCurrentValue() : 3.0D)) {
                 flag = true;
             }
 
