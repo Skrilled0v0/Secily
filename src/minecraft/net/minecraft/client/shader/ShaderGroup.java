@@ -3,16 +3,7 @@ package net.minecraft.client.shader;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+import com.google.gson.*;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResource;
@@ -23,6 +14,12 @@ import net.minecraft.util.ResourceLocation;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 public class ShaderGroup
 {
@@ -51,13 +48,19 @@ public class ShaderGroup
         this.parseGroup(p_i1050_1_, p_i1050_4_);
     }
 
-    public void parseGroup(TextureManager p_152765_1_, ResourceLocation p_152765_2_) throws JsonException, IOException, JsonSyntaxException
-    {
+    public List<Shader> getListShaders() {
+        return listShaders;
+    }
+
+    public Framebuffer getMainFramebuffer() {
+        return mainFramebuffer;
+    }
+
+    public void parseGroup(TextureManager p_152765_1_, ResourceLocation p_152765_2_) throws JsonException, IOException, JsonSyntaxException {
         JsonParser jsonparser = new JsonParser();
         InputStream inputstream = null;
 
-        try
-        {
+        try {
             IResource iresource = this.resourceManager.getResource(p_152765_2_);
             inputstream = iresource.getInputStream();
             JsonObject jsonobject = jsonparser.parse(IOUtils.toString(inputstream, Charsets.UTF_8)).getAsJsonObject();

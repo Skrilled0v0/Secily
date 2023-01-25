@@ -5,6 +5,8 @@
  */
 package me.skrilled.api.commands;
 
+import me.skrilled.SenseHeader;
+
 public class CommandSetPrefix extends CommandHeader {
     public CommandSetPrefix() {
         super("SetPrefix", new String[]{"prefix", "setpf", "pf"}, false);
@@ -13,9 +15,9 @@ public class CommandSetPrefix extends CommandHeader {
     @Override
     public void executed(String commandBody) {
         if (!commandBody.isEmpty())
-            sense.setClientPrefix(commandBody);
+            SenseHeader.getSense.setClientPrefix(commandBody);
         else
-            sense.printINFO("Please enter string that match the rule. :D");
+            SenseHeader.getSense.printINFO("Please enter string that match the rule. :D");
         super.executed(commandBody);
     }
 }

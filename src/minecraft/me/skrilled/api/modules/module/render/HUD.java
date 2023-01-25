@@ -6,14 +6,17 @@
 package me.skrilled.api.modules.module.render;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.cubex2.ttfr.CFontRenderer;
+import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender2D;
+import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.render.RenderUtil;
+import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -32,30 +35,27 @@ public class HUD extends ModuleHeader {
 
         int w = RenderUtil.width();
         int h = RenderUtil.height();
-        double[] pos = sense.getPlayerPos();
-        CFontRenderer font = sense.getFontBuffer().EN16;
-        CFontRenderer arrayFont = sense.getFontBuffer().EN24;
+        double[] pos = SenseHeader.getSense.getPlayerPos();
+        FontDrawer font = Main.fontLoader.EN16;
+        FontDrawer arrayFont = Main.fontLoader.EN24;
         //ArrayList
         if ((Boolean) this.getValue(malist)) {
             ArrayList<ModuleHeader> sortedList = new ArrayList<>();
-            for (ModuleHeader moduleHeader : sense.getModuleManager().mList)
+            for (ModuleHeader moduleHeader : ModuleManager.mList)
                 if (moduleHeader.isCanView()) sortedList.add(moduleHeader);
-
-
             sortedList.sort(Comparator.comparingInt(module -> -arrayFont.getStringWidth(module.getModuleDisplay())));
             int yAxis = 5;
             for (ModuleHeader moduleHeader : sortedList) {
                 arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w - moduleHeader.getArrayWidth().getAnimationFactor() * (arrayFont.getStringWidth(moduleHeader.getModuleDisplay()) + 5), yAxis, -1);
-                yAxis += arrayFont.getHeight(false) * moduleHeader.getArrayWidth().getAnimationFactor();
+                yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
 
         //Information
         if ((Boolean) this.getValue(info)) {
-            font.drawString(sense.getClientName() + " LastUpdate:" + sense.getClientUpdate(), 0, h - font.FONT_HEIGHT, -1);
-            font.drawString(sense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + sense.getClientFPS(), 0, h - font.FONT_HEIGHT * 2, -1);
+            font.drawString(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
+            font.drawString(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
-        if (not.isOptionOpen())
-            Notification.drawNotifications();
+        if (not.isOptionOpen()) Notification.drawNotifications();
     }
 }

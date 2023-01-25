@@ -5,14 +5,15 @@
  */
 package me.skrilled.ui;
 
-import me.cubex2.ttfr.CFontRenderer;
-import me.skrilled.SenseHeader;
+
+import me.fontloader.FontDrawer;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.main.Main;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
@@ -29,7 +30,7 @@ public class LoadingGui extends GuiScreen {
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         int genshinSize = 128;
-        CFontRenderer fontRenderer = SenseHeader.getSense.getFontBuffer().EN64;
+        FontDrawer fontRenderer = Main.fontLoader.EN64;
         color.setState(true);
         loading.setState(true);
         RenderUtil.drawImage(bg, 0, 0, w, h);

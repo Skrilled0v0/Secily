@@ -5,6 +5,7 @@
  */
 package me.skrilled.api.manager;
 
+import me.skrilled.SenseHeader;
 import me.skrilled.api.commands.CommandBind;
 import me.skrilled.api.commands.CommandHeader;
 import me.skrilled.api.commands.CommandSetPrefix;
@@ -31,7 +32,7 @@ public class CommandManager implements IMC {
                 } else {
                     ok = false;
                 }
-            if (!ok) sense.printINFO("Unknown command,Please enter §a.help§r to get help commands :D");
+            if (!ok) SenseHeader.getSense.printINFO("Unknown command,Please enter §a.help§r to get help commands :D");
         }
     }
 

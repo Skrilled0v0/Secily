@@ -36,32 +36,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModuleManager {
-    public ArrayList<ModuleHeader> mList = new ArrayList<>();
+    public static ArrayList<ModuleHeader> mList = new ArrayList<>();
 
-
-    public void load() {
-        EventManager.register(this);
-        //Render
-        mList.add(new HUD());
-        mList.add(new ESP());
-        mList.add(new SettingMenu());
-        mList.add(new Nametags());
-        //Move
-        mList.add(new AutoSprint());
-        mList.add(new AutoJump());
-        //Combat
-        mList.add(new AutoClicker());
-        mList.add(new Reach());
-        mList.add(new HitBox());
-        //Test
-        Collections.addAll(mList, new TestModule001(), new TestModule002());
+    public static ModuleHeader getModuleByName(String mName) {
         for (ModuleHeader moduleHeader : mList) {
-            moduleHeader.loadValueLists();
-        }
-    }
-
-    public ModuleHeader getModuleByName(String mName) {
-        for (ModuleHeader moduleHeader : this.mList) {
             if (moduleHeader.getModuleName().equalsIgnoreCase(mName)) {
 //                System.out.println("成功-返还->" + moduleHeader.getModuleName());
                 return moduleHeader;
@@ -72,15 +50,37 @@ public class ModuleManager {
 
     }
 
+    public void load() {
+        EventManager.register(this);
+        //Render
+        mList.add(new HUD());
+        mList.add(new ESP());
+
+        mList.add(new Nametags());
+        //Move
+        mList.add(new AutoSprint());
+        mList.add(new AutoJump());
+        //Combat
+        mList.add(new AutoClicker());
+        mList.add(new Reach());
+        mList.add(new HitBox());
+        mList.add(new SettingMenu());
+        //Test
+        Collections.addAll(mList, new TestModule001(), new TestModule002());
+        for (ModuleHeader moduleHeader : mList) {
+            moduleHeader.loadValueLists();
+        }
+    }
+
     public ModuleHeader getModuleByClass(Class<? extends ModuleHeader> mClass) {
-        for (ModuleHeader moduleHeader : this.mList) {
+        for (ModuleHeader moduleHeader : mList) {
             if (moduleHeader.getClass() == mClass) return moduleHeader;
         }
         return null;
     }
 
     public ModuleHeader getModuleByIndex(int index) {
-        for (ModuleHeader moduleHeader : this.mList) {
+        for (ModuleHeader moduleHeader : mList) {
             if (mList.get(index) == moduleHeader) return moduleHeader;
         }
         return null;

@@ -1,6 +1,7 @@
 package net.minecraft.client.renderer.entity;
 
 import com.google.common.collect.Lists;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.ESP;
 import me.skrilled.api.modules.module.render.Nametags;
 import me.skrilled.utils.IMC;
@@ -530,7 +531,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
     public void renderName(T entity, double x, double y, double z) {
         if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, entity, this, x, y, z)) {
-            if (this.canRenderName(entity) && !sense.getModuleManager().getModuleByClass(Nametags.class).isEnabled()) {
+            if (this.canRenderName(entity) && !SenseHeader.getSense.getModuleManager().getModuleByClass(Nametags.class).isEnabled()) {
                 double d0 = entity.getDistanceSqToEntity(this.renderManager.livingPlayer);
                 float f = entity.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
 

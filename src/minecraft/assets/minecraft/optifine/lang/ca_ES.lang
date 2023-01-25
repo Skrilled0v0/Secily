@@ -103,7 +103,7 @@ options.renderDistance.tooltip.7=  64 A lo bestia - 1024m, requereix utilitzar 3
 options.renderDistance.tooltip.8=A partir de 16 chunks serà inútil en multijugador.
 
 options.ao.tooltip.1=Iluminació suau
-options.ao.tooltip.2=  NO - sense iluminació suau (ràpid)
+options.ao.tooltip.2=  NO - SenseHeader.getSense iluminació suau (ràpid)
 options.ao.tooltip.3=  Mínim - iluminació suau simple (lent)
 options.ao.tooltip.4=  Màxim - iluminació suau avançada (més lent)
 
@@ -118,7 +118,7 @@ of.options.framerateLimit.vsync=VSync
 
 of.options.AO_LEVEL=Nivell de suavitat
 of.options.AO_LEVEL.tooltip.1=Nivell de l'iluminació suau
-of.options.AO_LEVEL.tooltip.2=  NO - sense ombres
+of.options.AO_LEVEL.tooltip.2=  NO - SenseHeader.getSense ombres
 of.options.AO_LEVEL.tooltip.3=  50%% - poques ombres
 of.options.AO_LEVEL.tooltip.4=  100%% - ombres fosques
 
@@ -156,7 +156,7 @@ options.anaglyph.tooltip.4=NOTA: Requereix ulleres anaglífiques (vermelles i bl
 options.attackIndicator.tooltip.1=Modifica l'ubicación de l'indicador d'atac
 options.attackIndicator.tooltip.2=  MIRA - sota de la mira central
 options.attackIndicator.tooltip.3=  BARRA - a prop de la barra d'objectes
-options.attackIndicator.tooltip.4=  NO - sense indicador d'atac
+options.attackIndicator.tooltip.4=  NO - SenseHeader.getSense indicador d'atac
 options.attackIndicator.tooltip.5=    
 options.attackIndicator.tooltip.6=S'indica la força d'atac de
 options.attackIndicator.tooltip.7=l'objecte que tinguis en la mà principal.
@@ -170,7 +170,7 @@ of.options.FOG_FANCY=Boira
 of.options.FOG_FANCY.tooltip.1=Tipus de boira
 of.options.FOG_FANCY.tooltip.2=  Ràpids - boira més ràpida, es veu cutre
 of.options.FOG_FANCY.tooltip.3=  Detallats - boira més lenta, es veu millor
-of.options.FOG_FANCY.tooltip.4=  NO - sense boira, superràpid
+of.options.FOG_FANCY.tooltip.4=  NO - SenseHeader.getSense boira, superràpid
 of.options.FOG_FANCY.tooltip.5=La boira detallada només està disponible si
 of.options.FOG_FANCY.tooltip.6=la teva tarjeta gràfica ho permet.
 
@@ -322,7 +322,7 @@ of.options.mipmap.trilinear=Trilinial
 options.mipmapLevels.tooltip.1=Efecte visual que fa que els objectes llunyans lluin
 options.mipmapLevels.tooltip.2=millor gracies a que suavitza els detalls de la seva textura
 options.mipmapLevels.tooltip.3= 
-options.mipmapLevels.tooltip.4=  NO - sense suavitzat
+options.mipmapLevels.tooltip.4=  NO - SenseHeader.getSense suavitzat
 options.mipmapLevels.tooltip.5=  1 - suavitzat mínim
 options.mipmapLevels.tooltip.6=  4 - suavitzat màxim
 options.mipmapLevels.tooltip.7= 
@@ -340,7 +340,7 @@ of.options.MIPMAP_TYPE.tooltip.7=  Trilinial - suavitzat molt fi (més lent)
 
 of.options.AA_LEVEL=Antialiàsing
 of.options.AA_LEVEL.tooltip.1=Antialiàsing suavitza línies i bores dels blocs
-of.options.AA_LEVEL.tooltip.2= NO - (per defecte) sense antialiàsing (més ràpid)
+of.options.AA_LEVEL.tooltip.2= NO - (per defecte) SenseHeader.getSense antialiàsing (més ràpid)
 of.options.AA_LEVEL.tooltip.3= 2-16 - nivell de suavitzat de l'antialiàsing (més lent)
 of.options.AA_LEVEL.tooltip.4= 
 of.options.AA_LEVEL.tooltip.5= Suavitza els dents de serra i millora la nitidesa.
@@ -403,7 +403,7 @@ of.options.CUSTOM_COLORS.tooltip.6=personalitzats.
 of.options.SWAMP_COLORS=Color de pantans
 of.options.SWAMP_COLORS.tooltip.1=Color de pantans
 of.options.SWAMP_COLORS.tooltip.2=  SÍ - color en pantans (per defecte), més lent
-of.options.SWAMP_COLORS.tooltip.3=  NO - sense color en els pantans, més ràpid
+of.options.SWAMP_COLORS.tooltip.3=  NO - SenseHeader.getSense color en els pantans, més ràpid
 of.options.SWAMP_COLORS.tooltip.4=Afecta a: gespa, aigua, fulles i enredaderes.
 
 of.options.SMOOTH_BIOMES=Suavitzar biomes
@@ -427,7 +427,7 @@ of.options.CONNECTED_TEXTURES.tooltip.8=No tots els paquets de recursos soporten
 
 of.options.NATURAL_TEXTURES=Textures naturals
 of.options.NATURAL_TEXTURES.tooltip.1=Textures naturals
-of.options.NATURAL_TEXTURES.tooltip.2=  NO - sense textures naturals (per defecte)
+of.options.NATURAL_TEXTURES.tooltip.2=  NO - SenseHeader.getSense textures naturals (per defecte)
 of.options.NATURAL_TEXTURES.tooltip.3=  SÍ - amb textures naturals
 of.options.NATURAL_TEXTURES.tooltip.4=Aquesta opció elimina el patró dels blocs
 of.options.NATURAL_TEXTURES.tooltip.5=que es crea al posar blocs del mateix tipus.
@@ -437,7 +437,7 @@ of.options.NATURAL_TEXTURES.tooltip.8=No tots els paquets de recursos soporten a
 
 of.options.EMISSIVE_TEXTURES=Textures emissives
 of.options.EMISSIVE_TEXTURES.tooltip.1=Textures emissives
-of.options.EMISSIVE_TEXTURES.tooltip.2=  NO - sense textures emissives (per defecte)
+of.options.EMISSIVE_TEXTURES.tooltip.2=  NO - SenseHeader.getSense textures emissives (per defecte)
 of.options.EMISSIVE_TEXTURES.tooltip.3=  SÍ - amb textures emissives
 of.options.EMISSIVE_TEXTURES.tooltip.4=Les textures emissives apareixen superposades amb
 of.options.EMISSIVE_TEXTURES.tooltip.5=la brillantor al màxim. Poden utilitzar-se per a simular
@@ -480,7 +480,7 @@ of.options.CLOUDS.tooltip.1=Qualitat dels núvols
 of.options.CLOUDS.tooltip.2=  Per defecte - depen de l'ajust de gràfics
 of.options.CLOUDS.tooltip.3=  Ràpids - pitjor qualitat, millor rendiment
 of.options.CLOUDS.tooltip.4=  Detallats - major qualitat, pitjor rendiment
-of.options.CLOUDS.tooltip.5=  NO - sense núvols, rendiment superràpid
+of.options.CLOUDS.tooltip.5=  NO - SenseHeader.getSense núvols, rendiment superràpid
 of.options.CLOUDS.tooltip.6=
 of.options.CLOUDS.tooltip.7=Els núvols ràpids es renderitzen en 2D.
 of.options.CLOUDS.tooltip.8=Els núvols detallats es renderitzen en 3D.
@@ -497,7 +497,7 @@ of.options.TREES.tooltip.3=  Ràpids - baixa qualitat, millor rendiment
 of.options.TREES.tooltip.4=  Intel·ligents - més qualitat, rendiment mitjà
 of.options.TREES.tooltip.5=  Detallats - màxima qualitat, pitjor rendiment
 of.options.TREES.tooltip.6=
-of.options.TREES.tooltip.7=La qualitat ràpida deixarà las fulles sense transparencia.
+of.options.TREES.tooltip.7=La qualitat ràpida deixarà las fulles SenseHeader.getSense transparencia.
 of.options.TREES.tooltip.8="Detallats" e "Intel·ligents" si mantenen la transparencia.
 
 of.options.RAIN=Pluja/Neu
@@ -505,7 +505,7 @@ of.options.RAIN.tooltip.1=Pluja i neu
 of.options.RAIN.tooltip.2=  Per defecte - depen de l'adjust de gràfics
 of.options.RAIN.tooltip.3=  Ràpids - pluja/neu lleugera, més ràpid
 of.options.RAIN.tooltip.4=  Detallats - pluja/neu intensa, més lent
-of.options.RAIN.tooltip.5=  NO - sense pluja/neu, més ràpid
+of.options.RAIN.tooltip.5=  NO - SenseHeader.getSense pluja/neu, més ràpid
 of.options.RAIN.tooltip.6=
 of.options.RAIN.tooltip.7=Encara que es desactivi la pluja, el só
 of.options.RAIN.tooltip.8=segueix estant actiu.
@@ -521,7 +521,7 @@ of.options.SKY.tooltip.6=seguir veient.
 of.options.STARS=Cel estrellat
 of.options.STARS.tooltip.1=Visibilitat d'estrelles en el cel nocturn
 of.options.STARS.tooltip.2=  SÍ - estrelles, més lent
-of.options.STARS.tooltip.3=  NO - sense estrelles, més ràpido
+of.options.STARS.tooltip.3=  NO - SenseHeader.getSense estrelles, més ràpido
 
 of.options.SUN_MOON=Sol/Lluna
 of.options.SUN_MOON.tooltip.1=Visibilitat del Sol i la Lluna
@@ -550,7 +550,7 @@ of.options.HELD_ITEM_TOOLTIPS.tooltip.2=  SÍ - mostrar noms (per defecte)
 of.options.HELD_ITEM_TOOLTIPS.tooltip.3=  NO - no mostrar noms (com antiguament)
 
 of.options.DROPPED_ITEMS=Objectes
-of.options.DROPPED_ITEMS.tooltip.1=Qualitat dels objectes en el terra sense recollir
+of.options.DROPPED_ITEMS.tooltip.1=Qualitat dels objectes en el terra SenseHeader.getSense recollir
 of.options.DROPPED_ITEMS.tooltip.2=  Per defecte - depen de l'adjust de gràfics
 of.options.DROPPED_ITEMS.tooltip.3=  Rápidos - objectes en 2D, més ràpido
 of.options.DROPPED_ITEMS.tooltip.4=  Detallats - objectes en 3D, més lent pero més bonic
@@ -567,7 +567,7 @@ of.options.VIGNETTE.tooltip.4=  Detallats - efecte vinyeta activat (més lent)
 of.options.VIGNETTE.tooltip.5= 
 of.options.VIGNETTE.tooltip.6=Els FPS poden disminuir considerablement al activar-se,
 of.options.VIGNETTE.tooltip.7=sobretot en pantalla completa.
-of.options.VIGNETTE.tooltip.8=L'efecto vinyeta es pot deshabilitar sense cap problema.
+of.options.VIGNETTE.tooltip.8=L'efecto vinyeta es pot deshabilitar SenseHeader.getSense cap problema.
 
 of.options.DYNAMIC_FOV=Camp de visió dinàmic
 of.options.DYNAMIC_FOV.tooltip.1=Camp de visió dinàmic
@@ -579,16 +579,16 @@ of.options.DYNAMIC_FOV.tooltip.6=apuntar amb un arc.
 
 of.options.DYNAMIC_LIGHTS=Ilum. dinàmica
 of.options.DYNAMIC_LIGHTS.tooltip.1=Iluminació dinàmica
-of.options.DYNAMIC_LIGHTS.tooltip.2=  NO - sense (per defecte)
+of.options.DYNAMIC_LIGHTS.tooltip.2=  NO - SenseHeader.getSense (per defecte)
 of.options.DYNAMIC_LIGHTS.tooltip.3=  Ràpids - bàsica (s'actualitza cada 500ms)
 of.options.DYNAMIC_LIGHTS.tooltip.4=  Detallats - perfecta (s'actualiza en temps real)
 of.options.DYNAMIC_LIGHTS.tooltip.5= 
-of.options.DYNAMIC_LIGHTS.tooltip.6=Permeteix a alguns objectes emetre llum sense estar colocats.
+of.options.DYNAMIC_LIGHTS.tooltip.6=Permeteix a alguns objectes emetre llum SenseHeader.getSense estar colocats.
 of.options.DYNAMIC_LIGHTS.tooltip.7=Al equipar un d'aquests objectes en la mà, o al tirar-los,
 of.options.DYNAMIC_LIGHTS.tooltip.8=s'iluminarà l'entorn (afecta a: torxes, roca brillant...).
 
 options.biomeBlendRadius.tooltip.1=L'efecte suavitza els colors entre biomes
-options.biomeBlendRadius.tooltip.2=  NO - sense efecte de transició (més ràpid)
+options.biomeBlendRadius.tooltip.2=  NO - SenseHeader.getSense efecte de transició (més ràpid)
 options.biomeBlendRadius.tooltip.3=  5x5 - transició normal (per defecte)
 options.biomeBlendRadius.tooltip.4=  15x15 - transició detallada (més lent)
 options.biomeBlendRadius.tooltip.5=   
@@ -599,7 +599,7 @@ options.biomeBlendRadius.tooltip.7=i reduir la velocitat de càrrega dels chunks
 
 of.options.SMOOTH_FPS=Estabilitzar FPS
 of.options.SMOOTH_FPS.tooltip.1=Establitzar FPS nivellant el búfer del controlador gràfic
-of.options.SMOOTH_FPS.tooltip.2=  NO - sense estabilització
+of.options.SMOOTH_FPS.tooltip.2=  NO - SenseHeader.getSense estabilització
 of.options.SMOOTH_FPS.tooltip.3=  SÍ - amb estabilització
 of.options.SMOOTH_FPS.tooltip.4= 
 of.options.SMOOTH_FPS.tooltip.5=Aquesta opció depen del controlador gràfic i el seu efecte
@@ -607,7 +607,7 @@ of.options.SMOOTH_FPS.tooltip.6=no sempre es notori.
 
 of.options.SMOOTH_WORLD=Estabilitzar móns
 of.options.SMOOTH_WORLD.tooltip.1=Eliminar els pics de lag causats pel servidor intern
-of.options.SMOOTH_WORLD.tooltip.2=  NO - sense estabilització
+of.options.SMOOTH_WORLD.tooltip.2=  NO - SenseHeader.getSense estabilització
 of.options.SMOOTH_WORLD.tooltip.3=  SÍ - amb estabilització
 of.options.SMOOTH_WORLD.tooltip.4=
 of.options.SMOOTH_WORLD.tooltip.5=Aquesta opció estabilitza els FPS distribuint la càrrega
@@ -807,9 +807,9 @@ of.options.CHAT_BACKGROUND=Fons de chat
 of.options.CHAT_BACKGROUND.tooltip.1=Fons de chat
 of.options.CHAT_BACKGROUND.tooltip.2=  Per defecte - el fons apareix amb un tamany estàtic
 of.options.CHAT_BACKGROUND.tooltip.3=  Compacte - el fons apareix amb un tamany adaptat al text
-of.options.CHAT_BACKGROUND.tooltip.4=  NO - sense fons
+of.options.CHAT_BACKGROUND.tooltip.4=  NO - SenseHeader.getSense fons
 
 of.options.CHAT_SHADOW=Sombrejat de chat
 of.options.CHAT_SHADOW.tooltip.1=Afegir ombra al text del chat
 of.options.CHAT_SHADOW.tooltip.2=  SÍ - ombrejar-lo
-of.options.CHAT_SHADOW.tooltip.3=  NO - sense ombrejar-lo
+of.options.CHAT_SHADOW.tooltip.3=  NO - SenseHeader.getSense ombrejar-lo

@@ -89,7 +89,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     private static final Logger logger = LogManager.getLogger();
     private static final ResourceLocation locationRainPng = new ResourceLocation("textures/environment/rain.png");
     private static final ResourceLocation locationSnowPng = new ResourceLocation("textures/environment/snow.png");
-    private static final ResourceLocation[] shaderResourceLocations = new ResourceLocation[]{new ResourceLocation("shaders/post/notch.json"), new ResourceLocation("shaders/post/fxaa.json"), new ResourceLocation("shaders/post/art.json"), new ResourceLocation("shaders/post/bumpy.json"), new ResourceLocation("shaders/post/blobs2.json"), new ResourceLocation("shaders/post/pencil.json"), new ResourceLocation("shaders/post/color_convolve.json"), new ResourceLocation("shaders/post/deconverge.json"), new ResourceLocation("shaders/post/flip.json"), new ResourceLocation("shaders/post/invert.json"), new ResourceLocation("shaders/post/ntsc.json"), new ResourceLocation("shaders/post/outline.json"), new ResourceLocation("shaders/post/phosphor.json"), new ResourceLocation("shaders/post/scan_pincushion.json"), new ResourceLocation("shaders/post/sobel.json"), new ResourceLocation("shaders/post/bits.json"), new ResourceLocation("shaders/post/desaturate.json"), new ResourceLocation("shaders/post/green.json"), new ResourceLocation("shaders/post/blur.json"), new ResourceLocation("shaders/post/wobble.json"), new ResourceLocation("shaders/post/blobs.json"), new ResourceLocation("shaders/post/antialias.json"), new ResourceLocation("shaders/post/creeper.json"), new ResourceLocation("shaders/post/spider.json")};
+    private static final ResourceLocation[] shaderResourceLocations = new ResourceLocation[]{new ResourceLocation("shaders/post/notch.json"), new ResourceLocation("shaders/post/fxaa.json"), new ResourceLocation("shaders/post/art.json"), new ResourceLocation("shaders/post/bumpy.json"), new ResourceLocation("shaders/post/blobs2.json"), new ResourceLocation("shaders/post/pencil.json"), new ResourceLocation("shaders/post/color_convolve.json"), new ResourceLocation("shaders/post/deconverge.json"), new ResourceLocation("shaders/post/flip.json"), new ResourceLocation("shaders/post/invert.json"), new ResourceLocation("shaders/post/ntsc.json"), new ResourceLocation("shaders/post/outline.json"), new ResourceLocation("shaders/post/phosphor.json"), new ResourceLocation("shaders/post/scan_pincushion.json"), new ResourceLocation("shaders/post/sobel.json"), new ResourceLocation("shaders/post/bits.json"), new ResourceLocation("shaders/post/desaturate.json"), new ResourceLocation("shaders/post/green.json"), new ResourceLocation("shaders/post/blurArea.json"), new ResourceLocation("shaders/post/wobble.json"), new ResourceLocation("shaders/post/blobs.json"), new ResourceLocation("shaders/post/antialias.json"), new ResourceLocation("shaders/post/creeper.json"), new ResourceLocation("shaders/post/spider.json")};
     public static final int shaderCount = shaderResourceLocations.length;
     public static boolean anaglyphEnable;
     public static int anaglyphField;
@@ -348,9 +348,9 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             if (this.mc.playerController.extendedReach()) {
                 d0 = 6.0D;
                 d1 = 6.0D;
-            } else if (SenseHeader.sense.moduleManager.getModuleByClass(Reach.class).isEnabled()) {
-                d0 = d1 = ((Reach) SenseHeader.sense.moduleManager.getModuleByClass(Reach.class)).build.getDoubleCurrentValue();
-            } else if (d0 > (SenseHeader.sense.moduleManager.getModuleByClass(Reach.class).isEnabled() ? ((Reach) SenseHeader.sense.moduleManager.getModuleByClass(Reach.class)).combat.getDoubleCurrentValue() : 3.0D)) {
+            } else if (SenseHeader.getSense.moduleManager.getModuleByClass(Reach.class).isEnabled()) {
+                d0 = d1 = ((Reach) SenseHeader.getSense.moduleManager.getModuleByClass(Reach.class)).build.getDoubleCurrentValue();
+            } else if (d0 > (SenseHeader.getSense.moduleManager.getModuleByClass(Reach.class).isEnabled() ? ((Reach) SenseHeader.getSense.moduleManager.getModuleByClass(Reach.class)).combat.getDoubleCurrentValue() : 3.0D)) {
                 flag = true;
             }
 

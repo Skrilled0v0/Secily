@@ -1,6 +1,8 @@
 package net.minecraft.client.gui;
 
-import me.cubex2.ttfr.CFontRenderer;
+
+import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
 import me.skrilled.ui.alt.GuiAltLogin;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.math.TimerUtil;
@@ -42,7 +44,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
 
         if (button.id == 2) mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
 
-        if (button.id == 1) sense.stopClient();
+        if (button.id == 1) SenseHeader.getSense.stopClient();
 
     }
 
@@ -50,11 +52,11 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int j = this.height / 2;
         int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
-        CFontRenderer font = sense.getFontBuffer().EN48;
+        FontDrawer font = Main.fontLoader.EN48;
         RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i - 1));
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
-        font.drawRainbowString(sense.getClientName(), 30, j - 90);
+        font.drawRainbowString(SenseHeader.getSense.getClientName(), 30, j - 90);
         GlStateManager.popMatrix();
         if (timerUtil.hasReached(50)) {
             i++;

@@ -1,10 +1,11 @@
 package me.skrilled.ui.alt;
 
-import me.cubex2.ttfr.CFontRenderer;
-import me.skrilled.SenseHeader;
+
+import me.fontloader.FontDrawer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class GuiAltLogin extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float z) {
-        CFontRenderer font = SenseHeader.getSense.getFontBuffer().CN18;
+        FontDrawer font = Main.fontLoader.EN18;
         this.drawDefaultBackground();
         this.username.drawTextBox();
         this.password.drawTextBox();

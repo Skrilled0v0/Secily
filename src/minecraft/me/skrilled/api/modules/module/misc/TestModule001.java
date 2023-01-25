@@ -5,6 +5,7 @@
  */
 package me.skrilled.api.modules.module.misc;
 
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
@@ -40,8 +41,8 @@ public class TestModule001 extends ModuleHeader {
     @Override
     public void onEnabled() {
         for (ValueHeader valueHeader : this.getValueList()) {
-            sense.printINFO("TestModule is Open!  ->");
-            sense.printINFO(this.getValue(valueHeader));
+            SenseHeader.getSense.printINFO("TestModule is Open!  ->");
+            SenseHeader.getSense.printINFO(this.getValue(valueHeader));
         }
         super.onEnabled();
     }

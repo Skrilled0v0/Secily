@@ -5,6 +5,7 @@
  */
 package me.skrilled.ui.clickui;
 
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.utils.IMC;
 import me.surge.animation.Animation;
@@ -18,11 +19,11 @@ public class MenuMotion implements IMC {
     }
 
     public static void setMenuMotion() {
-        if (sense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled()) {
+        if (SenseHeader.getSense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled()) {
             mc.displayGuiScreen(SettingMenu.menu);
             MenuMotion.setState(true);
         }
-        if (!sense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled())
+        if (!SenseHeader.getSense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled())
             MenuMotion.setState(false);
     }
 }

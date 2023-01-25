@@ -11,7 +11,6 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventKey;
-import me.skrilled.api.modules.module.combat.AutoClicker;
 import me.skrilled.ui.LoadingGui;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.block.Block;
@@ -120,7 +119,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     public static final boolean isRunningOnMac = Util.getOSType() == Util.EnumOS.OSX;
     private static final Logger logger = LogManager.getLogger();
     private static final List<DisplayMode> macDisplayModes = Lists.newArrayList(new DisplayMode(2560, 1600), new DisplayMode(2880, 1800));
-    private static final ResourceLocation loadingBG = new ResourceLocation("skrilled/background.png");
     public static byte[] memoryReserve = new byte[10485760];
     private static Minecraft theMinecraft;
     private static int debugFPS;
@@ -201,6 +199,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private IStream stream;
     private Framebuffer framebufferMc;
     private TextureMap textureMapBlocks;
+
     private SoundHandler mcSoundHandler;
     private MusicTicker mcMusicTicker;
     private ResourceLocation mojangLogo;
@@ -307,9 +306,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
 
     public void run() {
         this.running = true;
-        for (int i = 1; i <= 15; i++) {
-            Main.ldbgs.add(new ResourceLocation("skrilled/loading/blur" + i + ".png"));
-        }
+
         try {
             this.startGame();
         } catch (Throwable throwable) {
@@ -706,8 +703,11 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
         GlStateManager.disableDepth();
-        RenderUtil.drawImage(Main.ldbgs.get(loadingCount), 0, 0, w, h);
-        RenderUtil.drawRect(w / 2f, h / 2f, w / 2f + 100, h / 2f + 100, -1);
+        this.getTextureManager().bindTexture(new ResourceLocation("skrilled/bgNoBlur.png"));
+        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0f, 0f, w, h, w, h);
+        Main.fontLoader.EN72.drawCenteredStringWithShadow("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(), -1);
+        Main.fontLoader.EN36.drawCenteredStringWithShadow((loadingCount + 1) + "/15", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), -1);
+
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);

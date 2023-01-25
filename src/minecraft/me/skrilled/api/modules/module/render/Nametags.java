@@ -1,7 +1,7 @@
 package me.skrilled.api.modules.module.render;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.cubex2.ttfr.CFontRenderer;
+import me.fontloader.FontDrawer;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.event.EventUpdate;
 import me.skrilled.api.modules.ModuleHeader;
@@ -11,6 +11,7 @@ import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.Colors;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.enchantment.Enchantment;
@@ -51,19 +52,19 @@ public class Nametags extends ModuleHeader {
     public void onRender2D(EventRender2D event) {
         GlStateManager.pushMatrix();
         ScaledResolution scaledRes = new ScaledResolution(mc);
-            for (EntityLivingBase ent : entityPositions.keySet()) {
-                if (ent != mc.thePlayer && ((boolean) this.getValue(invis) || !ent.isInvisible())) {
+        for (EntityLivingBase ent : entityPositions.keySet()) {
+            if (ent != mc.thePlayer && ((boolean) this.getValue(invis) || !ent.isInvisible())) {
 
-                    GlStateManager.pushMatrix();
-                    if ((ent instanceof EntityPlayer)) {
+                GlStateManager.pushMatrix();
+                if ((ent instanceof EntityPlayer)) {
 
-                        double[] renderPositions = entityPositions.get(ent);
-                        if ((renderPositions[3] < 0.0D) || (renderPositions[3] >= 1.0D)) {
-                            GlStateManager.popMatrix();
-                            continue;
-                        }
+                    double[] renderPositions = entityPositions.get(ent);
+                    if ((renderPositions[3] < 0.0D) || (renderPositions[3] >= 1.0D)) {
+                        GlStateManager.popMatrix();
+                        continue;
+                    }
 
-                    CFontRenderer font = sense.getFontBuffer().CN18;
+                    FontDrawer font = Main.fontLoader.EN18;
 
                     GlStateManager.translate(renderPositions[0] / scaledRes.getScaleFactor(), renderPositions[1] / scaledRes.getScaleFactor(), 0.0D);
                     scale();
@@ -78,12 +79,12 @@ public class Nametags extends ModuleHeader {
                     str = str + suff;
 
                     float strWidth = font.getStringWidth(str.replaceAll("\247.", ""));
-                    float strWidth2 = sense.getFontBuffer().EN10.getStringWidth(health);
+                    float strWidth2 = Main.fontLoader.EN10.getStringWidth(health);
                     float allWidth = (Math.max(strWidth, strWidth2)) + 8;
                     RenderUtil.drawRect(-allWidth / 2, -25.0f, allWidth / 2, 0, Colors.getColor(0, 130));
                     font.drawString(str, -allWidth / 2 + 4, -22.0F, Colors.WHITE.c);
 
-                    sense.getFontBuffer().EN10.drawString(health, -allWidth / 2 + 4, -10.0F, Colors.WHITE.c);
+                    Main.fontLoader.EN10.drawString(health, -allWidth / 2 + 4, -10.0F, Colors.WHITE.c);
 
                     EntityLivingBase entity = ent;
                     float nowhealth = (float) Math.ceil(entity.getHealth() + entity.getAbsorptionAmount());
@@ -172,7 +173,7 @@ public class Nametags extends ModuleHeader {
         GlStateManager.disableDepth();
         x = (int) (x * 1.05D);
         y -= 6;
-        sense.getFontBuffer().EN10.drawString(text, x + 9, -30 - y, Colors.getColor(255));
+        Main.fontLoader.EN10.drawString(text, x + 9, -30 - y, Colors.getColor(255));
         GlStateManager.enableDepth();
         GlStateManager.popMatrix();
     }

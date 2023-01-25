@@ -5,7 +5,6 @@
  */
 package me.skrilled;
 
-import me.cubex2.ttfr.FontBuffer;
 import me.skrilled.api.manager.CommandManager;
 import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.utils.IMC;
@@ -17,10 +16,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SenseHeader implements IMC {
-    public static String[] clientInfo = {"SkrilledSense & Prohect", "230122", "Secily"};
+    public static String[] clientInfo = {"DeadAngles", "230122", "Secily"};
     public static SenseHeader getSense = new SenseHeader();
     public final Path directory = Paths.get(mc.mcDataDir.getAbsolutePath(), getClientName());
-    public FontBuffer fontBuffer;
     public ModuleManager moduleManager;
 
     public String getClientUpdate() {
@@ -35,18 +33,11 @@ public class SenseHeader implements IMC {
         return clientInfo[0];
     }
 
-    public FontBuffer getFontBuffer() {
-        return fontBuffer;
-    }
-
     public void clientStart() {
-
-        Display.setTitle(getClientName());
-//        FileManager.init();
         moduleManager = new ModuleManager();
         moduleManager.load();
-        readSettings();
-        fontBuffer = new FontBuffer();
+
+        Display.setTitle(getClientName());
         CommandManager.loadCommands();
     }
 
@@ -91,63 +82,8 @@ public class SenseHeader implements IMC {
         return moduleManager;
     }
 
-    //存档
-    public void saveSettings() {
-//        System.out.println("Save !");
-//        StringBuilder values = new StringBuilder();
-//        for (ModuleHeader m : this.getModuleManager().mList) {
-//            values.append(String.format("M-%s %s %s%s", m.getModuleName(), m.getKey(), m.isEnabled(), System.lineSeparator()));
-//            for (ValueHeader v : m.getValueList()) {
-//                values.append(String.format("V-%s %s %s%s", m.getModuleName(), v.getValueName(), m.getValue(v), System.lineSeparator()));
-//            }
-//        }
-//        FileManager.save("Config.txt", values.toString());
-    }
 
-    //读档
-    public void readSettings() {
-//        try {
-//            List<String> cfg = FileManager.read("Config.txt");
-//            String moduleName, moduleKey, moduleIsOpen;
-//            String valueName, values;
-//            for (String s : cfg) {
-//                if (s.startsWith("M-")) {
-//                    moduleName = s.split(" ")[0].substring(2);
-//                    moduleKey = s.split(" ")[1];
-//                    moduleIsOpen = s.split(" ")[2];
-//                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
-//                    System.out.println(s);
-//                    module.setKey(Integer.parseInt(moduleKey));
-//                    module.setEnabled(Boolean.parseBoolean(moduleIsOpen));
-//                }
-//                if (s.startsWith("V-")) {
-//                    moduleName = s.split(" ")[0].substring(2);
-//                    valueName = s.split(" ")[1];
-//                    values = s.split(" ")[2];
-//                    ModuleHeader module = this.getModuleManager().getModuleByName(moduleName);
-//                    for (ValueHeader value : module.getValueList()) {
-//                        if (valueName.equals(value.getValueName())) {
-//                            if (value.getValueType() == ValueHeader.ValueType.BOOLEAN)
-//                                value.setOptionOpen(Boolean.parseBoolean(values));
-//                            if (value.getValueType() == ValueHeader.ValueType.DOUBLE)
-//                                value.setDoubleCurrentValue(Double.parseDouble(values));
-//                            if (value.getValueType() == ValueHeader.ValueType.ENUM_TYPE)
-//                                value.setCurrentEnumType(values);
-//                            if (value.getValueType() == ValueHeader.ValueType.COLOR)
-//                                value.setColorValue(Color.decode(values));
-//                            if (value.getValueType() == ValueHeader.ValueType.STRING) value.setStrValue(values);
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    //关闭
     public void stopClient() {
-        saveSettings();
         mc.shutdown();
     }
 

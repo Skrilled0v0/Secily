@@ -47,6 +47,98 @@ public class RenderUtil implements IMC {
         return new Color((float) c.getRed() / 255.0F * fade, (float) c.getGreen() / 255.0F * fade, (float) c.getBlue() / 255.0F * fade, (float) c.getAlpha() / 255.0F);
     }
 
+    public static void quickDrawRect(final float x, final float y, final float x2, final float y2) {
+        glBegin(GL_QUADS);
+
+        glVertex2d(x2, y);
+        glVertex2d(x, y);
+        glVertex2d(x, y2);
+        glVertex2d(x2, y2);
+
+        glEnd();
+    }
+
+    public static void quickRoundedRect(float paramXStart, float paramYStart, float paramXEnd, float paramYEnd, float radius) {
+        float z = 0;
+        if (paramXStart > paramXEnd) {
+            z = paramXStart;
+            paramXStart = paramXEnd;
+            paramXEnd = z;
+        }
+
+        if (paramYStart > paramYEnd) {
+            z = paramYStart;
+            paramYStart = paramYEnd;
+            paramYEnd = z;
+        }
+
+        double x1 = paramXStart + radius;
+        double y1 = paramYStart + radius;
+        double x2 = paramXEnd - radius;
+        double y2 = paramYEnd - radius;
+
+        glEnable(GL_LINE_SMOOTH);
+        glLineWidth(1);
+
+        glBegin(GL_POLYGON);
+
+        double degree = Math.PI / 180;
+        for (double i = 0; i <= 90; i += 1)
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        for (double i = 90; i <= 180; i += 1)
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        for (double i = 180; i <= 270; i += 1)
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        for (double i = 270; i <= 360; i += 1)
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        glEnd();
+        glDisable(GL_LINE_SMOOTH);
+    }
+
+    public static void drawRoundedRect(float paramXStart, float paramYStart, float paramXEnd, float paramYEnd, float radius, int rgba) {
+//        Blur.renderBlur(1);
+        float z;
+        if (paramXStart > paramXEnd) {
+            z = paramXStart;
+            paramXStart = paramXEnd;
+            paramXEnd = z;
+        }
+
+        if (paramYStart > paramYEnd) {
+            z = paramYStart;
+            paramYStart = paramYEnd;
+            paramYEnd = z;
+        }
+        double x1 = paramXStart + radius;
+        double y1 = paramYStart + radius;
+        double x2 = paramXEnd - radius;
+        double y2 = paramYEnd - radius;
+        Color color = new Color(rgba, true);
+        glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+        glPushMatrix();
+        glEnable(GL_LINE_SMOOTH);
+        glLineWidth(1);
+        glBegin(GL_POLYGON);
+        double degree = Math.PI / 180;
+        for (double i = 0; i <= 90; i += 1)
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        for (double i = 90; i <= 180; i += 1)
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        for (double i = 180; i <= 270; i += 1)
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        for (double i = 270; i <= 360; i += 1)
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        glEnd();
+        glDisable(GL_LINE_SMOOTH);
+        glPopMatrix();
+        glColor4f(1F, 1F, 1F, 1F);
+    }
+
+
+    public static void resetColor() {
+        glClearColor(0, 0, 0, 0);
+    }
+
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
         GL11.glPushMatrix();
         GL11.glEnable(3042);

@@ -5,18 +5,22 @@
  */
 package me.skrilled.ui.clickui;
 
-import me.cubex2.ttfr.CFontRenderer;
+
+import me.fontloader.FontDrawer;
 import me.skrilled.SenseHeader;
+import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.api.value.SubEnumValueHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -38,7 +42,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
      */
     public static boolean clickDag = false;
     public static boolean clickDag1 = true;
-    public ModuleHeader currentModule = sense.moduleManager.getModuleByIndex(0);
+    public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     /**
      * ModuleType的盒子宽度
      */
@@ -131,17 +135,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 页码
      */
     int currentPage = 1;
-    /**
-     * 第一个：按下时是否在框中，第二个：松开时是否在框中
-     */
-    boolean[] onKeyBinding = new boolean[]{false, false};
-    ModuleHeader moduleOnKeyBinding = null;
 
     /**
      * 该moduleType下module总和
      */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-    BoundedAnimation windowAlpha = new BoundedAnimation(125, 220, 888f, false, Easing.LINEAR);
+    BoundedAnimation windowAlpha = new BoundedAnimation(50, 120, 888f, false, Easing.LINEAR);
     BoundedAnimation moduleAlpha = new BoundedAnimation(165, 250, 550f, false, Easing.LINEAR);
 
     /**
@@ -157,17 +156,24 @@ public class SecilyMenu extends GuiScreen implements IMC {
      */
     int module_Alpha = 0;
     /**
-     * Value Y坐标增值存储
+     * 窗口关闭布尔
      */
     boolean closed;
 
     /*
     绘制开始
      */
+
+    @Override
+    public void initGui() {
+
+        super.initGui();
+    }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         float scale = (float) MenuMotion.getMenuMotion().getAnimationFactor();
-        int bcColor = new Color(175, 175, 175, windows_Alpha).getRGB();         //定义背景颜色局部变量
+        int bcColor = new Color(0, 0, 0, windows_Alpha).getRGB();         //定义背景颜色局部变量
         int titleColor = new Color(52, 81, 129, windows_Alpha).getRGB();        //定义标题背景颜色局部变量
         int moduleBGColor = new Color(240, 240, 240, windows_Alpha).getRGB();   //定义Module背景颜色局部变量
         int typeBoxColor = new Color(94, 164, 255, windows_Alpha).getRGB();     //定义ModuleType被选中颜色局部变量
@@ -177,12 +183,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
 //        int moduleCurrentColor = new Color(171, 157, 242, 175).getRGB();
         int moduleCurrentColor = new Color(255, 68, 0, 130).getRGB();           //Module颜色-背景亮色
         int moduleColor = new Color(74, 38, 255, 130).getRGB();
+
         int width = posX + windowWidth;                                 //更新窗口宽度
         int height = posY + windowHeight;                               //更新窗口高度
-        CFontRenderer minFont = sense.fontBuffer.EN16;
-        CFontRenderer midFont = sense.fontBuffer.EN24;
-        CFontRenderer valueFont = sense.fontBuffer.EN18;
-        CFontRenderer bigFont = sense.fontBuffer.EN36;
+        FontDrawer minFont = Main.fontLoader.EN16;
+        FontDrawer midFont = Main.fontLoader.EN24;
+        FontDrawer valueFont = Main.fontLoader.EN18;
+        FontDrawer bigFont = Main.fontLoader.EN36;
         /*
         判定鼠标是否按下来对窗口透明值进行自增自减
          */
@@ -203,7 +210,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
             posX = mouseX - posInClickX;
             posY = mouseY - posInClickY;
             //enumSelected动画更新
-            for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
+            for (ModuleHeader moduleHeader : SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
                 for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
                     SubEnumValueHeader subEnumValueHeader = valueHeader.getCurrentSubEnumHeader();
                     valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
@@ -212,7 +219,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         }
         if (clickDag1) {
             //enumSelected动画更新
-            for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
+            for (ModuleHeader moduleHeader : SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
                 for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.ENUM_TYPE)) {
                     SubEnumValueHeader subEnumValueHeader = valueHeader.getCurrentSubEnumHeader();
                     valueHeader.selectedEnumBGAnim = new BoundedAnimation(subEnumValueHeader.x1, subEnumValueHeader.x1, 0, false, Easing.LINEAR);
@@ -221,7 +228,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
             clickDag1 = false;
         }
         //double类型拖动
-        for (ModuleHeader moduleHeader : SenseHeader.sense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
+        for (ModuleHeader moduleHeader : SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyMenu.currentModuleType)) {
             for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
                 if (valueHeader.onClicking) {
                     double[] ds = valueHeader.getDoubles();
@@ -240,11 +247,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
         GlStateManager.pushMatrix();
         //背景
         GL11.glScaled(scale, scale, 1);
-        RenderUtil.drawRect(posX, posY, width, height, bcColor);
-        //上标题背景
-        RenderUtil.drawRect(posX, posY, width, posY + upSide, titleColor);
-        //下标题背景
-        RenderUtil.drawRect(posX, posY + windowHeight - downSide, width, posY + windowHeight, titleColor);
+
+        RenderUtil.drawRoundedRect(posX, posY, width, height, 15, bcColor);
+        BlurUtil.blurAreaRounded(posX, posY, width, height, 15, 10);
+//        //上标题背景
+//        RenderUtil.drawRoundedRect(posX, posY, width, posY + upSide, 15, titleColor);
+//        //下标题背景
+//        RenderUtil.drawRoundedRect(posX, posY + windowHeight - downSide, width, posY + windowHeight, 15, titleColor);
         GlStateManager.popMatrix();
         if (MenuMotion.getMenuMotion().getAnimationFactor() == 1) {
             float xAxis = 0;
@@ -253,11 +262,11 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 float[] moduleTypePosInfo = new float[]{posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideHeight};
                 if (moduleType == currentModuleType) {
                     RenderUtil.drawRect(moduleTypePosInfo[0], moduleTypePosInfo[1], moduleTypePosInfo[2], moduleTypePosInfo[3], typeBoxColor);
-                    minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(false), -1);
+                    minFont.drawCenteredString(currentModuleType.name(), moduleTypePosInfo[0] + typeSideSize / 2f, moduleTypePosInfo[1] + typeSideHeight - minFont.getHeight(), -1);
                  /*
                  每绘制一个Module编辑区计数器+1，在计数器不大于ModuleType分支下的Module数量之前一直执行，（也就是在绘制了6个Module编辑区之前每绘制一个width坐标就会增加）
                  */
-                    moduleHeaders = sense.getModuleManager().getModuleListByModuleType(moduleType);
+                    moduleHeaders = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(moduleType);
                 /*
                 防止从已经翻到第n页后切换module类型导致而页码未重置导致的显示bug
                  */
@@ -271,7 +280,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                     for (int i = 0; i < moduleHeaders.size(); i++) {
                         ModuleHeader moduleHeader = moduleHeaders.get(i);
                         int nDrawCount = (i % 6);
-                        if (nDrawCount < sense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
+                        if (nDrawCount < SenseHeader.getSense.getModuleManager().getModuleListByModuleType(moduleType).size()) {
 
                             moduleHeader.modulePosInfo = new float[]{0f, 0f, 0f, posY + moduleUDMargin + moduleBoxHeight + upSide};
                             moduleHeader.modulePosInfo[0] = posX + moduleLRMargin + (moduleBoxLRInterval + moduleBoxWidth) * nDrawCount;
@@ -314,21 +323,20 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         /*
                         下标题背景
                          */
-                        String str = module.isEnabled() ? "Enabled" : "Disabled";
+                        String strEnabled = module.isEnabled() ? "Enabled" : "Disabled";
+                        String bind = Keyboard.getKeyName(module.getKey());
+                        int boxWidth = 65;
                         RenderUtil.drawRect(module.modulePosInfo[0], module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight, module.modulePosInfo[2], module.modulePosInfo[1] + moduleBoxHeight, moduleCurrentTitleOPorDis);
                         //Bind
-                        //Bind键位显示
-                        RenderUtil.drawRect(module.modulePosInfo[2] - midFont.getStringWidth(str) - 13, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[2] - 7, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
-                        midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
-
-                        midFont.drawCenteredString(Keyboard.getKeyName(module.getKey()), (module.modulePosInfo[2] - midFont.getStringWidth(str) - 13 + module.modulePosInfo[2] - 7) / 2, (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f + module.modulePosInfo[1] + moduleBoxHeight - 1.5f - midFont.FONT_HEIGHT) / 2, 1);
+                        RenderUtil.drawRect(module.modulePosInfo[2] - boxWidth, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[2] - 7, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
+                        midFont.drawString(bind, module.modulePosInfo[2] - boxWidth / 2f - midFont.getStringWidth(bind) / 2f - 4, module.modulePosInfo[1] + moduleBoxHeight - (moduleBoxTitleHeight / 1.5f), 1);
                         //E/D
-                        if (module != sense.getModuleManager().getModuleByClass(SettingMenu.class)) {
-                            RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + midFont.getStringWidth(str) + 13, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
-                            midFont.drawString(str, module.modulePosInfo[0] + 10, module.modulePosInfo[1] + moduleBoxHeight - (moduleBoxTitleHeight / 1.5f), 1);
+                        if (module != SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class)) {
+                            RenderUtil.drawRect(module.modulePosInfo[0] + 7, module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f, module.modulePosInfo[0] + boxWidth, module.modulePosInfo[1] + moduleBoxHeight - 1.5f, moduleBGColor);
+                            midFont.drawString(strEnabled, module.modulePosInfo[0] + boxWidth / 2f - midFont.getStringWidth(strEnabled) / 2f + 4, module.modulePosInfo[1] + moduleBoxHeight - (moduleBoxTitleHeight / 1.5f), 1);
                         }
                         //ModuleName
-                        bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight(false) / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
+                        bigFont.drawCenteredString(module.getModuleName(), module.modulePosInfo[0] + moduleBoxWidth / 2f, module.modulePosInfo[1] + bigFont.getHeight() / 3f, module.menuFlag ? moduleCurrentColor : moduleColor);
 
                         //滚轮处理
                         if (isHovering(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3])) {
@@ -354,13 +362,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = module.modulePosInfo[0] + 20;
-                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
-                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight() + 5;
+                            if (valueY + valueFont.getHeight() > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
                             valueHeader.visible = true;
-                            yValue += (valueFont.getHeight(false) * 1.5f);
+                            yValue += (valueFont.getHeight() * 1.5f);
 
                             valueHeader.x1 = (int) (module.modulePosInfo[2] - 55);
                             valueHeader.y1 = (int) valueY;
@@ -377,13 +385,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = module.modulePosInfo[0] + 20;
-                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
-                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight() + 5;
+                            if (valueY + valueFont.getHeight() > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
                             valueHeader.visible = true;
-                            yValue += (valueFont.getHeight(false) * 1.5f);
+                            yValue += (valueFont.getHeight() * 1.5f);
 
                             valueHeader.x1 = (int) module.modulePosInfo[2];
                             valueHeader.y1 = (int) valueY;
@@ -405,13 +413,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = module.modulePosInfo[0] + 20;
-                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
-                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight() + 5;
+                            if (valueY + valueFont.getHeight() > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
                             valueHeader.visible = true;
-                            yValue += (valueFont.getHeight(false) * 1.5f);
+                            yValue += (valueFont.getHeight() * 1.5f);
 
                             valueHeader.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
                             valueHeader.y1 = (int) valueY;
@@ -430,13 +438,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                                 continue;
                             }
                             float valueX = module.modulePosInfo[0] + 20;
-                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight(false) + 5;
-                            if (valueY + valueFont.getHeight(false) > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
+                            float valueY = module.modulePosInfo[1] + yValue + bigFont.getHeight() + 5;
+                            if (valueY + valueFont.getHeight() > (module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight))
                                 break;
                             String valueStr = valueHeader.getValueName() + ": ";
                             valueFont.drawString(valueStr, valueX, valueY, valueFontColor);
                             valueHeader.visible = true;
-                            yValue += (valueFont.getHeight(false) * 1.5f);
+                            yValue += (valueFont.getHeight() * 1.5f);
 
                             valueHeader.x1 = (int) (valueX + valueFont.getStringWidth(valueStr));
                             valueHeader.y1 = (int) valueY;
@@ -475,7 +483,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                  */
                     for (int i = 0; i < modulePageMAXIndex; i++) {
                         RenderUtil.drawRect(PageNumBars.get(i).x1, PageNumBars.get(i).y1, PageNumBars.get(i).x2, PageNumBars.get(i).y2, typeBoxColor);
-                        bigFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + bigFont.getHeight(false) / 2f - 5, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
+                        bigFont.drawCenteredString(String.valueOf(i + 1), PageNumBars.get(i).x1 + pageNumBarX / 2f, PageNumBars.get(i).y1 + bigFont.getHeight() / 2f - 5, currentPage == PageNumBars.get(i).num ? moduleBGColor : bcColor);
                         fstPageBarPos[0] = fstPageBarPos[0] + pageNumBarX + pageNumBarInterval;
                         fstPageBarPos[2] = fstPageBarPos[2] + pageNumBarX + pageNumBarInterval;
                     }
@@ -498,18 +506,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                         icon = 'E';
                         break;
                 }
-                sense.fontBuffer.ICON64.drawString(String.valueOf(icon), moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f + 3, moduleTypePosInfo[3] - sense.fontBuffer.ICON64.getHeight(false) / 3f - 3, -1);
+                Main.fontLoader.ICON64.drawChar(icon, moduleTypePosInfo[0] + (typeSideSize - typeICONSize) / 2f + 3, moduleTypePosInfo[3] - Main.fontLoader.ICON64.getHeight() / 3f - 3, -1);
                 xAxis += moduleTypeInterval + typeSideSize;
 
             }
-            //Key Binding提示
-            if (onKeyBinding[0] && onKeyBinding[1]) {
-                int bgColor = new Color(25, 25, 25, 200).getRGB();
-                String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
-                RenderUtil.drawRect(0, 0, RenderUtil.width(), RenderUtil.height(), bgColor);
-                sense.fontBuffer.EN36.drawCenteredString(editingStr, RenderUtil.width() / 2f, RenderUtil.height() / 2f, -1);
-            }
+
         }
+
         if (closed) {
             if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) IMC.mc.displayGuiScreen(null);
         }
@@ -520,7 +523,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         clickDag = mouseButton == 0 && mouseX > posX && mouseX < (posX + windowWidth) && mouseY > posY && mouseY < posY + upSide;
         int moduleTypeInterval = SecilyMenu.moduleTypeInterval;//ModuleType间隔
         int typeSideSize = this.typeSideSize;//ModuleTypeIcon大小
-        CFontRenderer midFont = sense.fontBuffer.EN24;
+        FontDrawer midFont = Main.fontLoader.EN24;
         float xAxis = 0;
         /*
         ModuleType切换判定
@@ -530,7 +533,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 currentModuleType = value;
             }
             xAxis += moduleTypeInterval + typeSideSize;
-            for (ModuleHeader moduleHeader : sense.getModuleManager().getModuleListByModuleType(currentModuleType)) {
+            for (ModuleHeader moduleHeader : SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType)) {
                 if (moduleHeader.isEnabled()) moduleHeader.moduleMotionColor.setState(true);
             }
         }
@@ -539,12 +542,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
             //切换选中Module
             module.menuFlag = isMouseClickedInside(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3]);
             //开关Module
-            float p1, p2, p3, p4 = 0;
+            float p1, p2, p3, p4;
             p1 = module.modulePosInfo[0] + 7;
             p2 = module.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
             p3 = module.modulePosInfo[0] + midFont.getStringWidth(str) + 13;
             p4 = module.modulePosInfo[1] + moduleBoxHeight - 1.5f;
-            boolean p5 = module != sense.getModuleManager().getModuleByClass(SettingMenu.class);
+            boolean p5 = module != SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class);
             if (isMouseClickedInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
                 module.moduleMotionColor.setState(!module.isEnabled());
                 module.toggle();
@@ -552,10 +555,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
             //绑定键位
             float middle = (module.modulePosInfo[0] + module.modulePosInfo[2]) / 2;
             if (isMouseClickedInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
-                onKeyBinding[0] = true;
-                moduleOnKeyBinding = module;
-            } else {
-                onKeyBinding[0] = false;
+// TODO: 2023/1/23
             }
             /*
             调value的判定
@@ -607,26 +607,12 @@ public class SecilyMenu extends GuiScreen implements IMC {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        if (moduleOnKeyBinding != null) {
-            float p1, p2, p3, p4 = 0;
-            p1 = moduleOnKeyBinding.modulePosInfo[0] + 7;
-            p2 = moduleOnKeyBinding.modulePosInfo[1] + moduleBoxHeight - moduleBoxTitleHeight + 1.5f;
-            p3 = moduleOnKeyBinding.modulePosInfo[0] + sense.fontBuffer.EN24.getStringWidth("Enabled") + 13;
-            p4 = moduleOnKeyBinding.modulePosInfo[1] + moduleBoxHeight - 1.5f;
-            float middle = (moduleOnKeyBinding.modulePosInfo[0] + moduleOnKeyBinding.modulePosInfo[2]) / 2;
-            if (isMouseClickedInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
-                onKeyBinding[1] = true;
-            } else {
-                moduleOnKeyBinding = null;
-                onKeyBinding[1] = false;
-            }
-        }
 
         if (clickDag) {
             clickDag1 = true;
         }
         clickDag = false;
-        for (ModuleHeader moduleHeader : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
+        for (ModuleHeader moduleHeader : SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType)) {
             for (ValueHeader valueHeader : moduleHeader.getValueListByValueType(ValueHeader.ValueType.DOUBLE)) {
                 valueHeader.onClicking = false;
             }
@@ -639,13 +625,16 @@ public class SecilyMenu extends GuiScreen implements IMC {
         //ESC键退出
         if (keyCode == 1) {
             closed = true;
-            sense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
+            SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
         } else {
-            if (onKeyBinding[0] && onKeyBinding[1]) {
-                if (keyCode == Keyboard.KEY_DELETE) moduleOnKeyBinding.setKey(0);
-                else moduleOnKeyBinding.setKey(keyCode);
-                onKeyBinding = new boolean[]{false, false};
-                moduleOnKeyBinding = null;
+            for (ModuleHeader m : ModuleManager.mList) {
+                if (m.isOnBinding()) {
+                    if (keyCode == Keyboard.KEY_DELETE) m.setKey(0);
+                    else {
+                        m.setKey(keyCode);
+                        m.setOnBinding(false);
+                    }
+                }
             }
         }
         super.keyTyped(typedChar, keyCode);

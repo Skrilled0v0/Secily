@@ -6,12 +6,12 @@
 package me.skrilled.api.value;
 
 
-import me.cubex2.ttfr.CFontRenderer;
-import me.skrilled.SenseHeader;
+import me.fontloader.FontDrawer;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
+import net.minecraft.client.main.Main;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public class ValueHeader {
     }
 
     public void draw() {
-        CFontRenderer font = SenseHeader.getSense.getFontBuffer().EN12;
+        FontDrawer font = Main.fontLoader.EN12;
         switch (valueType) {
             case DOUBLE:
 

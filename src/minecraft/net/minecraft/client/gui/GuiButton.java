@@ -1,6 +1,7 @@
 package net.minecraft.client.gui;
 
-import me.cubex2.ttfr.CFontRenderer;
+
+import me.fontloader.FontDrawer;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
@@ -9,6 +10,7 @@ import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.main.Main;
 import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
@@ -54,7 +56,7 @@ public class GuiButton extends Gui implements IMC {
 //            }
             startMotion(hovered);
             float lineWidth = 1;
-            CFontRenderer font = sense.getFontBuffer().CN18;
+            FontDrawer font = Main.fontLoader.EN18;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             RenderUtil.drawGradientSideways(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, upBgMotion.getColour().getRGB(), downBgMotion.getColour().getRGB());
             //up line

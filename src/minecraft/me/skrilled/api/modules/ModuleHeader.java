@@ -7,16 +7,21 @@
 package me.skrilled.api.modules;
 
 import com.darkmagician6.eventapi.EventManager;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
+import net.minecraft.client.main.Main;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +38,7 @@ public class ModuleHeader implements IMC {
     public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);
     String suffix = "";
     boolean canView = true;
+    boolean onBinding = false;
     ArrayList<ValueHeader> valueList;
     ModuleType moduleType;
 
@@ -64,6 +70,13 @@ public class ModuleHeader implements IMC {
         }
     }
 
+    public boolean isOnBinding() {
+        return onBinding;
+    }
+
+    public void setOnBinding(boolean onBinding) {
+        this.onBinding = onBinding;
+    }
 
     public Object getValue(ValueHeader valueHeader) {
         if (valueHeader.getValueType() == ValueHeader.ValueType.BOOLEAN) return valueHeader.isOptionOpen();
@@ -97,7 +110,6 @@ public class ModuleHeader implements IMC {
     }
 
     public void setEnabled(boolean isEnabled) {
-        sense.saveSettings();
         this.Enabled = isEnabled;
         arrayWidth.setState(isEnabled);
         if (isEnabled) this.onEnabled();
@@ -128,6 +140,41 @@ public class ModuleHeader implements IMC {
         return valueList;
     }
 
+    public void setKeyWidthGui() {
+        //Key Binding提示
+        if (isOnBinding()) {
+            int bgColor = new Color(25, 25, 25, 200).getRGB();
+            String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
+            RenderUtil.drawRect(0, 0, RenderUtil.width(), RenderUtil.height(), bgColor);
+            Main.fontLoader.EN36.drawCenteredString(editingStr, RenderUtil.width() / 2f, RenderUtil.height() / 2f, -1);
+            new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                        SenseHeader.getSense.printINFO("DEL|e.getKeyCode()=" + e.getKeyCode());
+                        setKey(0);
+                        setOnBinding(false);
+                    } else {
+                        SenseHeader.getSense.printINFO("BIND|e.getKeyCode()=" + e.getKeyCode());
+                        setKey(e.getKeyCode());
+                        setOnBinding(false);
+                    }
+
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            };
+
+        }
+    }
 
     public int getKey() {
         return key;

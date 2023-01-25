@@ -1389,7 +1389,7 @@ public abstract class Entity implements ICommandSender {
     }
 
     public float getCollisionBorderSize() {
-        return SenseHeader.sense.moduleManager.getModuleByClass(HitBox.class).Enabled ? (float) ((HitBox) SenseHeader.sense.moduleManager.getModuleByClass(HitBox.class)).size.getDoubleCurrentValue() : 0.1F;
+        return SenseHeader.getSense.moduleManager.getModuleByClass(HitBox.class).Enabled ? (float) ((HitBox) SenseHeader.getSense.moduleManager.getModuleByClass(HitBox.class)).size.getDoubleCurrentValue() : 0.1F;
     }
 
     public Vec3 getLookVec() {

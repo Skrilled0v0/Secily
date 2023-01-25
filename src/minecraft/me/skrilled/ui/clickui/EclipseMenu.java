@@ -1,6 +1,7 @@
 package me.skrilled.ui.clickui;
 
-import me.cubex2.ttfr.CFontRenderer;
+import me.ashyx.blur.util.Blur;
+import me.fontloader.FontDrawer;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
@@ -10,6 +11,7 @@ import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.main.Main;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -17,12 +19,10 @@ import org.lwjgl.input.Mouse;
 import java.awt.*;
 import java.io.IOException;
 
-import static me.skrilled.utils.IMC.sense;
-
 public class EclipseMenu extends GuiScreen {
     public static ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
     public static ModuleType currentModuleType = ModuleType.COMBAT;
-    public static ModuleHeader currentModule = SenseHeader.sense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
+    public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     public static float startX = sr.getScaledWidth() / 2 - 370 / 2, startY = sr.getScaledHeight() / 2 - 325 / 2;
     public static int moduleStart = 0;
     public static int valueStart = 0;
@@ -68,7 +68,7 @@ public class EclipseMenu extends GuiScreen {
         RenderUtil.drawRect(startX + 360, startY + 415, startX, startY + 70, f2c);
         int m = Mouse.getDWheel();
         if (this.isCategoryHovered(startX, startY + 50, startX + 150, startY + 375, mouseX, mouseY)) {
-            if (m < 0 && moduleStart < sense.moduleManager.getModuleListByModuleType(currentModuleType).size() - 1) {
+            if (m < 0 && moduleStart < SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType).size() - 1) {
                 moduleStart++;
             }
             if (m > 0 && moduleStart > 0) {
@@ -84,10 +84,10 @@ public class EclipseMenu extends GuiScreen {
             }
         }
         // wheel
-        sense.getFontBuffer().EN24.drawCenteredString(currentModuleType.toString() + "/" + currentModule.getModuleName(), startX + 175, startY + 45, color);
+        Main.fontLoader.EN24.drawCenteredString(currentModuleType.toString() + "/" + currentModule.getModuleName(), startX + 175, startY + 45, color);
         float mY = startY + 30;
-        for (int i = 0; i < sense.moduleManager.getModuleListByModuleType(currentModuleType).size(); i++) {
-            ModuleHeader module = sense.moduleManager.getModuleListByModuleType(currentModuleType).get(i);
+        for (int i = 0; i < SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType).size(); i++) {
+            ModuleHeader module = SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType).get(i);
             if (mY > startY + 350) break;
             if (i < moduleStart) {
                 continue;
@@ -113,7 +113,7 @@ public class EclipseMenu extends GuiScreen {
                 RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
                 RenderUtil.drawFilledCircle(startX + module.clickAnim, mY + 58, 5, color, 5);
             }
-            sense.getFontBuffer().EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
+            Main.fontLoader.EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
             if (isSettingsButtonHovered(startX + 110, mY + 54, startX + 125, mY + 62, mouseX, mouseY)) {
                 if (!this.previousmouse && Mouse.isButtonDown(0)) {
                     module.setEnabled(!module.isEnabled());
@@ -134,7 +134,7 @@ public class EclipseMenu extends GuiScreen {
                         value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
                     }
                 }
-                for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
+                for (ModuleHeader mod : SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType)) {
                     mod.clickAnim = 115;
                 }
                 currentModule = module;
@@ -145,7 +145,7 @@ public class EclipseMenu extends GuiScreen {
 
         // modules
         mY = startY + 30;
-        CFontRenderer font = sense.getFontBuffer().EN18;
+        FontDrawer font = Main.fontLoader.EN18;
         for (int i = 0; i < currentModule.getValueList().size(); i++) {
             if (mY > startY + 350) break;
             if (i < valueStart) {
@@ -277,7 +277,7 @@ public class EclipseMenu extends GuiScreen {
         RenderUtil.drawRect(0, 0, 160, sr.getScaledHeight_double(), f3c);
 
         RenderUtil.drawRect(160, 0, 161, sr.getScaledHeight_double(), color);
-        sense.getFontBuffer().EN36.drawCenteredString(sense.getClientName(), 75, 87, color);
+        Main.fontLoader.EN36.drawCenteredString(SenseHeader.getSense.getClientName(), 75, 87, color);
         int j = 60;
         int l = 45;
         int k = 100;
@@ -301,12 +301,12 @@ public class EclipseMenu extends GuiScreen {
                 RenderUtil.drawRect(35, k - 15 + j + sidey, 120, k + 15 + j + sidey, color);
 
             }
-            sense.getFontBuffer().EN24.drawCenteredString(iterator[i].toString(), xx + 40, k + 53 + l * i, new Color(255, 255, 255).getRGB());
+            Main.fontLoader.EN24.drawCenteredString(iterator[i].toString(), xx + 40, k + 53 + l * i, new Color(255, 255, 255).getRGB());
             RenderUtil.drawImageWithColor(new ResourceLocation("skrilled/MenuICON/" + iterator[i].toString() + ".png"), xx - 10, k + 48 + l * i, 25, 25, -1);
             try {
                 if (this.isCategoryHovered(+15, +k - 10 + j + i * l, +120, +k + 20 + j + i * l, mouseX, mouseY) && Mouse.isButtonDown(0)) {
                     currentModuleType = iterator[i];
-                    currentModule = sense.moduleManager.getModuleListByModuleType(currentModuleType).get(0);
+                    currentModule = SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType).get(0);
                     moduleStart = 0;
                     valueStart = 0;
                     for (int x = 0; x < currentModule.getValueList().size(); x++) {
@@ -315,7 +315,7 @@ public class EclipseMenu extends GuiScreen {
                             value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
                         }
                     }
-                    for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
+                    for (ModuleHeader mod : SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType)) {
                         mod.clickAnim = 115;
                     }
                 }
@@ -333,7 +333,7 @@ public class EclipseMenu extends GuiScreen {
                 value.setAnim(ValueHeader.ValueType.BOOLEAN, 55);
             }
         }
-        for (ModuleHeader mod : sense.moduleManager.getModuleListByModuleType(currentModuleType)) {
+        for (ModuleHeader mod : SenseHeader.getSense.moduleManager.getModuleListByModuleType(currentModuleType)) {
             mod.clickAnim = 115;
         }
         int l = 45;
@@ -343,9 +343,7 @@ public class EclipseMenu extends GuiScreen {
                 sidey = i * l;
             }
         }
-        if (this.mc.theWorld != null) {
-            this.mc.entityRenderer.loadShader(new ResourceLocation("skrilled/blur.json"));
-        }
+        Blur.renderBlur(5);
 
         super.initGui();
     }
@@ -360,7 +358,7 @@ public class EclipseMenu extends GuiScreen {
             this.bind = false;
         } else if (keyCode == 1) {
             this.mc.displayGuiScreen(null);
-            sense.moduleManager.getModuleByClass(SettingMenu.class).setEnabled(false);
+            SenseHeader.getSense.moduleManager.getModuleByClass(SettingMenu.class).setEnabled(false);
             if (this.mc.currentScreen == null) {
                 this.mc.setIngameFocus();
             }
@@ -421,8 +419,4 @@ public class EclipseMenu extends GuiScreen {
         return mouseX >= x && mouseX <= x2 && mouseY >= y && mouseY <= y2;
     }
 
-    @Override
-    public void onGuiClosed() {
-        mc.entityRenderer.switchUseShader();
-    }
 }
