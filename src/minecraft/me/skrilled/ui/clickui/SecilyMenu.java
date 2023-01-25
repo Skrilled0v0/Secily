@@ -140,7 +140,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
      * 该moduleType下module总和
      */
     ArrayList<PageNumBar> PageNumBars = new ArrayList<>();
-    BoundedAnimation windowAlpha = new BoundedAnimation(50, 120, 888f, false, Easing.LINEAR);
+    BoundedAnimation windowAlpha = new BoundedAnimation(70, 120, 888f, false, Easing.LINEAR);
     BoundedAnimation moduleAlpha = new BoundedAnimation(165, 250, 550f, false, Easing.LINEAR);
 
     /**
