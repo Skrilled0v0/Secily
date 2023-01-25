@@ -610,11 +610,13 @@ public class RenderUtil implements IMC {
         float f22 = (float) (col1 >> 16 & 255) / 255.0f;
         float f3 = (float) (col1 >> 8 & 255) / 255.0f;
         float f4 = (float) (col1 & 255) / 255.0f;
+        //
         GL11.glEnable(3042);
         GL11.glDisable(3553);
         GL11.glBlendFunc(770, 771);
         GL11.glEnable(2848);
         GL11.glPushMatrix();
+        //
         GL11.glColor4f(f22, f3, f4, f2);
         GL11.glBegin(7);
         GL11.glVertex2d(i, d);

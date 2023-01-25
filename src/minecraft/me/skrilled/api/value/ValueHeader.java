@@ -17,6 +17,10 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class ValueHeader {
+    //hsb.SB
+    public Color[][] colorPoints = new Color[][]{};
+    //hsb.H
+    public Color[] colorBar = new Color[360];
     public int x1 = 0;
     public int y1 = 0;
     public int x2 = 0;
@@ -107,6 +111,23 @@ public class ValueHeader {
 
                 break;
             case COLOR:
+
+                int colorBoardBGWidth = 380;
+                int colorBoardWidth = 360;
+                int colorBoardBGHeight = 380;
+                int colorBoardHeight = 360;
+
+                colorBar = new Color[colorBoardWidth];
+                for (int h=0;h<colorBoardWidth;h++){
+                    colorBar[h] = Color.getHSBColor(h,1f,1f);
+                    for (int s=0;s<colorBoardWidth;s++){
+                        for (int b= 0;b<colorBoardHeight;b++){
+                            colorPoints[s][b]=Color.getHSBColor(h,s/colorBoardWidth,b/colorBoardHeight);
+                        }
+                    }
+                }
+
+
 
 
                 break;
