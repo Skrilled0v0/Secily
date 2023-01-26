@@ -163,25 +163,6 @@ public class RenderUtil implements IMC {
         glDisable(GL_LINE_SMOOTH);
     }
 
-    /**
-     * 使用drawRect和drawCircle的方法绘制圆角矩形
-     * 不可使用透明度:(
-     */
-    public static void drawRoundedRect(float x, float y, float width, float height, float round, int color) {
-        x = (float) (x + ((round / 2.0f) + 0.5));
-        y = (float) (y + ((round / 2.0f) + 0.5));
-        width = (float) (width - ((round / 2.0f) + 0.5));
-        height = (float) (height - ((round / 2.0f) + 0.5));
-        drawRect(x, y, width, height, color);
-        drawCircle((width - round / 2.0f), (y + round / 2.0f), 0f, 360f, round, color);
-        drawCircle((x + round / 2.0f), (height - round / 2.0f), 0f, 360f, round, color);
-        drawCircle((x + round / 2.0f), (y + round / 2.0f), 0f, 360f, round, color);
-        drawCircle((width - round / 2.0f), (height - round / 2.0f), 0f, 360f, round, color);
-        drawRect((x - round / 2.0f - 0.5f), (y + round / 2.0f), width, (height - round / 2.0f), color);
-        drawRect(x, (y + round / 2.0f), (width + round / 2.0f + 0.5f), (height - round / 2.0f), color);
-        drawRect((x + round / 2.0f), (y - round / 2.0f - 0.5f), (width - round / 2.0f), (height - round / 2.0f), color);
-        drawRect((x + round / 2.0f), y, (width - round / 2.0f), (height + round / 2.0f + 0.5f), color);
-    }
 
     /**
      * 绘制开关按钮
@@ -238,10 +219,6 @@ public class RenderUtil implements IMC {
         glPopMatrix();
     }
 
-    public static int rainbow(int delay) {
-        double rainbow = Math.ceil((double) (System.currentTimeMillis() + (long) delay) / 5.0);
-        return Color.getHSBColor((float) (rainbow % 720.0 / 720.0), 0.5f, 0.7f).brighter().getRGB();
-    }
 
     public static void drawGradientSideways(double left, double top, double right, double bottom, int col1, int col2) {
         float f = (col1 >> 24 & 0xFF) / 255.0F;
@@ -456,51 +433,6 @@ public class RenderUtil implements IMC {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    public static void drawImage(ResourceLocation image, int x, int y, int width, int height, int color) {
-        glDisable(2929);
-        glEnable(3042);
-        glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        float var11 = (color >> 24 & 0xFF) / 255.0F;
-        float var6 = (color >> 16 & 0xFF) / 255.0F;
-        float var7 = (color >> 8 & 0xFF) / 255.0F;
-        float var8 = (color & 0xFF) / 255.0F;
-        glColor4f(var6, var7, var8, var11);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(image);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        glDepthMask(true);
-        glDisable(3042);
-        glEnable(2929);
-    }
-
-    public static void drawblock(double a, double a2, double a3, int a4, int a5, float a6) {
-        float a7 = (float) (a4 >> 24 & 255) / 255.0f;
-        float a8 = (float) (a4 >> 16 & 255) / 255.0f;
-        float a9 = (float) (a4 >> 8 & 255) / 255.0f;
-        float a10 = (float) (a4 & 255) / 255.0f;
-        float a11 = (float) (a5 >> 24 & 255) / 255.0f;
-        float a12 = (float) (a5 >> 16 & 255) / 255.0f;
-        float a13 = (float) (a5 >> 8 & 255) / 255.0f;
-        float a14 = (float) (a5 & 255) / 255.0f;
-        glPushMatrix();
-        glEnable(3042);
-        glBlendFunc(770, 771);
-        glDisable(3553);
-        glEnable(2848);
-        glDisable(2929);
-        glDepthMask(false);
-        glColor4f(a8, a9, a10, a7);
-        drawOutlinedBoundingBox(new AxisAlignedBB(a, a2, a3, a + 1.0, a2 + 1.0, a3 + 1.0));
-        glLineWidth(a6);
-        glColor4f(a12, a13, a14, a11);
-        drawOutlinedBoundingBox(new AxisAlignedBB(a, a2, a3, a + 1.0, a2 + 1.0, a3 + 1.0));
-        glDisable(2848);
-        glEnable(3553);
-        glEnable(2929);
-        glDepthMask(true);
-        glDisable(3042);
-        glPopMatrix();
-    }
 
     public static void drawOutlinedBoundingBox(AxisAlignedBB aa) {
         Tessellator tessellator = Tessellator.getInstance();
@@ -662,41 +594,6 @@ public class RenderUtil implements IMC {
         return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
     }
 
-    public static void drawVLine(float x, float y, float x1, int y1) {
-        if (x1 < y) {
-            float var5 = y;
-            y = x1;
-            x1 = var5;
-        }
-        drawRect(x, y + 1.0f, x + 1.0f, x1, y1);
-    }
-
-    public static void drawRound(float x, float y, float x1, float y1, int borderC, int insideC) {
-        enableGL2D();
-        glScalef(0.5f, 0.5f, 0.5f);
-        drawVLine(x *= 2.0f, (y *= 2.0f) + 1.0f, (y1 *= 2.0f) - 2.0f, borderC);
-        drawVLine((x1 *= 2.0f) - 1.0f, y + 1.0f, y1 - 2.0f, borderC);
-        drawHLine(x + 2.0f, x1 - 3.0f, y, borderC);
-        drawHLine(x + 2.0f, x1 - 3.0f, y1 - 1.0f, borderC);
-        drawHLine(x + 1.0f, x + 1.0f, y + 1.0f, borderC);
-        drawHLine(x1 - 2.0f, x1 - 2.0f, y + 1.0f, borderC);
-        drawHLine(x1 - 2.0f, x1 - 2.0f, y1 - 2.0f, borderC);
-        drawHLine(x + 1.0f, x + 1.0f, y1 - 2.0f, borderC);
-        Gui.drawRect((int) (x + 1.0f), (int) (y + 1.0f), (int) (x1 - 1.0f), (int) (y1 - 1.0f), insideC);
-        glScalef(2.0f, 2.0f, 2.0f);
-        disableGL2D();
-        Gui.drawRect(0, 0, 0, 0, 0);
-        GlStateManager.disableBlend();
-    }
-
-    public static void drawHLine(float par1, float par2, float par3, int par4) {
-        if (par2 < par1) {
-            float var5 = par1;
-            par1 = par2;
-            par2 = var5;
-        }
-        RenderUtil.drawRect(par1, par3, par2 + 1.0f, par3 + 1.0f, par4);
-    }
 
     public static void drawRect(double g, double d, double i, double e, int col1) {
         float f2 = (float) (col1 >> 24 & 255) / 255.0f;
@@ -725,30 +622,6 @@ public class RenderUtil implements IMC {
         GlStateManager.disableBlend();
     }
 
-    public static void drawPoint(double x, double y, int col1) {
-        float a = (float) (col1 >> 24 & 255) / 255.0f;
-        float r = (float) (col1 >> 16 & 255) / 255.0f;
-        float g = (float) (col1 >> 8 & 255) / 255.0f;
-        float b = (float) (col1 & 255) / 255.0f;
-        //
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
-        glPushMatrix();
-        //
-        glColor4f(r, g, b, a);
-        glBegin(GL_POINTS);
-        glVertex2d(x, y);
-        glEnd();
-        //
-        glPopMatrix();
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
-        GlStateManager.disableBlend();
-        glColor4f(1, 1, 1, 1);
-    }
 
     public static void drawColorPointLists(ArrayList<ArrayList<ColorPoint>> colorPointLists) {
         glEnable(3042);
@@ -836,71 +709,6 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
-    public static void disableGL2D() {
-        glEnable(3553);
-        glDisable(3042);
-        glEnable(2929);
-        glDisable(2848);
-        glHint(3154, 4352);
-        glHint(3155, 4352);
-    }
-
-    public static void enableGL2D() {
-        glDisable(2929);
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glDepthMask(true);
-        glEnable(2848);
-        glHint(3154, 4354);
-        glHint(3155, 4354);
-    }
-
-    public static void drawCustomImage(int x, int y, int width, int height, ResourceLocation image) {
-        ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-        glDisable(2929);
-        glEnable(3042);
-        glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(image);
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        glDepthMask(true);
-        glDisable(3042);
-        glEnable(2929);
-    }
-
-    public static void pre() {
-        glDisable(2929);
-        glDisable(3553);
-        glEnable(3042);
-        glBlendFunc(770, 771);
-    }
-
-    public static void post() {
-        glDisable(3042);
-        glEnable(3553);
-        glEnable(2929);
-        glColor3d(1.0, 1.0, 1.0);
-    }
-
-    public static void startDrawing() {
-        glEnable(3042);
-        glEnable(3042);
-        glBlendFunc(770, 771);
-        glEnable(2848);
-        glDisable(3553);
-        glDisable(2929);
-        mc.entityRenderer.setupCameraTransform(mc.timer.renderPartialTicks, 0);
-    }
-
-    public static void stopDrawing() {
-        glDisable(3042);
-        glEnable(3553);
-        glDisable(2848);
-        glDisable(3042);
-        glEnable(2929);
-    }
 
     public static void drawLine(float x, float y, float x1, float y1, float width) {
         drawLine(x, y, 0.0f, x1, y1, 0.0f, width);
@@ -997,35 +805,6 @@ public class RenderUtil implements IMC {
             GlStateManager.popMatrix();
         }
 
-    }
-
-    public static void drawBorderedRectNameTag(final float x, final float y, final float x2, final float y2, final float l1, final int col1) {
-        RenderUtil.drawRect(x, y, x2, y2, col1);
-        final float f = (col1 >> 24 & 0xFF) / 255.0f;
-        final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
-        final float f3 = (col1 >> 8 & 0xFF) / 255.0f;
-        final float f4 = (col1 & 0xFF) / 255.0f;
-        glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
-        glColor4f(f2, f3, f4, f);
-        glLineWidth(l1);
-        glBegin(1);
-        glVertex2d(x, y);
-        glVertex2d(x, y2);
-        glVertex2d(x2, y2);
-        glVertex2d(x2, y);
-        glVertex2d(x, y);
-        glVertex2d(x2, y);
-        glVertex2d(x, y2);
-        glVertex2d(x2, y2);
-        glEnd();
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
-        glPopMatrix();
     }
 
 }

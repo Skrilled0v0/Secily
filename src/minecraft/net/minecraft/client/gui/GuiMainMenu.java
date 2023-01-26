@@ -53,7 +53,7 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
         int j = this.height / 2;
         int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
         FontDrawer font = Main.fontLoader.EN48;
-        RenderUtil.drawCustomImage(0, 0, width, height, Main.bgs.get(i - 1));
+        RenderUtil.drawImage(Main.bgs.get(i - 1), 0, 0, width, height);
         GlStateManager.pushMatrix();
         RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
         font.drawRainbowString(SenseHeader.getSense.getClientName(), 30, j - 90);
