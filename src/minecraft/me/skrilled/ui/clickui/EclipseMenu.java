@@ -12,9 +12,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.main.Main;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
@@ -93,25 +95,25 @@ public class EclipseMenu extends GuiScreen {
                 continue;
             }
             RenderUtil.drawRect(startX + 10, mY + 48, startX + 140, mY + 68, bc);
-            RenderUtil.drawFilledCircle(startX + 12, mY + 58, 10, bc, 10);
-            RenderUtil.drawFilledCircle(startX + 142, mY + 58, 10, bc, 10);
+            drawFilledCircle(startX + 12, mY + 58, 10, bc, 10);
+            drawFilledCircle(startX + 142, mY + 58, 10, bc, 10);
             if (!module.isEnabled()) {
                 if (module.clickAnim > 110) {
                     module.clickAnim--;
                 }
 
                 RenderUtil.drawRect(startX + 110, mY + 54, startX + 125, mY + 62, f4c);
-                RenderUtil.drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + module.clickAnim, mY + 58, 5, bcc, 5);
+                drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
+                drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
+                drawFilledCircle(startX + module.clickAnim, mY + 58, 5, bcc, 5);
             } else {
                 if (module.clickAnim < 125) {
                     module.clickAnim++;
                 }
                 RenderUtil.drawRect(startX + 110, mY + 54, startX + 125, mY + 62, f4c);
-                RenderUtil.drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
-                RenderUtil.drawFilledCircle(startX + module.clickAnim, mY + 58, 5, color, 5);
+                drawFilledCircle(startX + 125, mY + 58, 4, f4c, 5);
+                drawFilledCircle(startX + 110, mY + 58, 4, f4c, 5);
+                drawFilledCircle(startX + module.clickAnim, mY + 58, 5, color, 5);
             }
             Main.fontLoader.EN18.drawString(module.getModuleName(), startX + 20, mY + 53, f1c);
             if (isSettingsButtonHovered(startX + 110, mY + 54, startX + 125, mY + 62, mouseX, mouseY)) {
@@ -157,7 +159,7 @@ public class EclipseMenu extends GuiScreen {
                 double render = 68.0F * (value.getDoubleCurrentValue() - value.getMinValue()) / (value.getMaxValue() - value.getMinValue());
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + 75), mY + 53, f1c);
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + render + 6.5D), mY + 53, color);
-                RenderUtil.drawFilledCircle((float) ((double) x + render + 2D) + 3, mY + 52.25, 3.7, color, 5);
+                drawFilledCircle((float) ((double) x + render + 2D) + 3, mY + 52.25, 3.7, color, 5);
                 RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
                 font.drawString(value.getValueName() + ": " + value.getDoubleCurrentValue(), startX + 170, mY + 48, f1c);
                 if (!Mouse.isButtonDown(0)) {
@@ -194,17 +196,17 @@ public class EclipseMenu extends GuiScreen {
                         value.setAnim(ValueHeader.ValueType.BOOLEAN, value.getAnim(ValueHeader.ValueType.BOOLEAN) + 1);
                     }
                     RenderUtil.drawRect(x + xx, mY + 50, x + x2x, mY + 59, va);
-                    RenderUtil.drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, color, 10);
+                    drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
+                    drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
+                    drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, color, 10);
                 } else {
                     if (value.getAnim(ValueHeader.ValueType.BOOLEAN) > xx) {
                         value.setAnim(ValueHeader.ValueType.BOOLEAN, value.getAnim(ValueHeader.ValueType.BOOLEAN) - 1);
                     }
                     RenderUtil.drawRect(x + xx, mY + 50, x + x2x, mY + 59, va);
-                    RenderUtil.drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
-                    RenderUtil.drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, new Color(177, 177, 177).getRGB(), 10);
+                    drawFilledCircle(x + xx, mY + 54.5, 4.5, va, 10);
+                    drawFilledCircle(x + x2x, mY + 54.5, 4.5, va, 10);
+                    drawFilledCircle(x + value.getAnim(ValueHeader.ValueType.BOOLEAN), mY + 54.5, 5, new Color(177, 177, 177).getRGB(), 10);
                 }
                 if (this.isCheckBoxHovered(x + xx - 5, mY + 50, x + x2x + 6, mY + 59, mouseX, mouseY)) {
                     if (!this.previousmouse && Mouse.isButtonDown(0)) {
@@ -226,8 +228,8 @@ public class EclipseMenu extends GuiScreen {
                 float x = startX + 260;
                 font.drawString(value.getValueName(), startX + 170, mY + 48, f1c);
                 RenderUtil.drawRect(x + 5, mY + 45, x + 75, mY + 65, va);
-                RenderUtil.drawFilledCircle(x + 5, mY + 55, 10, va, 5);
-                RenderUtil.drawFilledCircle(x + 75, mY + 55, 10, va, 5);
+                drawFilledCircle(x + 5, mY + 55, 10, va, 5);
+                drawFilledCircle(x + 75, mY + 55, 10, va, 5);
                 font.drawString(value.getCurrentEnumType(), x + 40 - font.getStringWidth(value.getCurrentEnumType()) / 2, mY + 51, f1c);
                 if (this.isStringHovered(x, mY + 45, x + 75, mY + 65, mouseX, mouseY)) {
                     if (Mouse.isButtonDown(0) && !this.previousmouse) {
@@ -253,8 +255,8 @@ public class EclipseMenu extends GuiScreen {
             float x = startX + 260;
             font.drawString("Bind", startX + 170, mY + 48, f1c);
             RenderUtil.drawRect(x + 5, mY + 45, x + 75, mY + 65, va);
-            RenderUtil.drawFilledCircle(x + 5, mY + 55, 10, va, 5);
-            RenderUtil.drawFilledCircle(x + 75, mY + 55, 10, va, 5);
+            drawFilledCircle(x + 5, mY + 55, 10, va, 5);
+            drawFilledCircle(x + 75, mY + 55, 10, va, 5);
             font.drawString("" + Keyboard.getKeyName(currentModule.getKey()), x + 40 - font.getStringWidth(Keyboard.getKeyName(currentModule.getKey())) / 2, mY + 51, f1c);
         }
 
@@ -284,8 +286,8 @@ public class EclipseMenu extends GuiScreen {
         int xx = 42;
         for (int i = 0; i < ModuleType.values().length; i++) {
             ModuleType[] iterator = ModuleType.values();
-            RenderUtil.drawFilledCircle(+35, +k + j + i * l, 15, f2c, 5);
-            RenderUtil.drawFilledCircle(+120, +k + j + i * l, 15, f2c, 5);
+            drawFilledCircle(+35, +k + j + i * l, 15, f2c, 5);
+            drawFilledCircle(+120, +k + j + i * l, 15, f2c, 5);
             RenderUtil.drawRect(35, k - 15 + j + i * l, 120, k + 15 + j + i * l, f2c);
             RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
             if (iterator[i] == currentModuleType) {
@@ -296,8 +298,8 @@ public class EclipseMenu extends GuiScreen {
                     sidey = Math.max(sidey - 10, i * l);
                 }
 
-                RenderUtil.drawFilledCircle(+35, k + j + sidey, 15, color, 5);
-                RenderUtil.drawFilledCircle(+120, k + j + sidey, 15, color, 5);
+                drawFilledCircle(+35, k + j + sidey, 15, color, 5);
+                drawFilledCircle(+120, k + j + sidey, 15, color, 5);
                 RenderUtil.drawRect(35, k - 15 + j + sidey, 120, k + 15 + j + sidey, color);
 
             }
@@ -393,6 +395,56 @@ public class EclipseMenu extends GuiScreen {
             }
         }
         super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    void drawFilledCircle(double x, double y, double r, int c, int id) {
+        float f = (float) (c >> 24 & 0xff) / 255F;
+        float f1 = (float) (c >> 16 & 0xff) / 255F;
+        float f2 = (float) (c >> 8 & 0xff) / 255F;
+        float f3 = (float) (c & 0xff) / 255F;
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GL11.glColor4f(f1, f2, f3, f);
+        GL11.glBegin(GL11.GL_POLYGON);
+        if (id == 1) {
+            GL11.glVertex2d(x, y);
+            for (int i = 0; i <= 90; i++) {
+                double x2 = Math.sin((i * 3.141526D / 180)) * r;
+                double y2 = Math.cos((i * 3.141526D / 180)) * r;
+                GL11.glVertex2d(x - x2, y - y2);
+            }
+        } else if (id == 2) {
+            GL11.glVertex2d(x, y);
+            for (int i = 90; i <= 180; i++) {
+                double x2 = Math.sin((i * 3.141526D / 180)) * r;
+                double y2 = Math.cos((i * 3.141526D / 180)) * r;
+                GL11.glVertex2d(x - x2, y - y2);
+            }
+        } else if (id == 3) {
+            GL11.glVertex2d(x, y);
+            for (int i = 270; i <= 360; i++) {
+                double x2 = Math.sin((i * 3.141526D / 180)) * r;
+                double y2 = Math.cos((i * 3.141526D / 180)) * r;
+                GL11.glVertex2d(x - x2, y - y2);
+            }
+        } else if (id == 4) {
+            GL11.glVertex2d(x, y);
+            for (int i = 180; i <= 270; i++) {
+                double x2 = Math.sin((i * 3.141526D / 180)) * r;
+                double y2 = Math.cos((i * 3.141526D / 180)) * r;
+                GL11.glVertex2d(x - x2, y - y2);
+            }
+        } else {
+            for (int i = 0; i <= 360; i++) {
+                double x2 = Math.sin((i * 3.141526D / 180)) * r;
+                double y2 = Math.cos((i * 3.141526D / 180)) * r;
+                GL11.glVertex2f((float) (x - x2), (float) (y - y2));
+            }
+        }
+        GL11.glEnd();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     public boolean isStringHovered(float f, float y, float g, float y2, int mouseX, int mouseY) {

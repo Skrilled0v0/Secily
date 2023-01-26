@@ -248,7 +248,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         //背景
         GL11.glScaled(scale, scale, 1);
 
-        RenderUtil.drawRoundedRect(posX, posY, width, height, 15, bcColor);
+        RenderUtil.drawRoundRect(posX, posY, width, height, 15, bcColor);
         BlurUtil.blurAreaRounded(posX, posY, width, height, 15, 10);
 //        //上标题背景
 //        RenderUtil.drawRoundedRect(posX, posY, width, posY + upSide, 15, titleColor);

@@ -5,9 +5,10 @@
  */
 package me.skrilled.ui.menu.assembly;
 
-import java.awt.*;
+import me.skrilled.SenseHeader;
+import me.skrilled.utils.render.RenderUtil;
 
-import static org.lwjgl.opengl.GL11.*;
+import java.awt.*;
 
 public class ColorAssembly extends Assembly {
 
@@ -21,24 +22,17 @@ public class ColorAssembly extends Assembly {
         float deltaX = pos[2] - pos[0];
         float deltaY = pos[3] - pos[1];
         float h = 0f;
-        float s = 0f;//x
-        float b = 0f;//y
-        glBegin(GL_POINTS);
-        glEnable(GL_POINTS);
+        float s;//x
+        float b;//y
         for (int i = 0; i < deltaX; i++) {
             for (int j = 1; j <= deltaY; j++) {
                 s = i / deltaX;
                 b = j / deltaY;
                 Color color = Color.getHSBColor(h, s, b);
-                float red, green, blue;
-                red = color.getRed() / 255f;
-                green = color.getGreen() / 255f;
-                blue = color.getBlue() / 255f;
-                glColor3f(red,green,blue);
-                glVertex2f(calcAbsX(),calcAbsY());
+                SenseHeader.getSense.printINFO(calcAbsX() + " " + calcAbsY());
+                RenderUtil.drawPoint(calcAbsX(), calcAbsY(), color.getRGB());
+
             }
         }
-        glDisable(GL_POINTS);
-        glEnd();
     }
 }

@@ -40,6 +40,7 @@ public class RenderUtil implements IMC {
         DISABLE_CLIENT_STATE = GL11::glEnableClientState;
     }
 
+
     public static Color rainbow(long time, float count, float fade) {
         float hue = ((float) time + (1.0F + count) * 2.0E8F) / 1.0E10F % 1.0F;
         long color = Long.parseLong(Integer.toHexString(Color.HSBtoRGB(hue, 1.0005F, 1.0F)), 16);
@@ -58,6 +59,72 @@ public class RenderUtil implements IMC {
         glEnd();
     }
 
+    /**
+     * 这个方法绘制的圆角矩形可以使用透明度
+     */
+    public static void drawRoundRect(float startX, float startY, float width, float height, float radius, int rgba) {
+        float z;
+        if (startX > width) {
+            z = startX;
+            startX = width;
+            width = z;
+        }
+
+        if (startY > height) {
+            z = startY;
+            startY = height;
+            height = z;
+        }
+        double x1 = startX + radius;
+        double y1 = startY + radius;
+        double x2 = width - radius;
+        double y2 = height - radius;
+        Color color = new Color(rgba, true);
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(2848);
+        glPushMatrix();
+
+        glBegin(GL_POLYGON);
+        glColor4f(r, g, b, a);
+        double degree = Math.PI / 180;
+        for (double i = 0; i <= 90; i += 1) {
+            glColor4f(r, g, b, a);
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        }
+
+        for (double i = 90; i <= 180; i += 1) {
+            glColor4f(r, g, b, a);
+            glVertex2d(x2 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        }
+
+        for (double i = 180; i <= 270; i += 1) {
+            glColor4f(r, g, b, a);
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
+        }
+
+        for (double i = 270; i <= 360; i += 1) {
+            glColor4f(r, g, b, a);
+            glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
+        }
+
+        glEnd();
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        GlStateManager.disableBlend();
+        glColor4f(1, 1, 1, 1);
+    }
+
+    /**
+     * 获取圆角矩形绘制区域
+     */
     public static void quickRoundedRect(float paramXStart, float paramYStart, float paramXEnd, float paramYEnd, float radius) {
         float z = 0;
         if (paramXStart > paramXEnd) {
@@ -95,66 +162,79 @@ public class RenderUtil implements IMC {
         glDisable(GL_LINE_SMOOTH);
     }
 
-    public static void drawRoundedRect(float paramXStart, float paramYStart, float paramXEnd, float paramYEnd, float radius, int rgba) {
-//        Blur.renderBlur(1);
-        float z;
-        if (paramXStart > paramXEnd) {
-            z = paramXStart;
-            paramXStart = paramXEnd;
-            paramXEnd = z;
-        }
-
-        if (paramYStart > paramYEnd) {
-            z = paramYStart;
-            paramYStart = paramYEnd;
-            paramYEnd = z;
-        }
-        double x1 = paramXStart + radius;
-        double y1 = paramYStart + radius;
-        double x2 = paramXEnd - radius;
-        double y2 = paramYEnd - radius;
-        Color color = new Color(rgba, true);
-        glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-        glPushMatrix();
-        glEnable(GL_LINE_SMOOTH);
-        glLineWidth(1);
-        glBegin(GL_POLYGON);
-        double degree = Math.PI / 180;
-        for (double i = 0; i <= 90; i += 1)
-            glVertex2d(x2 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
-        for (double i = 90; i <= 180; i += 1)
-            glVertex2d(x2 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
-        for (double i = 180; i <= 270; i += 1)
-            glVertex2d(x1 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
-        for (double i = 270; i <= 360; i += 1)
-            glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
-        glEnd();
-        glDisable(GL_LINE_SMOOTH);
-        glPopMatrix();
-        glColor4f(1F, 1F, 1F, 1F);
+    /**
+     * 使用drawRect和drawCircle的方法绘制圆角矩形
+     * 不可使用透明度:(
+     */
+    public static void drawRoundedRect(float x, float y, float width, float height, float round, int color) {
+        x = (float) (x + ((round / 2.0f) + 0.5));
+        y = (float) (y + ((round / 2.0f) + 0.5));
+        width = (float) (width - ((round / 2.0f) + 0.5));
+        height = (float) (height - ((round / 2.0f) + 0.5));
+        drawRect(x, y, width, height, color);
+        drawCircle((width - round / 2.0f), (y + round / 2.0f), 0f, 360f, round, color);
+        drawCircle((x + round / 2.0f), (height - round / 2.0f), 0f, 360f, round, color);
+        drawCircle((x + round / 2.0f), (y + round / 2.0f), 0f, 360f, round, color);
+        drawCircle((width - round / 2.0f), (height - round / 2.0f), 0f, 360f, round, color);
+        drawRect((x - round / 2.0f - 0.5f), (y + round / 2.0f), width, (height - round / 2.0f), color);
+        drawRect(x, (y + round / 2.0f), (width + round / 2.0f + 0.5f), (height - round / 2.0f), color);
+        drawRect((x + round / 2.0f), (y - round / 2.0f - 0.5f), (width - round / 2.0f), (height - round / 2.0f), color);
+        drawRect((x + round / 2.0f), y, (width - round / 2.0f), (height + round / 2.0f + 0.5f), color);
     }
 
+    /**
+     * 绘制开关按钮
+     *
+     * @param posX         坐标X
+     * @param posY         坐标Y
+     * @param buttonWidth  按钮宽度
+     * @param buttonHeight 按钮高度
+     * @param motion       按钮开关动量
+     * @param bgColor      背景颜色
+     * @param tureColor    打开颜色
+     * @param falseColor   关闭颜色
+     */
+    public static void drawBooleanButtton(float posX, float posY, float buttonWidth, float buttonHeight, float motion, int bgColor, int tureColor, int falseColor) {
+        int color;
+        if (motion == 0) {
+            color = falseColor;
+        } else color = tureColor;
+        float radius = buttonHeight / 2f;
+        RenderUtil.drawRoundRect(posX, posY, posX + buttonWidth, posY + buttonHeight, radius, bgColor);
+        RenderUtil.drawCircle(posX + radius + (buttonWidth - buttonHeight) * motion, posY + radius, radius, color);
+    }
 
-    public static void resetColor() {
-        glClearColor(0, 0, 0, 0);
+    /**
+     * 枚举类型编辑框
+     *
+     * @param posX      坐标X
+     * @param posY      坐标Y
+     * @param boxWidth  盒子宽度
+     * @param boxHeight 盒子高度
+     * @param motion    动量
+     * @param bgColor   背景颜色
+     * @param fontColor 字体颜色
+     */
+    public static void drawEnumTypeBox(float posX, float posY, float boxWidth, float boxHeight, float motion, int bgColor, int fontColor) {
+
     }
 
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
-        GL11.glPushMatrix();
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3553);
-        GL11.glEnable(2848);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glColor4f(red, green, blue, alpha);
+        glPushMatrix();
+        glEnable(3042);
+        glBlendFunc(770, 771);
+        glDisable(3553);
+        glEnable(2848);
+        glDisable(2929);
+        glDepthMask(false);
+        glColor4f(red, green, blue, alpha);
         drawBoundingBox(new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D));
-        GL11.glDisable(2848);
-        GL11.glEnable(3553);
-        GL11.glEnable(2929);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glPopMatrix();
+        glDisable(2848);
+        glEnable(3553);
+        glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glPopMatrix();
     }
 
     public static int rainbow(int delay) {
@@ -173,28 +253,28 @@ public class RenderUtil implements IMC {
         float f6 = (col2 >> 8 & 0xFF) / 255.0F;
         float f7 = (col2 & 0xFF) / 255.0F;
 
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glShadeModel(7425);
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glShadeModel(7425);
 
-        GL11.glPushMatrix();
-        GL11.glBegin(7);
-        GL11.glColor4f(f1, f2, f3, f);
-        GL11.glVertex2d(left, top);
-        GL11.glVertex2d(left, bottom);
+        glPushMatrix();
+        glBegin(7);
+        glColor4f(f1, f2, f3, f);
+        glVertex2d(left, top);
+        glVertex2d(left, bottom);
 
-        GL11.glColor4f(f5, f6, f7, f4);
-        GL11.glVertex2d(right, bottom);
-        GL11.glVertex2d(right, top);
-        GL11.glEnd();
-        GL11.glPopMatrix();
+        glColor4f(f5, f6, f7, f4);
+        glVertex2d(right, bottom);
+        glVertex2d(right, top);
+        glEnd();
+        glPopMatrix();
 
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
-        GL11.glDisable(2848);
-        GL11.glShadeModel(7424);
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        glShadeModel(7424);
     }
 
     public static void drawMyTexturedModalRect(float x, float y, int textureX, int textureY, float width, float height, float factor) {
@@ -210,83 +290,96 @@ public class RenderUtil implements IMC {
         tessellator.draw();
     }
 
-    public static void drawLoadingCircle(float x, float y) {
-        for (int i = 0; i < 4; i++) {
-            int rot = (int) ((System.nanoTime() / 5000000 * i) % 360);
-            drawCirque(x, y, i * 10, rot - 180, rot);
-        }
-    }
-
     public static void drawCirque(float x, float y, float radius, int start, int end) {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GL11.glColor4f(109, 115, 213, 255);
-        GL11.glEnable(3042);
-        GL11.glLineWidth(2F);
-        GL11.glBegin(3);
-        for (float i = end; i >= start; i -= (360 / 90))
-            GL11.glVertex2f((float) (x + (Math.cos(i * Math.PI / 180) * (radius * 1.001F))), (float) (y + (Math.sin(i * Math.PI / 180) * (radius * 1.001F))));
-        GL11.glEnd();
-        GL11.glEnable(2848);
+        glColor4f(109, 115, 213, 255);
+        glEnable(3042);
+        glLineWidth(2F);
+        glBegin(3);
+        for (float i = end; i >= start; i -= (360 / 90f))
+            glVertex2f((float) (x + (Math.cos(i * Math.PI / 180) * (radius * 1.001F))), (float) (y + (Math.sin(i * Math.PI / 180) * (radius * 1.001F))));
+        glEnd();
+        glEnable(2848);
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
+    public static void drawCircle(float x, float y, float start, float end, float radius, int color) {
+        float ldy;
+        float ldx;
+        float i;
+        float temp;
+        if (start > end) {
+            temp = end;
+            end = start;
+            start = temp;
+        }
+        float alpha = (color >> 24 & 255) / 255.0f;
+        float red = (color >> 16 & 255) / 255.0f;
+        float green = (color >> 8 & 255) / 255.0f;
+        float blue = (color & 255) / 255.0f;
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(red, green, blue, alpha);
+        if (alpha > 0.5f) {
+            glEnable(GL_LINE_SMOOTH);
+            glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+            glLineWidth(Float.MIN_VALUE);
+            glBegin(GL_LINE_STRIP);
+            i = end;
+            while (i >= start) {
+                ldx = (float) (Math.cos((i * Math.PI / 180.0)) * (radius * 1));
+                ldy = (float) (Math.sin((i * Math.PI / 180.0)) * (radius * 1));
+                glVertex2f((x + ldx), (y + ldy));
+                i -= 4.0f;
+            }
+            glEnd();
+            glDisable(GL_LINE_SMOOTH);
+        }
+        glEnable(GL_LINE_SMOOTH);
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        glLineWidth(Float.MIN_VALUE);
+        glBegin(GL_TRIANGLE_FAN);
+        i = end;
+        while (i >= start) {
+            ldx = (float) (Math.cos((i * Math.PI / 180.0)) * radius);
+            ldy = (float) (Math.sin((i * Math.PI / 180.0)) * radius);
+            glVertex2f((x + ldx), (y + ldy));
+            i -= 4.0f;
+        }
+        glEnd();
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
 
     public static void drawCircle(float x, float y, float radius, int color) {
-        float alpha = (color >> 24 & 0xFF) / 255.0F;
-        float red = (color >> 16 & 0xFF) / 255.0F;
-        float green = (color >> 8 & 0xFF) / 255.0F;
-        float blue = (color & 0xFF) / 255.0F;
-        glColor4f(red, green, blue, alpha);
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_LINE_SMOOTH);
-        glPushMatrix();
-        glLineWidth(1F);
-        glBegin(GL_POLYGON);
-        for (int i = 0; i <= 360; i++)
-            glVertex2d(x + Math.sin(i * Math.PI / 180.0D) * radius, y + Math.cos(i * Math.PI / 180.0D) * radius);
-        glEnd();
-        glPopMatrix();
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_LINE_SMOOTH);
-        glColor4f(1F, 1F, 1F, 1F);
-    }
-
-    public static double getAnimationState(double animation, double finalState, double speed) {
-        float add = (float) (0.01 * speed);
-        if (animation < finalState) {
-            if (animation + add < finalState) animation += add;
-            else animation = finalState;
-        } else {
-            if (animation - add > finalState) animation -= add;
-            else animation = finalState;
-        }
-        return animation;
+        drawCircle(x, y, 0f, 360f, radius, color);
     }
 
     public static void drawIcon(float x, float y, int sizex, int sizey, ResourceLocation resourceLocation) {
-        GL11.glPushMatrix();
+        glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
+        glEnable(3042);
+        glBlendFunc(770, 771);
+        glEnable(2848);
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1f);
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(770, 771);
-        GL11.glTranslatef(x, y, 0.0f);
+        glTranslatef(x, y, 0.0f);
         RenderUtil.drawScaledRect(0, 0, 0.0f, 0.0f, sizex, sizey, sizex, sizey, sizex, sizey);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
         GlStateManager.disableRescaleNormal();
-        GL11.glDisable(2848);
+        glDisable(2848);
         GlStateManager.disableBlend();
-        GL11.glPopMatrix();
+        glPopMatrix();
     }
 
     public static void drawScaledRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
@@ -294,34 +387,33 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawImageWithColor(ResourceLocation image, int x, int y, int width, int height, int color) {
-        GL11.glDisable(2929);
-        GL11.glEnable(3042);
-        GL11.glDepthMask(false);
+        glDisable(2929);
+        glEnable(3042);
+        glDepthMask(false);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         float var11 = (color >> 24 & 0xFF) / 255.0F;
         float var6 = (color >> 16 & 0xFF) / 255.0F;
         float var7 = (color >> 8 & 0xFF) / 255.0F;
         float var8 = (color & 0xFF) / 255.0F;
-        GL11.glColor4f(var6, var7, var8, var11);
+        glColor4f(var6, var7, var8, var11);
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glEnable(2929);
     }
 
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
-        GL11.glDisable(2929);
-        GL11.glEnable(3042);
-        GL11.glDepthMask(false);
+        glDisable(2929);
+        glEnable(3042);
+        glDepthMask(false);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glEnable(2929);
     }
-
 
     public static void drawEntityOnScreen(int p_147046_0_, int p_147046_1_, int Size, float Yaw, float pitch, EntityLivingBase e) {
         GlStateManager.enableColorMaterial();
@@ -364,20 +456,20 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height, int color) {
-        GL11.glDisable(2929);
-        GL11.glEnable(3042);
-        GL11.glDepthMask(false);
+        glDisable(2929);
+        glEnable(3042);
+        glDepthMask(false);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         float var11 = (color >> 24 & 0xFF) / 255.0F;
         float var6 = (color >> 16 & 0xFF) / 255.0F;
         float var7 = (color >> 8 & 0xFF) / 255.0F;
         float var8 = (color & 0xFF) / 255.0F;
-        GL11.glColor4f(var6, var7, var8, var11);
+        glColor4f(var6, var7, var8, var11);
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glEnable(2929);
     }
 
     public static void drawblock(double a, double a2, double a3, int a4, int a5, float a6) {
@@ -389,24 +481,24 @@ public class RenderUtil implements IMC {
         float a12 = (float) (a5 >> 16 & 255) / 255.0f;
         float a13 = (float) (a5 >> 8 & 255) / 255.0f;
         float a14 = (float) (a5 & 255) / 255.0f;
-        GL11.glPushMatrix();
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDisable(3553);
-        GL11.glEnable(2848);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glColor4f(a8, a9, a10, a7);
+        glPushMatrix();
+        glEnable(3042);
+        glBlendFunc(770, 771);
+        glDisable(3553);
+        glEnable(2848);
+        glDisable(2929);
+        glDepthMask(false);
+        glColor4f(a8, a9, a10, a7);
         drawOutlinedBoundingBox(new AxisAlignedBB(a, a2, a3, a + 1.0, a2 + 1.0, a3 + 1.0));
-        GL11.glLineWidth(a6);
-        GL11.glColor4f(a12, a13, a14, a11);
+        glLineWidth(a6);
+        glColor4f(a12, a13, a14, a11);
         drawOutlinedBoundingBox(new AxisAlignedBB(a, a2, a3, a + 1.0, a2 + 1.0, a3 + 1.0));
-        GL11.glDisable(2848);
-        GL11.glEnable(3553);
-        GL11.glEnable(2929);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glPopMatrix();
+        glDisable(2848);
+        glEnable(3553);
+        glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glPopMatrix();
     }
 
     public static void drawOutlinedBoundingBox(AxisAlignedBB aa) {
@@ -508,28 +600,28 @@ public class RenderUtil implements IMC {
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
         AxisAlignedBB box = entity instanceof EntityLivingBase ? AxisAlignedBB.fromBounds(posX - entity.width + 0.2f, posY, posZ - entity.width + 0.2f, posX + entity.width - 0.2f, posY + entity.height + (entity.isSneaking() ? 0.02f : 0.2f), posZ + entity.width - 0.2f) : AxisAlignedBB.fromBounds(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + entity.height + 0.2f, posZ + entity.width);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(3042);
-        GL11.glEnable(2848);
-        GL11.glLineWidth(2.0f);
-        GL11.glDisable(3553);
-        GL11.glDisable(2929);
-        GL11.glDepthMask(false);
-        GL11.glColor4f(boxColor.getRed() / 255.0f, boxColor.getGreen() / 255.0f, boxColor.getBlue() / 255.0f, boxColor.getAlpha() / 255.0f);
+        glBlendFunc(770, 771);
+        glEnable(3042);
+        glEnable(2848);
+        glLineWidth(2.0f);
+        glDisable(3553);
+        glDisable(2929);
+        glDepthMask(false);
+        glColor4f(boxColor.getRed() / 255.0f, boxColor.getGreen() / 255.0f, boxColor.getBlue() / 255.0f, boxColor.getAlpha() / 255.0f);
         drawBoundingBox(box);
         if (outline) {
-            GL11.glLineWidth(4.0f);
-            GL11.glColor4f(0f, 0f, 0f, 1f);
+            glLineWidth(4.0f);
+            glColor4f(0f, 0f, 0f, 1f);
             drawOutlinedBoundingBox(box);
         }
-        GL11.glLineWidth(1.5f);
-        GL11.glColor4f(lineColor.getRed() / 255.0f, lineColor.getGreen() / 255.0f, lineColor.getBlue() / 255.0f, 1f);
+        glLineWidth(1.5f);
+        glColor4f(lineColor.getRed() / 255.0f, lineColor.getGreen() / 255.0f, lineColor.getBlue() / 255.0f, 1f);
         drawOutlinedBoundingBox(box);
-        GL11.glDisable(2848);
-        GL11.glEnable(3553);
-        GL11.glEnable(2929);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
+        glDisable(2848);
+        glEnable(3553);
+        glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
     }
 
     public static void drawBorderedRect(double g, double d, double h, double e, float l1, int col1, int col2) {
@@ -538,27 +630,27 @@ public class RenderUtil implements IMC {
         float f2 = (col1 >> 16 & 0xFF) / 255.0f;
         float f3 = (col1 >> 8 & 0xFF) / 255.0f;
         float f4 = (col1 & 0xFF) / 255.0f;
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glPushMatrix();
-        GL11.glColor4f(f2, f3, f4, f);
-        GL11.glLineWidth(l1);
-        GL11.glBegin(1);
-        GL11.glVertex2d(g, d);
-        GL11.glVertex2d(g, e);
-        GL11.glVertex2d(h, e);
-        GL11.glVertex2d(h, d);
-        GL11.glVertex2d(g, d);
-        GL11.glVertex2d(h, d);
-        GL11.glVertex2d(g, e);
-        GL11.glVertex2d(h, e);
-        GL11.glEnd();
-        GL11.glPopMatrix();
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
-        GL11.glDisable(2848);
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
+        glColor4f(f2, f3, f4, f);
+        glLineWidth(l1);
+        glBegin(1);
+        glVertex2d(g, d);
+        glVertex2d(g, e);
+        glVertex2d(h, e);
+        glVertex2d(h, d);
+        glVertex2d(g, d);
+        glVertex2d(h, d);
+        glVertex2d(g, e);
+        glVertex2d(h, e);
+        glEnd();
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
     }
 
     public static int width() {
@@ -580,7 +672,7 @@ public class RenderUtil implements IMC {
 
     public static void drawRound(float x, float y, float x1, float y1, int borderC, int insideC) {
         enableGL2D();
-        GL11.glScalef(0.5f, 0.5f, 0.5f);
+        glScalef(0.5f, 0.5f, 0.5f);
         drawVLine(x *= 2.0f, (y *= 2.0f) + 1.0f, (y1 *= 2.0f) - 2.0f, borderC);
         drawVLine((x1 *= 2.0f) - 1.0f, y + 1.0f, y1 - 2.0f, borderC);
         drawHLine(x + 2.0f, x1 - 3.0f, y, borderC);
@@ -590,7 +682,7 @@ public class RenderUtil implements IMC {
         drawHLine(x1 - 2.0f, x1 - 2.0f, y1 - 2.0f, borderC);
         drawHLine(x + 1.0f, x + 1.0f, y1 - 2.0f, borderC);
         Gui.drawRect((int) (x + 1.0f), (int) (y + 1.0f), (int) (x1 - 1.0f), (int) (y1 - 1.0f), insideC);
-        GL11.glScalef(2.0f, 2.0f, 2.0f);
+        glScalef(2.0f, 2.0f, 2.0f);
         disableGL2D();
         Gui.drawRect(0, 0, 0, 0, 0);
         GlStateManager.disableBlend();
@@ -611,140 +703,116 @@ public class RenderUtil implements IMC {
         float f3 = (float) (col1 >> 8 & 255) / 255.0f;
         float f4 = (float) (col1 & 255) / 255.0f;
         //
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glPushMatrix();
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
         //
-        GL11.glColor4f(f22, f3, f4, f2);
-        GL11.glBegin(7);
-        GL11.glVertex2d(i, d);
-        GL11.glVertex2d(g, d);
-        GL11.glVertex2d(g, e);
-        GL11.glVertex2d(i, e);
-        GL11.glEnd();
-        GL11.glPopMatrix();
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
-        GL11.glDisable(2848);
+        glColor4f(f22, f3, f4, f2);
+        glBegin(7);
+        glVertex2d(i, d);
+        glVertex2d(g, d);
+        glVertex2d(g, e);
+        glVertex2d(i, e);
+        glEnd();
+        //
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
         GlStateManager.disableBlend();
     }
 
+    public static void drawPoint(double x, double y, int col1) {
+        float a = (float) (col1 >> 24 & 255) / 255.0f;
+        float r = (float) (col1 >> 16 & 255) / 255.0f;
+        float g = (float) (col1 >> 8 & 255) / 255.0f;
+        float b = (float) (col1 & 255) / 255.0f;
+        //
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
+        //
+        glColor4f(r, g, b, a);
+        glBegin(GL_POINTS);
+        glVertex2d(x, y);
+        glEnd();
+        //
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        GlStateManager.disableBlend();
+        glColor4f(1, 1, 1, 1);
+    }
+
     public static void disableGL2D() {
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
-        GL11.glDisable(2848);
-        GL11.glHint(3154, 4352);
-        GL11.glHint(3155, 4352);
+        glEnable(3553);
+        glDisable(3042);
+        glEnable(2929);
+        glDisable(2848);
+        glHint(3154, 4352);
+        glHint(3155, 4352);
     }
 
     public static void enableGL2D() {
-        GL11.glDisable(2929);
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glDepthMask(true);
-        GL11.glEnable(2848);
-        GL11.glHint(3154, 4354);
-        GL11.glHint(3155, 4354);
-    }
-
-    public static void drawFilledCircle(double x, double y, double r, int c, int id) {
-        float f = (float) (c >> 24 & 0xff) / 255F;
-        float f1 = (float) (c >> 16 & 0xff) / 255F;
-        float f2 = (float) (c >> 8 & 0xff) / 255F;
-        float f3 = (float) (c & 0xff) / 255F;
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GL11.glColor4f(f1, f2, f3, f);
-        GL11.glBegin(GL11.GL_POLYGON);
-        if (id == 1) {
-            GL11.glVertex2d(x, y);
-            for (int i = 0; i <= 90; i++) {
-                double x2 = Math.sin((i * 3.141526D / 180)) * r;
-                double y2 = Math.cos((i * 3.141526D / 180)) * r;
-                GL11.glVertex2d(x - x2, y - y2);
-            }
-        } else if (id == 2) {
-            GL11.glVertex2d(x, y);
-            for (int i = 90; i <= 180; i++) {
-                double x2 = Math.sin((i * 3.141526D / 180)) * r;
-                double y2 = Math.cos((i * 3.141526D / 180)) * r;
-                GL11.glVertex2d(x - x2, y - y2);
-            }
-        } else if (id == 3) {
-            GL11.glVertex2d(x, y);
-            for (int i = 270; i <= 360; i++) {
-                double x2 = Math.sin((i * 3.141526D / 180)) * r;
-                double y2 = Math.cos((i * 3.141526D / 180)) * r;
-                GL11.glVertex2d(x - x2, y - y2);
-            }
-        } else if (id == 4) {
-            GL11.glVertex2d(x, y);
-            for (int i = 180; i <= 270; i++) {
-                double x2 = Math.sin((i * 3.141526D / 180)) * r;
-                double y2 = Math.cos((i * 3.141526D / 180)) * r;
-                GL11.glVertex2d(x - x2, y - y2);
-            }
-        } else {
-            for (int i = 0; i <= 360; i++) {
-                double x2 = Math.sin((i * 3.141526D / 180)) * r;
-                double y2 = Math.cos((i * 3.141526D / 180)) * r;
-                GL11.glVertex2f((float) (x - x2), (float) (y - y2));
-            }
-        }
-        GL11.glEnd();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glDisable(GL11.GL_BLEND);
+        glDisable(2929);
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glDepthMask(true);
+        glEnable(2848);
+        glHint(3154, 4354);
+        glHint(3155, 4354);
     }
 
     public static void drawCustomImage(int x, int y, int width, int height, ResourceLocation image) {
         ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-        GL11.glDisable(2929);
-        GL11.glEnable(3042);
-        GL11.glDepthMask(false);
+        glDisable(2929);
+        glEnable(3042);
+        glDepthMask(false);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
-        GL11.glDepthMask(true);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
+        glDepthMask(true);
+        glDisable(3042);
+        glEnable(2929);
     }
 
     public static void pre() {
-        GL11.glDisable(2929);
-        GL11.glDisable(3553);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
+        glDisable(2929);
+        glDisable(3553);
+        glEnable(3042);
+        glBlendFunc(770, 771);
     }
 
     public static void post() {
-        GL11.glDisable(3042);
-        GL11.glEnable(3553);
-        GL11.glEnable(2929);
-        GL11.glColor3d(1.0, 1.0, 1.0);
+        glDisable(3042);
+        glEnable(3553);
+        glEnable(2929);
+        glColor3d(1.0, 1.0, 1.0);
     }
 
     public static void startDrawing() {
-        GL11.glEnable(3042);
-        GL11.glEnable(3042);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glDisable(3553);
-        GL11.glDisable(2929);
+        glEnable(3042);
+        glEnable(3042);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glDisable(3553);
+        glDisable(2929);
         mc.entityRenderer.setupCameraTransform(mc.timer.renderPartialTicks, 0);
     }
 
     public static void stopDrawing() {
-        GL11.glDisable(3042);
-        GL11.glEnable(3553);
-        GL11.glDisable(2848);
-        GL11.glDisable(3042);
-        GL11.glEnable(2929);
+        glDisable(3042);
+        glEnable(3553);
+        glDisable(2848);
+        glDisable(3042);
+        glEnable(2929);
     }
 
     public static void drawLine(float x, float y, float x1, float y1, float width) {
@@ -752,7 +820,7 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawLine(float x, float y, float z, float x1, float y1, float z1, float width) {
-        GL11.glLineWidth(width);
+        glLineWidth(width);
         setupRender(true);
         setupClientState(GLClientState.VERTEX, true);
         RenderUtil.tessellator.addVertex(x, y, z).addVertex(x1, y1, z1).draw(3);
@@ -772,15 +840,15 @@ public class RenderUtil implements IMC {
     public static void setupRender(boolean start) {
         if (start) {
             GlStateManager.enableBlend();
-            GL11.glEnable(2848);
+            glEnable(2848);
             GlStateManager.disableDepth();
             GlStateManager.disableTexture2D();
             GlStateManager.blendFunc(770, 771);
-            GL11.glHint(3154, 4354);
+            glHint(3154, 4354);
         } else {
             GlStateManager.disableBlend();
             GlStateManager.enableTexture2D();
-            GL11.glDisable(2848);
+            glDisable(2848);
             GlStateManager.enableDepth();
         }
         GlStateManager.depthMask(!start);
@@ -790,9 +858,8 @@ public class RenderUtil implements IMC {
         return new double[]{entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.timer.renderPartialTicks - RenderManager.renderPosX, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.timer.renderPartialTicks - RenderManager.renderPosY, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.timer.renderPartialTicks - RenderManager.renderPosZ,};
     }
 
-
     public static void drawPlayerArmorList(EntityPlayer entityPlayer, int x, int y, int /*间隔*/interval, boolean /*是/否纵向绘制*/vORh) {
-        GL11.glPushMatrix();
+        glPushMatrix();
         ArrayList<ItemStack> stuff = new ArrayList<>();
         for (int index = 3; index >= 0; --index) {
             ItemStack armor = (entityPlayer).inventory.armorInventory[index];
@@ -822,7 +889,7 @@ public class RenderUtil implements IMC {
             GlStateManager.popMatrix();
             Axis += interval;
         }
-        GL11.glPopMatrix();
+        glPopMatrix();
 
     }
 
@@ -851,26 +918,27 @@ public class RenderUtil implements IMC {
         final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
         final float f3 = (col1 >> 8 & 0xFF) / 255.0f;
         final float f4 = (col1 & 0xFF) / 255.0f;
-        GL11.glPushMatrix();
-        GL11.glEnable(3042);
-        GL11.glDisable(3553);
-        GL11.glBlendFunc(770, 771);
-        GL11.glEnable(2848);
-        GL11.glColor4f(f2, f3, f4, f);
-        GL11.glLineWidth(l1);
-        GL11.glBegin(1);
-        GL11.glVertex2d(x, y);
-        GL11.glVertex2d(x, y2);
-        GL11.glVertex2d(x2, y2);
-        GL11.glVertex2d(x2, y);
-        GL11.glVertex2d(x, y);
-        GL11.glVertex2d(x2, y);
-        GL11.glVertex2d(x, y2);
-        GL11.glVertex2d(x2, y2);
-        GL11.glEnd();
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
-        GL11.glDisable(2848);
-        GL11.glPopMatrix();
+        glPushMatrix();
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glColor4f(f2, f3, f4, f);
+        glLineWidth(l1);
+        glBegin(1);
+        glVertex2d(x, y);
+        glVertex2d(x, y2);
+        glVertex2d(x2, y2);
+        glVertex2d(x2, y);
+        glVertex2d(x, y);
+        glVertex2d(x2, y);
+        glVertex2d(x, y2);
+        glVertex2d(x2, y2);
+        glEnd();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        glPopMatrix();
     }
+
 }

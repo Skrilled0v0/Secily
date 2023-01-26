@@ -15,6 +15,7 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
+import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
@@ -50,7 +51,10 @@ public class HUD extends ModuleHeader {
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
-
+        RenderUtil.drawPoint(50, 50, -1);
+        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w / 2f, h / 2f, w / 2f + 100, h / 2f + 100f}, null);
+        colorAssembly.draw();
+//        RenderUtil.drawBooleanButtton(w / 2f, h / 2f, 45, 15, 0f, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(), Color.GRAY.getRGB());
         //Information
         if ((Boolean) this.getValue(info)) {
             font.drawString(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
