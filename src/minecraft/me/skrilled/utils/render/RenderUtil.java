@@ -806,6 +806,36 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
+    public static void drawColorPointsWithYThickness(ArrayList<ColorPoint> colorPoints, float thickness) {
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
+
+        Color color;
+        float x, y;
+        for (int t = 0; t < 2f * thickness; t++) {
+            for (ColorPoint colorPoint : colorPoints) {
+                color = colorPoint.color;
+                x = colorPoint.pos[0];
+                y = colorPoint.pos[1];
+                glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+                glBegin(GL_POINTS);
+                glVertex2d(x, y + t / 2f);
+                glEnd();
+            }
+        }
+
+
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        GlStateManager.disableBlend();
+        glColor4f(1, 1, 1, 1);
+    }
+
     public static void disableGL2D() {
         glEnable(3553);
         glDisable(3042);

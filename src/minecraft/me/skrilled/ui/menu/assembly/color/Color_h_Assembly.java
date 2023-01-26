@@ -1,6 +1,7 @@
 package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
+import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,13 +26,18 @@ public class Color_h_Assembly extends Assembly {
 
     @Override
     public void draw() {
+        if (!init) InitColorPoints();
+        RenderUtil.drawColorPoints(colorPoints);
 
     }
 
     public void InitColorPoints() {
         colorPoints = new ArrayList<>();
+        float absX, absY;
+        absX = calcAbsX();
+        absY = calcAbsY();
         for (int i = 0; i < 2f * (pos[2] - pos[0]); i++) {
-            colorPoints.add(new ColorPoint(Color.getHSBColor(i / (2f * (pos[2] - pos[0])), 1f, 1f), new float[]{}));
+            colorPoints.add(new ColorPoint(Color.getHSBColor(i / (2f * (pos[2] - pos[0])), 1f, 1f), new float[]{absX + (i / 2f), absY}));
         }
     }
 }
