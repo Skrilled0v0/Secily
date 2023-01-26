@@ -8,12 +8,12 @@ public abstract class Assembly {
     /**
      * 这个窗口中已经用了的高度,最大值参考currentUsedHeight
      */
-    float currentUsedHeight = 0;
+    public float currentUsedHeight = 0;
     /**
      * 这个（子）窗口中能用的最大高度（留出背景框上下左右边距）
      */
-    float maxHeight = 0;
-    Assembly fatherWindow;
+    public float maxHeight = 0;
+    public Assembly fatherWindow;
 
     public Assembly(float[] pos, Assembly fatherWindow) {
         this.pos = pos;

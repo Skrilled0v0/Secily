@@ -529,7 +529,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         ModuleType切换判定
          */
         for (ModuleType value : ModuleType.values()) {
-            if (mouseButton == 0 && isMouseClickedInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
+            if (mouseButton == 0 && isMouseInside(mouseX, mouseY, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f, posY + 5, posX + xAxis + (windowWidth - typeSideSize * 5 - moduleTypeInterval * 4) / 2f + typeSideSize, posY + 5 + typeSideSize)) {
                 currentModuleType = value;
             }
             xAxis += moduleTypeInterval + typeSideSize;
@@ -540,7 +540,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         for (ModuleHeader module : moduleHeaders) {
             String str = module.isEnabled() ? "Enabled" : "Disabled";
             //切换选中Module
-            module.menuFlag = isMouseClickedInside(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3]);
+            module.menuFlag = isMouseInside(mouseX, mouseY, module.modulePosInfo[0], module.modulePosInfo[1], module.modulePosInfo[2], module.modulePosInfo[3]);
             //开关Module
             float p1, p2, p3, p4;
             p1 = module.modulePosInfo[0] + 7;
@@ -548,13 +548,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
             p3 = module.modulePosInfo[0] + midFont.getStringWidth(str) + 13;
             p4 = module.modulePosInfo[1] + moduleBoxHeight - 1.5f;
             boolean p5 = module != SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class);
-            if (isMouseClickedInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
+            if (isMouseInside(mouseX, mouseY, p1, p2, p3, p4) && p5) {
                 module.moduleMotionColor.setState(!module.isEnabled());
                 module.toggle();
             }
             //绑定键位
             float middle = (module.modulePosInfo[0] + module.modulePosInfo[2]) / 2;
-            if (isMouseClickedInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
+            if (isMouseInside(mouseX, mouseY, 2 * middle - p3, p2, 2 * middle - p1, p4)) {
 // TODO: 2023/1/23
             }
             /*
@@ -562,14 +562,14 @@ public class SecilyMenu extends GuiScreen implements IMC {
              */
             for (ValueHeader value : module.getValueList()) {
                 //boolean切换
-                if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) {
+                if (isMouseInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) {
                     if (value.getValueType().equals(ValueHeader.ValueType.BOOLEAN))
                         value.setOptionOpen(!value.isOptionOpen());
                 }
                 //enum切换
                 if (value.getValueType().equals(ValueHeader.ValueType.ENUM_TYPE)) {
                     for (SubEnumValueHeader subEnumValueHeader : value.subEnumValueHeaders) {
-                        if (isMouseClickedInside(mouseX, mouseY, subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2)) {
+                        if (isMouseInside(mouseX, mouseY, subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2)) {
                             if (!value.getCurrentEnumType().equalsIgnoreCase(subEnumValueHeader.name)) {
                                 value.selectedEnumBGAnim = new BoundedAnimation(value.getCurrentSubEnumHeader().x1, subEnumValueHeader.x1, 660f, false, Easing.LINEAR);
                                 value.selectedEnumBGAnim.setState(true);
@@ -580,13 +580,13 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 }
                 //double拖动调整
                 if (value.getValueType().equals(ValueHeader.ValueType.DOUBLE)) {
-                    if (isMouseClickedInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2))
+                    if (isMouseInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2))
                         value.onClicking = true;
                 }
             }
         }
         for (PageNumBar page : PageNumBars) {
-            if (isMouseClickedInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {
+            if (isMouseInside(mouseX, mouseY, page.x1, page.y1, page.x2, page.y2)) {
                 currentPage = page.num;
             }
         }
@@ -597,7 +597,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    boolean isMouseClickedInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 

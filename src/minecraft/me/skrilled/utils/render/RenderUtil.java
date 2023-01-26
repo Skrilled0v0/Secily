@@ -1,6 +1,6 @@
 package me.skrilled.utils.render;
 
-import me.skrilled.ui.menu.assembly.ColorAssembly;
+import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
@@ -750,26 +750,52 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
-    public static void drawHSBColorBox(ColorAssembly cA) {
+    public static void drawColorPointLists(ArrayList<ArrayList<ColorPoint>> colorPointLists) {
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
         glEnable(2848);
         glPushMatrix();
 
-
-        float deltaX = cA.pos[2] - cA.pos[0];
-        float deltaY = cA.pos[3] - cA.pos[1];
-        for (float i = 0; i < deltaX; i += 0.5f) {
-            for (float j = 0; j < deltaY; j += 0.5f) {
-                cA.s = i / deltaX;
-                cA.b = j / deltaY;
-                Color color = Color.getHSBColor(cA.h, cA.s, cA.b);
+        Color color;
+        float x, y;
+        for (ArrayList<ColorPoint> colorPointList : colorPointLists) {
+            for (ColorPoint colorPoint : colorPointList) {
+                color = colorPoint.color;
+                x = colorPoint.pos[0];
+                y = colorPoint.pos[1];
                 glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
                 glBegin(GL_POINTS);
-                glVertex2d(cA.calcAbsX()+i, cA.calcAbsY()+j);
+                glVertex2d(x, y);
                 glEnd();
             }
+        }
+
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        GlStateManager.disableBlend();
+        glColor4f(1, 1, 1, 1);
+    }
+
+    public static void drawColorPoints(ArrayList<ColorPoint> colorPoints) {
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
+
+        Color color;
+        float x, y;
+        for (ColorPoint colorPoint : colorPoints) {
+            color = colorPoint.color;
+            x = colorPoint.pos[0];
+            y = colorPoint.pos[1];
+            glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+            glBegin(GL_POINTS);
+            glVertex2d(x, y);
+            glEnd();
         }
 
         glPopMatrix();
