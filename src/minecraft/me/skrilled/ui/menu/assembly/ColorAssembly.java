@@ -11,6 +11,7 @@ import me.skrilled.utils.render.RenderUtil;
 import java.awt.*;
 
 public class ColorAssembly extends Assembly {
+    public float h,s,b;
 
 
     public ColorAssembly(float[] pos, Assembly fatherWindow) {
@@ -19,6 +20,7 @@ public class ColorAssembly extends Assembly {
 
     @Override
     public void draw() {
+        h = (float) Math.random();
         RenderUtil.drawHSBColorBox(this);
     }
 }

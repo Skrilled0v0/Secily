@@ -756,23 +756,22 @@ public class RenderUtil implements IMC {
         glBlendFunc(770, 771);
         glEnable(2848);
         glPushMatrix();
-        glBegin(GL_POINTS);
+
 
         float deltaX = cA.pos[2] - cA.pos[0];
         float deltaY = cA.pos[3] - cA.pos[1];
-        float h = 0f;
-        float s;//x
-        float b;//y
         for (float i = 0; i < deltaX; i += 0.5f) {
             for (float j = 0; j < deltaY; j += 0.5f) {
-                s = i / deltaX;
-                b = j / deltaY;
-                Color color = Color.getHSBColor(h, s, b);
+                cA.s = i / deltaX;
+                cA.b = j / deltaY;
+                Color color = Color.getHSBColor(cA.h, cA.s, cA.b);
                 glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-                glVertex2d(cA.calcAbsX(), cA.calcAbsY());
+                glBegin(GL_POINTS);
+                glVertex2d(cA.calcAbsX()+i, cA.calcAbsY()+j);
+                glEnd();
             }
         }
-        glEnd();
+
         glPopMatrix();
         glEnable(3553);
         glDisable(3042);

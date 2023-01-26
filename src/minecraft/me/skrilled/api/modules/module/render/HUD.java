@@ -52,7 +52,7 @@ public class HUD extends ModuleHeader {
             }
         }
         RenderUtil.drawPoint(50, 50, -1);
-        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w / 2f, h / 2f, w / 2f + 100, h / 2f + 100f}, null);
+        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w/2, h/2, w/2+50f, h/2+50f}, null);
         colorAssembly.draw();
 //        RenderUtil.drawBooleanButtton(w / 2f, h / 2f, 45, 15, 0f, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(), Color.GRAY.getRGB());
         //Information
