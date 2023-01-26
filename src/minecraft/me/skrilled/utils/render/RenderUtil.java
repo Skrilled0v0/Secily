@@ -749,6 +749,32 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
+    //    public  static  void drawHSBColorBox(double x, double y,double xWidth,double yWidth){
+//        glEnable(3042);
+//        glDisable(3553);
+//        glBlendFunc(770, 771);
+//        glEnable(2848);
+//        glPushMatrix();
+//        glBegin(GL_POINTS);
+//        for (float i = 0; i < deltaX; i+=0.5f) {
+//            for (float j = 0; j < deltaY; j+=0.5f) {
+//
+//                //
+//                glColor3f(r, g, b);
+//
+//                glVertex2d(x, y);
+//                //
+//
+//            }
+//        }
+//        glEnd();
+//        glPopMatrix();
+//        glEnable(3553);
+//        glDisable(3042);
+//        glDisable(2848);
+//        GlStateManager.disableBlend();
+//        glColor4f(1, 1, 1, 1);
+//    }
     public static void disableGL2D() {
         glEnable(3553);
         glDisable(3042);

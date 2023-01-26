@@ -24,13 +24,13 @@ public class ColorAssembly extends Assembly {
         float h = 0f;
         float s;//x
         float b;//y
-        for (int i = 0; i < deltaX; i++) {
-            for (int j = 0; j < deltaY; j++) {
+        for (float i = 0; i < deltaX; i += 0.5f) {
+            for (float j = 0; j < deltaY; j += 0.5f) {
                 s = i / deltaX;
                 b = j / deltaY;
                 Color color = Color.getHSBColor(h, s, b);
                 SenseHeader.getSense.printINFO(calcAbsX() + " " + calcAbsY());
-                RenderUtil.drawPoint(calcAbsX()+i, calcAbsY()+j, color.getRGB());
+                RenderUtil.drawPoint(calcAbsX() + i, calcAbsY() + j, color.getRGB());
 
             }
         }

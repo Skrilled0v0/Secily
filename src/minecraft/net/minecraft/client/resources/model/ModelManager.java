@@ -23,7 +23,7 @@ public class ModelManager implements IResourceManagerReloadListener
     {
         ModelBakery modelbakery = new ModelBakery(resourceManager, this.texMap, this.modelProvider);
         this.modelRegistry = modelbakery.setupModelRegistry();
-        this.defaultModel = (IBakedModel)this.modelRegistry.getObject(ModelBakery.MODEL_MISSING);
+        this.defaultModel = this.modelRegistry.getObject(ModelBakery.MODEL_MISSING);
         this.modelProvider.reloadModels();
     }
 
