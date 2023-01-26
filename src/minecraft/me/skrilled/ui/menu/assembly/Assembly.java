@@ -1,7 +1,5 @@
 package me.skrilled.ui.menu.assembly;
 
-import java.util.ArrayList;
-
 public abstract class Assembly {
     /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
@@ -26,5 +24,17 @@ public abstract class Assembly {
      * 调用父窗口坐标和自己相对坐标绘制
      */
     public abstract void draw();
+
+    public float calcAbsX() {
+        float x = pos[0];
+        x += fatherWindow == null ? 0f : fatherWindow.calcAbsX();
+        return x;
+    }
+
+    public float calcAbsY() {
+        float y = pos[1];
+        y += fatherWindow == null ? 0f : fatherWindow.calcAbsY();
+        return 0f;
+    }
 
 }

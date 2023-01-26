@@ -5,11 +5,12 @@
  */
 package me.skrilled.ui.menu.assembly;
 
+import me.surge.animation.Animation;
+
 import java.util.ArrayList;
 
 public class BooleanAssembly extends Assembly {
-
-
+    Animation animation;
     public BooleanAssembly(float[] pos, Assembly fatherWindow) {
         super(pos, fatherWindow);
     }
