@@ -1,5 +1,6 @@
 package me.skrilled.utils.render;
 
+import com.mojang.authlib.GameProfile;
 import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
@@ -7,12 +8,14 @@ import me.skrilled.utils.render.tessellate.Tessellation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EnumPlayerModelParts;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
@@ -362,6 +365,31 @@ public class RenderUtil implements IMC {
 
     public static void drawScaledRect(int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
         Gui.drawScaledCustomSizeModalRect(x, y, u, v, uWidth, vHeight, width, height, tileWidth, tileHeight);
+    }
+
+    public static void drawPlayerHead(String playerName, int x, int y, int width, int height) {
+        for (Entity ent : mc.theWorld.getLoadedEntityList()) {
+            if (ent != null) {
+                EntityPlayer player = (EntityPlayer) ent;
+                if (playerName.equalsIgnoreCase(player.getName())) {
+                    GameProfile profile = new GameProfile(player.getUniqueID(), player.getName());
+                    NetworkPlayerInfo networkplayerinfo = new NetworkPlayerInfo(profile);
+                    glDisable(2929);
+                    glEnable(3042);
+                    glDepthMask(false);
+                    OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+                    mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
+                    Gui.drawScaledCustomSizeModalRect(x, y, 8.0F, 8.0F, 8, 8, width, height, 64.0F, 64.0F);
+                    if (player.isWearing(EnumPlayerModelParts.HAT)) {
+                        Gui.drawScaledCustomSizeModalRect(x, y, 40.0F, 8.0F, 8, 8, width, height, 64.0F, 64.0F);
+                    }
+                    glDepthMask(true);
+                    glDisable(3042);
+                    glEnable(2929);
+                }
+            }
+        }
     }
 
     public static void drawImageWithColor(ResourceLocation image, int x, int y, int width, int height, int color) {

@@ -160,7 +160,6 @@ public class EclipseMenu extends GuiScreen {
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + 75), mY + 53, f1c);
                 RenderUtil.drawRect(x + 2, mY + 52, (float) ((double) x + render + 6.5D), mY + 53, color);
                 drawFilledCircle((float) ((double) x + render + 2D) + 3, mY + 52.25, 3.7, color, 5);
-                RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
                 font.drawString(value.getValueName() + ": " + value.getDoubleCurrentValue(), startX + 170, mY + 48, f1c);
                 if (!Mouse.isButtonDown(0)) {
                     this.previousmouse = false;
@@ -289,7 +288,6 @@ public class EclipseMenu extends GuiScreen {
             drawFilledCircle(+35, +k + j + i * l, 15, f2c, 5);
             drawFilledCircle(+120, +k + j + i * l, 15, f2c, 5);
             RenderUtil.drawRect(35, k - 15 + j + i * l, 120, k + 15 + j + i * l, f2c);
-            RenderUtil.drawRound(0, 0, 0, 0, new Color(0, 0, 0, 0).getRGB(), 1);
             if (iterator[i] == currentModuleType) {
                 if (sidey < i * l) {
                     sidey = Math.min(sidey + 10, i * l);

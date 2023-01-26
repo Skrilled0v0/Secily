@@ -19,6 +19,7 @@ import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -55,11 +56,11 @@ public class HUD extends ModuleHeader {
 //        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w/2, h/2, w/2+50f, h/2+50f}, null);
 //        colorAssembly.draw();//颜色选框绘制测试
 //        RenderUtil.drawBooleanButtton(w / 2f, h / 2f, 45, 15, 0f, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(), Color.GRAY.getRGB());
-//        RenderUtil.drawRoundRect();
+        RenderUtil.drawRoundRect(w / 2f - 20, h / 2f - 10, w / 2f + 20, h / 2f + 10, 8, Color.DARK_GRAY.getRGB());
         //Information
         if ((Boolean) this.getValue(info)) {
-            font.drawString(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
-            font.drawString(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
     }
