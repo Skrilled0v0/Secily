@@ -4,7 +4,7 @@ public abstract class Assembly {
     /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
-    float[] pos;
+    public float[] pos;
     /**
      * 这个窗口中已经用了的高度,最大值参考currentUsedHeight
      */

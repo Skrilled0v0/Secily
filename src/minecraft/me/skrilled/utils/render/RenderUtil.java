@@ -1,5 +1,6 @@
 package me.skrilled.utils.render;
 
+import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
@@ -749,32 +750,37 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
-    //    public  static  void drawHSBColorBox(double x, double y,double xWidth,double yWidth){
-//        glEnable(3042);
-//        glDisable(3553);
-//        glBlendFunc(770, 771);
-//        glEnable(2848);
-//        glPushMatrix();
-//        glBegin(GL_POINTS);
-//        for (float i = 0; i < deltaX; i+=0.5f) {
-//            for (float j = 0; j < deltaY; j+=0.5f) {
-//
-//                //
-//                glColor3f(r, g, b);
-//
-//                glVertex2d(x, y);
-//                //
-//
-//            }
-//        }
-//        glEnd();
-//        glPopMatrix();
-//        glEnable(3553);
-//        glDisable(3042);
-//        glDisable(2848);
-//        GlStateManager.disableBlend();
-//        glColor4f(1, 1, 1, 1);
-//    }
+    public static void drawHSBColorBox(ColorAssembly cA) {
+        glEnable(3042);
+        glDisable(3553);
+        glBlendFunc(770, 771);
+        glEnable(2848);
+        glPushMatrix();
+        glBegin(GL_POINTS);
+
+        float deltaX = cA.pos[2] - cA.pos[0];
+        float deltaY = cA.pos[3] - cA.pos[1];
+        float h = 0f;
+        float s;//x
+        float b;//y
+        for (float i = 0; i < deltaX; i += 0.5f) {
+            for (float j = 0; j < deltaY; j += 0.5f) {
+                s = i / deltaX;
+                b = j / deltaY;
+                Color color = Color.getHSBColor(h, s, b);
+                glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+                glVertex2d(cA.calcAbsX(), cA.calcAbsY());
+            }
+        }
+        glEnd();
+        glPopMatrix();
+        glEnable(3553);
+        glDisable(3042);
+        glDisable(2848);
+        GlStateManager.disableBlend();
+        glColor4f(1, 1, 1, 1);
+    }
+
     public static void disableGL2D() {
         glEnable(3553);
         glDisable(3042);

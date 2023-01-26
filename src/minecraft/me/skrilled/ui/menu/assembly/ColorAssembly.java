@@ -31,7 +31,6 @@ public class ColorAssembly extends Assembly {
                 Color color = Color.getHSBColor(h, s, b);
                 SenseHeader.getSense.printINFO(calcAbsX() + " " + calcAbsY());
                 RenderUtil.drawPoint(calcAbsX() + i, calcAbsY() + j, color.getRGB());
-
             }
         }
     }
