@@ -23,6 +23,7 @@ public class ColorAssembly extends Assembly {
         float h = 0f;
         float s = 0f;//x
         float b = 0f;//y
+        glBegin(GL_POINTS);
         glEnable(GL_POINTS);
         for (int i = 0; i < deltaX; i++) {
             for (int j = 1; j <= deltaY; j++) {
@@ -37,5 +38,7 @@ public class ColorAssembly extends Assembly {
                 glVertex2f(calcAbsX(),calcAbsY());
             }
         }
+        glDisable(GL_POINTS);
+        glEnd();
     }
 }
