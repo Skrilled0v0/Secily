@@ -5,9 +5,15 @@
  */
 package me.skrilled.ui.menu.assembly;
 
-import me.skrilled.ui.menu.Window;
+import java.util.ArrayList;
 
-public class ColorAssembly implements Window {
+public class ColorAssembly extends Assembly {
+
+
+    public ColorAssembly(float[] pos, Assembly fatherWindow) {
+        super(pos, fatherWindow);
+    }
+
     @Override
     public void draw() {
 

@@ -5,9 +5,15 @@
  */
 package me.skrilled.ui.menu.assembly;
 
-import me.skrilled.ui.menu.Window;
+import java.util.ArrayList;
 
-public class BooleanAssembly implements Window {
+public class BooleanAssembly extends Assembly {
+
+
+    public BooleanAssembly(float[] pos, Assembly fatherWindow) {
+        super(pos, fatherWindow);
+    }
+
     @Override
     public void draw() {
 

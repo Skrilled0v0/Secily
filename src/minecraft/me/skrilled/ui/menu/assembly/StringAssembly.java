@@ -5,9 +5,14 @@
  */
 package me.skrilled.ui.menu.assembly;
 
-import me.skrilled.ui.menu.Window;
+import java.util.ArrayList;
 
-public class StringAssembly implements Window {
+public class StringAssembly extends Assembly {
+
+
+    public StringAssembly(float[] pos, Assembly fatherWindow) {
+        super(pos, fatherWindow);
+    }
 
     @Override
     public void draw() {
