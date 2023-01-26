@@ -34,7 +34,7 @@ public abstract class Assembly {
     public float calcAbsY() {
         float y = pos[1];
         y += fatherWindow == null ? 0f : fatherWindow.calcAbsY();
-        return 0f;
+        return y;
     }
 
 }

@@ -25,12 +25,12 @@ public class ColorAssembly extends Assembly {
         float s;//x
         float b;//y
         for (int i = 0; i < deltaX; i++) {
-            for (int j = 1; j <= deltaY; j++) {
+            for (int j = 0; j < deltaY; j++) {
                 s = i / deltaX;
                 b = j / deltaY;
                 Color color = Color.getHSBColor(h, s, b);
                 SenseHeader.getSense.printINFO(calcAbsX() + " " + calcAbsY());
-                RenderUtil.drawPoint(calcAbsX(), calcAbsY(), color.getRGB());
+                RenderUtil.drawPoint(calcAbsX()+i, calcAbsY()+j, color.getRGB());
 
             }
         }
