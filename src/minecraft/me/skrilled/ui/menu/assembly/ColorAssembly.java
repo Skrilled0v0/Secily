@@ -19,19 +19,6 @@ public class ColorAssembly extends Assembly {
 
     @Override
     public void draw() {
-        float deltaX = pos[2] - pos[0];
-        float deltaY = pos[3] - pos[1];
-        float h = 0f;
-        float s;//x
-        float b;//y
-        for (float i = 0; i < deltaX; i += 0.5f) {
-            for (float j = 0; j < deltaY; j += 0.5f) {
-                s = i / deltaX;
-                b = j / deltaY;
-                Color color = Color.getHSBColor(h, s, b);
-                SenseHeader.getSense.printINFO(calcAbsX() + " " + calcAbsY());
-                RenderUtil.drawPoint(calcAbsX() + i, calcAbsY() + j, color.getRGB());
-            }
-        }
+        RenderUtil.drawHSBColorBox(this);
     }
 }
