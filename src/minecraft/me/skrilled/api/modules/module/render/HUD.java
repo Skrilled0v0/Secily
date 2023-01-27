@@ -57,8 +57,12 @@ public class HUD extends ModuleHeader {
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
-
-        RenderUtil.drawEnumTypeBox(arrayFont, diType.getCurrentEnumType(), didis, w / 2f, h / 2f, 1f, Color.DARK_GRAY.getRGB(), -1);
+        //LU
+        RenderUtil.drawFullCircle(w / 2, h / 2, 50, 270, 50, 90, Color.ORANGE.getRGB());
+        //LM
+        RenderUtil.drawRect(w / 2f - 10, h / 2f - 10, w / 2f, h / 2f + 10, Color.ORANGE.getRGB());
+//        RenderUtil.drawNumberBar(100,100,300,50,0.3f,Color.DARK_GRAY.getRGB(),Color.GRAY.getRGB(),Color.GREEN.getRGB());
+//        RenderUtil.drawEnumTypeBox(arrayFont, diType.getCurrentEnumType(), didis, w / 2f, h / 2f, 1f, Color.DARK_GRAY.getRGB(), -1);
         //drawDIDI
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
