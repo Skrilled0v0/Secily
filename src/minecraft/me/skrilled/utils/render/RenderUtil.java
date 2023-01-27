@@ -3,11 +3,13 @@ package me.skrilled.utils.render;
 import com.mojang.authlib.GameProfile;
 import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -36,6 +38,10 @@ public class RenderUtil implements IMC {
     private static final Consumer<Integer> DISABLE_CLIENT_STATE;
     private static final Map<Integer, Boolean> glCapMap = new HashMap<>();
     public static Tessellation tessellator;
+    static TimerUtil redT = new TimerUtil();
+    static TimerUtil blueT = new TimerUtil();
+    static int blueCount = 1;
+    static int redCount = 1;
 
     static {
         tessellator = Tessellation.createExpanding(4, 1.0f, 2.0f);
@@ -44,6 +50,23 @@ public class RenderUtil implements IMC {
         DISABLE_CLIENT_STATE = GL11::glEnableClientState;
     }
 
+    public static void drawSikadi(float x, float y, boolean isRed) {
+        if (isRed) {
+            drawIcon(x, y, 280 / 2, 320 / 2, Main.redlimgs.get(redCount - 1));
+            if (redT.hasReached(50)) {
+                redCount++;
+                redT.reset();
+            }
+            if (redCount >= Main.REDINDEX) redCount = 1;
+        } else {
+            drawIcon(x, y, 452 / 2, 480 / 2, Main.bluelimgs.get(blueCount - 1));
+            if (blueT.hasReached(50)) {
+                blueCount++;
+                blueT.reset();
+            }
+            if (blueCount >= Main.BLUEINDEX) blueCount = 1;
+        }
+    }
 
     public static Color rainbow(long time, float count, float fade) {
         float hue = ((float) time + (1.0F + count) * 2.0E8F) / 1.0E10F % 1.0F;

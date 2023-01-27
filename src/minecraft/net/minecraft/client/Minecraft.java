@@ -96,12 +96,10 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -112,8 +110,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Queue;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -143,6 +139,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private final MinecraftSessionService sessionService;
     private final Queue<FutureTask<?>> scheduledTasks = Queues.newArrayDeque();
     private final Thread mcThread = Thread.currentThread();
+
     private final PlayerUsageSnooper usageSnooper = new PlayerUsageSnooper("client", this, MinecraftServer.getCurrentTimeMillis());
     private final int tempDisplayWidth;
     private final int tempDisplayHeight;
@@ -177,6 +174,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     int fpsCounter;
     long prevFrameTime = -1L;
     boolean bginit = false;
+    boolean ldimginitblue = false;
+    boolean ldimginitred = false;
+
     private ServerData currentServerData;
     private boolean fullscreen;
     private boolean hasCrashed;
@@ -203,7 +203,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     private IStream stream;
     private Framebuffer framebufferMc;
     private TextureMap textureMapBlocks;
-
     private SoundHandler mcSoundHandler;
     private MusicTicker mcMusicTicker;
     private ResourceLocation mojangLogo;
@@ -407,9 +406,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 return "Error: " + exception.getLocalizedMessage();
             }
         });
+
         this.mouseHelper = new MouseHelper();
         this.checkGLError("Pre startup");
-
         GlStateManager.enableTexture2D();
         GlStateManager.shadeModel(7425);
         GlStateManager.clearDepth(1.0D);
@@ -421,6 +420,34 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.matrixMode(5889);
         GlStateManager.loadIdentity();
         GlStateManager.matrixMode(5888);
+        if (!bginit) {
+            for (int i = 1; ; i++) {
+                if (i == Main.BACKGROUNDMAXINDEX) break;
+                ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".png");
+                Main.bgs.add(r1);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
+            }
+            bginit = true;
+        }
+        if (!ldimginitblue) {
+            for (int j = 1; ; j++) {
+                if (j == Main.BLUEINDEX) break;
+                ResourceLocation r2 = new ResourceLocation("skrilled/Sikadi_blue/Image" + j + ".png");
+                Main.bluelimgs.add(r2);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(r2);
+            }
+            ldimginitblue = true;
+        }
+        if (!ldimginitred) {
+            for (int k = 1; ; k++) {
+                if (k == Main.REDINDEX) break;
+                ResourceLocation r3 = new ResourceLocation("skrilled/Sikadi_red/Image" + k + ".png");
+                Main.redlimgs.add(r3);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(r3);
+            }
+            ldimginitred = true;
+        }
+        this.drawSplashScreen(0);
         this.checkGLError("Startup");
         this.textureMapBlocks = new TextureMap("textures");
         this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
@@ -428,11 +455,9 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         this.textureMapBlocks.setBlurMipmapDirect(false, this.gameSettings.mipmapLevels > 0);
         ModelManager modelManager = new ModelManager(this.textureMapBlocks);
-        this.drawSplashScreen(0);
         this.mcResourceManager.registerReloadListener(modelManager);
         this.renderItem = new RenderItem(this.renderEngine, modelManager);
         this.renderManager = new RenderManager(this.renderEngine, this.renderItem);
-        this.drawSplashScreen(1);
         this.itemRenderer = new ItemRenderer(this);
         this.mcResourceManager.registerReloadListener(this.renderItem);
         this.entityRenderer = new EntityRenderer(this, this.mcResourceManager);
@@ -440,7 +465,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.blockRenderDispatcher = new BlockRendererDispatcher(modelManager.getBlockModelShapes(), this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.blockRenderDispatcher);
         this.renderGlobal = new RenderGlobal(this);
-        this.drawSplashScreen(2);
+        this.drawSplashScreen(1);
         this.mcResourceManager.registerReloadListener(this.renderGlobal);
         this.guiAchievement = new GuiAchievement(this);
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
@@ -490,9 +515,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         Gui.drawModalRectWithCustomSizedTexture(0, 0, 0f, 0f, w, h, w, h);
         Main.fontLoader.EN72.drawCenteredStringWithShadow("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(), -1);
         Main.fontLoader.EN36.drawCenteredStringWithShadow((loadingCount + 1) + "/3", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), -1);
-        RenderUtil.drawRect(w / 6f, h / 2f + h / 6f, w - w / 6f, (h / 2f + w / 6f) + 20, Color.GREEN.getRGB());
-
-
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -503,6 +525,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         tessellator.draw();
         this.updateDisplay();
     }
+
     private void registerMetadataSerializers() {
         this.metadataSerializer_.registerMetadataSectionType(new TextureMetadataSectionSerializer(), TextureMetadataSection.class);
         this.metadataSerializer_.registerMetadataSectionType(new FontMetadataSectionSerializer(), FontMetadataSection.class);
@@ -713,7 +736,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     }
 
 
-
     public void draw(int posX, int posY, int texU, int texV, int width, int height, int red, int green, int blue, int alpha) {
         float f = 0.00390625F;
         float f1 = 0.00390625F;
@@ -794,15 +816,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     }
 
     private void runGameLoop() throws IOException {
-        if (!bginit) {
-            for (int i = 1; ; i++) {
-                if (i == Main.BACKGROUNDMAXINDEX) break;
-                ResourceLocation r1 = new ResourceLocation("skrilled/bg/Image" + i + ".png");
-                Main.bgs.add(r1);
-                Minecraft.getMinecraft().getTextureManager().bindTexture(r1);
-            }
-            bginit = true;
-        }
+
         long i = System.nanoTime();
         this.mcProfiler.startSection("root");
 

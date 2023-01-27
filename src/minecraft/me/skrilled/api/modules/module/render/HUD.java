@@ -25,11 +25,17 @@ import java.util.Comparator;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
-
+    ArrayList<String> didis = new ArrayList<>();
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader not = new ValueHeader("Notifications", true);
+    ValueHeader didi = new ValueHeader("drawDIDI", true);
+    ValueHeader diType = new ValueHeader("didiType", "Red", didis);
 
+
+    public HUD() {
+        addEnumTypes(didis, "Red", "Blue");
+    }
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {
@@ -50,6 +56,10 @@ public class HUD extends ModuleHeader {
                 arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w - moduleHeader.getArrayWidth().getAnimationFactor() * (arrayFont.getStringWidth(moduleHeader.getModuleDisplay()) + 5), yAxis, -1);
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
+        }
+        //drawDIDI
+        if ((Boolean) getValue(didi)) {
+            RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
 
 //        RenderUtil.drawPoint(50, 50, -1);
