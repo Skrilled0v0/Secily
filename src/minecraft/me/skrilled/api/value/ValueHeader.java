@@ -103,7 +103,7 @@ public class ValueHeader {
 
                 y2 = y1 + 10;
 
-                RenderUtil.drawRound(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, bgColor, bgColor);
+                RenderUtil.drawRoundRect(x1, 0.75f * y1 + 0.25f * y2, x2, 0.25f * y1 + 0.75f * y2, 5, bgColor);
                 double[] ds = this.getDoubles();
                 RenderUtil.drawCircle((float) (x1 + (x2 - x1) * ((ds[1] - ds[0]) / (ds[2] - ds[0]))), (y1 + y2) / 2f, 5, buttonColor);
                 String value = Double.toString((Math.floor(ds[1] * 10) / 10));
@@ -150,8 +150,8 @@ public class ValueHeader {
                 int BGColor = this.isOptionOpen() ? valueBooleanOPColor : valueBooleanDisColor;
                 x2 = x1 + 35;
                 y2 = y1 + 10;
-                RenderUtil.drawRound(x1, y1, x2, y2, BGColor, BGColor);
-                RenderUtil.drawRound((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, valueButtonBooleanColor, valueButtonBooleanColor);
+                RenderUtil.drawRoundRect(x1, y1, x2, y2, 5, BGColor);
+                RenderUtil.drawRoundRect((float) ((x1 - 7) + (35 * motion.getAnimationFactor())), (float) (y1 - 2), (float) ((x1 + 7) + (35 * motion.getAnimationFactor())), y1 + 12, 5, valueButtonBooleanColor);
                 break;
             case ENUM_TYPE:
 
@@ -177,7 +177,7 @@ public class ValueHeader {
                     subEnumValueHeader.x2 = subEnumValueHeader.x1 + font.getStringWidth(subEnumValueHeader.name) + 4f;
                     subEnumValueHeader.y2 = y2;
                     //绘制背景框
-                    RenderUtil.drawRound(subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2, enumBGColor, enumBGColor);
+                    RenderUtil.drawRoundRect(subEnumValueHeader.x1, subEnumValueHeader.y1, subEnumValueHeader.x2, subEnumValueHeader.y2, 5, enumBGColor);
                 }
                 //初始化动画
                 if (selectedEnumBGAnim == null) {
@@ -192,7 +192,7 @@ public class ValueHeader {
 
                 //绘制选中enum背景框
                 assert selectedEnumBGAnim != null;
-                RenderUtil.drawRound((float) selectedEnumBGAnim.getAnimationValue(), y1, (float) (selectedEnumBGAnim.getAnimationValue() + font.getStringWidth(this.getCurrentEnumType()) + 4f), y2, selectedEnumColor, selectedEnumColor);
+                RenderUtil.drawRoundRect((float) selectedEnumBGAnim.getAnimationValue(), y1, (float) (selectedEnumBGAnim.getAnimationValue() + font.getStringWidth(this.getCurrentEnumType()) + 4f), y2, 5, selectedEnumColor);
                 //绘制文字
                 for (SubEnumValueHeader subEnumValueHeader : subEnumValueHeaders) {
                     font.drawString(subEnumValueHeader.name, subEnumValueHeader.x1 + 2f, y1, -1);

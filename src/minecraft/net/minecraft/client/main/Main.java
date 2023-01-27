@@ -23,6 +23,10 @@ import java.util.List;
 
 public class Main {
     public final static int BACKGROUNDMAXINDEX = 79;
+    public final static int BLUEINDEX = 14;
+    public final static int REDINDEX = 16;
+    public static ArrayList<ResourceLocation> redlimgs = new ArrayList<>();
+    public static ArrayList<ResourceLocation> bluelimgs = new ArrayList<>();
     public static ArrayList<ResourceLocation> bgs = new ArrayList<>();
     public static FontLoader fontLoader;
 
