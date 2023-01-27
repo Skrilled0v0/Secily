@@ -1,6 +1,7 @@
 package me.skrilled.utils.render;
 
 import com.mojang.authlib.GameProfile;
+import me.fontloader.FontDrawer;
 import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.math.TimerUtil;
@@ -214,16 +215,45 @@ public class RenderUtil implements IMC {
 
     /**
      * 枚举类型编辑框
+     * list需要除去currentStr
      *
-     * @param posX      坐标X
-     * @param posY      坐标Y
-     * @param boxWidth  盒子宽度
-     * @param boxHeight 盒子高度
-     * @param motion    动量
-     * @param bgColor   背景颜色
-     * @param fontColor 字体颜色
+     * @param font       字体
+     * @param currentStr 选择的字符
+     * @param list       剩下的字符
+     * @param posX       坐标X
+     * @param posY       坐标Y
+     * @param motion     动量
+     * @param bgColor    背景颜色
+     * @param fontColor  字体颜色
      */
-    public static void drawEnumTypeBox(float posX, float posY, float boxWidth, float boxHeight, float motion, int bgColor, int fontColor) {
+    public static void drawEnumTypeBox(FontDrawer font, String currentStr, ArrayList<String> list, float posX, float posY, float motion, int bgColor, int fontColor) {
+        float maxStringWidth = 0f;
+        //寻找最大StringWidth
+        for (String s : list) {
+            float fontStringWidth = font.getStringWidth(s);
+            if (fontStringWidth > maxStringWidth) maxStringWidth = fontStringWidth;
+        }
+        //左右边距
+        float lrMargin = font.getCharWidth('A');
+        //字高
+        float fontHeight = font.getHeight();
+        //上下边距
+        float udMargin = fontHeight / 4f;
+        //行距
+        float lineSpace = fontHeight * 1.5f;
+        //盒子宽度
+        float boxWidth = maxStringWidth + lrMargin * 2;
+        //总盒子高度=上下边距*2+字体高度+行距*行数-1
+        drawRoundRect(posX, posY, posX + maxStringWidth + lrMargin * 2, posY + fontHeight + udMargin * 2 + (fontHeight + lineSpace) * motion * list.size(), 5, bgColor);
+        //第一个字体的高度=上下边距
+        font.drawString(currentStr, posX + (boxWidth - font.getStringWidth(currentStr)) / 2f, posY + udMargin, fontColor);
+        if (motion > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String s = list.get(i);
+                //其他行字体高度=字体高度+上下边距+(字高+行距)*已经画的行数*动量
+                font.drawString(s, posX + boxWidth / 2 - font.getStringWidth(s) / 2f, posY + (fontHeight + lineSpace) * motion * (i + 1), fontColor);
+            }
+        }
 
     }
 

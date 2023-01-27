@@ -34,7 +34,7 @@ public class HUD extends ModuleHeader {
 
 
     public HUD() {
-        addEnumTypes(didis, "Red", "Blue");
+        addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
     }
 
     @EventTarget
@@ -57,6 +57,8 @@ public class HUD extends ModuleHeader {
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
+
+        RenderUtil.drawEnumTypeBox(arrayFont, diType.getCurrentEnumType(), didis, w / 2f, h / 2f, 1f, Color.DARK_GRAY.getRGB(), -1);
         //drawDIDI
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
@@ -66,7 +68,7 @@ public class HUD extends ModuleHeader {
 //        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w/2, h/2, w/2+50f, h/2+50f}, null);
 //        colorAssembly.draw();//颜色选框绘制测试
 //        RenderUtil.drawBooleanButtton(w / 2f, h / 2f, 45, 15, 0f, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(), Color.GRAY.getRGB());
-        RenderUtil.drawRoundRect(w / 2f - 20, h / 2f - 10, w / 2f + 20, h / 2f + 10, 8, Color.DARK_GRAY.getRGB());
+
         //Information
         if ((Boolean) this.getValue(info)) {
             font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
