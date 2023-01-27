@@ -203,7 +203,7 @@ public class RenderUtil implements IMC {
      * @param tureColor    打开颜色
      * @param falseColor   关闭颜色
      */
-    public static void drawBooleanButtton(float posX, float posY, float buttonWidth, float buttonHeight, float motion, int bgColor, int tureColor, int falseColor) {
+    public static float drawBooleanButtton(float posX, float posY, float buttonWidth, float buttonHeight, float motion, int bgColor, int tureColor, int falseColor) {
         int color;
         if (motion == 0) {
             color = falseColor;
@@ -211,6 +211,7 @@ public class RenderUtil implements IMC {
         float radius = buttonHeight / 2f;
         RenderUtil.drawRoundRect(posX, posY, posX + buttonWidth, posY + buttonHeight, radius, bgColor);
         RenderUtil.drawCircle(posX + radius + (buttonWidth - buttonHeight) * motion, posY + radius, radius, color);
+        return buttonHeight;
     }
 
     /**
@@ -226,7 +227,7 @@ public class RenderUtil implements IMC {
      * @param bgColor    背景颜色
      * @param fontColor  字体颜色
      */
-    public static void drawEnumTypeBox(FontDrawer font, String currentStr, ArrayList<String> list, float posX, float posY, float motion, int bgColor, int fontColor) {
+    public static float drawEnumTypeBox(FontDrawer font, String currentStr, ArrayList<String> list, float posX, float posY, float motion, int bgColor, int fontColor) {
         float maxStringWidth = 0f;
         //寻找最大StringWidth
         for (String s : list) {
@@ -254,7 +255,38 @@ public class RenderUtil implements IMC {
                 font.drawString(s, posX + boxWidth / 2 - font.getStringWidth(s) / 2f, posY + (fontHeight + lineSpace) * motion * (i + 1), fontColor);
             }
         }
+        return fontHeight + udMargin * 2 + (fontHeight + lineSpace) * motion * list.size();
+    }
 
+    /**
+     * 使用drawRect和drawCircle的方法绘制圆角矩形
+     * 不可使用透明度:(
+     */
+
+    public static float drawNumberBar(float posX, float posY, float barWidth, float barHeight, float motion, int bgColor, int ugColor, int buttonColor) {
+        float barLRMargin = barWidth / 16;
+        float barUDMargin = barHeight / 6;
+        drawRoundRect(posX, posY, posX + barWidth, posY + barHeight, barHeight / 2f, bgColor);
+        drawRoundedRect(posX + barLRMargin, posY + barUDMargin, posX + barWidth - barLRMargin, posY + barHeight - barUDMargin, 5, ugColor);
+        drawRoundedRect(posX + barLRMargin, posY + barUDMargin, posX + barLRMargin + (barWidth - barLRMargin * 2) * motion, posY + barHeight - barUDMargin, barHeight, buttonColor);
+        drawCircle(posX + barWidth / 2f, posY + barHeight / 2f, barHeight / 2.5f, buttonColor);
+        return barHeight;
+    }
+
+    public static void drawRoundedRect(float x, float y, float width, float height, float round, int color) {
+        x = (float) (x + ((round / 2.0f) + 0.5));
+        y = (float) (y + ((round / 2.0f) + 0.5));
+        width = (float) (width - ((round / 2.0f) + 0.5));
+        height = (float) (height - ((round / 2.0f) + 0.5));
+        drawRect(x, y, width, height, color);
+        drawFullCircle((int) (width - round / 2.0f), (int) (y + round / 2.0f), round, 0, 10, 90, color);
+        drawFullCircle((int) (width - round / 2.0f), (int) (y + round / 2.0f), round, 90, 10, 90, color);
+        drawFullCircle((int) (width - round / 2.0f), (int) (y + round / 2.0f), round, 180, 10, 90, color);
+        drawFullCircle((int) (width - round / 2.0f), (int) (y + round / 2.0f), round, 270, 10, 90, color);
+        drawRect((x - round / 2.0f - 0.5f), (y + round / 2.0f), width, (height - round / 2.0f), color);
+        drawRect(x, (y + round / 2.0f), (width + round / 2.0f + 0.5f), (height - round / 2.0f), color);
+        drawRect((x + round / 2.0f), (y - round / 2.0f - 0.5f), (width - round / 2.0f), (height - round / 2.0f), color);
+        drawRect((x + round / 2.0f), y, (width - round / 2.0f), (height + round / 2.0f + 0.5f), color);
     }
 
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
@@ -324,11 +356,46 @@ public class RenderUtil implements IMC {
         tessellator.draw();
     }
 
-    public static void drawCirque(float x, float y, float radius, int start, int end) {
+    public static void drawFullCircle(int cx, int cy, double r, int segments, float lineWidth, int part, int c) {
+        GL11.glScalef(0.5f, 0.5f, 0.5f);
+        r *= 2.0;
+        cx *= 2;
+        cy *= 2;
+        float f2 = (float) (c >> 24 & 255) / 255.0f;
+        float f22 = (float) (c >> 16 & 255) / 255.0f;
+        float f3 = (float) (c >> 8 & 255) / 255.0f;
+        float f4 = (float) (c & 255) / 255.0f;
+        GL11.glEnable(3042);
+        GL11.glLineWidth(lineWidth);
+        GL11.glDisable(3553);
+        GL11.glEnable(2848);
+        GL11.glBlendFunc(770, 771);
+        GL11.glColor4f(f22, f3, f4, f2);
+        GL11.glBegin(3);
+        int i = segments - part;
+        while (i <= segments) {
+            double x = Math.sin((double) i * Math.PI / 180.0) * r;
+            double y = Math.cos((double) i * Math.PI / 180.0) * r;
+            GL11.glVertex2d((double) cx + x, (double) cy + y);
+            ++i;
+        }
+        GL11.glEnd();
+        GL11.glDisable(2848);
+        GL11.glEnable(3553);
+        GL11.glDisable(3042);
+        GL11.glScalef(2.0f, 2.0f, 2.0f);
+    }
+
+    public static void drawCirque(float x, float y, float radius, int start, int end, int rgba) {
+        Color color = new Color(rgba, true);
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        glColor4f(109, 115, 213, 255);
+        GL11.glColor4f(r, g, b, a);
         glEnable(3042);
         glLineWidth(2F);
         glBegin(3);
@@ -339,6 +406,31 @@ public class RenderUtil implements IMC {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
+
+
+    public static void drawAngleCircle(float x, float y, int start, int end, float radius, int color) {
+        float alpha = (color >> 24 & 0xFF) / 255.0F;
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+
+        glColor4f(red, green, blue, alpha);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
+        glPushMatrix();
+        glLineWidth(1F);
+        glBegin(GL_POLYGON);
+        for (int i = start; i <= end; i++)
+            glVertex2d(x + Math.sin(i * Math.PI / 180.0D) * radius, y + Math.cos(i * Math.PI / 180.0D) * radius);
+        glEnd();
+        glPopMatrix();
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_LINE_SMOOTH);
+        glColor4f(1F, 1F, 1F, 1F);
+    }
+
 
     public static void drawCircle(float x, float y, float start, float end, float radius, int color) {
         float ldy;
