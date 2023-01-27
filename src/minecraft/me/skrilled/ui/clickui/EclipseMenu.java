@@ -66,7 +66,7 @@ public class EclipseMenu extends GuiScreen {
             startX = sr.getScaledWidth() / 2 - 370 / 2;
             startY = sr.getScaledHeight() / 2 - 325 / 2;
         }
-        RenderUtil.drawBorderedRect(startX - 20, startY + 435, startX + 380, startY + 35, 2, color, bc);
+        RenderUtil.drawBorderedRect((int) (startX - 20), (int) (startY + 435), (int) (startX + 380), (int) (startY + 35), 2, color, bc);
         RenderUtil.drawRect(startX + 360, startY + 415, startX, startY + 70, f2c);
         int m = Mouse.getDWheel();
         if (this.isCategoryHovered(startX, startY + 50, startX + 150, startY + 375, mouseX, mouseY)) {
@@ -188,7 +188,6 @@ public class EclipseMenu extends GuiScreen {
                 int xx = 50;
                 int x2x = 65;
                 font.drawString(value.getValueName(), startX + 170, mY + 48, f1c);
-                RenderUtil.drawBorderedRect(1, 1, 1, 1, 1, new Color(0, 0, 0, 0).getRGB(), 77);
                 if (value.isOptionOpen()) {
 
                     if (value.getAnim(ValueHeader.ValueType.BOOLEAN) < x2x) {
