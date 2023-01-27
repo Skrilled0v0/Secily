@@ -31,7 +31,7 @@ public class ColorAssembly extends Assembly {
         super(pos, fatherWindow);
         withAlpha = true;
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
-        float[] bg_pos = new float[]{};
+        float[] bg_pos = new float[]{};//TODO:坐标待计算
         float[] h_pos = new float[]{};
         float[] sb_pos = new float[]{};
         float[] alpha_pos = new float[]{};
@@ -48,7 +48,7 @@ public class ColorAssembly extends Assembly {
     public ColorAssembly(float[] pos, Assembly fatherWindow, float h, float s, float b) {
         super(pos, fatherWindow);
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
-        float[] bg_pos = new float[]{};
+        float[] bg_pos = new float[]{};//TODO:坐标待计算
         float[] h_pos = new float[]{};
         float[] sb_pos = new float[]{};
         bgAssembly = new BGAssembly(bg_pos, fatherWindow);

@@ -1,6 +1,7 @@
 package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
+import me.skrilled.ui.menu.assembly.SolidCicleAssembly;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 public class Color_h_Assembly extends Assembly {
     public Color_sb_Assembly color_sb_assembly;
+    SolidCicleAssembly solidCircleAssembly;
     public float h;
     public ArrayList<ColorPoint> colorPoints;
     private boolean init;
@@ -22,13 +24,15 @@ public class Color_h_Assembly extends Assembly {
     public Color_h_Assembly(float[] pos, Assembly fatherWindow, float h) {
         super(pos, fatherWindow);
         this.h = h;
+        float[] solidCirclePos = new float[]{};//TODO:坐标待计算
+        this.solidCircleAssembly = new SolidCicleAssembly(solidCirclePos,fatherWindow);
     }
 
     @Override
     public void draw() {
         if (!init) InitColorPoints();
-        RenderUtil.drawColorPoints(colorPoints);
-
+        RenderUtil.drawColorPointsWithYThickness(colorPoints,2.5f);
+        solidCircleAssembly.draw();
     }
 
     public void InitColorPoints() {
