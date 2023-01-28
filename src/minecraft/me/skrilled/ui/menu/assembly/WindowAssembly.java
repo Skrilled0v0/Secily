@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class WindowAssembly extends Assembly {
     BGAssembly bgAssembly;
     StringAssembly windowName;
-    ArrayList<IconAssembly> icons;
-    ArrayList<WindowAssembly> subWindows;
-    ArrayList<Assembly> otherAssemblies;
+    ArrayList<IconAssembly> icons = new ArrayList<>();
+    ArrayList<WindowAssembly> subWindows = new ArrayList<>();
+    ArrayList<Assembly> otherAssemblies = new ArrayList<>();
 
     public WindowAssembly(float[] pos, Assembly fatherWindow) {
         super(pos, fatherWindow);
@@ -18,9 +18,29 @@ public class WindowAssembly extends Assembly {
         this.subWindows = subWindows;
     }
 
+    public void addAssembly(Assembly assembly) {
+        if(otherAssemblies==null)
+            otherAssemblies=new ArrayList<>();
+        otherAssemblies.add(assembly);
+    }
+
+    public void addWindow(WindowAssembly windowAssembly) {
+        subWindows.add(windowAssembly);
+    }
+
+    public void delAssembly(Assembly assembly) {
+        otherAssemblies.removeIf(a -> a.equals(assembly));
+    }
+
+    public void delWindow(WindowAssembly windowAssembly) {
+        subWindows.removeIf(a -> a.equals(windowAssembly));
+    }
+
     @Override
     public void draw() {
-        this.bgAssembly.draw();
+        if (bgAssembly != null) {
+            this.bgAssembly.draw();
+        }
         if (windowName != null) {
             this.windowName.draw();
         }
