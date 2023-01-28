@@ -24,14 +24,14 @@ public class Color_h_Assembly extends Assembly {
     public Color_h_Assembly(float[] pos, Assembly fatherWindow, float h) {
         super(pos, fatherWindow);
         this.h = h;
-        float[] solidCirclePos = new float[]{};//TODO:坐标待计算
-        this.solidCircleAssembly = new SolidCicleAssembly(solidCirclePos,fatherWindow);
+        float[] solidCirclePos = new float[]{pos[0]+deltaX*(h/360),pos[1]+deltaY/2f,pos[0]+deltaX*(h/360),pos[1]+deltaY/2f};
+        this.solidCircleAssembly = new SolidCicleAssembly(solidCirclePos,fatherWindow,deltaY*0.6f,Color.blue);
     }
 
     @Override
     public void draw() {
         if (!init) InitColorPoints();
-        RenderUtil.drawColorPointsWithYThickness(colorPoints,2.5f);
+        RenderUtil.drawColorPointsWithYThickness(colorPoints,0.8f*deltaY);
         solidCircleAssembly.draw();
     }
 

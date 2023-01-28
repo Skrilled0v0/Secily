@@ -16,6 +16,7 @@ public class ColorAssembly extends Assembly {
     public ArrayList<ColorPoint> h_colors;
     public ArrayList<ColorPoint> sb_colors;
     public ArrayList<ColorPoint> alpha_colors;
+    WindowAssembly windowAssembly;
     boolean withAlpha = false;
     BGAssembly bgAssembly;
 
@@ -30,15 +31,18 @@ public class ColorAssembly extends Assembly {
     public ColorAssembly(float[] pos, Assembly fatherWindow, float h, float s, float b, float a) {
         super(pos, fatherWindow);
         withAlpha = true;
+        windowAssembly = new WindowAssembly(pos, fatherWindow);
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
-        float[] bg_pos = new float[]{};//TODO:坐标待计算
-        float[] h_pos = new float[]{};
-        float[] sb_pos = new float[]{};
-        float[] alpha_pos = new float[]{};
-        bgAssembly = new BGAssembly(bg_pos, fatherWindow);
-        color_h_assembly = new Color_h_Assembly(h_pos, fatherWindow, h);
-        color_sb_assembly = new Color_sb_Assembly(sb_pos, fatherWindow, h, s, b);
-        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, fatherWindow, h, s, b, a);
+        float margin = 0.05f * deltaX;
+        float[] bg_pos = new float[]{0, 0, deltaX, deltaY};
+        float[] sb_pos = new float[]{margin, margin, deltaX - margin, deltaX - margin};
+        //y坐标计算：(dY-2*margin-0.9dX)/2
+        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, 1.02f*deltaX};
+        float[] alpha_pos = new float[]{margin,1.07f*deltaX , deltaX - margin, 1.09f*deltaX};
+        bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
+        color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h);
+        color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b);
+        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, windowAssembly, h, s, b, a);
     }
 
     /**
@@ -51,7 +55,7 @@ public class ColorAssembly extends Assembly {
         float[] bg_pos = new float[]{};//TODO:坐标待计算
         float[] h_pos = new float[]{};
         float[] sb_pos = new float[]{};
-        bgAssembly = new BGAssembly(bg_pos, fatherWindow);
+        bgAssembly = new BGAssembly(bg_pos, fatherWindow, Color.DARK_GRAY);
         color_h_assembly = new Color_h_Assembly(h_pos, fatherWindow, h);
         color_sb_assembly = new Color_sb_Assembly(sb_pos, fatherWindow, h, s, b);
     }
@@ -59,8 +63,7 @@ public class ColorAssembly extends Assembly {
     @Override
     public void draw() {
         //待设计边框和背景，这两个先画
-        //有透明值时白色背景凸显透明效果？
-
+        bgAssembly.draw();
         //color选区等
         this.color_sb_assembly.draw();
         this.color_h_assembly.draw();
@@ -69,9 +72,9 @@ public class ColorAssembly extends Assembly {
 
     public Color getColorClicked_hsb(int[] mouseABSPos) {
         for (ArrayList<ColorPoint> colorPoints : color_sb_assembly.colorPointLists) {
-            if (mouseABSPos[0] == Math.floor(colorPoints.get(0).pos[0])){
+            if (mouseABSPos[0] == Math.floor(colorPoints.get(0).pos[0])) {
                 for (ColorPoint colorPoint : colorPoints) {
-                    if (mouseABSPos[1]==Math.floor(colorPoint.pos[1])){
+                    if (mouseABSPos[1] == Math.floor(colorPoint.pos[1])) {
                         return colorPoint.color;
                     }
                 }
@@ -83,7 +86,7 @@ public class ColorAssembly extends Assembly {
 
     public Color getColorClicked_h(int[] mouseABSPos) {
         for (ColorPoint colorPoint : color_h_assembly.colorPoints) {
-            if (mouseABSPos[0]==Math.floor(colorPoint.pos[0])){
+            if (mouseABSPos[0] == Math.floor(colorPoint.pos[0])) {
                 color_sb_assembly.SetH(colorPoint.GetH());
                 return colorPoint.color;
             }
@@ -94,7 +97,7 @@ public class ColorAssembly extends Assembly {
 
     public Color getColorClicked_alpha(int[] mouseABSPos) {
         for (ColorPoint colorPoint : color_alpha_assembly.colorPoints) {
-            if (mouseABSPos[0]==Math.floor(colorPoint.pos[0])){
+            if (mouseABSPos[0] == Math.floor(colorPoint.pos[0])) {
                 return colorPoint.color;
             }
         }

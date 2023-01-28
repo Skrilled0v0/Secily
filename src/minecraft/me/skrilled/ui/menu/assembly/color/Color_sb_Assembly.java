@@ -31,7 +31,7 @@ public class Color_sb_Assembly extends Assembly {
         float x = pos[0] + (pos[2] - pos[0]) * s;
         float y = pos[1] + (pos[3] - pos[1]) * b;
         float[] solidCirclePos = new float[]{x - circleR, y - circleR, x + circleR, y + circleR};
-        this.solidCicleAssembly = new SolidCicleAssembly(solidCirclePos, fatherWindow);
+        this.solidCicleAssembly = new SolidCicleAssembly(solidCirclePos, fatherWindow,circleR,Color.BLACK);
     }
 
     /**
@@ -65,7 +65,7 @@ public class Color_sb_Assembly extends Assembly {
         for (int i = 0; i < 2f * (pos[2] - pos[0]); i++) {
             colorPointLists.add(new ArrayList<>());
             s = i / (2f * (pos[2] - pos[0]));
-            for (int j = 0; j < 2f * (pos[3] - pos[1]); i++) {
+            for (int j = 0; j < 2f * (pos[3] - pos[1]); j++) {
                 b = j / (2f * (pos[3] - pos[1]));
                 colorPointLists.get(i).add(new ColorPoint(Color.getHSBColor(h, s, b), new float[]{absX + (i / 2f), absY + (j / 2f)}));
             }

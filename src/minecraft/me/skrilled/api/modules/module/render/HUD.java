@@ -15,6 +15,7 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
+import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
@@ -57,18 +58,15 @@ public class HUD extends ModuleHeader {
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
-        RenderUtil.drawNumberBar(100, 100, 200, 20, 0.3f, Color.DARK_GRAY.getRGB(), Color.GRAY.getRGB(), Color.GREEN.getRGB());
-//        RenderUtil.drawEnumTypeBox(arrayFont, diType.getCurrentEnumType(), didis, w / 2f, h / 2f, 1f, Color.DARK_GRAY.getRGB(), -1);
         //drawDIDI
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
-        RenderUtil.drawCenteredStringBox(Main.fontLoader.EN24,"TestString ",50,50,0f,Color.GRAY.getRGB(),Color.ORANGE.getRGB());
 
-//        RenderUtil.drawPoint(50, 50, -1);
-//        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w/2, h/2, w/2+50f, h/2+50f}, null);
-//        colorAssembly.draw();//颜色选框绘制测试
-//        RenderUtil.drawBooleanButtton(w / 2f, h / 2f, 45, 15, 0f, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(), Color.GRAY.getRGB());
+        //Test
+        float[] cAPos = new float[]{100,100,200,213};
+        ColorAssembly colorAssembly = new ColorAssembly(cAPos, null, 360, 1f, 1f, 1f);
+        colorAssembly.draw();
 
         //Information
         if ((Boolean) this.getValue(info)) {
