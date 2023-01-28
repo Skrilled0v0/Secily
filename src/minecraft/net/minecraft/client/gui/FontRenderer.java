@@ -296,15 +296,15 @@ public class FontRenderer implements IResourceManagerReloadListener {
 
     public int drawStringWithShadow(String text, float x, float y, int color) {
         if (HUD.fontReplace.isOptionOpen()) {
-            Main.fontLoader.EN18.drawStringWithShadow(text, x, y, 1.2f, color);
-            return Main.fontLoader.EN18.getStringWidth(text);
+            Main.fontLoader.EN16.drawStringWithShadow(text, x, y, 1.2f, color);
+            return Main.fontLoader.EN16.getStringWidth(text);
         } else return this.drawString(text, x, y, color, true);
     }
 
     public int drawString(String text, int x, int y, int color) {
         if (HUD.fontReplace.isOptionOpen()) {
-            Main.fontLoader.EN18.drawString(text, (float) x, (float) y, color, false);
-            return Main.fontLoader.EN18.getStringWidth(text);
+            Main.fontLoader.EN16.drawString(text, (float) x, (float) y, color, false);
+            return Main.fontLoader.EN16.getStringWidth(text);
         } else {
             return this.drawString(text, (float) x, (float) y, color, false);
         }

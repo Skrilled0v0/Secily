@@ -15,12 +15,11 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
-import me.skrilled.ui.menu.assembly.ColorAssembly;
-import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -66,7 +65,7 @@ public class HUD extends ModuleHeader {
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
-
+        RenderUtil.drawTitleIcon(Main.fontLoader.ICON64, w / 2f-300, h / 2f-200, new String[]{"A","B","C","D","E"}, 100, 4, -1, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(),false);
 /*
         cA.draw();
         if (timerUtil.hasReached(333)) {

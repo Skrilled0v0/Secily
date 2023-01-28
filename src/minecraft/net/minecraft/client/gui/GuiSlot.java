@@ -174,11 +174,11 @@ public abstract class GuiSlot {
             int i1 = 4;
 //            this.overlayBackground(0, this.top, 255, 255);
 //            this.overlayBackground(this.bottom, this.height, 255, 255);
-//            GlStateManager.enableBlend();
-//            GlStateManager.tryBlendFuncSeparate(770, 771, 0, 1);
-//            GlStateManager.disableAlpha();
-//            GlStateManager.shadeModel(7425);
-//            GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 0, 1);
+            GlStateManager.disableAlpha();
+            GlStateManager.shadeModel(7425);
+            GlStateManager.disableTexture2D();
 //            worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 //            worldrenderer.pos(this.left, this.top + i1, 0.0D).tex(0.0D, 1.0D).color(0, 0, 0, 0).endVertex();
 //            worldrenderer.pos(this.right, this.top + i1, 0.0D).tex(1.0D, 1.0D).color(0, 0, 0, 0).endVertex();
