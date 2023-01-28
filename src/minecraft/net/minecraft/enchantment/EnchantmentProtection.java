@@ -57,17 +57,16 @@ public class EnchantmentProtection extends Enchantment
         return "enchantment.protect." + protectionName[this.protectionType];
     }
 
-    public boolean canApplyTogether(Enchantment ench)
+    public static double func_92092_a(Entity p_92092_0_, double p_92092_1_)
     {
-        if (ench instanceof EnchantmentProtection)
+        int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.blastProtection.effectId, p_92092_0_.getInventory());
+
+        if (i > 0)
         {
-            EnchantmentProtection enchantmentprotection = (EnchantmentProtection)ench;
-            return enchantmentprotection.protectionType == this.protectionType ? false : this.protectionType == 2 || enchantmentprotection.protectionType == 2;
+            p_92092_1_ -= MathHelper.floor_double(p_92092_1_ * (double) ((float) i * 0.15F));
         }
-        else
-        {
-            return super.canApplyTogether(ench);
-        }
+
+        return p_92092_1_;
     }
 
     public static int getFireTimeForEntity(Entity p_92093_0_, int p_92093_1_)
@@ -82,15 +81,16 @@ public class EnchantmentProtection extends Enchantment
         return p_92093_1_;
     }
 
-    public static double func_92092_a(Entity p_92092_0_, double p_92092_1_)
+    public boolean canApplyTogether(Enchantment ench)
     {
-        int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantment.blastProtection.effectId, p_92092_0_.getInventory());
-
-        if (i > 0)
+        if (ench instanceof EnchantmentProtection)
         {
-            p_92092_1_ -= (double)MathHelper.floor_double(p_92092_1_ * (double)((float)i * 0.15F));
+            EnchantmentProtection enchantmentprotection = (EnchantmentProtection)ench;
+            return enchantmentprotection.protectionType != this.protectionType && (this.protectionType == 2 || enchantmentprotection.protectionType == 2);
         }
-
-        return p_92092_1_;
+        else
+        {
+            return super.canApplyTogether(ench);
+        }
     }
 }

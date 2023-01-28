@@ -1,12 +1,13 @@
 package net.minecraft.network.play.client;
 
-import java.io.IOException;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import java.io.IOException;
 
 public class C02PacketUseEntity implements Packet<INetHandlerPlayServer>
 {
@@ -33,11 +34,11 @@ public class C02PacketUseEntity implements Packet<INetHandlerPlayServer>
     public void readPacketData(PacketBuffer buf) throws IOException
     {
         this.entityId = buf.readVarIntFromBuffer();
-        this.action = (C02PacketUseEntity.Action)buf.readEnumValue(C02PacketUseEntity.Action.class);
+        this.action = buf.readEnumValue(Action.class);
 
         if (this.action == C02PacketUseEntity.Action.INTERACT_AT)
         {
-            this.hitVec = new Vec3((double)buf.readFloat(), (double)buf.readFloat(), (double)buf.readFloat());
+            this.hitVec = new Vec3(buf.readFloat(), buf.readFloat(), buf.readFloat());
         }
     }
 
@@ -74,10 +75,9 @@ public class C02PacketUseEntity implements Packet<INetHandlerPlayServer>
         return this.hitVec;
     }
 
-    public static enum Action
-    {
+    public enum Action {
         INTERACT,
         ATTACK,
-        INTERACT_AT;
+        INTERACT_AT
     }
 }

@@ -1,43 +1,19 @@
 package net.minecraft.init;
 
 import com.mojang.authlib.GameProfile;
-import java.io.PrintStream;
-import java.util.Random;
-import java.util.UUID;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.block.BlockFire;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockPumpkin;
-import net.minecraft.block.BlockSkull;
-import net.minecraft.block.BlockTNT;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
-import net.minecraft.dispenser.BehaviorProjectileDispense;
-import net.minecraft.dispenser.IBehaviorDispenseItem;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityExpBottle;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBucket;
-import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemMonsterPlacer;
-import net.minecraft.item.ItemPotion;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.projectile.*;
+import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.stats.StatList;
@@ -51,6 +27,9 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.PrintStream;
+import java.util.Random;
 
 public class Bootstrap
 {
@@ -130,14 +109,14 @@ public class Bootstrap
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
             {
                 EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
-                double d0 = source.getX() + (double)enumfacing.getFrontOffsetX();
-                double d1 = (double)((float)source.getBlockPos().getY() + 0.2F);
-                double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ();
+                double d0 = source.getX() + (double) enumfacing.getFrontOffsetX();
+                double d1 = (float) source.getBlockPos().getY() + 0.2F;
+                double d2 = source.getZ() + (double) enumfacing.getFrontOffsetZ();
                 Entity entity = ItemMonsterPlacer.spawnCreature(source.getWorld(), stack.getMetadata(), d0, d1, d2);
 
                 if (entity instanceof EntityLivingBase && stack.hasDisplayName())
                 {
-                    ((EntityLiving)entity).setCustomNameTag(stack.getDisplayName());
+                    entity.setCustomNameTag(stack.getDisplayName());
                 }
 
                 stack.splitStack(1);
@@ -149,9 +128,9 @@ public class Bootstrap
             public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
             {
                 EnumFacing enumfacing = BlockDispenser.getFacing(source.getBlockMetadata());
-                double d0 = source.getX() + (double)enumfacing.getFrontOffsetX();
-                double d1 = (double)((float)source.getBlockPos().getY() + 0.2F);
-                double d2 = source.getZ() + (double)enumfacing.getFrontOffsetZ();
+                double d0 = source.getX() + (double) enumfacing.getFrontOffsetX();
+                double d1 = (float) source.getBlockPos().getY() + 0.2F;
+                double d2 = source.getZ() + (double) enumfacing.getFrontOffsetZ();
                 EntityFireworkRocket entityfireworkrocket = new EntityFireworkRocket(source.getWorld(), d0, d1, d2, stack);
                 source.getWorld().spawnEntityInWorld(entityfireworkrocket);
                 stack.splitStack(1);
@@ -257,14 +236,10 @@ public class Bootstrap
                 Material material = block.getMaterial();
                 Item item;
 
-                if (Material.water.equals(material) && block instanceof BlockLiquid && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0)
-                {
+                if (Material.water.equals(material) && block instanceof BlockLiquid && iblockstate.getValue(BlockLiquid.LEVEL).intValue() == 0) {
                     item = Items.water_bucket;
-                }
-                else
-                {
-                    if (!Material.lava.equals(material) || !(block instanceof BlockLiquid) || ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() != 0)
-                    {
+                } else {
+                    if (!Material.lava.equals(material) || !(block instanceof BlockLiquid) || iblockstate.getValue(BlockLiquid.LEVEL).intValue() != 0) {
                         return super.dispenseStack(source, stack);
                     }
 
@@ -374,7 +349,7 @@ public class Bootstrap
             {
                 World world = source.getWorld();
                 BlockPos blockpos = source.getBlockPos().offset(BlockDispenser.getFacing(source.getBlockMetadata()));
-                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double)blockpos.getX() + 0.5D, (double)blockpos.getY(), (double)blockpos.getZ() + 0.5D, (EntityLivingBase)null);
+                EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(world, (double) blockpos.getX() + 0.5D, blockpos.getY(), (double) blockpos.getZ() + 0.5D, null);
                 world.spawnEntityInWorld(entitytntprimed);
                 world.playSoundAtEntity(entitytntprimed, "game.tnt.primed", 1.0F, 1.0F);
                 --stack.stackSize;
@@ -418,7 +393,7 @@ public class Bootstrap
 
                                         if (!StringUtils.isNullOrEmpty(s))
                                         {
-                                            gameprofile = new GameProfile((UUID)null, s);
+                                            gameprofile = new GameProfile(null, s);
                                         }
                                     }
                                 }

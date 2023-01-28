@@ -138,6 +138,120 @@ public class ConnectedProperties
         this.layer = connectedparser.parseBlockRenderLayer(props.getProperty("layer"), EnumWorldBlockLayer.CUTOUT_MIPPED);
     }
 
+    private static TextureAtlasSprite[] registerIcons(String[] tileNames, TextureMap textureMap, boolean skipTiles, boolean defaultTiles)
+    {
+        if (tileNames == null)
+        {
+            return null;
+        }
+        else
+        {
+            List list = new ArrayList();
+
+            for (int i = 0; i < tileNames.length; ++i)
+            {
+                String s = tileNames[i];
+                ResourceLocation resourcelocation = new ResourceLocation(s);
+                String s1 = resourcelocation.getResourceDomain();
+                String s2 = resourcelocation.getResourcePath();
+
+                if (!s2.contains("/"))
+                {
+                    s2 = "textures/blocks/" + s2;
+                }
+
+                String s3 = s2 + ".png";
+
+                if (skipTiles && s3.endsWith("<skip>.png"))
+                {
+                    list.add(null);
+                }
+                else if (defaultTiles && s3.endsWith("<default>.png"))
+                {
+                    list.add(ConnectedTextures.SPRITE_DEFAULT);
+                }
+                else
+                {
+                    ResourceLocation resourcelocation1 = new ResourceLocation(s1, s3);
+                    boolean flag = Config.hasResource(resourcelocation1);
+
+                    if (!flag)
+                    {
+                        Config.warn("File not found: " + s3);
+                    }
+
+                    String s4 = "textures/";
+                    String s5 = s2;
+
+                    if (s2.startsWith(s4))
+                    {
+                        s5 = s2.substring(s4.length());
+                    }
+
+                    ResourceLocation resourcelocation2 = new ResourceLocation(s1, s5);
+                    TextureAtlasSprite textureatlassprite = textureMap.registerSprite(resourcelocation2);
+                    list.add(textureatlassprite);
+                }
+            }
+
+            TextureAtlasSprite[] atextureatlassprite = (TextureAtlasSprite[]) list.toArray(new TextureAtlasSprite[list.size()]);
+            return atextureatlassprite;
+        }
+    }
+
+    private String[] parseMatchTiles(String str)
+    {
+        if (str == null)
+        {
+            return null;
+        }
+        else
+        {
+            String[] astring = Config.tokenize(str, " ");
+
+            for (int i = 0; i < astring.length; ++i)
+            {
+                String s = astring[i];
+
+                if (s.endsWith(".png"))
+                {
+                    s = s.substring(0, s.length() - 4);
+                }
+
+                s = TextureUtils.fixResourcePath(s, this.basePath);
+                astring[i] = s;
+            }
+
+            return astring;
+        }
+    }
+
+    private static String parseName(String path)
+    {
+        String s = path;
+        int i = path.lastIndexOf(47);
+
+        if (i >= 0)
+        {
+            s = path.substring(i + 1);
+        }
+
+        int j = s.lastIndexOf(46);
+
+        if (j >= 0)
+        {
+            s = s.substring(0, j);
+        }
+
+        return s;
+    }
+
+    private static String parseBasePath(String path)
+    {
+        int i = path.lastIndexOf(47);
+        return i < 0 ? "" : path.substring(0, i);
+    }
+
     private int[] parseCtmTileIndexes(Properties props)
     {
         if (this.tiles == null)
@@ -201,146 +315,12 @@ public class ConnectedProperties
 
                     if (map.containsKey(Integer.valueOf(k)))
                     {
-                        aint[k] = ((Integer)map.get(Integer.valueOf(k))).intValue();
+                        aint[k] = map.get(Integer.valueOf(k)).intValue();
                     }
                 }
 
                 return aint;
             }
-        }
-    }
-
-    private String[] parseMatchTiles(String str)
-    {
-        if (str == null)
-        {
-            return null;
-        }
-        else
-        {
-            String[] astring = Config.tokenize(str, " ");
-
-            for (int i = 0; i < astring.length; ++i)
-            {
-                String s = astring[i];
-
-                if (s.endsWith(".png"))
-                {
-                    s = s.substring(0, s.length() - 4);
-                }
-
-                s = TextureUtils.fixResourcePath(s, this.basePath);
-                astring[i] = s;
-            }
-
-            return astring;
-        }
-    }
-
-    private static String parseName(String path)
-    {
-        String s = path;
-        int i = path.lastIndexOf(47);
-
-        if (i >= 0)
-        {
-            s = path.substring(i + 1);
-        }
-
-        int j = s.lastIndexOf(46);
-
-        if (j >= 0)
-        {
-            s = s.substring(0, j);
-        }
-
-        return s;
-    }
-
-    private static String parseBasePath(String path)
-    {
-        int i = path.lastIndexOf(47);
-        return i < 0 ? "" : path.substring(0, i);
-    }
-
-    private String[] parseTileNames(String str)
-    {
-        if (str == null)
-        {
-            return null;
-        }
-        else
-        {
-            List list = new ArrayList();
-            String[] astring = Config.tokenize(str, " ,");
-            label32:
-
-            for (int i = 0; i < astring.length; ++i)
-            {
-                String s = astring[i];
-
-                if (s.contains("-"))
-                {
-                    String[] astring1 = Config.tokenize(s, "-");
-
-                    if (astring1.length == 2)
-                    {
-                        int j = Config.parseInt(astring1[0], -1);
-                        int k = Config.parseInt(astring1[1], -1);
-
-                        if (j >= 0 && k >= 0)
-                        {
-                            if (j > k)
-                            {
-                                Config.warn("Invalid interval: " + s + ", when parsing: " + str);
-                                continue;
-                            }
-
-                            int l = j;
-
-                            while (true)
-                            {
-                                if (l > k)
-                                {
-                                    continue label32;
-                                }
-
-                                list.add(String.valueOf(l));
-                                ++l;
-                            }
-                        }
-                    }
-                }
-
-                list.add(s);
-            }
-
-            String[] astring2 = (String[])((String[])list.toArray(new String[list.size()]));
-
-            for (int i1 = 0; i1 < astring2.length; ++i1)
-            {
-                String s1 = astring2[i1];
-                s1 = TextureUtils.fixResourcePath(s1, this.basePath);
-
-                if (!s1.startsWith(this.basePath) && !s1.startsWith("textures/") && !s1.startsWith("mcpatcher/"))
-                {
-                    s1 = this.basePath + "/" + s1;
-                }
-
-                if (s1.endsWith(".png"))
-                {
-                    s1 = s1.substring(0, s1.length() - 4);
-                }
-
-                if (s1.startsWith("/"))
-                {
-                    s1 = s1.substring(1);
-                }
-
-                astring2[i1] = s1;
-            }
-
-            return astring2;
         }
     }
 
@@ -1145,64 +1125,84 @@ public class ConnectedProperties
         }
     }
 
-    private static TextureAtlasSprite[] registerIcons(String[] tileNames, TextureMap textureMap, boolean skipTiles, boolean defaultTiles)
+    private String[] parseTileNames(String str)
     {
-        if (tileNames == null)
+        if (str == null)
         {
             return null;
         }
         else
         {
             List list = new ArrayList();
+            String[] astring = Config.tokenize(str, " ,");
+            label32:
 
-            for (int i = 0; i < tileNames.length; ++i)
+            for (int i = 0; i < astring.length; ++i)
             {
-                String s = tileNames[i];
-                ResourceLocation resourcelocation = new ResourceLocation(s);
-                String s1 = resourcelocation.getResourceDomain();
-                String s2 = resourcelocation.getResourcePath();
+                String s = astring[i];
 
-                if (!s2.contains("/"))
+                if (s.contains("-"))
                 {
-                    s2 = "textures/blocks/" + s2;
-                }
+                    String[] astring1 = Config.tokenize(s, "-");
 
-                String s3 = s2 + ".png";
-
-                if (skipTiles && s3.endsWith("<skip>.png"))
-                {
-                    list.add(null);
-                }
-                else if (defaultTiles && s3.endsWith("<default>.png"))
-                {
-                    list.add(ConnectedTextures.SPRITE_DEFAULT);
-                }
-                else
-                {
-                    ResourceLocation resourcelocation1 = new ResourceLocation(s1, s3);
-                    boolean flag = Config.hasResource(resourcelocation1);
-
-                    if (!flag)
+                    if (astring1.length == 2)
                     {
-                        Config.warn("File not found: " + s3);
+                        int j = Config.parseInt(astring1[0], -1);
+                        int k = Config.parseInt(astring1[1], -1);
+
+                        if (j >= 0 && k >= 0)
+                        {
+                            if (j > k)
+                            {
+                                Config.warn("Invalid interval: " + s + ", when parsing: " + str);
+                                continue;
+                            }
+
+                            int l = j;
+
+                            while (true)
+                            {
+                                if (l > k)
+                                {
+                                    continue label32;
+                                }
+
+                                list.add(String.valueOf(l));
+                                ++l;
+                            }
+                        }
                     }
-
-                    String s4 = "textures/";
-                    String s5 = s2;
-
-                    if (s2.startsWith(s4))
-                    {
-                        s5 = s2.substring(s4.length());
-                    }
-
-                    ResourceLocation resourcelocation2 = new ResourceLocation(s1, s5);
-                    TextureAtlasSprite textureatlassprite = textureMap.registerSprite(resourcelocation2);
-                    list.add(textureatlassprite);
                 }
+
+                list.add(s);
             }
 
-            TextureAtlasSprite[] atextureatlassprite = (TextureAtlasSprite[])((TextureAtlasSprite[])list.toArray(new TextureAtlasSprite[list.size()]));
-            return atextureatlassprite;
+            String[] astring2 = (String[]) list.toArray(new String[list.size()]);
+
+            for (int i1 = 0; i1 < astring2.length; ++i1)
+            {
+                String s1 = astring2[i1];
+                s1 = TextureUtils.fixResourcePath(s1, this.basePath);
+
+                if (!s1.startsWith(this.basePath) && !s1.startsWith("textures/") && !s1.startsWith("mcpatcher/"))
+                {
+                    s1 = this.basePath + "/" + s1;
+                }
+
+                if (s1.endsWith(".png"))
+                {
+                    s1 = s1.substring(0, s1.length() - 4);
+                }
+
+                if (s1.startsWith("/"))
+                {
+                    s1 = s1.substring(1);
+                }
+
+                astring2[i1] = s1;
+            }
+
+            return astring2;
         }
     }
 
@@ -1213,7 +1213,7 @@ public class ConnectedProperties
 
     public boolean matchesBlock(int blockId, int metadata)
     {
-        return !Matches.block(blockId, metadata, this.matchBlocks) ? false : Matches.metadata(metadata, this.metadatas);
+        return Matches.block(blockId, metadata, this.matchBlocks) && Matches.metadata(metadata, this.metadatas);
     }
 
     public boolean matchesIcon(TextureAtlasSprite icon)
@@ -1223,7 +1223,7 @@ public class ConnectedProperties
 
     public String toString()
     {
-        return "CTM name: " + this.name + ", basePath: " + this.basePath + ", matchBlocks: " + Config.arrayToString((Object[])this.matchBlocks) + ", matchTiles: " + Config.arrayToString((Object[])this.matchTiles);
+        return "CTM name: " + this.name + ", basePath: " + this.basePath + ", matchBlocks: " + Config.arrayToString(this.matchBlocks) + ", matchTiles: " + Config.arrayToString(this.matchTiles);
     }
 
     public boolean matchesBiome(BiomeGenBase biome)

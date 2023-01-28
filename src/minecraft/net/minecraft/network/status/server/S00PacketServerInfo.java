@@ -2,7 +2,6 @@ package net.minecraft.network.status.server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.ServerStatusResponse;
@@ -10,6 +9,8 @@ import net.minecraft.network.status.INetHandlerStatusClient;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.IChatComponent;
+
+import java.io.IOException;
 
 public class S00PacketServerInfo implements Packet<INetHandlerStatusClient>
 {
@@ -27,12 +28,12 @@ public class S00PacketServerInfo implements Packet<INetHandlerStatusClient>
 
     public void readPacketData(PacketBuffer buf) throws IOException
     {
-        this.response = (ServerStatusResponse)GSON.fromJson(buf.readStringFromBuffer(32767), ServerStatusResponse.class);
+        this.response = GSON.fromJson(buf.readStringFromBuffer(32767), ServerStatusResponse.class);
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException
     {
-        buf.writeString(GSON.toJson((Object)this.response));
+        buf.writeString(GSON.toJson(this.response));
     }
 
     public void processPacket(INetHandlerStatusClient handler)

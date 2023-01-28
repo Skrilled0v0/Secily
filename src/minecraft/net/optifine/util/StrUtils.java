@@ -54,16 +54,13 @@ public class StrUtils
                     {
                         int i = 0;
 
-                        for (int j = 0; j < ((List)list).size(); ++j)
-                        {
-                            String s3 = (String)list.get(j);
+                        for (int j = 0; j < list.size(); ++j) {
+                            String s3 = (String) list.get(j);
 
-                            if (s3.length() > 0)
-                            {
+                            if (s3.length() > 0) {
                                 int k = indexOfMaskSingle(str, s3, i, wildCharSingle);
 
-                                if (k < 0)
-                                {
+                                if (k < 0) {
                                     return false;
                                 }
 
@@ -157,7 +154,7 @@ public class StrUtils
             }
             else
             {
-                String s = str.substring(str.length() - mask.length(), str.length());
+                String s = str.substring(str.length() - mask.length());
                 return equalsMaskSingle(s, mask, wildCharSingle);
             }
         }
@@ -250,16 +247,13 @@ public class StrUtils
                     {
                         int i = 0;
 
-                        for (int j = 0; j < ((List)list).size(); ++j)
-                        {
-                            String s3 = (String)list.get(j);
+                        for (int j = 0; j < list.size(); ++j) {
+                            String s3 = (String) list.get(j);
 
-                            if (s3.length() > 0)
-                            {
+                            if (s3.length() > 0) {
                                 int k = str.indexOf(s3, i);
 
-                                if (k < 0)
-                                {
+                                if (k < 0) {
                                     return false;
                                 }
 
@@ -291,19 +285,17 @@ public class StrUtils
                 List list = new ArrayList();
                 int i = 0;
 
-                for (int j = 0; j < str.length(); ++j)
-                {
+                for (int j = 0; j < str.length(); ++j) {
                     char c0 = str.charAt(j);
 
-                    if (equals(c0, separators))
-                    {
+                    if (equals(c0, separators)) {
                         list.add(str.substring(i, j));
                         i = j + 1;
                     }
                 }
 
-                list.add(str.substring(i, str.length()));
-                return (String[])((String[])list.toArray(new String[list.size()]));
+                list.add(str.substring(i));
+                return (String[]) list.toArray(new String[list.size()]);
             }
         }
         else
@@ -342,7 +334,7 @@ public class StrUtils
 
     public static boolean isEmpty(String string)
     {
-        return string == null ? true : string.trim().length() <= 0;
+        return string == null || string.trim().length() <= 0;
     }
 
     public static String stringInc(String str)
@@ -419,7 +411,7 @@ public class StrUtils
                 stringbuffer.append(fillChar);
             }
 
-            return stringbuffer.toString() + s;
+            return stringbuffer + s;
         }
     }
 
@@ -449,7 +441,7 @@ public class StrUtils
 
     public static boolean equals(Object a, Object b)
     {
-        return a == b ? true : (a != null && a.equals(b) ? true : b != null && b.equals(a));
+        return a == b || (a != null && a.equals(b) || b != null && b.equals(a));
     }
 
     public static boolean startsWith(String str, String[] prefixes)
@@ -658,7 +650,7 @@ public class StrUtils
                     }
                 }
 
-                String[] astring = (String[])list.toArray(new String[list.size()]);
+                String[] astring = list.toArray(new String[list.size()]);
                 return astring;
             }
         }

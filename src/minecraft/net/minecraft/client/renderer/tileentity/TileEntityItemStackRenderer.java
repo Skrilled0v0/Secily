@@ -1,7 +1,6 @@
 package net.minecraft.client.renderer.tileentity;
 
 import com.mojang.authlib.GameProfile;
-import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Blocks;
@@ -15,24 +14,19 @@ import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
 
-public class TileEntityItemStackRenderer
-{
+public class TileEntityItemStackRenderer {
     public static TileEntityItemStackRenderer instance = new TileEntityItemStackRenderer();
-    private TileEntityChest field_147717_b = new TileEntityChest(0);
-    private TileEntityChest field_147718_c = new TileEntityChest(1);
-    private TileEntityEnderChest enderChest = new TileEntityEnderChest();
-    private TileEntityBanner banner = new TileEntityBanner();
-    private TileEntitySkull skull = new TileEntitySkull();
+    private final TileEntityChest field_147717_b = new TileEntityChest(0);
+    private final TileEntityChest field_147718_c = new TileEntityChest(1);
+    private final TileEntityEnderChest enderChest = new TileEntityEnderChest();
+    private final TileEntityBanner banner = new TileEntityBanner();
+    private final TileEntitySkull skull = new TileEntitySkull();
 
-    public void renderByItem(ItemStack itemStackIn)
-    {
-        if (itemStackIn.getItem() == Items.banner)
-        {
+    public void renderByItem(ItemStack itemStackIn) {
+        if (itemStackIn.getItem() == Items.banner) {
             this.banner.setItemValues(itemStackIn);
             TileEntityRendererDispatcher.instance.renderTileEntityAt(this.banner, 0.0D, 0.0D, 0.0D, 0.0F);
-        }
-        else if (itemStackIn.getItem() == Items.skull)
-        {
+        } else if (itemStackIn.getItem() == Items.skull) {
             GameProfile gameprofile = null;
 
             if (itemStackIn.hasTagCompound())
@@ -45,7 +39,7 @@ public class TileEntityItemStackRenderer
                 }
                 else if (nbttagcompound.hasKey("SkullOwner", 8) && nbttagcompound.getString("SkullOwner").length() > 0)
                 {
-                    gameprofile = new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner"));
+                    gameprofile = new GameProfile(null, nbttagcompound.getString("SkullOwner"));
                     gameprofile = TileEntitySkull.updateGameprofile(gameprofile);
                     nbttagcompound.removeTag("SkullOwner");
                     nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));

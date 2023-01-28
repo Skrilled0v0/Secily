@@ -1,6 +1,5 @@
 package net.minecraft.inventory;
 
-import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -8,13 +7,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class InventoryHelper
 {
     private static final Random RANDOM = new Random();
 
     public static void dropInventoryItems(World worldIn, BlockPos pos, IInventory inventory)
     {
-        dropInventoryItems(worldIn, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), inventory);
+        dropInventoryItems(worldIn, pos.getX(), pos.getY(), pos.getZ(), inventory);
     }
 
     public static void dropInventoryItems(World worldIn, Entity entityAt, IInventory inventory)

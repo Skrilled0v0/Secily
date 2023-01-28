@@ -1,13 +1,5 @@
 package net.minecraft.client.renderer.block.model;
 
-import net.minecraftforge.client.model.ITransformation;
-import net.optifine.model.BlockModelUtils;
-import net.optifine.reflect.Reflector;
-import net.optifine.shaders.Shaders;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
-
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelRotation;
@@ -15,6 +7,13 @@ import net.minecraft.src.Config;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3i;
+import net.minecraftforge.client.model.ITransformation;
+import net.optifine.model.BlockModelUtils;
+import net.optifine.reflect.Reflector;
+import net.optifine.shaders.Shaders;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 public class FaceBakery
 {
@@ -26,27 +25,48 @@ public class FaceBakery
         return this.makeBakedQuad(posFrom, posTo, face, sprite, facing, (ITransformation) modelRotationIn, partRotation, uvLocked, shade);
     }
 
-    public BakedQuad makeBakedQuad(Vector3f p_makeBakedQuad_1_, Vector3f p_makeBakedQuad_2_, BlockPartFace p_makeBakedQuad_3_, TextureAtlasSprite p_makeBakedQuad_4_, EnumFacing p_makeBakedQuad_5_, ITransformation p_makeBakedQuad_6_, BlockPartRotation p_makeBakedQuad_7_, boolean p_makeBakedQuad_8_, boolean p_makeBakedQuad_9_)
+    public static EnumFacing getFacingFromVertexData(int[] faceData)
     {
-        int[] aint = this.makeQuadVertexData(p_makeBakedQuad_3_, p_makeBakedQuad_4_, p_makeBakedQuad_5_, this.getPositionsDiv16(p_makeBakedQuad_1_, p_makeBakedQuad_2_), p_makeBakedQuad_6_, p_makeBakedQuad_7_, p_makeBakedQuad_8_, p_makeBakedQuad_9_);
-        EnumFacing enumfacing = getFacingFromVertexData(aint);
+        int i = faceData.length / 4;
+        int j = i * 2;
+        int k = i * 3;
+        Vector3f vector3f = new Vector3f(Float.intBitsToFloat(faceData[0]), Float.intBitsToFloat(faceData[1]), Float.intBitsToFloat(faceData[2]));
+        Vector3f vector3f1 = new Vector3f(Float.intBitsToFloat(faceData[i]), Float.intBitsToFloat(faceData[i + 1]), Float.intBitsToFloat(faceData[i + 2]));
+        Vector3f vector3f2 = new Vector3f(Float.intBitsToFloat(faceData[j]), Float.intBitsToFloat(faceData[j + 1]), Float.intBitsToFloat(faceData[j + 2]));
+        Vector3f vector3f3 = new Vector3f();
+        Vector3f vector3f4 = new Vector3f();
+        Vector3f vector3f5 = new Vector3f();
+        Vector3f.sub(vector3f, vector3f1, vector3f3);
+        Vector3f.sub(vector3f2, vector3f1, vector3f4);
+        Vector3f.cross(vector3f4, vector3f3, vector3f5);
+        float f = (float) Math.sqrt(vector3f5.x * vector3f5.x + vector3f5.y * vector3f5.y + vector3f5.z * vector3f5.z);
+        vector3f5.x /= f;
+        vector3f5.y /= f;
+        vector3f5.z /= f;
+        EnumFacing enumfacing = null;
+        float f1 = 0.0F;
 
-        if (p_makeBakedQuad_8_)
+        for (EnumFacing enumfacing1 : EnumFacing.values())
         {
-            this.lockUv(aint, enumfacing, p_makeBakedQuad_3_.blockFaceUV, p_makeBakedQuad_4_);
+            Vec3i vec3i = enumfacing1.getDirectionVec();
+            Vector3f vector3f6 = new Vector3f((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
+            float f2 = Vector3f.dot(vector3f5, vector3f6);
+
+            if (f2 >= 0.0F && f2 > f1)
+            {
+                f1 = f2;
+                enumfacing = enumfacing1;
+            }
         }
 
-        if (p_makeBakedQuad_7_ == null)
+        if (enumfacing == null)
         {
-            this.applyFacing(aint, enumfacing);
+            return EnumFacing.UP;
         }
-
-        if (Reflector.ForgeHooksClient_fillNormal.exists())
+        else
         {
-            Reflector.call(Reflector.ForgeHooksClient_fillNormal, new Object[] {aint, enumfacing});
+            return enumfacing;
         }
-
-        return new BakedQuad(aint, p_makeBakedQuad_3_.tintIndex, enumfacing);
     }
 
     private int[] makeQuadVertexData(BlockPartFace p_makeQuadVertexData_1_, TextureAtlasSprite p_makeQuadVertexData_2_, EnumFacing p_makeQuadVertexData_3_, float[] p_makeQuadVertexData_4_, ITransformation p_makeQuadVertexData_5_, BlockPartRotation p_makeQuadVertexData_6_, boolean p_makeQuadVertexData_7_, boolean p_makeQuadVertexData_8_)
@@ -200,25 +220,27 @@ public class FaceBakery
         return this.rotateVertex(position, facing, vertexIndex, modelRotationIn, uvLocked);
     }
 
-    public int rotateVertex(Vector3f p_rotateVertex_1_, EnumFacing p_rotateVertex_2_, int p_rotateVertex_3_, ITransformation p_rotateVertex_4_, boolean p_rotateVertex_5_)
+    public BakedQuad makeBakedQuad(Vector3f p_makeBakedQuad_1_, Vector3f p_makeBakedQuad_2_, BlockPartFace p_makeBakedQuad_3_, TextureAtlasSprite p_makeBakedQuad_4_, EnumFacing p_makeBakedQuad_5_, ITransformation p_makeBakedQuad_6_, BlockPartRotation p_makeBakedQuad_7_, boolean p_makeBakedQuad_8_, boolean p_makeBakedQuad_9_)
     {
-        if (p_rotateVertex_4_ == ModelRotation.X0_Y0)
-        {
-            return p_rotateVertex_3_;
-        }
-        else
-        {
-            if (Reflector.ForgeHooksClient_transform.exists())
-            {
-                Reflector.call(Reflector.ForgeHooksClient_transform, new Object[] {p_rotateVertex_1_, p_rotateVertex_4_.getMatrix()});
-            }
-            else
-            {
-                this.rotateScale(p_rotateVertex_1_, new Vector3f(0.5F, 0.5F, 0.5F), ((ModelRotation)p_rotateVertex_4_).getMatrix4d(), new Vector3f(1.0F, 1.0F, 1.0F));
-            }
+        int[] aint = this.makeQuadVertexData(p_makeBakedQuad_3_, p_makeBakedQuad_4_, p_makeBakedQuad_5_, this.getPositionsDiv16(p_makeBakedQuad_1_, p_makeBakedQuad_2_), p_makeBakedQuad_6_, p_makeBakedQuad_7_, p_makeBakedQuad_8_, p_makeBakedQuad_9_);
+        EnumFacing enumfacing = getFacingFromVertexData(aint);
 
-            return p_rotateVertex_4_.rotate(p_rotateVertex_2_, p_rotateVertex_3_);
+        if (p_makeBakedQuad_8_)
+        {
+            this.lockUv(aint, enumfacing, p_makeBakedQuad_3_.blockFaceUV, p_makeBakedQuad_4_);
         }
+
+        if (p_makeBakedQuad_7_ == null)
+        {
+            this.applyFacing(aint, enumfacing);
+        }
+
+        if (Reflector.ForgeHooksClient_fillNormal.exists())
+        {
+            Reflector.call(Reflector.ForgeHooksClient_fillNormal, aint, enumfacing);
+        }
+
+        return new BakedQuad(aint, p_makeBakedQuad_3_.tintIndex, enumfacing);
     }
 
     private void rotateScale(Vector3f position, Vector3f rotationOrigin, Matrix4f rotationMatrix, Vector3f scale)
@@ -238,47 +260,24 @@ public class FaceBakery
         return matrix4f;
     }
 
-    public static EnumFacing getFacingFromVertexData(int[] faceData)
+    public int rotateVertex(Vector3f p_rotateVertex_1_, EnumFacing p_rotateVertex_2_, int p_rotateVertex_3_, ITransformation p_rotateVertex_4_, boolean p_rotateVertex_5_)
     {
-        int i = faceData.length / 4;
-        int j = i * 2;
-        int k = i * 3;
-        Vector3f vector3f = new Vector3f(Float.intBitsToFloat(faceData[0]), Float.intBitsToFloat(faceData[1]), Float.intBitsToFloat(faceData[2]));
-        Vector3f vector3f1 = new Vector3f(Float.intBitsToFloat(faceData[i]), Float.intBitsToFloat(faceData[i + 1]), Float.intBitsToFloat(faceData[i + 2]));
-        Vector3f vector3f2 = new Vector3f(Float.intBitsToFloat(faceData[j]), Float.intBitsToFloat(faceData[j + 1]), Float.intBitsToFloat(faceData[j + 2]));
-        Vector3f vector3f3 = new Vector3f();
-        Vector3f vector3f4 = new Vector3f();
-        Vector3f vector3f5 = new Vector3f();
-        Vector3f.sub(vector3f, vector3f1, vector3f3);
-        Vector3f.sub(vector3f2, vector3f1, vector3f4);
-        Vector3f.cross(vector3f4, vector3f3, vector3f5);
-        float f = (float)Math.sqrt((double)(vector3f5.x * vector3f5.x + vector3f5.y * vector3f5.y + vector3f5.z * vector3f5.z));
-        vector3f5.x /= f;
-        vector3f5.y /= f;
-        vector3f5.z /= f;
-        EnumFacing enumfacing = null;
-        float f1 = 0.0F;
-
-        for (EnumFacing enumfacing1 : EnumFacing.values())
+        if (p_rotateVertex_4_ == ModelRotation.X0_Y0)
         {
-            Vec3i vec3i = enumfacing1.getDirectionVec();
-            Vector3f vector3f6 = new Vector3f((float)vec3i.getX(), (float)vec3i.getY(), (float)vec3i.getZ());
-            float f2 = Vector3f.dot(vector3f5, vector3f6);
-
-            if (f2 >= 0.0F && f2 > f1)
-            {
-                f1 = f2;
-                enumfacing = enumfacing1;
-            }
-        }
-
-        if (enumfacing == null)
-        {
-            return EnumFacing.UP;
+            return p_rotateVertex_3_;
         }
         else
         {
-            return enumfacing;
+            if (Reflector.ForgeHooksClient_transform.exists())
+            {
+                Reflector.call(Reflector.ForgeHooksClient_transform, p_rotateVertex_1_, p_rotateVertex_4_.getMatrix());
+            }
+            else
+            {
+                this.rotateScale(p_rotateVertex_1_, new Vector3f(0.5F, 0.5F, 0.5F), ((ModelRotation)p_rotateVertex_4_).getMatrix4d(), new Vector3f(1.0F, 1.0F, 1.0F));
+            }
+
+            return p_rotateVertex_4_.rotate(p_rotateVertex_2_, p_rotateVertex_3_);
         }
     }
 
@@ -429,7 +428,7 @@ public class FaceBakery
         }
 
         int k = p_178401_4_.func_178345_c(p_178401_1_) * i;
-        p_178401_2_[k + 4] = Float.floatToRawIntBits(p_178401_5_.getInterpolatedU((double)f3));
-        p_178401_2_[k + 4 + 1] = Float.floatToRawIntBits(p_178401_5_.getInterpolatedV((double)f4));
+        p_178401_2_[k + 4] = Float.floatToRawIntBits(p_178401_5_.getInterpolatedU(f3));
+        p_178401_2_[k + 4 + 1] = Float.floatToRawIntBits(p_178401_5_.getInterpolatedV(f4));
     }
 }

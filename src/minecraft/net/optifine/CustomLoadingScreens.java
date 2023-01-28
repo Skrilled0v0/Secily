@@ -43,8 +43,8 @@ public class CustomLoadingScreens
         screens = null;
         screensMinDimensionId = 0;
         Pair<CustomLoadingScreen[], Integer> pair = parseScreens();
-        screens = (CustomLoadingScreen[])pair.getLeft();
-        screensMinDimensionId = ((Integer)pair.getRight()).intValue();
+        screens = pair.getLeft();
+        screensMinDimensionId = pair.getRight().intValue();
     }
 
     private static Pair<CustomLoadingScreen[], Integer> parseScreens()
@@ -60,26 +60,20 @@ public class CustomLoadingScreens
             String s3 = StrUtils.removePrefixSuffix(s2, s, s1);
             int j = Config.parseInt(s3, Integer.MIN_VALUE);
 
-            if (j == Integer.MIN_VALUE)
-            {
+            if (j == Integer.MIN_VALUE) {
                 warn("Invalid dimension ID: " + s3 + ", path: " + s2);
-            }
-            else
-            {
+            } else {
                 map.put(Integer.valueOf(j), s2);
             }
         }
 
         Set<Integer> set = map.keySet();
-        Integer[] ainteger = (Integer[])set.toArray(new Integer[set.size()]);
-        Arrays.sort((Object[])ainteger);
+        Integer[] ainteger = set.toArray(new Integer[set.size()]);
+        Arrays.sort(ainteger);
 
-        if (ainteger.length <= 0)
-        {
-            return new ImmutablePair((Object)null, Integer.valueOf(0));
-        }
-        else
-        {
+        if (ainteger.length <= 0) {
+            return new ImmutablePair(null, Integer.valueOf(0));
+        } else {
             String s5 = "optifine/gui/loading/loading.properties";
             Properties properties = ResUtils.readProperties(s5, "CustomLoadingScreens");
             int k = ainteger[0].intValue();
@@ -90,7 +84,7 @@ public class CustomLoadingScreens
             for (int j1 = 0; j1 < ainteger.length; ++j1)
             {
                 Integer integer = ainteger[j1];
-                String s4 = (String)map.get(integer);
+                String s4 = map.get(integer);
                 acustomloadingscreen[integer.intValue() - k] = CustomLoadingScreen.parseScreen(s4, integer.intValue(), properties);
             }
 

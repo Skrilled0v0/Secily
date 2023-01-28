@@ -5,20 +5,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class ContainerHorseInventory extends Container
-{
-    private IInventory horseInventory;
-    private EntityHorse theHorse;
+public class ContainerHorseInventory extends Container {
+    private final IInventory horseInventory;
+    private final EntityHorse theHorse;
 
-    public ContainerHorseInventory(IInventory playerInventory, final IInventory horseInventoryIn, final EntityHorse horse, EntityPlayer player)
-    {
+    public ContainerHorseInventory(IInventory playerInventory, final IInventory horseInventoryIn, final EntityHorse horse, EntityPlayer player) {
         this.horseInventory = horseInventoryIn;
         this.theHorse = horse;
         int i = 3;
         horseInventoryIn.openInventory(player);
         int j = (i - 4) * 18;
-        this.addSlotToContainer(new Slot(horseInventoryIn, 0, 8, 18)
-        {
+        this.addSlotToContainer(new Slot(horseInventoryIn, 0, 8, 18) {
             public boolean isItemValid(ItemStack stack)
             {
                 return super.isItemValid(stack) && stack.getItem() == Items.saddle && !this.getHasStack();
@@ -69,7 +66,7 @@ public class ContainerHorseInventory extends Container
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -104,7 +101,7 @@ public class ContainerHorseInventory extends Container
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(null);
             }
             else
             {

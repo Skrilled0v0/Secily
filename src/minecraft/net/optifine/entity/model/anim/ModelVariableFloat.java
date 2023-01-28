@@ -4,21 +4,18 @@ import net.minecraft.client.model.ModelRenderer;
 import net.optifine.expr.ExpressionType;
 import net.optifine.expr.IExpressionFloat;
 
-public class ModelVariableFloat implements IExpressionFloat
-{
-    private String name;
-    private ModelRenderer modelRenderer;
-    private ModelVariableType enumModelVariable;
+public class ModelVariableFloat implements IExpressionFloat {
+    private final String name;
+    private final ModelRenderer modelRenderer;
+    private final ModelVariableType enumModelVariable;
 
-    public ModelVariableFloat(String name, ModelRenderer modelRenderer, ModelVariableType enumModelVariable)
-    {
+    public ModelVariableFloat(String name, ModelRenderer modelRenderer, ModelVariableType enumModelVariable) {
         this.name = name;
         this.modelRenderer = modelRenderer;
         this.enumModelVariable = enumModelVariable;
     }
 
-    public ExpressionType getExpressionType()
-    {
+    public ExpressionType getExpressionType() {
         return ExpressionType.FLOAT;
     }
 

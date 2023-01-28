@@ -43,7 +43,7 @@ public class AnvilSaveConverter extends SaveFormatOld
     {
         if (this.savesDirectory != null && this.savesDirectory.exists() && this.savesDirectory.isDirectory())
         {
-            List<SaveFormatComparator> list = Lists.<SaveFormatComparator>newArrayList();
+            List<SaveFormatComparator> list = Lists.newArrayList();
             File[] afile = this.savesDirectory.listFiles();
 
             for (File file1 : afile)
@@ -104,20 +104,18 @@ public class AnvilSaveConverter extends SaveFormatOld
         return worldinfo != null && worldinfo.getSaveVersion() != this.getSaveVersion();
     }
 
-    public boolean convertMapFormat(String filename, IProgressUpdate progressCallback)
-    {
+    public boolean convertMapFormat(String filename, IProgressUpdate progressCallback) {
         progressCallback.setLoadingProgress(0);
-        List<File> list = Lists.<File>newArrayList();
-        List<File> list1 = Lists.<File>newArrayList();
-        List<File> list2 = Lists.<File>newArrayList();
+        List<File> list = Lists.newArrayList();
+        List<File> list1 = Lists.newArrayList();
+        List<File> list2 = Lists.newArrayList();
         File file1 = new File(this.savesDirectory, filename);
         File file2 = new File(file1, "DIM-1");
         File file3 = new File(file1, "DIM1");
         logger.info("Scanning folders...");
         this.addRegionFilesToCollection(file1, list);
 
-        if (file2.exists())
-        {
+        if (file2.exists()) {
             this.addRegionFilesToCollection(file2, list1);
         }
 

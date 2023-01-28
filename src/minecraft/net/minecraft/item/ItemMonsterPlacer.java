@@ -1,6 +1,5 @@
 package net.minecraft.item;
 
-import java.util.List;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -9,19 +8,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemMonsterPlacer extends Item
 {
@@ -44,10 +40,34 @@ public class ItemMonsterPlacer extends Item
         return s;
     }
 
-    public int getColorFromItemStack(ItemStack stack, int renderPass)
+    public static Entity spawnCreature(World worldIn, int entityID, double x, double y, double z)
     {
-        EntityList.EntityEggInfo entitylist$entityegginfo = (EntityList.EntityEggInfo)EntityList.entityEggs.get(Integer.valueOf(stack.getMetadata()));
-        return entitylist$entityegginfo != null ? (renderPass == 0 ? entitylist$entityegginfo.primaryColor : entitylist$entityegginfo.secondaryColor) : 16777215;
+        if (!EntityList.entityEggs.containsKey(Integer.valueOf(entityID)))
+        {
+            return null;
+        }
+        else
+        {
+            Entity entity = null;
+
+            for (int i = 0; i < 1; ++i)
+            {
+                entity = EntityList.createEntityByID(entityID, worldIn);
+
+                if (entity instanceof EntityLivingBase)
+                {
+                    EntityLiving entityliving = (EntityLiving)entity;
+                    entity.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+                    entityliving.rotationYawHead = entityliving.rotationYaw;
+                    entityliving.renderYawOffset = entityliving.rotationYaw;
+                    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), null);
+                    worldIn.spawnEntityInWorld(entity);
+                    entityliving.playLivingSound();
+                }
+            }
+
+            return entity;
+        }
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
@@ -111,6 +131,12 @@ public class ItemMonsterPlacer extends Item
         }
     }
 
+    public int getColorFromItemStack(ItemStack stack, int renderPass)
+    {
+        EntityList.EntityEggInfo entitylist$entityegginfo = EntityList.entityEggs.get(Integer.valueOf(stack.getMetadata()));
+        return entitylist$entityegginfo != null ? (renderPass == 0 ? entitylist$entityegginfo.primaryColor : entitylist$entityegginfo.secondaryColor) : 16777215;
+    }
+
     public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
     {
         if (worldIn.isRemote)
@@ -149,7 +175,7 @@ public class ItemMonsterPlacer extends Item
                         {
                             if (entity instanceof EntityLivingBase && itemStackIn.hasDisplayName())
                             {
-                                ((EntityLiving)entity).setCustomNameTag(itemStackIn.getDisplayName());
+                                entity.setCustomNameTag(itemStackIn.getDisplayName());
                             }
 
                             if (!playerIn.capabilities.isCreativeMode)
@@ -164,36 +190,6 @@ public class ItemMonsterPlacer extends Item
 
                 return itemStackIn;
             }
-        }
-    }
-
-    public static Entity spawnCreature(World worldIn, int entityID, double x, double y, double z)
-    {
-        if (!EntityList.entityEggs.containsKey(Integer.valueOf(entityID)))
-        {
-            return null;
-        }
-        else
-        {
-            Entity entity = null;
-
-            for (int i = 0; i < 1; ++i)
-            {
-                entity = EntityList.createEntityByID(entityID, worldIn);
-
-                if (entity instanceof EntityLivingBase)
-                {
-                    EntityLiving entityliving = (EntityLiving)entity;
-                    entity.setLocationAndAngles(x, y, z, MathHelper.wrapAngleTo180_float(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-                    entityliving.rotationYawHead = entityliving.rotationYaw;
-                    entityliving.renderYawOffset = entityliving.rotationYaw;
-                    entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData)null);
-                    worldIn.spawnEntityInWorld(entity);
-                    entityliving.playLivingSound();
-                }
-            }
-
-            return entity;
         }
     }
 

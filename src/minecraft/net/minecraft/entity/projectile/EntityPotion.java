@@ -1,6 +1,5 @@
 package net.minecraft.entity.projectile;
 
-import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -11,6 +10,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityPotion extends EntityThrowable
 {
@@ -87,7 +88,7 @@ public class EntityPotion extends EntityThrowable
             if (list != null && !list.isEmpty())
             {
                 AxisAlignedBB axisalignedbb = this.getEntityBoundingBox().expand(4.0D, 2.0D, 4.0D);
-                List<EntityLivingBase> list1 = this.worldObj.<EntityLivingBase>getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
+                List<EntityLivingBase> list1 = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, axisalignedbb);
 
                 if (!list1.isEmpty())
                 {

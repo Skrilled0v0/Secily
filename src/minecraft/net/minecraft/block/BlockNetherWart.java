@@ -1,19 +1,18 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockNetherWart extends BlockBush
 {
@@ -26,7 +25,7 @@ public class BlockNetherWart extends BlockBush
         this.setTickRandomly(true);
         float f = 0.5F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-        this.setCreativeTab((CreativeTabs)null);
+        this.setCreativeTab(null);
     }
 
     protected boolean canPlaceBlockOn(Block ground)
@@ -41,7 +40,7 @@ public class BlockNetherWart extends BlockBush
 
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
 
         if (i < 3 && rand.nextInt(10) == 0)
         {
@@ -58,12 +57,10 @@ public class BlockNetherWart extends BlockBush
         {
             int i = 1;
 
-            if (((Integer)state.getValue(AGE)).intValue() >= 3)
-            {
+            if (state.getValue(AGE).intValue() >= 3) {
                 i = 2 + worldIn.rand.nextInt(3);
 
-                if (fortune > 0)
-                {
+                if (fortune > 0) {
                     i += worldIn.rand.nextInt(fortune + 1);
                 }
             }
@@ -97,11 +94,11 @@ public class BlockNetherWart extends BlockBush
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {AGE});
+        return new BlockState(this, AGE);
     }
 }

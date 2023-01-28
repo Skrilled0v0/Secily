@@ -4,15 +4,13 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class EntityPortalFX extends EntityFX
-{
-    private float portalParticleScale;
-    private double portalPosX;
-    private double portalPosY;
-    private double portalPosZ;
+public class EntityPortalFX extends EntityFX {
+    private final float portalParticleScale;
+    private final double portalPosX;
+    private final double portalPosY;
+    private final double portalPosZ;
 
-    protected EntityPortalFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)
-    {
+    protected EntityPortalFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.motionX = xSpeedIn;
         this.motionY = ySpeedIn;
@@ -22,7 +20,7 @@ public class EntityPortalFX extends EntityFX
         this.portalPosZ = this.posZ = zCoordIn;
         float f = this.rand.nextFloat() * 0.6F + 0.4F;
         this.portalParticleScale = this.particleScale = this.rand.nextFloat() * 0.2F + 0.5F;
-        this.particleRed = this.particleGreen = this.particleBlue = 1.0F * f;
+        this.particleRed = this.particleGreen = this.particleBlue = f;
         this.particleGreen *= 0.3F;
         this.particleRed *= 0.9F;
         this.particleMaxAge = (int)(Math.random() * 10.0D) + 40;

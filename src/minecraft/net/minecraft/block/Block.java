@@ -130,7 +130,7 @@ public class Block
 
     public static Block getBlockById(int id)
     {
-        return (Block)blockRegistry.getObjectById(id);
+        return blockRegistry.getObjectById(id);
     }
 
     public static IBlockState getStateById(int id)
@@ -151,13 +151,13 @@ public class Block
 
         if (blockRegistry.containsKey(resourcelocation))
         {
-            return (Block)blockRegistry.getObject(resourcelocation);
+            return blockRegistry.getObject(resourcelocation);
         }
         else
         {
             try
             {
-                return (Block)blockRegistry.getObjectById(Integer.parseInt(name));
+                return blockRegistry.getObjectById(Integer.parseInt(name));
             }
             catch (NumberFormatException var3)
             {
@@ -196,35 +196,23 @@ public class Block
         return this.blockMaterial;
     }
 
-    public MapColor getMapColor(IBlockState state)
-    {
+    public MapColor getMapColor(IBlockState state) {
         return this.blockMapColor;
     }
 
-    public IBlockState getStateFromMeta(int meta)
-    {
+    public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState();
     }
 
-    public int getMetaFromState(IBlockState state)
-    {
-        if (state != null && !state.getPropertyNames().isEmpty())
-        {
-            throw new IllegalArgumentException("Don\'t know how to convert " + state + " back into data...");
-        }
-        else
-        {
-            return 0;
-        }
+    public static boolean isEqualTo(Block blockIn, Block other) {
+        return blockIn != null && other != null && (blockIn == other || blockIn.isAssociatedBlock(other));
     }
 
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-    {
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return state;
     }
 
-    public Block(Material blockMaterialIn, MapColor blockMapColorIn)
-    {
+    public Block(Material blockMaterialIn, MapColor blockMapColorIn) {
         this.enableStats = true;
         this.stepSound = soundTypeStone;
         this.blockParticleGravity = 1.0F;
@@ -332,56 +320,50 @@ public class Block
         return this;
     }
 
-    public boolean getTickRandomly()
-    {
+    public boolean getTickRandomly() {
         return this.needsRandomTick;
     }
 
-    public boolean hasTileEntity()
-    {
+    public boolean hasTileEntity() {
         return this.isBlockContainer;
     }
 
-    protected final void setBlockBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ)
-    {
-        this.minX = (double)minX;
-        this.minY = (double)minY;
-        this.minZ = (double)minZ;
-        this.maxX = (double)maxX;
-        this.maxY = (double)maxY;
-        this.maxZ = (double)maxZ;
+    public int getMetaFromState(IBlockState state) {
+        if (state != null && !state.getPropertyNames().isEmpty()) {
+            throw new IllegalArgumentException("Don't know how to convert " + state + " back into data...");
+        } else {
+            return 0;
+        }
     }
 
-    public int getMixedBrightnessForBlock(IBlockAccess worldIn, BlockPos pos)
-    {
+    public int getMixedBrightnessForBlock(IBlockAccess worldIn, BlockPos pos) {
         Block block = worldIn.getBlockState(pos).getBlock();
         int i = worldIn.getCombinedLight(pos, block.getLightValue());
 
-        if (i == 0 && block instanceof BlockSlab)
-        {
+        if (i == 0 && block instanceof BlockSlab) {
             pos = pos.down();
             block = worldIn.getBlockState(pos).getBlock();
             return worldIn.getCombinedLight(pos, block.getLightValue());
-        }
-        else
-        {
+        } else {
             return i;
         }
     }
 
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-    {
-        return side == EnumFacing.DOWN && this.minY > 0.0D ? true : (side == EnumFacing.UP && this.maxY < 1.0D ? true : (side == EnumFacing.NORTH && this.minZ > 0.0D ? true : (side == EnumFacing.SOUTH && this.maxZ < 1.0D ? true : (side == EnumFacing.WEST && this.minX > 0.0D ? true : (side == EnumFacing.EAST && this.maxX < 1.0D ? true : !worldIn.getBlockState(pos).getBlock().isOpaqueCube())))));
+    protected final void setBlockBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
+        this.minX = minX;
+        this.minY = minY;
+        this.minZ = minZ;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
     }
 
-    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
-    {
+    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         return worldIn.getBlockState(pos).getBlock().getMaterial().isSolid();
     }
 
-    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos)
-    {
-        return new AxisAlignedBB((double)pos.getX() + this.minX, (double)pos.getY() + this.minY, (double)pos.getZ() + this.minZ, (double)pos.getX() + this.maxX, (double)pos.getY() + this.maxY, (double)pos.getZ() + this.maxZ);
+    public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos) {
+        return new AxisAlignedBB((double) pos.getX() + this.minX, (double) pos.getY() + this.minY, (double) pos.getZ() + this.minZ, (double) pos.getX() + this.maxX, (double) pos.getY() + this.maxY, (double) pos.getZ() + this.maxZ);
     }
 
     public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
@@ -522,16 +504,18 @@ public class Block
         return 0;
     }
 
-    public float getExplosionResistance(Entity exploder)
-    {
+    public float getExplosionResistance(Entity exploder) {
         return this.blockResistance / 5.0F;
     }
 
-    public MovingObjectPosition collisionRayTrace(World worldIn, BlockPos pos, Vec3 start, Vec3 end)
-    {
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.DOWN && this.minY > 0.0D || (side == EnumFacing.UP && this.maxY < 1.0D || (side == EnumFacing.NORTH && this.minZ > 0.0D || (side == EnumFacing.SOUTH && this.maxZ < 1.0D || (side == EnumFacing.WEST && this.minX > 0.0D || (side == EnumFacing.EAST && this.maxX < 1.0D || !worldIn.getBlockState(pos).getBlock().isOpaqueCube())))));
+    }
+
+    public MovingObjectPosition collisionRayTrace(World worldIn, BlockPos pos, Vec3 start, Vec3 end) {
         this.setBlockBoundsBasedOnState(worldIn, pos);
-        start = start.addVector((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
-        end = end.addVector((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
+        start = start.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
+        end = end.addVector(-pos.getX(), -pos.getY(), -pos.getZ());
         Vec3 vec3 = start.getIntermediateWithXValue(end, this.minX);
         Vec3 vec31 = start.getIntermediateWithXValue(end, this.maxX);
         Vec3 vec32 = start.getIntermediateWithYValue(end, this.minY);
@@ -539,123 +523,97 @@ public class Block
         Vec3 vec34 = start.getIntermediateWithZValue(end, this.minZ);
         Vec3 vec35 = start.getIntermediateWithZValue(end, this.maxZ);
 
-        if (!this.isVecInsideYZBounds(vec3))
-        {
+        if (!this.isVecInsideYZBounds(vec3)) {
             vec3 = null;
         }
 
-        if (!this.isVecInsideYZBounds(vec31))
-        {
+        if (!this.isVecInsideYZBounds(vec31)) {
             vec31 = null;
         }
 
-        if (!this.isVecInsideXZBounds(vec32))
-        {
+        if (!this.isVecInsideXZBounds(vec32)) {
             vec32 = null;
         }
 
-        if (!this.isVecInsideXZBounds(vec33))
-        {
+        if (!this.isVecInsideXZBounds(vec33)) {
             vec33 = null;
         }
 
-        if (!this.isVecInsideXYBounds(vec34))
-        {
+        if (!this.isVecInsideXYBounds(vec34)) {
             vec34 = null;
         }
 
-        if (!this.isVecInsideXYBounds(vec35))
-        {
+        if (!this.isVecInsideXYBounds(vec35)) {
             vec35 = null;
         }
 
         Vec3 vec36 = null;
 
-        if (vec3 != null && (vec36 == null || start.squareDistanceTo(vec3) < start.squareDistanceTo(vec36)))
-        {
+        if (vec3 != null && (vec36 == null || start.squareDistanceTo(vec3) < start.squareDistanceTo(vec36))) {
             vec36 = vec3;
         }
 
-        if (vec31 != null && (vec36 == null || start.squareDistanceTo(vec31) < start.squareDistanceTo(vec36)))
-        {
+        if (vec31 != null && (vec36 == null || start.squareDistanceTo(vec31) < start.squareDistanceTo(vec36))) {
             vec36 = vec31;
         }
 
-        if (vec32 != null && (vec36 == null || start.squareDistanceTo(vec32) < start.squareDistanceTo(vec36)))
-        {
+        if (vec32 != null && (vec36 == null || start.squareDistanceTo(vec32) < start.squareDistanceTo(vec36))) {
             vec36 = vec32;
         }
 
-        if (vec33 != null && (vec36 == null || start.squareDistanceTo(vec33) < start.squareDistanceTo(vec36)))
-        {
+        if (vec33 != null && (vec36 == null || start.squareDistanceTo(vec33) < start.squareDistanceTo(vec36))) {
             vec36 = vec33;
         }
 
-        if (vec34 != null && (vec36 == null || start.squareDistanceTo(vec34) < start.squareDistanceTo(vec36)))
-        {
+        if (vec34 != null && (vec36 == null || start.squareDistanceTo(vec34) < start.squareDistanceTo(vec36))) {
             vec36 = vec34;
         }
 
-        if (vec35 != null && (vec36 == null || start.squareDistanceTo(vec35) < start.squareDistanceTo(vec36)))
-        {
+        if (vec35 != null && (vec36 == null || start.squareDistanceTo(vec35) < start.squareDistanceTo(vec36))) {
             vec36 = vec35;
         }
 
-        if (vec36 == null)
-        {
+        if (vec36 == null) {
             return null;
-        }
-        else
-        {
+        } else {
             EnumFacing enumfacing = null;
 
-            if (vec36 == vec3)
-            {
+            if (vec36 == vec3) {
                 enumfacing = EnumFacing.WEST;
             }
 
-            if (vec36 == vec31)
-            {
+            if (vec36 == vec31) {
                 enumfacing = EnumFacing.EAST;
             }
 
-            if (vec36 == vec32)
-            {
+            if (vec36 == vec32) {
                 enumfacing = EnumFacing.DOWN;
             }
 
-            if (vec36 == vec33)
-            {
+            if (vec36 == vec33) {
                 enumfacing = EnumFacing.UP;
             }
 
-            if (vec36 == vec34)
-            {
+            if (vec36 == vec34) {
                 enumfacing = EnumFacing.NORTH;
             }
 
-            if (vec36 == vec35)
-            {
+            if (vec36 == vec35) {
                 enumfacing = EnumFacing.SOUTH;
             }
 
-            return new MovingObjectPosition(vec36.addVector((double)pos.getX(), (double)pos.getY(), (double)pos.getZ()), enumfacing, pos);
+            return new MovingObjectPosition(vec36.addVector(pos.getX(), pos.getY(), pos.getZ()), enumfacing, pos);
         }
     }
 
     private boolean isVecInsideYZBounds(Vec3 point)
     {
-        return point == null ? false : point.yCoord >= this.minY && point.yCoord <= this.maxY && point.zCoord >= this.minZ && point.zCoord <= this.maxZ;
+        return point != null && point.yCoord >= this.minY && point.yCoord <= this.maxY && point.zCoord >= this.minZ && point.zCoord <= this.maxZ;
     }
 
     private boolean isVecInsideXZBounds(Vec3 point)
     {
-        return point == null ? false : point.xCoord >= this.minX && point.xCoord <= this.maxX && point.zCoord >= this.minZ && point.zCoord <= this.maxZ;
-    }
-
-    private boolean isVecInsideXYBounds(Vec3 point)
-    {
-        return point == null ? false : point.xCoord >= this.minX && point.xCoord <= this.maxX && point.yCoord >= this.minY && point.yCoord <= this.maxY;
+        return point != null && point.xCoord >= this.minX && point.xCoord <= this.maxX && point.zCoord >= this.minZ && point.zCoord <= this.maxZ;
     }
 
     public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn)
@@ -941,9 +899,8 @@ public class Block
         return this == other;
     }
 
-    public static boolean isEqualTo(Block blockIn, Block other)
-    {
-        return blockIn != null && other != null ? (blockIn == other ? true : blockIn.isAssociatedBlock(other)) : false;
+    private boolean isVecInsideXYBounds(Vec3 point) {
+        return point != null && point.xCoord >= this.minX && point.xCoord <= this.maxX && point.yCoord >= this.minY && point.yCoord <= this.maxY;
     }
 
     public boolean hasComparatorInputOverride()
@@ -963,7 +920,7 @@ public class Block
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[0]);
+        return new BlockState(this);
     }
 
     public BlockState getBlockState()
@@ -1250,11 +1207,10 @@ public class Block
         registerBlock(id, new ResourceLocation(textualID), block_);
     }
 
-    public static enum EnumOffsetType
-    {
+    public enum EnumOffsetType {
         NONE,
         XZ,
-        XYZ;
+        XYZ
     }
 
     public static class SoundType

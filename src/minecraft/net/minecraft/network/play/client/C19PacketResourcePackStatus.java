@@ -1,9 +1,10 @@
 package net.minecraft.network.play.client;
 
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayServer;
+
+import java.io.IOException;
 
 public class C19PacketResourcePackStatus implements Packet<INetHandlerPlayServer>
 {
@@ -28,7 +29,7 @@ public class C19PacketResourcePackStatus implements Packet<INetHandlerPlayServer
     public void readPacketData(PacketBuffer buf) throws IOException
     {
         this.hash = buf.readStringFromBuffer(40);
-        this.status = (C19PacketResourcePackStatus.Action)buf.readEnumValue(C19PacketResourcePackStatus.Action.class);
+        this.status = buf.readEnumValue(Action.class);
     }
 
     public void writePacketData(PacketBuffer buf) throws IOException
@@ -42,11 +43,10 @@ public class C19PacketResourcePackStatus implements Packet<INetHandlerPlayServer
         handler.handleResourcePackStatus(this);
     }
 
-    public static enum Action
-    {
+    public enum Action {
         SUCCESSFULLY_LOADED,
         DECLINED,
         FAILED_DOWNLOAD,
-        ACCEPTED;
+        ACCEPTED
     }
 }

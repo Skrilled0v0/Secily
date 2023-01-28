@@ -10,20 +10,117 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class FlatGeneratorInfo
-{
-    private final List<FlatLayerInfo> flatLayers = Lists.<FlatLayerInfo>newArrayList();
-    private final Map<String, Map<String, String>> worldFeatures = Maps.<String, Map<String, String>>newHashMap();
+public class FlatGeneratorInfo {
+    private final List<FlatLayerInfo> flatLayers = Lists.newArrayList();
+    private final Map<String, Map<String, String>> worldFeatures = Maps.newHashMap();
     private int biomeToUse;
 
-    public int getBiome()
+    private static List<FlatLayerInfo> func_180716_a(int p_180716_0_, String p_180716_1_)
     {
-        return this.biomeToUse;
+        if (p_180716_1_ != null && p_180716_1_.length() >= 1)
+        {
+            List<FlatLayerInfo> list = Lists.newArrayList();
+            String[] astring = p_180716_1_.split(",");
+            int i = 0;
+
+            for (String s : astring)
+            {
+                FlatLayerInfo flatlayerinfo = func_180715_a(p_180716_0_, s, i);
+
+                if (flatlayerinfo == null)
+                {
+                    return null;
+                }
+
+                list.add(flatlayerinfo);
+                i += flatlayerinfo.getLayerCount();
+            }
+
+            return list;
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public void setBiome(int biome)
+    public static FlatGeneratorInfo createFlatGeneratorFromString(String flatGeneratorSettings)
     {
-        this.biomeToUse = biome;
+        if (flatGeneratorSettings == null)
+        {
+            return getDefaultFlatGenerator();
+        }
+        else
+        {
+            String[] astring = flatGeneratorSettings.split(";", -1);
+            int i = astring.length == 1 ? 0 : MathHelper.parseIntWithDefault(astring[0], 0);
+
+            if (i >= 0 && i <= 3)
+            {
+                FlatGeneratorInfo flatgeneratorinfo = new FlatGeneratorInfo();
+                int j = astring.length == 1 ? 0 : 1;
+                List<FlatLayerInfo> list = func_180716_a(i, astring[j++]);
+
+                if (list != null && !list.isEmpty())
+                {
+                    flatgeneratorinfo.getFlatLayers().addAll(list);
+                    flatgeneratorinfo.func_82645_d();
+                    int k = BiomeGenBase.plains.biomeID;
+
+                    if (i > 0 && astring.length > j)
+                    {
+                        k = MathHelper.parseIntWithDefault(astring[j++], k);
+                    }
+
+                    flatgeneratorinfo.setBiome(k);
+
+                    if (i > 0 && astring.length > j)
+                    {
+                        String[] astring1 = astring[j++].toLowerCase().split(",");
+
+                        for (String s : astring1)
+                        {
+                            String[] astring2 = s.split("\\(", 2);
+                            Map<String, String> map = Maps.newHashMap();
+
+                            if (astring2[0].length() > 0)
+                            {
+                                flatgeneratorinfo.getWorldFeatures().put(astring2[0], map);
+
+                                if (astring2.length > 1 && astring2[1].endsWith(")") && astring2[1].length() > 1)
+                                {
+                                    String[] astring3 = astring2[1].substring(0, astring2[1].length() - 1).split(" ");
+
+                                    for (int l = 0; l < astring3.length; ++l)
+                                    {
+                                        String[] astring4 = astring3[l].split("=", 2);
+
+                                        if (astring4.length == 2)
+                                        {
+                                            map.put(astring4[0], astring4[1]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        flatgeneratorinfo.getWorldFeatures().put("village", Maps.newHashMap());
+                    }
+
+                    return flatgeneratorinfo;
+                }
+                else
+                {
+                    return getDefaultFlatGenerator();
+                }
+            }
+            else
+            {
+                return getDefaultFlatGenerator();
+            }
+        }
     }
 
     public Map<String, Map<String, String>> getWorldFeatures()
@@ -47,67 +144,16 @@ public class FlatGeneratorInfo
         }
     }
 
-    public String toString()
+    public static FlatGeneratorInfo getDefaultFlatGenerator()
     {
-        StringBuilder stringbuilder = new StringBuilder();
-        stringbuilder.append((int)3);
-        stringbuilder.append(";");
-
-        for (int i = 0; i < this.flatLayers.size(); ++i)
-        {
-            if (i > 0)
-            {
-                stringbuilder.append(",");
-            }
-
-            stringbuilder.append(((FlatLayerInfo)this.flatLayers.get(i)).toString());
-        }
-
-        stringbuilder.append(";");
-        stringbuilder.append(this.biomeToUse);
-
-        if (!this.worldFeatures.isEmpty())
-        {
-            stringbuilder.append(";");
-            int k = 0;
-
-            for (Entry<String, Map<String, String>> entry : this.worldFeatures.entrySet())
-            {
-                if (k++ > 0)
-                {
-                    stringbuilder.append(",");
-                }
-
-                stringbuilder.append(((String)entry.getKey()).toLowerCase());
-                Map<String, String> map = (Map)entry.getValue();
-
-                if (!map.isEmpty())
-                {
-                    stringbuilder.append("(");
-                    int j = 0;
-
-                    for (Entry<String, String> entry1 : map.entrySet())
-                    {
-                        if (j++ > 0)
-                        {
-                            stringbuilder.append(" ");
-                        }
-
-                        stringbuilder.append((String)entry1.getKey());
-                        stringbuilder.append("=");
-                        stringbuilder.append((String)entry1.getValue());
-                    }
-
-                    stringbuilder.append(")");
-                }
-            }
-        }
-        else
-        {
-            stringbuilder.append(";");
-        }
-
-        return stringbuilder.toString();
+        FlatGeneratorInfo flatgeneratorinfo = new FlatGeneratorInfo();
+        flatgeneratorinfo.setBiome(BiomeGenBase.plains.biomeID);
+        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(1, Blocks.bedrock));
+        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(2, Blocks.dirt));
+        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(1, Blocks.grass));
+        flatgeneratorinfo.func_82645_d();
+        flatgeneratorinfo.getWorldFeatures().put("village", Maps.newHashMap());
+        return flatgeneratorinfo;
     }
 
     private static FlatLayerInfo func_180715_a(int p_180715_0_, String p_180715_1_, int p_180715_2_)
@@ -200,123 +246,69 @@ public class FlatGeneratorInfo
         return flatlayerinfo;
     }
 
-    private static List<FlatLayerInfo> func_180716_a(int p_180716_0_, String p_180716_1_)
-    {
-        if (p_180716_1_ != null && p_180716_1_.length() >= 1)
-        {
-            List<FlatLayerInfo> list = Lists.<FlatLayerInfo>newArrayList();
-            String[] astring = p_180716_1_.split(",");
-            int i = 0;
-
-            for (String s : astring)
-            {
-                FlatLayerInfo flatlayerinfo = func_180715_a(p_180716_0_, s, i);
-
-                if (flatlayerinfo == null)
-                {
-                    return null;
-                }
-
-                list.add(flatlayerinfo);
-                i += flatlayerinfo.getLayerCount();
-            }
-
-            return list;
-        }
-        else
-        {
-            return null;
-        }
+    public int getBiome() {
+        return this.biomeToUse;
     }
 
-    public static FlatGeneratorInfo createFlatGeneratorFromString(String flatGeneratorSettings)
+    public void setBiome(int biome) {
+        this.biomeToUse = biome;
+    }
+
+    public String toString()
     {
-        if (flatGeneratorSettings == null)
-        {
-            return getDefaultFlatGenerator();
-        }
-        else
-        {
-            String[] astring = flatGeneratorSettings.split(";", -1);
-            int i = astring.length == 1 ? 0 : MathHelper.parseIntWithDefault(astring[0], 0);
+        StringBuilder stringbuilder = new StringBuilder();
+        stringbuilder.append(3);
+        stringbuilder.append(";");
 
-            if (i >= 0 && i <= 3)
+        for (int i = 0; i < this.flatLayers.size(); ++i)
+        {
+            if (i > 0)
             {
-                FlatGeneratorInfo flatgeneratorinfo = new FlatGeneratorInfo();
-                int j = astring.length == 1 ? 0 : 1;
-                List<FlatLayerInfo> list = func_180716_a(i, astring[j++]);
+                stringbuilder.append(",");
+            }
 
-                if (list != null && !list.isEmpty())
-                {
-                    flatgeneratorinfo.getFlatLayers().addAll(list);
-                    flatgeneratorinfo.func_82645_d();
-                    int k = BiomeGenBase.plains.biomeID;
+            stringbuilder.append(this.flatLayers.get(i).toString());
+        }
 
-                    if (i > 0 && astring.length > j)
-                    {
-                        k = MathHelper.parseIntWithDefault(astring[j++], k);
-                    }
+        stringbuilder.append(";");
+        stringbuilder.append(this.biomeToUse);
 
-                    flatgeneratorinfo.setBiome(k);
+        if (!this.worldFeatures.isEmpty())
+        {
+            stringbuilder.append(";");
+            int k = 0;
 
-                    if (i > 0 && astring.length > j)
-                    {
-                        String[] astring1 = astring[j++].toLowerCase().split(",");
+            for (Entry<String, Map<String, String>> entry : this.worldFeatures.entrySet()) {
+                if (k++ > 0) {
+                    stringbuilder.append(",");
+                }
 
-                        for (String s : astring1)
-                        {
-                            String[] astring2 = s.split("\\(", 2);
-                            Map<String, String> map = Maps.<String, String>newHashMap();
+                stringbuilder.append(entry.getKey().toLowerCase());
+                Map<String, String> map = entry.getValue();
 
-                            if (astring2[0].length() > 0)
-                            {
-                                flatgeneratorinfo.getWorldFeatures().put(astring2[0], map);
+                if (!map.isEmpty()) {
+                    stringbuilder.append("(");
+                    int j = 0;
 
-                                if (astring2.length > 1 && astring2[1].endsWith(")") && astring2[1].length() > 1)
-                                {
-                                    String[] astring3 = astring2[1].substring(0, astring2[1].length() - 1).split(" ");
-
-                                    for (int l = 0; l < astring3.length; ++l)
-                                    {
-                                        String[] astring4 = astring3[l].split("=", 2);
-
-                                        if (astring4.length == 2)
-                                        {
-                                            map.put(astring4[0], astring4[1]);
-                                        }
-                                    }
-                                }
-                            }
+                    for (Entry<String, String> entry1 : map.entrySet()) {
+                        if (j++ > 0) {
+                            stringbuilder.append(" ");
                         }
-                    }
-                    else
-                    {
-                        flatgeneratorinfo.getWorldFeatures().put("village", Maps.<String, String>newHashMap());
+
+                        stringbuilder.append(entry1.getKey());
+                        stringbuilder.append("=");
+                        stringbuilder.append(entry1.getValue());
                     }
 
-                    return flatgeneratorinfo;
+                    stringbuilder.append(")");
                 }
-                else
-                {
-                    return getDefaultFlatGenerator();
-                }
-            }
-            else
-            {
-                return getDefaultFlatGenerator();
             }
         }
-    }
+        else
+        {
+            stringbuilder.append(";");
+        }
 
-    public static FlatGeneratorInfo getDefaultFlatGenerator()
-    {
-        FlatGeneratorInfo flatgeneratorinfo = new FlatGeneratorInfo();
-        flatgeneratorinfo.setBiome(BiomeGenBase.plains.biomeID);
-        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(1, Blocks.bedrock));
-        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(2, Blocks.dirt));
-        flatgeneratorinfo.getFlatLayers().add(new FlatLayerInfo(1, Blocks.grass));
-        flatgeneratorinfo.func_82645_d();
-        flatgeneratorinfo.getWorldFeatures().put("village", Maps.<String, String>newHashMap());
-        return flatgeneratorinfo;
+        return stringbuilder.toString();
     }
 }

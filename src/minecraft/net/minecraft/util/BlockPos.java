@@ -1,8 +1,9 @@
 package net.minecraft.util;
 
 import com.google.common.collect.AbstractIterator;
-import java.util.Iterator;
 import net.minecraft.entity.Entity;
+
+import java.util.Iterator;
 
 public class BlockPos extends Vec3i
 {
@@ -10,7 +11,7 @@ public class BlockPos extends Vec3i
     private static final int NUM_X_BITS = 1 + MathHelper.calculateLogBaseTwo(MathHelper.roundUpToPowerOfTwo(30000000));
     private static final int NUM_Z_BITS = NUM_X_BITS;
     private static final int NUM_Y_BITS = 64 - NUM_X_BITS - NUM_Z_BITS;
-    private static final int Y_SHIFT = 0 + NUM_Z_BITS;
+    private static final int Y_SHIFT = NUM_Z_BITS;
     private static final int X_SHIFT = Y_SHIFT + NUM_Y_BITS;
     private static final long X_MASK = (1L << NUM_X_BITS) - 1L;
     private static final long Y_MASK = (1L << NUM_Y_BITS) - 1L;
@@ -169,7 +170,7 @@ public class BlockPos extends Vec3i
                         }
                         else if (this.lastReturned.equals(blockpos1))
                         {
-                            return (BlockPos)this.endOfData();
+                            return this.endOfData();
                         }
                         else
                         {
@@ -222,7 +223,7 @@ public class BlockPos extends Vec3i
                         }
                         else if (this.theBlockPos.equals(blockpos1))
                         {
-                            return (BlockPos.MutableBlockPos)this.endOfData();
+                            return this.endOfData();
                         }
                         else
                         {

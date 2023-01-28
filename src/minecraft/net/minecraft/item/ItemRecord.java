@@ -1,8 +1,6 @@
 package net.minecraft.item;
 
 import com.google.common.collect.Maps;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,9 +12,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Map;
+
 public class ItemRecord extends Item
 {
-    private static final Map<String, ItemRecord> RECORDS = Maps.<String, ItemRecord>newHashMap();
+    private static final Map<String, ItemRecord> RECORDS = Maps.newHashMap();
     public final String recordName;
 
     protected ItemRecord(String name)
@@ -27,29 +28,9 @@ public class ItemRecord extends Item
         RECORDS.put("records." + name, this);
     }
 
-    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+    public static ItemRecord getRecord(String name)
     {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-
-        if (iblockstate.getBlock() == Blocks.jukebox && !((Boolean)iblockstate.getValue(BlockJukebox.HAS_RECORD)).booleanValue())
-        {
-            if (worldIn.isRemote)
-            {
-                return true;
-            }
-            else
-            {
-                ((BlockJukebox)Blocks.jukebox).insertRecord(worldIn, pos, iblockstate, stack);
-                worldIn.playAuxSFXAtEntity((EntityPlayer)null, 1005, pos, Item.getIdFromItem(this));
-                --stack.stackSize;
-                playerIn.triggerAchievement(StatList.field_181740_X);
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
+        return RECORDS.get(name);
     }
 
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
@@ -67,8 +48,24 @@ public class ItemRecord extends Item
         return EnumRarity.RARE;
     }
 
-    public static ItemRecord getRecord(String name)
+    public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        return (ItemRecord)RECORDS.get(name);
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+
+        if (iblockstate.getBlock() == Blocks.jukebox && !iblockstate.getValue(BlockJukebox.HAS_RECORD).booleanValue()) {
+            if (worldIn.isRemote) {
+                return true;
+            } else {
+                ((BlockJukebox) Blocks.jukebox).insertRecord(worldIn, pos, iblockstate, stack);
+                worldIn.playAuxSFXAtEntity(null, 1005, pos, Item.getIdFromItem(this));
+                --stack.stackSize;
+                playerIn.triggerAchievement(StatList.field_181740_X);
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }

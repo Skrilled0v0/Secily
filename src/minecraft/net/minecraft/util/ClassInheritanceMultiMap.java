@@ -13,17 +13,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import net.optifine.util.IteratorCache;
 
-public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
-{
-    private static final Set < Class<? >> field_181158_a = Collections. < Class<? >> newSetFromMap(new ConcurrentHashMap());
-    private final Map < Class<?>, List<T >> map = Maps. < Class<?>, List<T >> newHashMap();
-    private final Set < Class<? >> knownKeys = Sets. < Class<? >> newIdentityHashSet();
+public class ClassInheritanceMultiMap<T> extends AbstractSet<T> {
+    private static final Set<Class<?>> field_181158_a = Collections.<Class<?>>newSetFromMap(new ConcurrentHashMap());
+    private final Map<Class<?>, List<T>> map = Maps.newHashMap();
+    private final Set<Class<?>> knownKeys = Sets.newIdentityHashSet();
     private final Class<T> baseClass;
-    private final List<T> values = Lists.<T>newArrayList();
+    private final List<T> values = Lists.newArrayList();
     public boolean empty;
 
-    public ClassInheritanceMultiMap(Class<T> baseClassIn)
-    {
+    public ClassInheritanceMultiMap(Class<T> baseClassIn) {
         this.baseClass = baseClassIn;
         this.knownKeys.add(baseClassIn);
         this.map.put(baseClassIn, this.values);
@@ -67,7 +65,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
         }
         else
         {
-            throw new IllegalArgumentException("Don\'t know how to search for " + clazz);
+            throw new IllegalArgumentException("Don't know how to search for " + clazz);
         }
     }
 
@@ -87,7 +85,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
 
     private void addForClass(T value, Class<?> parentClass)
     {
-        List<T> list = (List)this.map.get(parentClass);
+        List<T> list = this.map.get(parentClass);
 
         if (list == null)
         {
@@ -110,7 +108,7 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
         {
             if (oclass.isAssignableFrom(t.getClass()))
             {
-                List<T> list = (List)this.map.get(oclass);
+                List<T> list = this.map.get(oclass);
 
                 if (list != null && list.remove(t))
                 {
@@ -134,11 +132,11 @@ public class ClassInheritanceMultiMap<T> extends AbstractSet<T>
         {
             public Iterator<S> iterator()
             {
-                List<T> list = (List)ClassInheritanceMultiMap.this.map.get(ClassInheritanceMultiMap.this.initializeClassLookup(clazz));
+                List<T> list = ClassInheritanceMultiMap.this.map.get(ClassInheritanceMultiMap.this.initializeClassLookup(clazz));
 
                 if (list == null)
                 {
-                    return Iterators.<S>emptyIterator();
+                    return Iterators.emptyIterator();
                 }
                 else
                 {

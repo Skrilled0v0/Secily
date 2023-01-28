@@ -1,23 +1,22 @@
 package net.minecraft.entity.ai;
 
 import com.google.common.collect.Lists;
-import java.util.Iterator;
-import java.util.List;
 import net.minecraft.profiler.Profiler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityAITasks
-{
+import java.util.Iterator;
+import java.util.List;
+
+public class EntityAITasks {
     private static final Logger logger = LogManager.getLogger();
-    private List<EntityAITasks.EntityAITaskEntry> taskEntries = Lists.<EntityAITasks.EntityAITaskEntry>newArrayList();
-    private List<EntityAITasks.EntityAITaskEntry> executingTaskEntries = Lists.<EntityAITasks.EntityAITaskEntry>newArrayList();
+    private final List<EntityAITasks.EntityAITaskEntry> taskEntries = Lists.newArrayList();
+    private final List<EntityAITasks.EntityAITaskEntry> executingTaskEntries = Lists.newArrayList();
     private final Profiler theProfiler;
     private int tickCount;
-    private int tickRate = 3;
+    private final int tickRate = 3;
 
-    public EntityAITasks(Profiler profilerIn)
-    {
+    public EntityAITasks(Profiler profilerIn) {
         this.theProfiler = profilerIn;
     }
 
@@ -32,7 +31,7 @@ public class EntityAITasks
 
         while (iterator.hasNext())
         {
-            EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry = (EntityAITasks.EntityAITaskEntry)iterator.next();
+            EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry = iterator.next();
             EntityAIBase entityaibase = entityaitasks$entityaitaskentry.action;
 
             if (entityaibase == task)
@@ -97,7 +96,7 @@ public class EntityAITasks
 
             while (iterator1.hasNext())
             {
-                EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry1 = (EntityAITasks.EntityAITaskEntry)iterator1.next();
+                EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry1 = iterator1.next();
 
                 if (!this.canContinue(entityaitasks$entityaitaskentry1))
                 {

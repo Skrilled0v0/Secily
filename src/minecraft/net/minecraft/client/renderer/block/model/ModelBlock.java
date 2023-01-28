@@ -2,13 +2,13 @@ package net.minecraft.client.renderer.block.model;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
+import net.minecraft.util.JsonUtils;
+import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.Type;
@@ -16,11 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import net.minecraft.util.JsonUtils;
-import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ModelBlock
 {
@@ -29,15 +24,15 @@ public class ModelBlock
     private final List<BlockPart> elements;
     private final boolean gui3d;
     private final boolean ambientOcclusion;
-    private ItemCameraTransforms cameraTransforms;
+    private final ItemCameraTransforms cameraTransforms;
     public String name;
     protected final Map<String, String> textures;
     protected ModelBlock parent;
     protected ResourceLocation parentLocation;
 
-    public static ModelBlock deserialize(Reader readerIn)
+    protected ModelBlock(List<BlockPart> elementsIn, Map<String, String> texturesIn, boolean ambientOcclusionIn, boolean gui3dIn, ItemCameraTransforms cameraTransformsIn)
     {
-        return (ModelBlock)SERIALIZER.fromJson(readerIn, ModelBlock.class);
+        this(null, elementsIn, texturesIn, ambientOcclusionIn, gui3dIn, cameraTransformsIn);
     }
 
     public static ModelBlock deserialize(String jsonString)
@@ -45,14 +40,14 @@ public class ModelBlock
         return deserialize(new StringReader(jsonString));
     }
 
-    protected ModelBlock(List<BlockPart> elementsIn, Map<String, String> texturesIn, boolean ambientOcclusionIn, boolean gui3dIn, ItemCameraTransforms cameraTransformsIn)
-    {
-        this((ResourceLocation)null, elementsIn, texturesIn, ambientOcclusionIn, gui3dIn, cameraTransformsIn);
-    }
-
     protected ModelBlock(ResourceLocation parentLocationIn, Map<String, String> texturesIn, boolean ambientOcclusionIn, boolean gui3dIn, ItemCameraTransforms cameraTransformsIn)
     {
-        this(parentLocationIn, Collections.<BlockPart>emptyList(), texturesIn, ambientOcclusionIn, gui3dIn, cameraTransformsIn);
+        this(parentLocationIn, Collections.emptyList(), texturesIn, ambientOcclusionIn, gui3dIn, cameraTransformsIn);
+    }
+
+    public static ModelBlock deserialize(Reader readerIn)
+    {
+        return SERIALIZER.fromJson(readerIn, ModelBlock.class);
     }
 
     private ModelBlock(ResourceLocation parentLocationIn, List<BlockPart> elementsIn, Map<String, String> texturesIn, boolean ambientOcclusionIn, boolean gui3dIn, ItemCameraTransforms cameraTransformsIn)
@@ -95,7 +90,7 @@ public class ModelBlock
     {
         if (this.parentLocation != null)
         {
-            this.parent = (ModelBlock)p_178299_1_.get(this.parentLocation);
+            this.parent = p_178299_1_.get(this.parentLocation);
         }
     }
 
@@ -125,7 +120,7 @@ public class ModelBlock
             }
             else
             {
-                String s = (String)this.textures.get(textureName.substring(1));
+                String s = this.textures.get(textureName.substring(1));
 
                 if (s == null && this.hasParent())
                 {
@@ -196,7 +191,6 @@ public class ModelBlock
             }
             catch (NullPointerException var5)
             {
-                ;
             }
         }
     }
@@ -239,7 +233,7 @@ public class ModelBlock
                 if (jsonobject.has("display"))
                 {
                     JsonObject jsonobject1 = JsonUtils.getJsonObject(jsonobject, "display");
-                    itemcameratransforms = (ItemCameraTransforms)p_deserialize_3_.deserialize(jsonobject1, ItemCameraTransforms.class);
+                    itemcameratransforms = p_deserialize_3_.deserialize(jsonobject1, ItemCameraTransforms.class);
                 }
 
                 return flag1 ? new ModelBlock(new ResourceLocation(s), map, flag2, true, itemcameratransforms) : new ModelBlock(list, map, flag2, true, itemcameratransforms);
@@ -248,7 +242,7 @@ public class ModelBlock
 
         private Map<String, String> getTextures(JsonObject p_178329_1_)
         {
-            Map<String, String> map = Maps.<String, String>newHashMap();
+            Map<String, String> map = Maps.newHashMap();
 
             if (p_178329_1_.has("textures"))
             {
@@ -256,7 +250,7 @@ public class ModelBlock
 
                 for (Entry<String, JsonElement> entry : jsonobject.entrySet())
                 {
-                    map.put(entry.getKey(), ((JsonElement)entry.getValue()).getAsString());
+                    map.put(entry.getKey(), entry.getValue().getAsString());
                 }
             }
 
@@ -275,13 +269,13 @@ public class ModelBlock
 
         protected List<BlockPart> getModelElements(JsonDeserializationContext p_178325_1_, JsonObject p_178325_2_)
         {
-            List<BlockPart> list = Lists.<BlockPart>newArrayList();
+            List<BlockPart> list = Lists.newArrayList();
 
             if (p_178325_2_.has("elements"))
             {
                 for (JsonElement jsonelement : JsonUtils.getJsonArray(p_178325_2_, "elements"))
                 {
-                    list.add((BlockPart)p_178325_1_.deserialize(jsonelement, BlockPart.class));
+                    list.add(p_178325_1_.deserialize(jsonelement, BlockPart.class));
                 }
             }
 

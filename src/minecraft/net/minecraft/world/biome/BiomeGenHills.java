@@ -11,22 +11,19 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenTaiga2;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class BiomeGenHills extends BiomeGenBase
-{
-    private WorldGenerator theWorldGenerator = new WorldGenMinable(Blocks.monster_egg.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 9);
-    private WorldGenTaiga2 field_150634_aD = new WorldGenTaiga2(false);
-    private int field_150635_aE = 0;
-    private int field_150636_aF = 1;
-    private int field_150637_aG = 2;
+public class BiomeGenHills extends BiomeGenBase {
+    private final WorldGenerator theWorldGenerator = new WorldGenMinable(Blocks.monster_egg.getDefaultState().withProperty(BlockSilverfish.VARIANT, BlockSilverfish.EnumType.STONE), 9);
+    private final WorldGenTaiga2 field_150634_aD = new WorldGenTaiga2(false);
+    private final int field_150635_aE = 0;
+    private final int field_150636_aF = 1;
+    private final int field_150637_aG = 2;
     private int field_150638_aH;
 
-    protected BiomeGenHills(int id, boolean p_i45373_2_)
-    {
+    protected BiomeGenHills(int id, boolean p_i45373_2_) {
         super(id);
         this.field_150638_aH = this.field_150635_aE;
 
-        if (p_i45373_2_)
-        {
+        if (p_i45373_2_) {
             this.theBiomeDecorator.treesPerChunk = 3;
             this.field_150638_aH = this.field_150636_aF;
         }
@@ -34,7 +31,7 @@ public class BiomeGenHills extends BiomeGenBase
 
     public WorldGenAbstractTree genBigTreeChance(Random rand)
     {
-        return (WorldGenAbstractTree)(rand.nextInt(3) > 0 ? this.field_150634_aD : super.genBigTreeChance(rand));
+        return rand.nextInt(3) > 0 ? this.field_150634_aD : super.genBigTreeChance(rand);
     }
 
     public void decorate(World worldIn, Random rand, BlockPos pos)

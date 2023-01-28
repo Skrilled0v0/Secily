@@ -1,6 +1,5 @@
 package net.minecraft.client.gui.stream;
 
-import java.io.IOException;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiOptionSlider;
@@ -8,6 +7,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.EnumChatFormatting;
+
+import java.io.IOException;
 
 public class GuiStreamOptions extends GuiScreen
 {
@@ -29,17 +30,13 @@ public class GuiStreamOptions extends GuiScreen
     public void initGui()
     {
         int i = 0;
-        this.field_152319_i = I18n.format("options.stream.title", new Object[0]);
-        this.field_152313_r = I18n.format("options.stream.chat.title", new Object[0]);
+        this.field_152319_i = I18n.format("options.stream.title");
+        this.field_152313_r = I18n.format("options.stream.chat.title");
 
-        for (GameSettings.Options gamesettings$options : field_152312_a)
-        {
-            if (gamesettings$options.getEnumFloat())
-            {
+        for (GameSettings.Options gamesettings$options : field_152312_a) {
+            if (gamesettings$options.getEnumFloat()) {
                 this.buttonList.add(new GuiOptionSlider(gamesettings$options.returnEnumOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 + 24 * (i >> 1), gamesettings$options));
-            }
-            else
-            {
+            } else {
                 this.buttonList.add(new GuiOptionButton(gamesettings$options.returnEnumOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 + 24 * (i >> 1), gamesettings$options, this.field_152318_h.getKeyBinding(gamesettings$options)));
             }
 
@@ -59,17 +56,15 @@ public class GuiStreamOptions extends GuiScreen
             if (gamesettings$options1.getEnumFloat())
             {
                 this.buttonList.add(new GuiOptionSlider(gamesettings$options1.returnEnumOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 + 24 * (i >> 1), gamesettings$options1));
-            }
-            else
-            {
+            } else {
                 this.buttonList.add(new GuiOptionButton(gamesettings$options1.returnEnumOrdinal(), this.width / 2 - 155 + i % 2 * 160, this.height / 6 + 24 * (i >> 1), gamesettings$options1, this.field_152318_h.getKeyBinding(gamesettings$options1)));
             }
 
             ++i;
         }
 
-        this.buttonList.add(new GuiButton(200, this.width / 2 - 155, this.height / 6 + 168, 150, 20, I18n.format("gui.done", new Object[0])));
-        GuiButton guibutton = new GuiButton(201, this.width / 2 + 5, this.height / 6 + 168, 150, 20, I18n.format("options.stream.ingestSelection", new Object[0]));
+        this.buttonList.add(new GuiButton(200, this.width / 2 - 155, this.height / 6 + 168, 150, 20, I18n.format("gui.done")));
+        GuiButton guibutton = new GuiButton(201, this.width / 2 + 5, this.height / 6 + 168, 150, 20, I18n.format("options.stream.ingestSelection"));
         guibutton.enabled = this.mc.getTwitchStream().isReadyToBroadcast() && this.mc.getTwitchStream().func_152925_v().length > 0 || this.mc.getTwitchStream().func_152908_z();
         this.buttonList.add(guibutton);
     }
@@ -120,7 +115,7 @@ public class GuiStreamOptions extends GuiScreen
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        this.drawDefaultBackground();
+        this.drawBackground();
         this.drawCenteredString(this.fontRendererObj, this.field_152319_i, this.width / 2, 20, 16777215);
         this.drawCenteredString(this.fontRendererObj, this.field_152313_r, this.width / 2, this.field_152314_s, 16777215);
 

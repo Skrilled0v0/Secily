@@ -52,25 +52,22 @@ public abstract class EntityHanging extends Entity
             double d3 = 0.46875D;
             double d4 = this.func_174858_a(this.getWidthPixels());
             double d5 = this.func_174858_a(this.getHeightPixels());
-            d0 = d0 - (double)this.facingDirection.getFrontOffsetX() * 0.46875D;
-            d2 = d2 - (double)this.facingDirection.getFrontOffsetZ() * 0.46875D;
+            d0 = d0 - (double) this.facingDirection.getFrontOffsetX() * 0.46875D;
+            d2 = d2 - (double) this.facingDirection.getFrontOffsetZ() * 0.46875D;
             d1 = d1 + d5;
             EnumFacing enumfacing = this.facingDirection.rotateYCCW();
-            d0 = d0 + d4 * (double)enumfacing.getFrontOffsetX();
-            d2 = d2 + d4 * (double)enumfacing.getFrontOffsetZ();
+            d0 = d0 + d4 * (double) enumfacing.getFrontOffsetX();
+            d2 = d2 + d4 * (double) enumfacing.getFrontOffsetZ();
             this.posX = d0;
             this.posY = d1;
             this.posZ = d2;
-            double d6 = (double)this.getWidthPixels();
-            double d7 = (double)this.getHeightPixels();
-            double d8 = (double)this.getWidthPixels();
+            double d6 = this.getWidthPixels();
+            double d7 = this.getHeightPixels();
+            double d8 = this.getWidthPixels();
 
-            if (this.facingDirection.getAxis() == EnumFacing.Axis.Z)
-            {
+            if (this.facingDirection.getAxis() == EnumFacing.Axis.Z) {
                 d8 = 1.0D;
-            }
-            else
-            {
+            } else {
                 d6 = 1.0D;
             }
 
@@ -99,7 +96,7 @@ public abstract class EntityHanging extends Entity
             if (!this.isDead && !this.onValidSurface())
             {
                 this.setDead();
-                this.onBroken((Entity)null);
+                this.onBroken(null);
             }
         }
     }
@@ -150,7 +147,7 @@ public abstract class EntityHanging extends Entity
 
     public boolean hitByEntity(Entity entityIn)
     {
-        return entityIn instanceof EntityPlayer ? this.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)entityIn), 0.0F) : false;
+        return entityIn instanceof EntityPlayer && this.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) entityIn), 0.0F);
     }
 
     public EnumFacing getHorizontalFacing()
@@ -182,7 +179,7 @@ public abstract class EntityHanging extends Entity
         if (!this.worldObj.isRemote && !this.isDead && x * x + y * y + z * z > 0.0D)
         {
             this.setDead();
-            this.onBroken((Entity)null);
+            this.onBroken(null);
         }
     }
 
@@ -191,7 +188,7 @@ public abstract class EntityHanging extends Entity
         if (!this.worldObj.isRemote && !this.isDead && x * x + y * y + z * z > 0.0D)
         {
             this.setDead();
-            this.onBroken((Entity)null);
+            this.onBroken(null);
         }
     }
 

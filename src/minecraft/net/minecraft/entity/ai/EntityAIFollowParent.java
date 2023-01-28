@@ -1,7 +1,8 @@
 package net.minecraft.entity.ai;
 
-import java.util.List;
 import net.minecraft.entity.passive.EntityAnimal;
+
+import java.util.List;
 
 public class EntityAIFollowParent extends EntityAIBase
 {
@@ -24,7 +25,7 @@ public class EntityAIFollowParent extends EntityAIBase
         }
         else
         {
-            List<EntityAnimal> list = this.childAnimal.worldObj.<EntityAnimal>getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().expand(8.0D, 4.0D, 8.0D));
+            List<EntityAnimal> list = this.childAnimal.worldObj.getEntitiesWithinAABB(this.childAnimal.getClass(), this.childAnimal.getEntityBoundingBox().expand(8.0D, 4.0D, 8.0D));
             EntityAnimal entityanimal = null;
             double d0 = Double.MAX_VALUE;
 

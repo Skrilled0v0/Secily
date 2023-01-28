@@ -15,22 +15,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.world.WorldSavedData;
 
-public class MapStorage
-{
-    private ISaveHandler saveHandler;
-    protected Map<String, WorldSavedData> loadedDataMap = Maps.<String, WorldSavedData>newHashMap();
-    private List<WorldSavedData> loadedDataList = Lists.<WorldSavedData>newArrayList();
-    private Map<String, Short> idCounts = Maps.<String, Short>newHashMap();
+public class MapStorage {
+    private final ISaveHandler saveHandler;
+    private final List<WorldSavedData> loadedDataList = Lists.newArrayList();
+    private final Map<String, Short> idCounts = Maps.newHashMap();
+    protected Map<String, WorldSavedData> loadedDataMap = Maps.newHashMap();
 
-    public MapStorage(ISaveHandler saveHandlerIn)
-    {
+    public MapStorage(ISaveHandler saveHandlerIn) {
         this.saveHandler = saveHandlerIn;
         this.loadIdCounts();
     }
 
-    public WorldSavedData loadData(Class <? extends WorldSavedData > clazz, String dataIdentifier)
-    {
-        WorldSavedData worldsaveddata = (WorldSavedData)this.loadedDataMap.get(dataIdentifier);
+    public WorldSavedData loadData(Class<? extends WorldSavedData> clazz, String dataIdentifier) {
+        WorldSavedData worldsaveddata = this.loadedDataMap.get(dataIdentifier);
 
         if (worldsaveddata != null)
         {
@@ -48,7 +45,7 @@ public class MapStorage
                     {
                         try
                         {
-                            worldsaveddata = (WorldSavedData)clazz.getConstructor(new Class[] {String.class}).newInstance(new Object[] {dataIdentifier});
+                            worldsaveddata = clazz.getConstructor(new Class[]{String.class}).newInstance(new Object[]{dataIdentifier});
                         }
                         catch (Exception exception)
                         {
@@ -92,7 +89,7 @@ public class MapStorage
     {
         for (int i = 0; i < this.loadedDataList.size(); ++i)
         {
-            WorldSavedData worldsaveddata = (WorldSavedData)this.loadedDataList.get(i);
+            WorldSavedData worldsaveddata = this.loadedDataList.get(i);
 
             if (worldsaveddata.isDirty())
             {
@@ -168,7 +165,7 @@ public class MapStorage
 
     public int getUniqueDataId(String key)
     {
-        Short oshort = (Short)this.idCounts.get(key);
+        Short oshort = this.idCounts.get(key);
 
         if (oshort == null)
         {
@@ -197,7 +194,7 @@ public class MapStorage
 
                     for (String s : this.idCounts.keySet())
                     {
-                        short short1 = ((Short)this.idCounts.get(s)).shortValue();
+                        short short1 = this.idCounts.get(s).shortValue();
                         nbttagcompound.setShort(s, short1);
                     }
 

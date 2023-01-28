@@ -2,7 +2,6 @@ package net.minecraft.block;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -31,15 +30,12 @@ public class BlockJukebox extends BlockContainer
 
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (((Boolean)state.getValue(HAS_RECORD)).booleanValue())
-        {
+        if (state.getValue(HAS_RECORD).booleanValue()) {
             this.dropRecord(worldIn, pos, state);
             state = state.withProperty(HAS_RECORD, Boolean.valueOf(false));
             worldIn.setBlockState(pos, state, 2);
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -69,17 +65,16 @@ public class BlockJukebox extends BlockContainer
                 BlockJukebox.TileEntityJukebox blockjukebox$tileentityjukebox = (BlockJukebox.TileEntityJukebox)tileentity;
                 ItemStack itemstack = blockjukebox$tileentityjukebox.getRecord();
 
-                if (itemstack != null)
-                {
+                if (itemstack != null) {
                     worldIn.playAuxSFX(1005, pos, 0);
-                    worldIn.playRecord(pos, (String)null);
-                    blockjukebox$tileentityjukebox.setRecord((ItemStack)null);
+                    worldIn.playRecord(pos, null);
+                    blockjukebox$tileentityjukebox.setRecord(null);
                     float f = 0.7F;
-                    double d0 = (double)(worldIn.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
-                    double d1 = (double)(worldIn.rand.nextFloat() * f) + (double)(1.0F - f) * 0.2D + 0.6D;
-                    double d2 = (double)(worldIn.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+                    double d0 = (double) (worldIn.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
+                    double d1 = (double) (worldIn.rand.nextFloat() * f) + (double) (1.0F - f) * 0.2D + 0.6D;
+                    double d2 = (double) (worldIn.rand.nextFloat() * f) + (double) (1.0F - f) * 0.5D;
                     ItemStack itemstack1 = itemstack.copy();
-                    EntityItem entityitem = new EntityItem(worldIn, (double)pos.getX() + d0, (double)pos.getY() + d1, (double)pos.getZ() + d2, itemstack1);
+                    EntityItem entityitem = new EntityItem(worldIn, (double) pos.getX() + d0, (double) pos.getY() + d1, (double) pos.getZ() + d2, itemstack1);
                     entityitem.setDefaultPickupDelay();
                     worldIn.spawnEntityInWorld(entityitem);
                 }
@@ -140,12 +135,12 @@ public class BlockJukebox extends BlockContainer
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Boolean)state.getValue(HAS_RECORD)).booleanValue() ? 1 : 0;
+        return state.getValue(HAS_RECORD).booleanValue() ? 1 : 0;
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {HAS_RECORD});
+        return new BlockState(this, HAS_RECORD);
     }
 
     public static class TileEntityJukebox extends TileEntity

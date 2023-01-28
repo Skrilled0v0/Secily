@@ -15,7 +15,7 @@ public class ShaderOptionProfile extends ShaderOption
 
     public ShaderOptionProfile(ShaderProfile[] profiles, ShaderOption[] options)
     {
-        super("<profile>", "", detectProfileName(profiles, options), getProfileNames(profiles), detectProfileName(profiles, options, true), (String)null);
+        super("<profile>", "", detectProfileName(profiles, options), getProfileNames(profiles), detectProfileName(profiles, options, true), null);
         this.profiles = profiles;
         this.options = options;
     }
@@ -32,15 +32,19 @@ public class ShaderOptionProfile extends ShaderOption
         this.applyProfileOptions();
     }
 
-    public void updateProfile()
+    private static String[] getProfileNames(ShaderProfile[] profs)
     {
-        ShaderProfile shaderprofile = this.getProfile(this.getValue());
+        List<String> list = new ArrayList();
 
-        if (shaderprofile == null || !ShaderUtils.matchProfile(shaderprofile, this.options, false))
+        for (int i = 0; i < profs.length; ++i)
         {
-            String s = detectProfileName(this.profiles, this.options);
-            this.setValue(s);
+            ShaderProfile shaderprofile = profs[i];
+            list.add(shaderprofile.getName());
         }
+
+        list.add("<custom>");
+        String[] astring = list.toArray(new String[list.size()]);
+        return astring;
     }
 
     private void applyProfileOptions()
@@ -110,9 +114,30 @@ public class ShaderOptionProfile extends ShaderOption
         return val.equals("<custom>") ? "\u00a7c" : "\u00a7a";
     }
 
+    public void updateProfile()
+    {
+        ShaderProfile shaderprofile = this.getProfile(this.getValue());
+
+        if (!ShaderUtils.matchProfile(shaderprofile, this.options, false)) {
+            String s = detectProfileName(this.profiles, this.options);
+            this.setValue(s);
+        }
+    }
+
+    private static String detectProfileName(ShaderProfile[] profs, ShaderOption[] opts)
+    {
+        return detectProfileName(profs, opts, false);
+    }
+
+    private static String detectProfileName(ShaderProfile[] profs, ShaderOption[] opts, boolean def)
+    {
+        ShaderProfile shaderprofile = ShaderUtils.detectProfile(profs, opts, def);
+        return shaderprofile == null ? "<custom>" : shaderprofile.getName();
+    }
+
     public String getDescriptionText()
     {
-        String s = Shaders.translate("profile.comment", (String)null);
+        String s = Shaders.translate("profile.comment", null);
 
         if (s != null)
         {
@@ -128,7 +153,7 @@ public class ShaderOptionProfile extends ShaderOption
 
                 if (s1 != null)
                 {
-                    String s2 = Shaders.translate("profile." + s1 + ".comment", (String)null);
+                    String s2 = Shaders.translate("profile." + s1 + ".comment", null);
 
                     if (s2 != null)
                     {
@@ -144,31 +169,5 @@ public class ShaderOptionProfile extends ShaderOption
 
             return stringbuffer.toString();
         }
-    }
-
-    private static String detectProfileName(ShaderProfile[] profs, ShaderOption[] opts)
-    {
-        return detectProfileName(profs, opts, false);
-    }
-
-    private static String detectProfileName(ShaderProfile[] profs, ShaderOption[] opts, boolean def)
-    {
-        ShaderProfile shaderprofile = ShaderUtils.detectProfile(profs, opts, def);
-        return shaderprofile == null ? "<custom>" : shaderprofile.getName();
-    }
-
-    private static String[] getProfileNames(ShaderProfile[] profs)
-    {
-        List<String> list = new ArrayList();
-
-        for (int i = 0; i < profs.length; ++i)
-        {
-            ShaderProfile shaderprofile = profs[i];
-            list.add(shaderprofile.getName());
-        }
-
-        list.add("<custom>");
-        String[] astring = (String[])((String[])list.toArray(new String[list.size()]));
-        return astring;
     }
 }

@@ -8,22 +8,19 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
-public abstract class ModelBase
-{
+public abstract class ModelBase {
     public float swingProgress;
     public boolean isRiding;
     public boolean isChild = true;
-    public List<ModelRenderer> boxList = Lists.<ModelRenderer>newArrayList();
-    private Map<String, TextureOffset> modelTextureMap = Maps.<String, TextureOffset>newHashMap();
+    private final Map<String, TextureOffset> modelTextureMap = Maps.newHashMap();
+    public List<ModelRenderer> boxList = Lists.newArrayList();
     public int textureWidth = 64;
     public int textureHeight = 32;
 
-    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale)
-    {
+    public void render(Entity entityIn, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float scale) {
     }
 
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
-    {
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
     }
 
     public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime)
@@ -32,7 +29,7 @@ public abstract class ModelBase
 
     public ModelRenderer getRandomModelBox(Random rand)
     {
-        return (ModelRenderer)this.boxList.get(rand.nextInt(this.boxList.size()));
+        return this.boxList.get(rand.nextInt(this.boxList.size()));
     }
 
     protected void setTextureOffset(String partName, int x, int y)
@@ -42,7 +39,7 @@ public abstract class ModelBase
 
     public TextureOffset getTextureOffset(String partName)
     {
-        return (TextureOffset)this.modelTextureMap.get(partName);
+        return this.modelTextureMap.get(partName);
     }
 
     public static void copyModelAngles(ModelRenderer source, ModelRenderer dest)

@@ -3,20 +3,17 @@ package net.minecraft.client.model;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
-public class ModelSilverfish extends ModelBase
-{
-    private ModelRenderer[] silverfishBodyParts = new ModelRenderer[7];
-    private ModelRenderer[] silverfishWings;
-    private float[] field_78170_c = new float[7];
-    private static final int[][] silverfishBoxLength = new int[][] {{3, 2, 2}, {4, 3, 2}, {6, 4, 3}, {3, 3, 3}, {2, 2, 3}, {2, 1, 2}, {1, 1, 2}};
-    private static final int[][] silverfishTexturePositions = new int[][] {{0, 0}, {0, 4}, {0, 9}, {0, 16}, {0, 22}, {11, 0}, {13, 4}};
+public class ModelSilverfish extends ModelBase {
+    private static final int[][] silverfishBoxLength = new int[][]{{3, 2, 2}, {4, 3, 2}, {6, 4, 3}, {3, 3, 3}, {2, 2, 3}, {2, 1, 2}, {1, 1, 2}};
+    private static final int[][] silverfishTexturePositions = new int[][]{{0, 0}, {0, 4}, {0, 9}, {0, 16}, {0, 22}, {11, 0}, {13, 4}};
+    private final ModelRenderer[] silverfishBodyParts = new ModelRenderer[7];
+    private final ModelRenderer[] silverfishWings;
+    private final float[] field_78170_c = new float[7];
 
-    public ModelSilverfish()
-    {
+    public ModelSilverfish() {
         float f = -3.5F;
 
-        for (int i = 0; i < this.silverfishBodyParts.length; ++i)
-        {
+        for (int i = 0; i < this.silverfishBodyParts.length; ++i) {
             this.silverfishBodyParts[i] = new ModelRenderer(this, silverfishTexturePositions[i][0], silverfishTexturePositions[i][1]);
             this.silverfishBodyParts[i].addBox((float)silverfishBoxLength[i][0] * -0.5F, 0.0F, (float)silverfishBoxLength[i][2] * -0.5F, silverfishBoxLength[i][0], silverfishBoxLength[i][1], silverfishBoxLength[i][2]);
             this.silverfishBodyParts[i].setRotationPoint(0.0F, (float)(24 - silverfishBoxLength[i][1]), f);

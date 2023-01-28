@@ -9,16 +9,14 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-public class TooltipManager
-{
-    private GuiScreen guiScreen;
-    private TooltipProvider tooltipProvider;
+public class TooltipManager {
+    private final GuiScreen guiScreen;
+    private final TooltipProvider tooltipProvider;
     private int lastMouseX = 0;
     private int lastMouseY = 0;
     private long mouseStillTime = 0L;
 
-    public TooltipManager(GuiScreen guiScreen, TooltipProvider tooltipProvider)
-    {
+    public TooltipManager(GuiScreen guiScreen, TooltipProvider tooltipProvider) {
         this.guiScreen = guiScreen;
         this.tooltipProvider = tooltipProvider;
     }
@@ -42,7 +40,7 @@ public class TooltipManager
                     {
                         if (astring.length > 8)
                         {
-                            astring = (String[])Arrays.copyOf(astring, 8);
+                            astring = Arrays.copyOf(astring, 8);
                             astring[astring.length - 1] = astring[astring.length - 1] + " ...";
                         }
 

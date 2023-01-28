@@ -66,9 +66,8 @@ public interface IStream
 
     IStream.AuthFailureReason func_152918_H();
 
-    public static enum AuthFailureReason
-    {
+    enum AuthFailureReason {
         ERROR,
-        INVALID_TOKEN;
+        INVALID_TOKEN
     }
 }

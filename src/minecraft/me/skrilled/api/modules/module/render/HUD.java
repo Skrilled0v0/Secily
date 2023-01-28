@@ -30,6 +30,7 @@ public class HUD extends ModuleHeader {
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader not = new ValueHeader("Notifications", true);
     ValueHeader didi = new ValueHeader("drawDIDI", true);
+    public static ValueHeader fontReplace = new ValueHeader("fontReplace", true);
     ValueHeader diType = new ValueHeader("didiType", "Red", didis);
 
 
@@ -53,7 +54,7 @@ public class HUD extends ModuleHeader {
             sortedList.sort(Comparator.comparingInt(module -> -arrayFont.getStringWidth(module.getModuleDisplay())));
             int yAxis = 5;
             for (ModuleHeader moduleHeader : sortedList) {
-                arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w - moduleHeader.getArrayWidth().getAnimationFactor() * (arrayFont.getStringWidth(moduleHeader.getModuleDisplay()) + 5), yAxis, -1);
+                arrayFont.drawStringWithShadow(moduleHeader.getModuleDisplay(), w - moduleHeader.getArrayWidth().getAnimationFactor() * (arrayFont.getStringWidth(moduleHeader.getModuleDisplay()) + 5), yAxis, 1.2f, -1);
                 yAxis += arrayFont.getHeight() * moduleHeader.getArrayWidth().getAnimationFactor();
             }
         }
@@ -63,9 +64,7 @@ public class HUD extends ModuleHeader {
         }
 
         //Test
-        float[] cAPos = new float[]{100, 100, 300, 350};
-        ColorAssembly colorAssembly = new ColorAssembly(cAPos, null, 360, 1f, 1f, 1f);
-        colorAssembly.draw();
+
 
         //Information
         if ((Boolean) this.getValue(info)) {

@@ -1,15 +1,11 @@
 package net.minecraft.client.renderer.block.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import java.lang.reflect.Type;
+import com.google.gson.*;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.util.vector.Vector3f;
+
+import java.lang.reflect.Type;
 
 public class ItemTransformVec3f
 {
@@ -38,7 +34,7 @@ public class ItemTransformVec3f
         else
         {
             ItemTransformVec3f itemtransformvec3f = (ItemTransformVec3f)p_equals_1_;
-            return !this.rotation.equals(itemtransformvec3f.rotation) ? false : (!this.scale.equals(itemtransformvec3f.scale) ? false : this.translation.equals(itemtransformvec3f.translation));
+            return this.rotation.equals(itemtransformvec3f.rotation) && (this.scale.equals(itemtransformvec3f.scale) && this.translation.equals(itemtransformvec3f.translation));
         }
     }
 

@@ -1,8 +1,6 @@
 package net.minecraft.tileentity;
 
 import com.google.common.collect.Lists;
-import java.util.Arrays;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStainedGlass;
 import net.minecraft.block.BlockStainedGlassPane;
@@ -27,10 +25,13 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ITickable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TileEntityBeacon extends TileEntityLockable implements ITickable, IInventory
 {
-    public static final Potion[][] effectsList = new Potion[][] {{Potion.moveSpeed, Potion.digSpeed}, {Potion.resistance, Potion.jump}, {Potion.damageBoost}, {Potion.regeneration}};
-    private final List<TileEntityBeacon.BeamSegment> beamSegments = Lists.<TileEntityBeacon.BeamSegment>newArrayList();
+    public static final Potion[][] effectsList = new Potion[][]{{Potion.moveSpeed, Potion.digSpeed}, {Potion.resistance, Potion.jump}, {Potion.damageBoost}, {Potion.regeneration}};
+    private final List<TileEntityBeacon.BeamSegment> beamSegments = Lists.newArrayList();
     private long beamRenderCounter;
     private float field_146014_j;
     private boolean isComplete;
@@ -58,29 +59,25 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
     {
         if (this.isComplete && this.levels > 0 && !this.worldObj.isRemote && this.primaryEffect > 0)
         {
-            double d0 = (double)(this.levels * 10 + 10);
+            double d0 = this.levels * 10 + 10;
             int i = 0;
 
-            if (this.levels >= 4 && this.primaryEffect == this.secondaryEffect)
-            {
+            if (this.levels >= 4 && this.primaryEffect == this.secondaryEffect) {
                 i = 1;
             }
 
             int j = this.pos.getX();
             int k = this.pos.getY();
             int l = this.pos.getZ();
-            AxisAlignedBB axisalignedbb = (new AxisAlignedBB((double)j, (double)k, (double)l, (double)(j + 1), (double)(k + 1), (double)(l + 1))).expand(d0, d0, d0).addCoord(0.0D, (double)this.worldObj.getHeight(), 0.0D);
-            List<EntityPlayer> list = this.worldObj.<EntityPlayer>getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
+            AxisAlignedBB axisalignedbb = (new AxisAlignedBB(j, k, l, j + 1, k + 1, l + 1)).expand(d0, d0, d0).addCoord(0.0D, this.worldObj.getHeight(), 0.0D);
+            List<EntityPlayer> list = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, axisalignedbb);
 
-            for (EntityPlayer entityplayer : list)
-            {
+            for (EntityPlayer entityplayer : list) {
                 entityplayer.addPotionEffect(new PotionEffect(this.primaryEffect, 180, i, true, true));
             }
 
-            if (this.levels >= 4 && this.primaryEffect != this.secondaryEffect && this.secondaryEffect > 0)
-            {
-                for (EntityPlayer entityplayer1 : list)
-                {
+            if (this.levels >= 4 && this.primaryEffect != this.secondaryEffect && this.secondaryEffect > 0) {
+                for (EntityPlayer entityplayer1 : list) {
                     entityplayer1.addPotionEffect(new PotionEffect(this.secondaryEffect, 180, 0, true, true));
                 }
             }
@@ -108,7 +105,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
 
             if (iblockstate.getBlock() == Blocks.stained_glass)
             {
-                afloat = EntitySheep.getDyeRgb((EnumDyeColor)iblockstate.getValue(BlockStainedGlass.COLOR));
+                afloat = EntitySheep.getDyeRgb(iblockstate.getValue(BlockStainedGlass.COLOR));
             }
             else
             {
@@ -125,7 +122,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
                     continue;
                 }
 
-                afloat = EntitySheep.getDyeRgb((EnumDyeColor)iblockstate.getValue(BlockStainedGlassPane.COLOR));
+                afloat = EntitySheep.getDyeRgb(iblockstate.getValue(BlockStainedGlassPane.COLOR));
             }
 
             if (!flag)
@@ -187,8 +184,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
 
         if (!this.worldObj.isRemote && this.levels == 4 && i < this.levels)
         {
-            for (EntityPlayer entityplayer : this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, (new AxisAlignedBB((double)j, (double)k, (double)l, (double)j, (double)(k - 4), (double)l)).expand(10.0D, 5.0D, 10.0D)))
-            {
+            for (EntityPlayer entityplayer : this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, (new AxisAlignedBB(j, k, l, j, k - 4, l)).expand(10.0D, 5.0D, 10.0D))) {
                 entityplayer.triggerAchievement(AchievementList.fullBeacon);
             }
         }
@@ -348,7 +344,7 @@ public class TileEntityBeacon extends TileEntityLockable implements ITickable, I
 
     public boolean isUseableByPlayer(EntityPlayer player)
     {
-        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+        return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     public void openInventory(EntityPlayer player)

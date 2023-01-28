@@ -9,19 +9,16 @@ import net.minecraft.world.gen.feature.WorldGenIcePath;
 import net.minecraft.world.gen.feature.WorldGenIceSpike;
 import net.minecraft.world.gen.feature.WorldGenTaiga2;
 
-public class BiomeGenSnow extends BiomeGenBase
-{
-    private boolean field_150615_aC;
-    private WorldGenIceSpike field_150616_aD = new WorldGenIceSpike();
-    private WorldGenIcePath field_150617_aE = new WorldGenIcePath(4);
+public class BiomeGenSnow extends BiomeGenBase {
+    private final boolean field_150615_aC;
+    private final WorldGenIceSpike field_150616_aD = new WorldGenIceSpike();
+    private final WorldGenIcePath field_150617_aE = new WorldGenIcePath(4);
 
-    public BiomeGenSnow(int id, boolean p_i45378_2_)
-    {
+    public BiomeGenSnow(int id, boolean p_i45378_2_) {
         super(id);
         this.field_150615_aC = p_i45378_2_;
 
-        if (p_i45378_2_)
-        {
+        if (p_i45378_2_) {
             this.topBlock = Blocks.snow.getDefaultState();
         }
 

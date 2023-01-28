@@ -1,11 +1,12 @@
 package net.minecraft.network.play.client;
 
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayServer;
 import net.minecraft.util.BlockPos;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
 
 public class C14PacketTabComplete implements Packet<INetHandlerPlayServer>
 {
@@ -18,7 +19,7 @@ public class C14PacketTabComplete implements Packet<INetHandlerPlayServer>
 
     public C14PacketTabComplete(String msg)
     {
-        this(msg, (BlockPos)null);
+        this(msg, null);
     }
 
     public C14PacketTabComplete(String msg, BlockPos target)

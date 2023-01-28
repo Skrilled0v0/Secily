@@ -51,15 +51,14 @@ public abstract class EntityFlying extends EntityLiving
             this.moveFlying(strafe, forward, this.onGround ? 0.1F * f1 : 0.02F);
             f = 0.91F;
 
-            if (this.onGround)
-            {
+            if (this.onGround) {
                 f = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
             }
 
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
-            this.motionX *= (double)f;
-            this.motionY *= (double)f;
-            this.motionZ *= (double)f;
+            this.motionX *= f;
+            this.motionY *= f;
+            this.motionZ *= f;
         }
 
         this.prevLimbSwingAmount = this.limbSwingAmount;

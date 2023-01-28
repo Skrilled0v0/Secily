@@ -36,15 +36,15 @@ public class GuiAltLogin extends GuiScreen {
     @Override
     public void drawScreen(int x, int y, float z) {
         FontDrawer font = Main.fontLoader.EN18;
-        this.drawDefaultBackground();
+        this.drawBackground();
         this.username.drawTextBox();
         this.password.drawTextBox();
         font.drawCenteredString("Alt Login", width / 2f, 20, -1);
         if (this.username.getText().isEmpty()) {
-            font.drawStringWithShadow("Username / E-Mail", width / 2f - 96, 66.0f, -7829368);
+            font.drawStringWithShadow("Username / E-Mail", width / 2f - 96, 66.0f, 1.2f, -7829368);
         }
         if (this.password.getText().isEmpty()) {
-            font.drawStringWithShadow("Password", width / 2f - 96, 106.0f, -7829368);
+            font.drawStringWithShadow("Password", width / 2f - 96, 106.0f, 1.2f, -7829368);
         }
         super.drawScreen(x, y, z);
     }

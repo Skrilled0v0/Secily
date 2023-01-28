@@ -5,19 +5,16 @@ import net.optifine.expr.ExpressionParser;
 import net.optifine.expr.IExpressionFloat;
 import net.optifine.expr.ParseException;
 
-public class ModelVariableUpdater
-{
-    private String modelVariableName;
-    private String expressionText;
+public class ModelVariableUpdater {
+    private final String modelVariableName;
+    private final String expressionText;
     private ModelVariableFloat modelVariable;
     private IExpressionFloat expression;
 
-    public boolean initialize(IModelResolver mr)
-    {
+    public boolean initialize(IModelResolver mr) {
         this.modelVariable = mr.getModelVariable(this.modelVariableName);
 
-        if (this.modelVariable == null)
-        {
+        if (this.modelVariable == null) {
             Config.warn("Model variable not found: " + this.modelVariableName);
             return false;
         }

@@ -68,11 +68,10 @@ public class BlockCauldron extends Block
 
     public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     {
-        int i = ((Integer)state.getValue(LEVEL)).intValue();
-        float f = (float)pos.getY() + (6.0F + (float)(3 * i)) / 16.0F;
+        int i = state.getValue(LEVEL).intValue();
+        float f = (float) pos.getY() + (6.0F + (float) (3 * i)) / 16.0F;
 
-        if (!worldIn.isRemote && entityIn.isBurning() && i > 0 && entityIn.getEntityBoundingBox().minY <= (double)f)
-        {
+        if (!worldIn.isRemote && entityIn.isBurning() && i > 0 && entityIn.getEntityBoundingBox().minY <= (double) f) {
             entityIn.extinguish();
             this.setWaterLevel(worldIn, pos, state, i - 1);
         }
@@ -94,7 +93,7 @@ public class BlockCauldron extends Block
             }
             else
             {
-                int i = ((Integer)state.getValue(LEVEL)).intValue();
+                int i = state.getValue(LEVEL).intValue();
                 Item item = itemstack.getItem();
 
                 if (item == Items.water_bucket)
@@ -134,7 +133,7 @@ public class BlockCauldron extends Block
 
                             if (itemstack.stackSize <= 0)
                             {
-                                playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, (ItemStack)null);
+                                playerIn.inventory.setInventorySlotContents(playerIn.inventory.currentItem, null);
                             }
                         }
 
@@ -215,8 +214,7 @@ public class BlockCauldron extends Block
         {
             IBlockState iblockstate = worldIn.getBlockState(pos);
 
-            if (((Integer)iblockstate.getValue(LEVEL)).intValue() < 3)
-            {
+            if (iblockstate.getValue(LEVEL).intValue() < 3) {
                 worldIn.setBlockState(pos, iblockstate.cycleProperty(LEVEL), 2);
             }
         }
@@ -239,7 +237,7 @@ public class BlockCauldron extends Block
 
     public int getComparatorInputOverride(World worldIn, BlockPos pos)
     {
-        return ((Integer)worldIn.getBlockState(pos).getValue(LEVEL)).intValue();
+        return worldIn.getBlockState(pos).getValue(LEVEL).intValue();
     }
 
     public IBlockState getStateFromMeta(int meta)
@@ -249,11 +247,11 @@ public class BlockCauldron extends Block
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(LEVEL)).intValue();
+        return state.getValue(LEVEL).intValue();
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {LEVEL});
+        return new BlockState(this, LEVEL);
     }
 }

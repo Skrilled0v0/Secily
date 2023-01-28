@@ -80,6 +80,56 @@ public class ConnectedParser
         return i < 0 ? "" : path.substring(0, i);
     }
 
+    private static int[] parseCareerIds(int prof, String str)
+    {
+        Set<Integer> set = new HashSet();
+        String[] astring = Config.tokenize(str, ",");
+
+        for (int i = 0; i < astring.length; ++i)
+        {
+            String s = astring[i];
+            int j = parseCareerId(prof, s);
+
+            if (j < 0)
+            {
+                return null;
+            }
+
+            set.add(Integer.valueOf(j));
+        }
+
+        Integer[] ainteger = set.toArray(new Integer[set.size()]);
+        int[] aint = new int[ainteger.length];
+
+        for (int k = 0; k < aint.length; ++k)
+        {
+            aint[k] = ainteger[k].intValue();
+        }
+
+        return aint;
+    }
+
+    public IBlockState parseBlockState(String str, IBlockState def)
+    {
+        MatchBlock[] amatchblock = this.parseMatchBlock(str);
+
+        if (amatchblock == null)
+        {
+            return def;
+        }
+        else if (amatchblock.length != 1)
+        {
+            return def;
+        }
+        else
+        {
+            MatchBlock matchblock = amatchblock[0];
+            int i = matchblock.getBlockId();
+            Block block = Block.getBlockById(i);
+            return block.getDefaultState();
+        }
+    }
+
     public MatchBlock[] parseMatchBlocks(String propMatchBlocks)
     {
         if (propMatchBlocks == null)
@@ -102,29 +152,8 @@ public class ConnectedParser
                 }
             }
 
-            MatchBlock[] amatchblock1 = (MatchBlock[])((MatchBlock[])list.toArray(new MatchBlock[list.size()]));
+            MatchBlock[] amatchblock1 = (MatchBlock[]) list.toArray(new MatchBlock[list.size()]);
             return amatchblock1;
-        }
-    }
-
-    public IBlockState parseBlockState(String str, IBlockState def)
-    {
-        MatchBlock[] amatchblock = this.parseMatchBlock(str);
-
-        if (amatchblock == null)
-        {
-            return def;
-        }
-        else if (amatchblock.length != 1)
-        {
-            return def;
-        }
-        else
-        {
-            MatchBlock matchblock = amatchblock[0];
-            int i = matchblock.getBlockId();
-            Block block = Block.getBlockById(i);
-            return block.getDefaultState();
         }
     }
 
@@ -160,7 +189,7 @@ public class ConnectedParser
                 }
 
                 String s1 = astring[i];
-                String[] astring1 = (String[])Arrays.copyOfRange(astring, i + 1, astring.length);
+                String[] astring1 = Arrays.copyOfRange(astring, i + 1, astring.length);
                 Block[] ablock = this.parseBlockPart(s, s1);
 
                 if (ablock == null)
@@ -194,19 +223,6 @@ public class ConnectedParser
                     return amatchblock;
                 }
             }
-        }
-    }
-
-    public boolean isFullBlockName(String[] parts)
-    {
-        if (parts.length < 2)
-        {
-            return false;
-        }
-        else
-        {
-            String s = parts[1];
-            return s.length() < 1 ? false : (this.startsWithDigit(s) ? false : !s.contains("="));
         }
     }
 
@@ -276,121 +292,16 @@ public class ConnectedParser
         }
     }
 
-    public int[] parseBlockMetadatas(Block block, String[] params)
+    public boolean isFullBlockName(String[] parts)
     {
-        if (params.length <= 0)
+        if (parts.length < 2)
         {
-            return null;
+            return false;
         }
         else
         {
-            String s = params[0];
-
-            if (this.startsWithDigit(s))
-            {
-                int[] aint = this.parseIntList(s);
-                return aint;
-            }
-            else
-            {
-                IBlockState iblockstate = block.getDefaultState();
-                Collection collection = iblockstate.getPropertyNames();
-                Map<IProperty, List<Comparable>> map = new HashMap();
-
-                for (int i = 0; i < params.length; ++i)
-                {
-                    String s1 = params[i];
-
-                    if (s1.length() > 0)
-                    {
-                        String[] astring = Config.tokenize(s1, "=");
-
-                        if (astring.length != 2)
-                        {
-                            this.warn("Invalid block property: " + s1);
-                            return null;
-                        }
-
-                        String s2 = astring[0];
-                        String s3 = astring[1];
-                        IProperty iproperty = ConnectedProperties.getProperty(s2, collection);
-
-                        if (iproperty == null)
-                        {
-                            this.warn("Property not found: " + s2 + ", block: " + block);
-                            return null;
-                        }
-
-                        List<Comparable> list = (List)map.get(s2);
-
-                        if (list == null)
-                        {
-                            list = new ArrayList();
-                            map.put(iproperty, list);
-                        }
-
-                        String[] astring1 = Config.tokenize(s3, ",");
-
-                        for (int j = 0; j < astring1.length; ++j)
-                        {
-                            String s4 = astring1[j];
-                            Comparable comparable = parsePropertyValue(iproperty, s4);
-
-                            if (comparable == null)
-                            {
-                                this.warn("Property value not found: " + s4 + ", property: " + s2 + ", block: " + block);
-                                return null;
-                            }
-
-                            list.add(comparable);
-                        }
-                    }
-                }
-
-                if (map.isEmpty())
-                {
-                    return null;
-                }
-                else
-                {
-                    List<Integer> list1 = new ArrayList();
-
-                    for (int k = 0; k < 16; ++k)
-                    {
-                        int l = k;
-
-                        try
-                        {
-                            IBlockState iblockstate1 = this.getStateFromMeta(block, l);
-
-                            if (this.matchState(iblockstate1, map))
-                            {
-                                list1.add(Integer.valueOf(l));
-                            }
-                        }
-                        catch (IllegalArgumentException var18)
-                        {
-                            ;
-                        }
-                    }
-
-                    if (list1.size() == 16)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        int[] aint1 = new int[list1.size()];
-
-                        for (int i1 = 0; i1 < aint1.length; ++i1)
-                        {
-                            aint1[i1] = ((Integer)list1.get(i1)).intValue();
-                        }
-
-                        return aint1;
-                    }
-                }
-            }
+            String s = parts[1];
+            return s.length() >= 1 && (!this.startsWithDigit(s) && !s.contains("="));
         }
     }
 
@@ -478,12 +389,128 @@ public class ConnectedParser
         return null;
     }
 
+    public int[] parseBlockMetadatas(Block block, String[] params)
+    {
+        if (params.length <= 0)
+        {
+            return null;
+        }
+        else
+        {
+            String s = params[0];
+
+            if (this.startsWithDigit(s))
+            {
+                int[] aint = this.parseIntList(s);
+                return aint;
+            }
+            else
+            {
+                IBlockState iblockstate = block.getDefaultState();
+                Collection collection = iblockstate.getPropertyNames();
+                Map<IProperty, List<Comparable>> map = new HashMap();
+
+                for (int i = 0; i < params.length; ++i)
+                {
+                    String s1 = params[i];
+
+                    if (s1.length() > 0)
+                    {
+                        String[] astring = Config.tokenize(s1, "=");
+
+                        if (astring.length != 2)
+                        {
+                            this.warn("Invalid block property: " + s1);
+                            return null;
+                        }
+
+                        String s2 = astring[0];
+                        String s3 = astring[1];
+                        IProperty iproperty = ConnectedProperties.getProperty(s2, collection);
+
+                        if (iproperty == null)
+                        {
+                            this.warn("Property not found: " + s2 + ", block: " + block);
+                            return null;
+                        }
+
+                        List<Comparable> list = map.get(s2);
+
+                        if (list == null)
+                        {
+                            list = new ArrayList();
+                            map.put(iproperty, list);
+                        }
+
+                        String[] astring1 = Config.tokenize(s3, ",");
+
+                        for (int j = 0; j < astring1.length; ++j)
+                        {
+                            String s4 = astring1[j];
+                            Comparable comparable = parsePropertyValue(iproperty, s4);
+
+                            if (comparable == null)
+                            {
+                                this.warn("Property value not found: " + s4 + ", property: " + s2 + ", block: " + block);
+                                return null;
+                            }
+
+                            list.add(comparable);
+                        }
+                    }
+                }
+
+                if (map.isEmpty())
+                {
+                    return null;
+                }
+                else
+                {
+                    List<Integer> list1 = new ArrayList();
+
+                    for (int k = 0; k < 16; ++k)
+                    {
+                        int l = k;
+
+                        try
+                        {
+                            IBlockState iblockstate1 = this.getStateFromMeta(block, l);
+
+                            if (this.matchState(iblockstate1, map))
+                            {
+                                list1.add(Integer.valueOf(l));
+                            }
+                        }
+                        catch (IllegalArgumentException var18)
+                        {
+                        }
+                    }
+
+                    if (list1.size() == 16)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        int[] aint1 = new int[list1.size()];
+
+                        for (int i1 = 0; i1 < aint1.length; ++i1)
+                        {
+                            aint1[i1] = list1.get(i1).intValue();
+                        }
+
+                        return aint1;
+                    }
+                }
+            }
+        }
+    }
 
     public boolean matchState(IBlockState bs, Map<IProperty, List<Comparable>> mapPropValues)
     {
         for (IProperty iproperty : mapPropValues.keySet())
         {
-            List<Comparable> list = (List)mapPropValues.get(iproperty);
+            List<Comparable> list = mapPropValues.get(iproperty);
             Comparable comparable = bs.getValue(iproperty);
 
             if (comparable == null)
@@ -498,53 +525,6 @@ public class ConnectedParser
         }
 
         return true;
-    }
-
-    public BiomeGenBase[] parseBiomes(String str)
-    {
-        if (str == null)
-        {
-            return null;
-        }
-        else
-        {
-            str = str.trim();
-            boolean flag = false;
-
-            if (str.startsWith("!"))
-            {
-                flag = true;
-                str = str.substring(1);
-            }
-
-            String[] astring = Config.tokenize(str, " ");
-            List list = new ArrayList();
-
-            for (int i = 0; i < astring.length; ++i)
-            {
-                String s = astring[i];
-                BiomeGenBase biomegenbase = this.findBiome(s);
-
-                if (biomegenbase == null)
-                {
-                    this.warn("Biome not found: " + s);
-                }
-                else
-                {
-                    list.add(biomegenbase);
-                }
-            }
-
-            if (flag)
-            {
-                List<BiomeGenBase> list1 = new ArrayList(Arrays.asList(BiomeGenBase.getBiomeGenArray()));
-                list1.removeAll(list);
-                list = list1;
-            }
-
-            BiomeGenBase[] abiomegenbase = (BiomeGenBase[])((BiomeGenBase[])list.toArray(new BiomeGenBase[list.size()]));
-            return abiomegenbase;
-        }
     }
 
     public BiomeGenBase findBiome(String biomeName)
@@ -601,7 +581,7 @@ public class ConnectedParser
         }
     }
 
-    public int[] parseIntList(String str)
+    public BiomeGenBase[] parseBiomes(String str)
     {
         if (str == null)
         {
@@ -609,62 +589,42 @@ public class ConnectedParser
         }
         else
         {
-            List<Integer> list = new ArrayList();
-            String[] astring = Config.tokenize(str, " ,");
+            str = str.trim();
+            boolean flag = false;
+
+            if (str.startsWith("!"))
+            {
+                flag = true;
+                str = str.substring(1);
+            }
+
+            String[] astring = Config.tokenize(str, " ");
+            List list = new ArrayList();
 
             for (int i = 0; i < astring.length; ++i)
             {
                 String s = astring[i];
+                BiomeGenBase biomegenbase = this.findBiome(s);
 
-                if (s.contains("-"))
+                if (biomegenbase == null)
                 {
-                    String[] astring1 = Config.tokenize(s, "-");
-
-                    if (astring1.length != 2)
-                    {
-                        this.warn("Invalid interval: " + s + ", when parsing: " + str);
-                    }
-                    else
-                    {
-                        int k = Config.parseInt(astring1[0], -1);
-                        int l = Config.parseInt(astring1[1], -1);
-
-                        if (k >= 0 && l >= 0 && k <= l)
-                        {
-                            for (int i1 = k; i1 <= l; ++i1)
-                            {
-                                list.add(Integer.valueOf(i1));
-                            }
-                        }
-                        else
-                        {
-                            this.warn("Invalid interval: " + s + ", when parsing: " + str);
-                        }
-                    }
+                    this.warn("Biome not found: " + s);
                 }
                 else
                 {
-                    int j = Config.parseInt(s, -1);
-
-                    if (j < 0)
-                    {
-                        this.warn("Invalid number: " + s + ", when parsing: " + str);
-                    }
-                    else
-                    {
-                        list.add(Integer.valueOf(j));
-                    }
+                    list.add(biomegenbase);
                 }
             }
 
-            int[] aint = new int[list.size()];
-
-            for (int j1 = 0; j1 < aint.length; ++j1)
+            if (flag)
             {
-                aint[j1] = ((Integer)list.get(j1)).intValue();
+                List<BiomeGenBase> list1 = new ArrayList(Arrays.asList(BiomeGenBase.getBiomeGenArray()));
+                list1.removeAll(list);
+                list = list1;
             }
 
-            return aint;
+            BiomeGenBase[] abiomegenbase = (BiomeGenBase[]) list.toArray(new BiomeGenBase[list.size()]);
+            return abiomegenbase;
         }
     }
 
@@ -963,11 +923,78 @@ public class ConnectedParser
         }
     }
 
+    public int[] parseIntList(String str)
+    {
+        if (str == null)
+        {
+            return null;
+        }
+        else
+        {
+            List<Integer> list = new ArrayList();
+            String[] astring = Config.tokenize(str, " ,");
+
+            for (int i = 0; i < astring.length; ++i)
+            {
+                String s = astring[i];
+
+                if (s.contains("-"))
+                {
+                    String[] astring1 = Config.tokenize(s, "-");
+
+                    if (astring1.length != 2)
+                    {
+                        this.warn("Invalid interval: " + s + ", when parsing: " + str);
+                    }
+                    else
+                    {
+                        int k = Config.parseInt(astring1[0], -1);
+                        int l = Config.parseInt(astring1[1], -1);
+
+                        if (k >= 0 && l >= 0 && k <= l)
+                        {
+                            for (int i1 = k; i1 <= l; ++i1)
+                            {
+                                list.add(Integer.valueOf(i1));
+                            }
+                        }
+                        else
+                        {
+                            this.warn("Invalid interval: " + s + ", when parsing: " + str);
+                        }
+                    }
+                }
+                else
+                {
+                    int j = Config.parseInt(s, -1);
+
+                    if (j < 0)
+                    {
+                        this.warn("Invalid number: " + s + ", when parsing: " + str);
+                    }
+                    else
+                    {
+                        list.add(Integer.valueOf(j));
+                    }
+                }
+            }
+
+            int[] aint = new int[list.size()];
+
+            for (int j1 = 0; j1 < aint.length; ++j1)
+            {
+                aint[j1] = list.get(j1).intValue();
+            }
+
+            return aint;
+        }
+    }
+
     public <T> T parseObject(String str, T[] objs, INameGetter nameGetter, String property)
     {
         if (str == null)
         {
-            return (T)null;
+            return null;
         }
         else
         {
@@ -985,7 +1012,7 @@ public class ConnectedParser
             }
 
             this.warn("Invalid " + property + ": " + str);
-            return (T)null;
+            return null;
         }
     }
 
@@ -1008,7 +1035,7 @@ public class ConnectedParser
 
                 if (t == null)
                 {
-                    return (T[])errValue;
+                    return errValue;
                 }
 
                 at[i] = t;
@@ -1020,22 +1047,17 @@ public class ConnectedParser
 
     public Enum parseEnum(String str, Enum[] enums, String property)
     {
-        return (Enum)this.parseObject(str, enums, NAME_GETTER_ENUM, property);
+        return this.parseObject(str, enums, NAME_GETTER_ENUM, property);
     }
 
     public Enum[] parseEnums(String str, Enum[] enums, String property, Enum[] errValue)
     {
-        return (Enum[])this.parseObjects(str, enums, NAME_GETTER_ENUM, property, errValue);
+        return this.parseObjects(str, enums, NAME_GETTER_ENUM, property, errValue);
     }
 
     public EnumDyeColor[] parseDyeColors(String str, String property, EnumDyeColor[] errValue)
     {
-        return (EnumDyeColor[])this.parseObjects(str, EnumDyeColor.values(), NAME_GETTER_DYE_COLOR, property, errValue);
-    }
-
-    public Weather[] parseWeather(String str, String property, Weather[] errValue)
-    {
-        return (Weather[])this.parseObjects(str, Weather.values(), NAME_GETTER_ENUM, property, errValue);
+        return this.parseObjects(str, EnumDyeColor.values(), NAME_GETTER_DYE_COLOR, property, errValue);
     }
 
     public NbtTagValue parseNbtTagValue(String path, String value)
@@ -1043,41 +1065,9 @@ public class ConnectedParser
         return path != null && value != null ? new NbtTagValue(path, value) : null;
     }
 
-    public VillagerProfession[] parseProfessions(String profStr)
+    public Weather[] parseWeather(String str, String property, Weather[] errValue)
     {
-        if (profStr == null)
-        {
-            return null;
-        }
-        else
-        {
-            List<VillagerProfession> list = new ArrayList();
-            String[] astring = Config.tokenize(profStr, " ");
-
-            for (int i = 0; i < astring.length; ++i)
-            {
-                String s = astring[i];
-                VillagerProfession villagerprofession = this.parseProfession(s);
-
-                if (villagerprofession == null)
-                {
-                    this.warn("Invalid profession: " + s);
-                    return PROFESSIONS_INVALID;
-                }
-
-                list.add(villagerprofession);
-            }
-
-            if (list.isEmpty())
-            {
-                return null;
-            }
-            else
-            {
-                VillagerProfession[] avillagerprofession = (VillagerProfession[])((VillagerProfession[])list.toArray(new VillagerProfession[list.size()]));
-                return avillagerprofession;
-            }
-        }
+        return this.parseObjects(str, Weather.values(), NAME_GETTER_ENUM, property, errValue);
     }
 
     private VillagerProfession parseProfession(String str)
@@ -1130,33 +1120,41 @@ public class ConnectedParser
         return i >= 0 ? i : (str.equals("farmer") ? 0 : (str.equals("librarian") ? 1 : (str.equals("priest") ? 2 : (str.equals("blacksmith") ? 3 : (str.equals("butcher") ? 4 : (str.equals("nitwit") ? 5 : -1))))));
     }
 
-    private static int[] parseCareerIds(int prof, String str)
+    public VillagerProfession[] parseProfessions(String profStr)
     {
-        Set<Integer> set = new HashSet();
-        String[] astring = Config.tokenize(str, ",");
-
-        for (int i = 0; i < astring.length; ++i)
+        if (profStr == null)
         {
-            String s = astring[i];
-            int j = parseCareerId(prof, s);
+            return null;
+        }
+        else
+        {
+            List<VillagerProfession> list = new ArrayList();
+            String[] astring = Config.tokenize(profStr, " ");
 
-            if (j < 0)
+            for (int i = 0; i < astring.length; ++i)
+            {
+                String s = astring[i];
+                VillagerProfession villagerprofession = this.parseProfession(s);
+
+                if (villagerprofession == null)
+                {
+                    this.warn("Invalid profession: " + s);
+                    return PROFESSIONS_INVALID;
+                }
+
+                list.add(villagerprofession);
+            }
+
+            if (list.isEmpty())
             {
                 return null;
             }
-
-            set.add(Integer.valueOf(j));
+            else
+            {
+                VillagerProfession[] avillagerprofession = list.toArray(new VillagerProfession[list.size()]);
+                return avillagerprofession;
+            }
         }
-
-        Integer[] ainteger = (Integer[])((Integer[])set.toArray(new Integer[set.size()]));
-        int[] aint = new int[ainteger.length];
-
-        for (int k = 0; k < aint.length; ++k)
-        {
-            aint[k] = ainteger[k].intValue();
-        }
-
-        return aint;
     }
 
     private static int parseCareerId(int prof, String str)
@@ -1257,7 +1255,7 @@ public class ConnectedParser
         {
             String s = astring[i];
             ResourceLocation resourcelocation = new ResourceLocation(s);
-            Item item = (Item)Item.itemRegistry.getObject(resourcelocation);
+            Item item = Item.itemRegistry.getObject(resourcelocation);
 
             if (item == null)
             {
@@ -1278,7 +1276,7 @@ public class ConnectedParser
             }
         }
 
-        Integer[] ainteger = (Integer[])((Integer[])set.toArray(new Integer[set.size()]));
+        Integer[] ainteger = set.toArray(new Integer[set.size()]);
         int[] aint = Config.toPrimitive(ainteger);
         return aint;
     }
@@ -1304,7 +1302,7 @@ public class ConnectedParser
             }
         }
 
-        Integer[] ainteger = (Integer[])((Integer[])set.toArray(new Integer[set.size()]));
+        Integer[] ainteger = set.toArray(new Integer[set.size()]);
         int[] aint = Config.toPrimitive(ainteger);
         return aint;
     }

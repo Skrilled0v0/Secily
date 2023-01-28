@@ -1,15 +1,5 @@
 package net.minecraft.client.renderer;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.Proxy.Type;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -24,6 +14,17 @@ import net.optifine.shaders.ShadersTex;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
+import java.net.Proxy.Type;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadDownloadImageData extends SimpleTexture
 {
@@ -97,7 +98,7 @@ public class ThreadDownloadImageData extends SimpleTexture
         {
             if (this.cacheFile != null && this.cacheFile.isFile())
             {
-                logger.debug("Loading http texture from local cache ({})", new Object[] {this.cacheFile});
+                logger.debug("Loading http texture from local cache ({})", this.cacheFile);
 
                 try
                 {
@@ -112,7 +113,7 @@ public class ThreadDownloadImageData extends SimpleTexture
                 }
                 catch (IOException ioexception)
                 {
-                    logger.error((String)("Couldn\'t load skin " + this.cacheFile), (Throwable)ioexception);
+                    logger.error("Couldn't load skin " + this.cacheFile, ioexception);
                     this.loadTextureFromServer();
                 }
             }
@@ -130,7 +131,7 @@ public class ThreadDownloadImageData extends SimpleTexture
             public void run()
             {
                 HttpURLConnection httpurlconnection = null;
-                ThreadDownloadImageData.logger.debug("Downloading http texture from {} to {}", new Object[] {ThreadDownloadImageData.this.imageUrl, ThreadDownloadImageData.this.cacheFile});
+                ThreadDownloadImageData.logger.debug("Downloading http texture from {} to {}", ThreadDownloadImageData.this.imageUrl, ThreadDownloadImageData.this.cacheFile);
 
                 if (ThreadDownloadImageData.this.shouldPipeline())
                 {
@@ -176,8 +177,7 @@ public class ThreadDownloadImageData extends SimpleTexture
                     }
                     catch (Exception exception)
                     {
-                        ThreadDownloadImageData.logger.error("Couldn\'t download http texture: " + exception.getClass().getName() + ": " + exception.getMessage());
-                        return;
+                        ThreadDownloadImageData.logger.error("Couldn't download http texture: " + exception.getClass().getName() + ": " + exception.getMessage());
                     }
                     finally
                     {
@@ -204,7 +204,7 @@ public class ThreadDownloadImageData extends SimpleTexture
         else
         {
             Proxy proxy = Minecraft.getMinecraft().getProxy();
-            return proxy.type() != Type.DIRECT && proxy.type() != Type.SOCKS ? false : this.imageUrl.startsWith("http://");
+            return (proxy.type() == Type.DIRECT || proxy.type() == Type.SOCKS) && this.imageUrl.startsWith("http://");
         }
     }
 
@@ -243,8 +243,7 @@ public class ThreadDownloadImageData extends SimpleTexture
         }
         catch (Exception exception)
         {
-            logger.error("Couldn\'t download http texture: " + exception.getClass().getName() + ": " + exception.getMessage());
-            return;
+            logger.error("Couldn't download http texture: " + exception.getClass().getName() + ": " + exception.getMessage());
         }
         finally
         {

@@ -12,19 +12,17 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class WorldChunkManager
-{
+public class WorldChunkManager {
     private GenLayer genBiomes;
     private GenLayer biomeIndexLayer;
-    private BiomeCache biomeCache;
-    private List<BiomeGenBase> biomesToSpawnIn;
+    private final BiomeCache biomeCache;
+    private final List<BiomeGenBase> biomesToSpawnIn;
     private String generatorOptions;
 
-    protected WorldChunkManager()
-    {
+    protected WorldChunkManager() {
         this.biomeCache = new BiomeCache(this);
         this.generatorOptions = "";
-        this.biomesToSpawnIn = Lists.<BiomeGenBase>newArrayList();
+        this.biomesToSpawnIn = Lists.newArrayList();
         this.biomesToSpawnIn.add(BiomeGenBase.forest);
         this.biomesToSpawnIn.add(BiomeGenBase.plains);
         this.biomesToSpawnIn.add(BiomeGenBase.taiga);
@@ -55,7 +53,7 @@ public class WorldChunkManager
 
     public BiomeGenBase getBiomeGenerator(BlockPos pos)
     {
-        return this.getBiomeGenerator(pos, (BiomeGenBase)null);
+        return this.getBiomeGenerator(pos, null);
     }
 
     public BiomeGenBase getBiomeGenerator(BlockPos pos, BiomeGenBase biomeGenBaseIn)

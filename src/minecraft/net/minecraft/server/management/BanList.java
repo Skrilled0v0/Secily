@@ -1,6 +1,7 @@
 package net.minecraft.server.management;
 
 import com.google.gson.JsonObject;
+
 import java.io.File;
 import java.net.SocketAddress;
 
@@ -25,7 +26,7 @@ public class BanList extends UserList<String, IPBanEntry>
     public IPBanEntry getBanEntry(SocketAddress address)
     {
         String s = this.addressToString(address);
-        return (IPBanEntry)this.getEntry(s);
+        return this.getEntry(s);
     }
 
     private String addressToString(SocketAddress address)

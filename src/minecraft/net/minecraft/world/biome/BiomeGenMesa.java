@@ -15,18 +15,16 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
-public class BiomeGenMesa extends BiomeGenBase
-{
+public class BiomeGenMesa extends BiomeGenBase {
     private IBlockState[] field_150621_aC;
     private long field_150622_aD;
     private NoiseGeneratorPerlin field_150623_aE;
     private NoiseGeneratorPerlin field_150624_aF;
     private NoiseGeneratorPerlin field_150625_aG;
-    private boolean field_150626_aH;
-    private boolean field_150620_aI;
+    private final boolean field_150626_aH;
+    private final boolean field_150620_aI;
 
-    public BiomeGenMesa(int id, boolean p_i45380_2_, boolean p_i45380_3_)
-    {
+    public BiomeGenMesa(int id, boolean p_i45380_2_, boolean p_i45380_3_) {
         super(id);
         this.field_150626_aH = p_i45380_2_;
         this.field_150620_aI = p_i45380_3_;
@@ -310,7 +308,7 @@ public class BiomeGenMesa extends BiomeGenBase
 
     private IBlockState func_180629_a(int p_180629_1_, int p_180629_2_, int p_180629_3_)
     {
-        int i = (int)Math.round(this.field_150625_aG.func_151601_a((double)p_180629_1_ * 1.0D / 512.0D, (double)p_180629_1_ * 1.0D / 512.0D) * 2.0D);
+        int i = (int) Math.round(this.field_150625_aG.func_151601_a((double) p_180629_1_ / 512.0D, (double) p_180629_1_ / 512.0D) * 2.0D);
         return this.field_150621_aC[(p_180629_2_ + i + 64) % 64];
     }
 

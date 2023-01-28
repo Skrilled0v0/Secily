@@ -1,7 +1,5 @@
 package net.minecraft.block;
 
-import java.util.List;
-import java.util.Random;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -17,10 +15,13 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public abstract class BlockStoneSlab extends BlockSlab
 {
     public static final PropertyBool SEAMLESS = PropertyBool.create("seamless");
-    public static final PropertyEnum<BlockStoneSlab.EnumType> VARIANT = PropertyEnum.<BlockStoneSlab.EnumType>create("variant", BlockStoneSlab.EnumType.class);
+    public static final PropertyEnum<BlockStoneSlab.EnumType> VARIANT = PropertyEnum.create("variant", BlockStoneSlab.EnumType.class);
 
     public BlockStoneSlab()
     {
@@ -98,12 +99,11 @@ public abstract class BlockStoneSlab extends BlockSlab
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((BlockStoneSlab.EnumType)state.getValue(VARIANT)).getMetadata();
+        i = i | state.getValue(VARIANT).getMetadata();
 
         if (this.isDouble())
         {
-            if (((Boolean)state.getValue(SEAMLESS)).booleanValue())
-            {
+            if (state.getValue(SEAMLESS).booleanValue()) {
                 i |= 8;
             }
         }
@@ -117,21 +117,20 @@ public abstract class BlockStoneSlab extends BlockSlab
 
     protected BlockState createBlockState()
     {
-        return this.isDouble() ? new BlockState(this, new IProperty[] {SEAMLESS, VARIANT}): new BlockState(this, new IProperty[] {HALF, VARIANT});
+        return this.isDouble() ? new BlockState(this, SEAMLESS, VARIANT) : new BlockState(this, HALF, VARIANT);
     }
 
     public int damageDropped(IBlockState state)
     {
-        return ((BlockStoneSlab.EnumType)state.getValue(VARIANT)).getMetadata();
+        return state.getValue(VARIANT).getMetadata();
     }
 
     public MapColor getMapColor(IBlockState state)
     {
-        return ((BlockStoneSlab.EnumType)state.getValue(VARIANT)).func_181074_c();
+        return state.getValue(VARIANT).func_181074_c();
     }
 
-    public static enum EnumType implements IStringSerializable
-    {
+    public enum EnumType implements IStringSerializable {
         STONE(0, MapColor.stoneColor, "stone"),
         SAND(1, MapColor.sandColor, "sandstone", "sand"),
         WOOD(2, MapColor.woodColor, "wood_old", "wood"),
@@ -147,13 +146,11 @@ public abstract class BlockStoneSlab extends BlockSlab
         private final String name;
         private final String unlocalizedName;
 
-        private EnumType(int p_i46381_3_, MapColor p_i46381_4_, String p_i46381_5_)
-        {
+        EnumType(int p_i46381_3_, MapColor p_i46381_4_, String p_i46381_5_) {
             this(p_i46381_3_, p_i46381_4_, p_i46381_5_, p_i46381_5_);
         }
 
-        private EnumType(int p_i46382_3_, MapColor p_i46382_4_, String p_i46382_5_, String p_i46382_6_)
-        {
+        EnumType(int p_i46382_3_, MapColor p_i46382_4_, String p_i46382_5_, String p_i46382_6_) {
             this.meta = p_i46382_3_;
             this.field_181075_k = p_i46382_4_;
             this.name = p_i46382_5_;

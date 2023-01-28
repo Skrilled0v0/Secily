@@ -12,7 +12,7 @@ public class BlockPosM extends BlockPos
     private int mx;
     private int my;
     private int mz;
-    private int level;
+    private final int level;
     private BlockPosM[] facings;
     private boolean needsUpdate;
 
@@ -154,16 +154,13 @@ public class BlockPosM extends BlockPos
                 return new AbstractIterator()
                 {
                     private BlockPosM theBlockPosM = null;
-                    protected BlockPosM computeNext0()
-                    {
-                        if (this.theBlockPosM == null)
-                        {
+
+                    private BlockPosM computeNext0() {
+                        if (this.theBlockPosM == null) {
                             this.theBlockPosM = new BlockPosM(blockpos.getX(), blockpos.getY(), blockpos.getZ(), 3);
                             return this.theBlockPosM;
-                        }
-                        else if (this.theBlockPosM.equals(blockpos1))
-                        {
-                            return (BlockPosM)this.endOfData();
+                        } else if (this.theBlockPosM.equals(blockpos1)) {
+                            return (BlockPosM) this.endOfData();
                         }
                         else
                         {

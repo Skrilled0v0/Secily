@@ -16,15 +16,14 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class ChunkProviderEnd implements IChunkProvider
-{
-    private Random endRNG;
-    private NoiseGeneratorOctaves noiseGen1;
-    private NoiseGeneratorOctaves noiseGen2;
-    private NoiseGeneratorOctaves noiseGen3;
+public class ChunkProviderEnd implements IChunkProvider {
+    private final Random endRNG;
+    private final NoiseGeneratorOctaves noiseGen1;
+    private final NoiseGeneratorOctaves noiseGen2;
+    private final NoiseGeneratorOctaves noiseGen3;
     public NoiseGeneratorOctaves noiseGen4;
     public NoiseGeneratorOctaves noiseGen5;
-    private World endWorld;
+    private final World endWorld;
     private double[] densities;
     private BiomeGenBase[] biomesForGeneration;
     double[] noiseData1;
@@ -56,20 +55,18 @@ public class ChunkProviderEnd implements IChunkProvider
         {
             for (int j1 = 0; j1 < i; ++j1)
             {
-                for (int k1 = 0; k1 < 32; ++k1)
-                {
+                for (int k1 = 0; k1 < 32; ++k1) {
                     double d0 = 0.25D;
-                    double d1 = this.densities[((i1 + 0) * l + j1 + 0) * k + k1 + 0];
-                    double d2 = this.densities[((i1 + 0) * l + j1 + 1) * k + k1 + 0];
-                    double d3 = this.densities[((i1 + 1) * l + j1 + 0) * k + k1 + 0];
-                    double d4 = this.densities[((i1 + 1) * l + j1 + 1) * k + k1 + 0];
-                    double d5 = (this.densities[((i1 + 0) * l + j1 + 0) * k + k1 + 1] - d1) * d0;
-                    double d6 = (this.densities[((i1 + 0) * l + j1 + 1) * k + k1 + 1] - d2) * d0;
-                    double d7 = (this.densities[((i1 + 1) * l + j1 + 0) * k + k1 + 1] - d3) * d0;
+                    double d1 = this.densities[((i1) * l + j1) * k + k1];
+                    double d2 = this.densities[((i1) * l + j1 + 1) * k + k1];
+                    double d3 = this.densities[((i1 + 1) * l + j1) * k + k1];
+                    double d4 = this.densities[((i1 + 1) * l + j1 + 1) * k + k1];
+                    double d5 = (this.densities[((i1) * l + j1) * k + k1 + 1] - d1) * d0;
+                    double d6 = (this.densities[((i1) * l + j1 + 1) * k + k1 + 1] - d2) * d0;
+                    double d7 = (this.densities[((i1 + 1) * l + j1) * k + k1 + 1] - d3) * d0;
                     double d8 = (this.densities[((i1 + 1) * l + j1 + 1) * k + k1 + 1] - d4) * d0;
 
-                    for (int l1 = 0; l1 < 4; ++l1)
-                    {
+                    for (int l1 = 0; l1 < 4; ++l1) {
                         double d9 = 0.125D;
                         double d10 = d1;
                         double d11 = d2;
@@ -201,19 +198,16 @@ public class ChunkProviderEnd implements IChunkProvider
 
         for (int j = 0; j < p_73187_5_; ++j)
         {
-            for (int k = 0; k < p_73187_7_; ++k)
-            {
-                float f = (float)(j + p_73187_2_) / 1.0F;
-                float f1 = (float)(k + p_73187_4_) / 1.0F;
+            for (int k = 0; k < p_73187_7_; ++k) {
+                float f = (float) (j + p_73187_2_);
+                float f1 = (float) (k + p_73187_4_);
                 float f2 = 100.0F - MathHelper.sqrt_float(f * f + f1 * f1) * 8.0F;
 
-                if (f2 > 80.0F)
-                {
+                if (f2 > 80.0F) {
                     f2 = 80.0F;
                 }
 
-                if (f2 < -100.0F)
-                {
+                if (f2 < -100.0F) {
                     f2 = -100.0F;
                 }
 
@@ -243,7 +237,7 @@ public class ChunkProviderEnd implements IChunkProvider
 
                     if (l > p_73187_6_ / 2 - i1)
                     {
-                        double d6 = (double)((float)(l - (p_73187_6_ / 2 - i1)) / 64.0F);
+                        double d6 = (float) (l - (p_73187_6_ / 2 - i1)) / 64.0F;
                         d6 = MathHelper.clamp_double(d6, 0.0D, 1.0D);
                         d2 = d2 * (1.0D - d6) + -3000.0D * d6;
                     }
@@ -252,7 +246,7 @@ public class ChunkProviderEnd implements IChunkProvider
 
                     if (l < i1)
                     {
-                        double d7 = (double)((float)(i1 - l) / ((float)i1 - 1.0F));
+                        double d7 = (float) (i1 - l) / ((float) i1 - 1.0F);
                         d2 = d2 * (1.0D - d7) + -30.0D * d7;
                     }
 

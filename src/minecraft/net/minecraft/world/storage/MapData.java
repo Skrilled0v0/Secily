@@ -17,26 +17,23 @@ import net.minecraft.util.Vec4b;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
-public class MapData extends WorldSavedData
-{
+public class MapData extends WorldSavedData {
     public int xCenter;
     public int zCenter;
     public byte dimension;
     public byte scale;
     public byte[] colors = new byte[16384];
-    public List<MapData.MapInfo> playersArrayList = Lists.<MapData.MapInfo>newArrayList();
-    private Map<EntityPlayer, MapData.MapInfo> playersHashMap = Maps.<EntityPlayer, MapData.MapInfo>newHashMap();
-    public Map<String, Vec4b> mapDecorations = Maps.<String, Vec4b>newLinkedHashMap();
+    private final Map<EntityPlayer, MapData.MapInfo> playersHashMap = Maps.newHashMap();
+    public List<MapData.MapInfo> playersArrayList = Lists.newArrayList();
+    public Map<String, Vec4b> mapDecorations = Maps.newLinkedHashMap();
 
-    public MapData(String mapname)
-    {
+    public MapData(String mapname) {
         super(mapname);
     }
 
-    public void calculateMapCenter(double x, double z, int mapScale)
-    {
+    public void calculateMapCenter(double x, double z, int mapScale) {
         int i = 128 * (1 << mapScale);
-        int j = MathHelper.floor_double((x + 64.0D) / (double)i);
+        int j = MathHelper.floor_double((x + 64.0D) / (double) i);
         int k = MathHelper.floor_double((z + 64.0D) / (double)i);
         this.xCenter = j * i + i / 2 - 64;
         this.zCenter = k * i + i / 2 - 64;
@@ -110,13 +107,13 @@ public class MapData extends WorldSavedData
 
         for (int i = 0; i < this.playersArrayList.size(); ++i)
         {
-            MapData.MapInfo mapdata$mapinfo1 = (MapData.MapInfo)this.playersArrayList.get(i);
+            MapData.MapInfo mapdata$mapinfo1 = this.playersArrayList.get(i);
 
             if (!mapdata$mapinfo1.entityplayerObj.isDead && (mapdata$mapinfo1.entityplayerObj.inventory.hasItemStack(mapStack) || mapStack.isOnItemFrame()))
             {
                 if (!mapStack.isOnItemFrame() && mapdata$mapinfo1.entityplayerObj.dimension == this.dimension)
                 {
-                    this.updateDecorations(0, mapdata$mapinfo1.entityplayerObj.worldObj, mapdata$mapinfo1.entityplayerObj.getName(), mapdata$mapinfo1.entityplayerObj.posX, mapdata$mapinfo1.entityplayerObj.posZ, (double)mapdata$mapinfo1.entityplayerObj.rotationYaw);
+                    this.updateDecorations(0, mapdata$mapinfo1.entityplayerObj.worldObj, mapdata$mapinfo1.entityplayerObj.getName(), mapdata$mapinfo1.entityplayerObj.posX, mapdata$mapinfo1.entityplayerObj.posZ, mapdata$mapinfo1.entityplayerObj.rotationYaw);
                 }
             }
             else
@@ -130,7 +127,7 @@ public class MapData extends WorldSavedData
         {
             EntityItemFrame entityitemframe = mapStack.getItemFrame();
             BlockPos blockpos = entityitemframe.getHangingPosition();
-            this.updateDecorations(1, player.worldObj, "frame-" + entityitemframe.getEntityId(), (double)blockpos.getX(), (double)blockpos.getZ(), (double)(entityitemframe.facingDirection.getHorizontalIndex() * 90));
+            this.updateDecorations(1, player.worldObj, "frame-" + entityitemframe.getEntityId(), blockpos.getX(), blockpos.getZ(), entityitemframe.facingDirection.getHorizontalIndex() * 90);
         }
 
         if (mapStack.hasTagCompound() && mapStack.getTagCompound().hasKey("Decorations", 9))
@@ -207,7 +204,7 @@ public class MapData extends WorldSavedData
 
     public Packet getMapPacket(ItemStack mapStack, World worldIn, EntityPlayer player)
     {
-        MapData.MapInfo mapdata$mapinfo = (MapData.MapInfo)this.playersHashMap.get(player);
+        MapData.MapInfo mapdata$mapinfo = this.playersHashMap.get(player);
         return mapdata$mapinfo == null ? null : mapdata$mapinfo.getPacket(mapStack);
     }
 
@@ -223,7 +220,7 @@ public class MapData extends WorldSavedData
 
     public MapData.MapInfo getMapInfo(EntityPlayer player)
     {
-        MapData.MapInfo mapdata$mapinfo = (MapData.MapInfo)this.playersHashMap.get(player);
+        MapData.MapInfo mapdata$mapinfo = this.playersHashMap.get(player);
 
         if (mapdata$mapinfo == null)
         {

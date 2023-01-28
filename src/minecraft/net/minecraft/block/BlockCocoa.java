@@ -38,7 +38,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
         }
         else if (worldIn.rand.nextInt(5) == 0)
         {
-            int i = ((Integer)state.getValue(AGE)).intValue();
+            int i = state.getValue(AGE).intValue();
 
             if (i < 2)
             {
@@ -49,7 +49,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
 
     public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
     {
-        pos = pos.offset((EnumFacing)state.getValue(FACING));
+        pos = pos.offset(state.getValue(FACING));
         IBlockState iblockstate = worldIn.getBlockState(pos);
         return iblockstate.getBlock() == Blocks.log && iblockstate.getValue(BlockPlanks.VARIANT) == BlockPlanks.EnumType.JUNGLE;
     }
@@ -77,27 +77,25 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
     }
 
     @SuppressWarnings("incomplete-switch")
-    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
-    {
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
-        EnumFacing enumfacing = (EnumFacing)iblockstate.getValue(FACING);
-        int i = ((Integer)iblockstate.getValue(AGE)).intValue();
+        EnumFacing enumfacing = iblockstate.getValue(FACING);
+        int i = iblockstate.getValue(AGE).intValue();
         int j = 4 + i * 2;
         int k = 5 + i * 2;
-        float f = (float)j / 2.0F;
+        float f = (float) j / 2.0F;
 
-        switch (enumfacing)
-        {
+        switch (enumfacing) {
             case SOUTH:
-                this.setBlockBounds((8.0F - f) / 16.0F, (12.0F - (float)k) / 16.0F, (15.0F - (float)j) / 16.0F, (8.0F + f) / 16.0F, 0.75F, 0.9375F);
+                this.setBlockBounds((8.0F - f) / 16.0F, (12.0F - (float) k) / 16.0F, (15.0F - (float) j) / 16.0F, (8.0F + f) / 16.0F, 0.75F, 0.9375F);
                 break;
 
             case NORTH:
-                this.setBlockBounds((8.0F - f) / 16.0F, (12.0F - (float)k) / 16.0F, 0.0625F, (8.0F + f) / 16.0F, 0.75F, (1.0F + (float)j) / 16.0F);
+                this.setBlockBounds((8.0F - f) / 16.0F, (12.0F - (float) k) / 16.0F, 0.0625F, (8.0F + f) / 16.0F, 0.75F, (1.0F + (float) j) / 16.0F);
                 break;
 
             case WEST:
-                this.setBlockBounds(0.0625F, (12.0F - (float)k) / 16.0F, (8.0F - f) / 16.0F, (1.0F + (float)j) / 16.0F, 0.75F, (8.0F + f) / 16.0F);
+                this.setBlockBounds(0.0625F, (12.0F - (float) k) / 16.0F, (8.0F - f) / 16.0F, (1.0F + (float) j) / 16.0F, 0.75F, (8.0F + f) / 16.0F);
                 break;
 
             case EAST:
@@ -107,7 +105,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
 
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
-        EnumFacing enumfacing = EnumFacing.fromAngle((double)placer.rotationYaw);
+        EnumFacing enumfacing = EnumFacing.fromAngle(placer.rotationYaw);
         worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
     }
 
@@ -137,7 +135,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
 
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
-        int i = ((Integer)state.getValue(AGE)).intValue();
+        int i = state.getValue(AGE).intValue();
         int j = 1;
 
         if (i >= 2)
@@ -163,7 +161,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
 
     public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
     {
-        return ((Integer)state.getValue(AGE)).intValue() < 2;
+        return state.getValue(AGE).intValue() < 2;
     }
 
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
@@ -173,7 +171,7 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
 
     public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
     {
-        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(((Integer)state.getValue(AGE)).intValue() + 1)), 2);
+        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(state.getValue(AGE).intValue() + 1)), 2);
     }
 
     public EnumWorldBlockLayer getBlockLayer()
@@ -186,16 +184,15 @@ public class BlockCocoa extends BlockDirectional implements IGrowable
         return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta)).withProperty(AGE, Integer.valueOf((meta & 15) >> 2));
     }
 
-    public int getMetaFromState(IBlockState state)
-    {
+    public int getMetaFromState(IBlockState state) {
         int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-        i = i | ((Integer)state.getValue(AGE)).intValue() << 2;
+        i = i | state.getValue(FACING).getHorizontalIndex();
+        i = i | state.getValue(AGE).intValue() << 2;
         return i;
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING, AGE});
+        return new BlockState(this, FACING, AGE);
     }
 }

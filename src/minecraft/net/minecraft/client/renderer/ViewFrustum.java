@@ -1,7 +1,5 @@
 package net.minecraft.client.renderer;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.minecraft.client.renderer.chunk.IRenderChunkFactory;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.src.Config;
@@ -13,6 +11,9 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.optifine.render.VboRegion;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ViewFrustum
 {
     protected final RenderGlobal renderGlobal;
@@ -21,7 +22,7 @@ public class ViewFrustum
     protected int countChunksX;
     protected int countChunksZ;
     public RenderChunk[] renderChunks;
-    private Map<ChunkCoordIntPair, VboRegion[]> mapVboRegions = new HashMap();
+    private final Map<ChunkCoordIntPair, VboRegion[]> mapVboRegions = new HashMap();
 
     public ViewFrustum(World worldIn, int renderDistanceChunks, RenderGlobal p_i46246_3_, IRenderChunkFactory renderChunkFactory)
     {
@@ -216,7 +217,7 @@ public class ViewFrustum
         int j = blockpos.getZ() >> 8 << 8;
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(i, j);
         EnumWorldBlockLayer[] aenumworldblocklayer = RenderChunk.ENUM_WORLD_BLOCK_LAYERS;
-        VboRegion[] avboregion = (VboRegion[])this.mapVboRegions.get(chunkcoordintpair);
+        VboRegion[] avboregion = this.mapVboRegions.get(chunkcoordintpair);
 
         if (avboregion == null)
         {
@@ -245,7 +246,7 @@ public class ViewFrustum
     {
         for (ChunkCoordIntPair chunkcoordintpair : this.mapVboRegions.keySet())
         {
-            VboRegion[] avboregion = (VboRegion[])this.mapVboRegions.get(chunkcoordintpair);
+            VboRegion[] avboregion = this.mapVboRegions.get(chunkcoordintpair);
 
             for (int i = 0; i < avboregion.length; ++i)
             {

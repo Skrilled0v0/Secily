@@ -7,19 +7,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldGenSand extends WorldGenerator
-{
-    private Block block;
-    private int radius;
+public class WorldGenSand extends WorldGenerator {
+    private final Block block;
+    private final int radius;
 
-    public WorldGenSand(Block p_i45462_1_, int p_i45462_2_)
-    {
+    public WorldGenSand(Block p_i45462_1_, int p_i45462_2_) {
         this.block = p_i45462_1_;
         this.radius = p_i45462_2_;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position)
-    {
+    public boolean generate(World worldIn, Random rand, BlockPos position) {
         if (worldIn.getBlockState(position).getBlock().getMaterial() != Material.water)
         {
             return false;

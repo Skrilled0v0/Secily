@@ -1,17 +1,14 @@
 package net.minecraft.util;
 
-public class StatCollector
-{
-    private static StringTranslate localizedName = StringTranslate.getInstance();
-    private static StringTranslate fallbackTranslator = new StringTranslate();
+public class StatCollector {
+    private static final StringTranslate localizedName = StringTranslate.getInstance();
+    private static final StringTranslate fallbackTranslator = new StringTranslate();
 
-    public static String translateToLocal(String key)
-    {
+    public static String translateToLocal(String key) {
         return localizedName.translateKey(key);
     }
 
-    public static String translateToLocalFormatted(String key, Object... format)
-    {
+    public static String translateToLocalFormatted(String key, Object... format) {
         return localizedName.translateKeyFormat(key, format);
     }
 

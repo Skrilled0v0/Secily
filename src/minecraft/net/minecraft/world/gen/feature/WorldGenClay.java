@@ -7,20 +7,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldGenClay extends WorldGenerator
-{
-    private Block field_150546_a = Blocks.clay;
-    private int numberOfBlocks;
+public class WorldGenClay extends WorldGenerator {
+    private final Block field_150546_a = Blocks.clay;
+    private final int numberOfBlocks;
 
-    public WorldGenClay(int p_i2011_1_)
-    {
+    public WorldGenClay(int p_i2011_1_) {
         this.numberOfBlocks = p_i2011_1_;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position)
-    {
-        if (worldIn.getBlockState(position).getBlock().getMaterial() != Material.water)
-        {
+    public boolean generate(World worldIn, Random rand, BlockPos position) {
+        if (worldIn.getBlockState(position).getBlock().getMaterial() != Material.water) {
             return false;
         }
         else

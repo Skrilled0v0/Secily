@@ -27,19 +27,140 @@ import net.optifine.BlockPosM;
 import net.optifine.reflect.Reflector;
 import net.optifine.reflect.ReflectorForge;
 
-public final class SpawnerAnimals
-{
-    private static final int MOB_COUNT_DIV = (int)Math.pow(17.0D, 2.0D);
-    private final Set<ChunkCoordIntPair> eligibleChunksForSpawning = Sets.<ChunkCoordIntPair>newHashSet();
-    private Map<Class, EntityLiving> mapSampleEntitiesByClass = new HashMap();
+public final class SpawnerAnimals {
+    private static final int MOB_COUNT_DIV = (int) Math.pow(17.0D, 2.0D);
+    private final Set<ChunkCoordIntPair> eligibleChunksForSpawning = Sets.newHashSet();
+    private final Map<Class, EntityLiving> mapSampleEntitiesByClass = new HashMap();
     private int lastPlayerChunkX = Integer.MAX_VALUE;
     private int lastPlayerChunkZ = Integer.MAX_VALUE;
     private int countChunkPos;
 
-    public int findChunksForSpawning(WorldServer worldServerIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean p_77192_4_)
+    private static BlockPos getRandomChunkPosition(World worldIn, int x, int z) {
+        Chunk chunk = worldIn.getChunkFromChunkCoords(x, z);
+        int i = x * 16 + worldIn.rand.nextInt(16);
+        int j = z * 16 + worldIn.rand.nextInt(16);
+        int k = MathHelper.roundUp(chunk.getHeight(new BlockPos(i, 0, j)) + 1, 16);
+        int l = worldIn.rand.nextInt(k > 0 ? k : chunk.getTopFilledSegment() + 16 - 1);
+        return new BlockPos(i, l, j);
+    }
+
+    public static boolean canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType spawnPlacementTypeIn, World worldIn, BlockPos pos)
     {
-        if (!spawnHostileMobs && !spawnPeacefulMobs)
+        if (!worldIn.getWorldBorder().contains(pos))
         {
+            return false;
+        }
+        else if (spawnPlacementTypeIn == null)
+        {
+            return false;
+        }
+        else
+        {
+            Block block = worldIn.getBlockState(pos).getBlock();
+
+            if (spawnPlacementTypeIn == EntityLiving.SpawnPlacementType.IN_WATER)
+            {
+                return block.getMaterial().isLiquid() && worldIn.getBlockState(pos.down()).getBlock().getMaterial().isLiquid() && !worldIn.getBlockState(pos.up()).getBlock().isNormalCube();
+            }
+            else
+            {
+                BlockPos blockpos = pos.down();
+                IBlockState iblockstate = worldIn.getBlockState(blockpos);
+                boolean flag = Reflector.ForgeBlock_canCreatureSpawn.exists() ? Reflector.callBoolean(iblockstate.getBlock(), Reflector.ForgeBlock_canCreatureSpawn, worldIn, blockpos, spawnPlacementTypeIn) : World.doesBlockHaveSolidTopSurface(worldIn, blockpos);
+
+                if (!flag)
+                {
+                    return false;
+                }
+                else
+                {
+                    Block block1 = worldIn.getBlockState(blockpos).getBlock();
+                    boolean flag1 = block1 != Blocks.bedrock && block1 != Blocks.barrier;
+                    return flag1 && !block.isNormalCube() && !block.getMaterial().isLiquid() && !worldIn.getBlockState(pos.up()).getBlock().isNormalCube();
+                }
+            }
+        }
+    }
+
+    private static BlockPosM getRandomChunkPosition(World p_getRandomChunkPosition_0_, int p_getRandomChunkPosition_1_, int p_getRandomChunkPosition_2_, BlockPosM p_getRandomChunkPosition_3_)
+    {
+        Chunk chunk = p_getRandomChunkPosition_0_.getChunkFromChunkCoords(p_getRandomChunkPosition_1_, p_getRandomChunkPosition_2_);
+        int i = p_getRandomChunkPosition_1_ * 16 + p_getRandomChunkPosition_0_.rand.nextInt(16);
+        int j = p_getRandomChunkPosition_2_ * 16 + p_getRandomChunkPosition_0_.rand.nextInt(16);
+        int k = MathHelper.roundUp(chunk.getHeightValue(i & 15, j & 15) + 1, 16);
+        int l = p_getRandomChunkPosition_0_.rand.nextInt(k > 0 ? k : chunk.getTopFilledSegment() + 16 - 1);
+        p_getRandomChunkPosition_3_.setXyz(i, l, j);
+        return p_getRandomChunkPosition_3_;
+    }
+
+    public static void performWorldGenSpawning(World worldIn, BiomeGenBase biomeIn, int p_77191_2_, int p_77191_3_, int p_77191_4_, int p_77191_5_, Random randomIn)
+    {
+        List<BiomeGenBase.SpawnListEntry> list = biomeIn.getSpawnableList(EnumCreatureType.CREATURE);
+
+        if (!list.isEmpty())
+        {
+            while (randomIn.nextFloat() < biomeIn.getSpawningChance())
+            {
+                BiomeGenBase.SpawnListEntry biomegenbase$spawnlistentry = WeightedRandom.getRandomItem(worldIn.rand, list);
+                int i = biomegenbase$spawnlistentry.minGroupCount + randomIn.nextInt(1 + biomegenbase$spawnlistentry.maxGroupCount - biomegenbase$spawnlistentry.minGroupCount);
+                IEntityLivingData ientitylivingdata = null;
+                int j = p_77191_2_ + randomIn.nextInt(p_77191_4_);
+                int k = p_77191_3_ + randomIn.nextInt(p_77191_5_);
+                int l = j;
+                int i1 = k;
+
+                for (int j1 = 0; j1 < i; ++j1)
+                {
+                    boolean flag = false;
+
+                    for (int k1 = 0; !flag && k1 < 4; ++k1)
+                    {
+                        BlockPos blockpos = worldIn.getTopSolidOrLiquidBlock(new BlockPos(j, 0, k));
+
+                        if (canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType.ON_GROUND, worldIn, blockpos))
+                        {
+                            EntityLiving entityliving;
+
+                            try
+                            {
+                                entityliving = biomegenbase$spawnlistentry.entityClass.getConstructor(new Class[]{World.class}).newInstance(new Object[]{worldIn});
+                            }
+                            catch (Exception exception1)
+                            {
+                                exception1.printStackTrace();
+                                continue;
+                            }
+
+                            if (Reflector.ForgeEventFactory_canEntitySpawn.exists())
+                            {
+                                Object object = Reflector.call(Reflector.ForgeEventFactory_canEntitySpawn, entityliving, worldIn, Float.valueOf((float) j + 0.5F), Integer.valueOf(blockpos.getY()), Float.valueOf((float) k + 0.5F));
+
+                                if (object == ReflectorForge.EVENT_RESULT_DENY)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            entityliving.setLocationAndAngles((float) j + 0.5F, blockpos.getY(), (float) k + 0.5F, randomIn.nextFloat() * 360.0F, 0.0F);
+                            worldIn.spawnEntityInWorld(entityliving);
+                            ientitylivingdata = entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), ientitylivingdata);
+                            flag = true;
+                        }
+
+                        j += randomIn.nextInt(5) - randomIn.nextInt(5);
+
+                        for (k += randomIn.nextInt(5) - randomIn.nextInt(5); j < p_77191_2_ || j >= p_77191_2_ + p_77191_4_ || k < p_77191_3_ || k >= p_77191_3_ + p_77191_4_; k = i1 + randomIn.nextInt(5) - randomIn.nextInt(5))
+                        {
+                            j = l + randomIn.nextInt(5) - randomIn.nextInt(5);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public int findChunksForSpawning(WorldServer worldServerIn, boolean spawnHostileMobs, boolean spawnPeacefulMobs, boolean p_77192_4_) {
+        if (!spawnHostileMobs && !spawnPeacefulMobs) {
             return 0;
         }
         else
@@ -49,7 +170,7 @@ public final class SpawnerAnimals
 
             if (worldServerIn.playerEntities.size() == 1)
             {
-                entityplayer = (EntityPlayer)worldServerIn.playerEntities.get(0);
+                entityplayer = worldServerIn.playerEntities.get(0);
 
                 if (this.eligibleChunksForSpawning.size() > 0 && entityplayer != null && entityplayer.chunkCoordX == this.lastPlayerChunkX && entityplayer.chunkCoordZ == this.lastPlayerChunkZ)
                 {
@@ -109,7 +230,7 @@ public final class SpawnerAnimals
             {
                 if ((!enumcreaturetype.getPeacefulCreature() || spawnPeacefulMobs) && (enumcreaturetype.getPeacefulCreature() || spawnHostileMobs) && (!enumcreaturetype.getAnimal() || p_77192_4_))
                 {
-                    int k4 = Reflector.ForgeWorld_countEntities.exists() ? Reflector.callInt(worldServerIn, Reflector.ForgeWorld_countEntities, new Object[] {enumcreaturetype, Boolean.valueOf(true)}): worldServerIn.countEntities(enumcreaturetype.getCreatureClass());
+                    int k4 = Reflector.ForgeWorld_countEntities.exists() ? Reflector.callInt(worldServerIn, Reflector.ForgeWorld_countEntities, enumcreaturetype, Boolean.valueOf(true)) : worldServerIn.countEntities(enumcreaturetype.getCreatureClass());
                     int l4 = enumcreaturetype.getMaxNumberOfCreature() * this.countChunkPos / MOB_COUNT_DIV;
 
                     if (k4 <= l4)
@@ -155,14 +276,11 @@ public final class SpawnerAnimals
                                         float f = (float)l2 + 0.5F;
                                         float f1 = (float)j3 + 0.5F;
 
-                                        if (!worldServerIn.isAnyPlayerWithinRangeAt((double)f, (double)i3, (double)f1, 24.0D) && blockpos2.distanceSq((double)f, (double)i3, (double)f1) >= 576.0D)
-                                        {
-                                            if (biomegenbase$spawnlistentry == null)
-                                            {
+                                        if (!worldServerIn.isAnyPlayerWithinRangeAt(f, i3, f1, 24.0D) && blockpos2.distanceSq(f, i3, f1) >= 576.0D) {
+                                            if (biomegenbase$spawnlistentry == null) {
                                                 biomegenbase$spawnlistentry = worldServerIn.getSpawnListEntryForTypeAt(enumcreaturetype, blockpos1);
 
-                                                if (biomegenbase$spawnlistentry == null)
-                                                {
+                                                if (biomegenbase$spawnlistentry == null) {
                                                     break;
                                                 }
                                             }
@@ -173,11 +291,11 @@ public final class SpawnerAnimals
 
                                                 try
                                                 {
-                                                    entityliving = (EntityLiving)this.mapSampleEntitiesByClass.get(biomegenbase$spawnlistentry.entityClass);
+                                                    entityliving = this.mapSampleEntitiesByClass.get(biomegenbase$spawnlistentry.entityClass);
 
                                                     if (entityliving == null)
                                                     {
-                                                        entityliving = (EntityLiving)biomegenbase$spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldServerIn});
+                                                        entityliving = biomegenbase$spawnlistentry.entityClass.getConstructor(new Class[]{World.class}).newInstance(new Object[]{worldServerIn});
                                                         this.mapSampleEntitiesByClass.put(biomegenbase$spawnlistentry.entityClass, entityliving);
                                                     }
                                                 }
@@ -187,7 +305,7 @@ public final class SpawnerAnimals
                                                     return j4;
                                                 }
 
-                                                entityliving.setLocationAndAngles((double)f, (double)i3, (double)f1, worldServerIn.rand.nextFloat() * 360.0F, 0.0F);
+                                                entityliving.setLocationAndAngles(f, i3, f1, worldServerIn.rand.nextFloat() * 360.0F, 0.0F);
                                                 boolean flag2 = Reflector.ForgeEventFactory_canEntitySpawn.exists() ? ReflectorForge.canEntitySpawn(entityliving, worldServerIn, f, (float)i3, f1) : entityliving.getCanSpawnHere() && entityliving.isNotColliding();
 
                                                 if (flag2)
@@ -205,7 +323,7 @@ public final class SpawnerAnimals
                                                         worldServerIn.spawnEntityInWorld(entityliving);
                                                     }
 
-                                                    int i4 = Reflector.ForgeEventFactory_getMaxSpawnPackSize.exists() ? Reflector.callInt(Reflector.ForgeEventFactory_getMaxSpawnPackSize, new Object[] {entityliving}): entityliving.getMaxSpawnedInChunk();
+                                                    int i4 = Reflector.ForgeEventFactory_getMaxSpawnPackSize.exists() ? Reflector.callInt(Reflector.ForgeEventFactory_getMaxSpawnPackSize, entityliving) : entityliving.getMaxSpawnedInChunk();
 
                                                     if (j2 >= i4)
                                                     {
@@ -225,131 +343,6 @@ public final class SpawnerAnimals
             }
 
             return j4;
-        }
-    }
-
-    protected static BlockPos getRandomChunkPosition(World worldIn, int x, int z)
-    {
-        Chunk chunk = worldIn.getChunkFromChunkCoords(x, z);
-        int i = x * 16 + worldIn.rand.nextInt(16);
-        int j = z * 16 + worldIn.rand.nextInt(16);
-        int k = MathHelper.roundUp(chunk.getHeight(new BlockPos(i, 0, j)) + 1, 16);
-        int l = worldIn.rand.nextInt(k > 0 ? k : chunk.getTopFilledSegment() + 16 - 1);
-        return new BlockPos(i, l, j);
-    }
-
-    private static BlockPosM getRandomChunkPosition(World p_getRandomChunkPosition_0_, int p_getRandomChunkPosition_1_, int p_getRandomChunkPosition_2_, BlockPosM p_getRandomChunkPosition_3_)
-    {
-        Chunk chunk = p_getRandomChunkPosition_0_.getChunkFromChunkCoords(p_getRandomChunkPosition_1_, p_getRandomChunkPosition_2_);
-        int i = p_getRandomChunkPosition_1_ * 16 + p_getRandomChunkPosition_0_.rand.nextInt(16);
-        int j = p_getRandomChunkPosition_2_ * 16 + p_getRandomChunkPosition_0_.rand.nextInt(16);
-        int k = MathHelper.roundUp(chunk.getHeightValue(i & 15, j & 15) + 1, 16);
-        int l = p_getRandomChunkPosition_0_.rand.nextInt(k > 0 ? k : chunk.getTopFilledSegment() + 16 - 1);
-        p_getRandomChunkPosition_3_.setXyz(i, l, j);
-        return p_getRandomChunkPosition_3_;
-    }
-
-    public static boolean canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType spawnPlacementTypeIn, World worldIn, BlockPos pos)
-    {
-        if (!worldIn.getWorldBorder().contains(pos))
-        {
-            return false;
-        }
-        else if (spawnPlacementTypeIn == null)
-        {
-            return false;
-        }
-        else
-        {
-            Block block = worldIn.getBlockState(pos).getBlock();
-
-            if (spawnPlacementTypeIn == EntityLiving.SpawnPlacementType.IN_WATER)
-            {
-                return block.getMaterial().isLiquid() && worldIn.getBlockState(pos.down()).getBlock().getMaterial().isLiquid() && !worldIn.getBlockState(pos.up()).getBlock().isNormalCube();
-            }
-            else
-            {
-                BlockPos blockpos = pos.down();
-                IBlockState iblockstate = worldIn.getBlockState(blockpos);
-                boolean flag = Reflector.ForgeBlock_canCreatureSpawn.exists() ? Reflector.callBoolean(iblockstate.getBlock(), Reflector.ForgeBlock_canCreatureSpawn, new Object[] {worldIn, blockpos, spawnPlacementTypeIn}): World.doesBlockHaveSolidTopSurface(worldIn, blockpos);
-
-                if (!flag)
-                {
-                    return false;
-                }
-                else
-                {
-                    Block block1 = worldIn.getBlockState(blockpos).getBlock();
-                    boolean flag1 = block1 != Blocks.bedrock && block1 != Blocks.barrier;
-                    return flag1 && !block.isNormalCube() && !block.getMaterial().isLiquid() && !worldIn.getBlockState(pos.up()).getBlock().isNormalCube();
-                }
-            }
-        }
-    }
-
-    public static void performWorldGenSpawning(World worldIn, BiomeGenBase biomeIn, int p_77191_2_, int p_77191_3_, int p_77191_4_, int p_77191_5_, Random randomIn)
-    {
-        List<BiomeGenBase.SpawnListEntry> list = biomeIn.getSpawnableList(EnumCreatureType.CREATURE);
-
-        if (!list.isEmpty())
-        {
-            while (randomIn.nextFloat() < biomeIn.getSpawningChance())
-            {
-                BiomeGenBase.SpawnListEntry biomegenbase$spawnlistentry = (BiomeGenBase.SpawnListEntry)WeightedRandom.getRandomItem(worldIn.rand, list);
-                int i = biomegenbase$spawnlistentry.minGroupCount + randomIn.nextInt(1 + biomegenbase$spawnlistentry.maxGroupCount - biomegenbase$spawnlistentry.minGroupCount);
-                IEntityLivingData ientitylivingdata = null;
-                int j = p_77191_2_ + randomIn.nextInt(p_77191_4_);
-                int k = p_77191_3_ + randomIn.nextInt(p_77191_5_);
-                int l = j;
-                int i1 = k;
-
-                for (int j1 = 0; j1 < i; ++j1)
-                {
-                    boolean flag = false;
-
-                    for (int k1 = 0; !flag && k1 < 4; ++k1)
-                    {
-                        BlockPos blockpos = worldIn.getTopSolidOrLiquidBlock(new BlockPos(j, 0, k));
-
-                        if (canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType.ON_GROUND, worldIn, blockpos))
-                        {
-                            EntityLiving entityliving;
-
-                            try
-                            {
-                                entityliving = (EntityLiving)biomegenbase$spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {worldIn});
-                            }
-                            catch (Exception exception1)
-                            {
-                                exception1.printStackTrace();
-                                continue;
-                            }
-
-                            if (Reflector.ForgeEventFactory_canEntitySpawn.exists())
-                            {
-                                Object object = Reflector.call(Reflector.ForgeEventFactory_canEntitySpawn, new Object[] {entityliving, worldIn, Float.valueOf((float)j + 0.5F), Integer.valueOf(blockpos.getY()), Float.valueOf((float)k + 0.5F)});
-
-                                if (object == ReflectorForge.EVENT_RESULT_DENY)
-                                {
-                                    continue;
-                                }
-                            }
-
-                            entityliving.setLocationAndAngles((double)((float)j + 0.5F), (double)blockpos.getY(), (double)((float)k + 0.5F), randomIn.nextFloat() * 360.0F, 0.0F);
-                            worldIn.spawnEntityInWorld(entityliving);
-                            ientitylivingdata = entityliving.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entityliving)), ientitylivingdata);
-                            flag = true;
-                        }
-
-                        j += randomIn.nextInt(5) - randomIn.nextInt(5);
-
-                        for (k += randomIn.nextInt(5) - randomIn.nextInt(5); j < p_77191_2_ || j >= p_77191_2_ + p_77191_4_ || k < p_77191_3_ || k >= p_77191_3_ + p_77191_4_; k = i1 + randomIn.nextInt(5) - randomIn.nextInt(5))
-                        {
-                            j = l + randomIn.nextInt(5) - randomIn.nextInt(5);
-                        }
-                    }
-                }
-            }
         }
     }
 }

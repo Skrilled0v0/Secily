@@ -24,8 +24,8 @@ public abstract class BlockStateBase implements IBlockState
             }
             else
             {
-                IProperty iproperty = (IProperty)p_apply_1_.getKey();
-                return iproperty.getName() + "=" + iproperty.getName((Comparable)p_apply_1_.getValue());
+                IProperty iproperty = p_apply_1_.getKey();
+                return iproperty.getName() + "=" + iproperty.getName(p_apply_1_.getValue());
             }
         }
     };
@@ -64,48 +64,39 @@ public abstract class BlockStateBase implements IBlockState
         return this.metadata;
     }
 
-    public ResourceLocation getBlockLocation()
-    {
-        if (this.blockLocation == null)
-        {
-            this.blockLocation = (ResourceLocation)Block.blockRegistry.getNameForObject(this.getBlock());
+    protected static <T> T cyclePropertyValue(Collection<T> values, T currentValue) {
+        Iterator<T> iterator = values.iterator();
+
+        while (iterator.hasNext()) {
+            if (iterator.next().equals(currentValue)) {
+                if (iterator.hasNext()) {
+                    return iterator.next();
+                }
+
+                return values.iterator().next();
+            }
+        }
+
+        return iterator.next();
+    }
+
+    public ImmutableTable<IProperty<?>, Comparable<?>, IBlockState> getPropertyValueTable() {
+        return null;
+    }
+
+    public <T extends Comparable<T>> IBlockState cycleProperty(IProperty<T> property) {
+        return this.withProperty(property, cyclePropertyValue(property.getAllowedValues(), this.getValue(property)));
+    }
+
+    public ResourceLocation getBlockLocation() {
+        if (this.blockLocation == null) {
+            this.blockLocation = Block.blockRegistry.getNameForObject(this.getBlock());
         }
 
         return this.blockLocation;
     }
 
-    public ImmutableTable < IProperty<?>, Comparable<?>, IBlockState > getPropertyValueTable()
-    {
-        return null;
-    }
-
-    public <T extends Comparable<T>> IBlockState cycleProperty(IProperty<T> property)
-    {
-        return this.withProperty(property, cyclePropertyValue(property.getAllowedValues(), this.getValue(property)));
-    }
-
-    protected static <T> T cyclePropertyValue(Collection<T> values, T currentValue)
-    {
-        Iterator<T> iterator = values.iterator();
-
-        while (iterator.hasNext())
-        {
-            if (iterator.next().equals(currentValue))
-            {
-                if (iterator.hasNext())
-                {
-                    return (T)iterator.next();
-                }
-
-                return (T)values.iterator().next();
-            }
-        }
-
-        return (T)iterator.next();
-    }
-
-    public String toString()
-    {
+    public String toString() {
         StringBuilder stringbuilder = new StringBuilder();
         stringbuilder.append(Block.blockRegistry.getNameForObject(this.getBlock()));
 

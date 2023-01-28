@@ -3,18 +3,15 @@ package net.minecraft.world.gen;
 import java.util.Random;
 import net.minecraft.util.MathHelper;
 
-public class NoiseGeneratorOctaves extends NoiseGenerator
-{
-    private NoiseGeneratorImproved[] generatorCollection;
-    private int octaves;
+public class NoiseGeneratorOctaves extends NoiseGenerator {
+    private final NoiseGeneratorImproved[] generatorCollection;
+    private final int octaves;
 
-    public NoiseGeneratorOctaves(Random seed, int octavesIn)
-    {
+    public NoiseGeneratorOctaves(Random seed, int octavesIn) {
         this.octaves = octavesIn;
         this.generatorCollection = new NoiseGeneratorImproved[octavesIn];
 
-        for (int i = 0; i < octavesIn; ++i)
-        {
+        for (int i = 0; i < octavesIn; ++i) {
             this.generatorCollection[i] = new NoiseGeneratorImproved(seed);
         }
     }

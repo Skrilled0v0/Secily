@@ -1,10 +1,8 @@
 package net.minecraft.block;
 
 import com.google.common.base.Predicate;
-import java.util.List;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
@@ -25,6 +23,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BlockHopper extends BlockContainer
 {
@@ -132,8 +132,7 @@ public class BlockHopper extends BlockContainer
     {
         boolean flag = !worldIn.isBlockPowered(pos);
 
-        if (flag != ((Boolean)state.getValue(ENABLED)).booleanValue())
-        {
+        if (flag != state.getValue(ENABLED).booleanValue()) {
             worldIn.setBlockState(pos, state.withProperty(ENABLED, Boolean.valueOf(flag)), 4);
         }
     }
@@ -204,10 +203,9 @@ public class BlockHopper extends BlockContainer
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
+        i = i | state.getValue(FACING).getIndex();
 
-        if (!((Boolean)state.getValue(ENABLED)).booleanValue())
-        {
+        if (!state.getValue(ENABLED).booleanValue()) {
             i |= 8;
         }
 
@@ -216,6 +214,6 @@ public class BlockHopper extends BlockContainer
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING, ENABLED});
+        return new BlockState(this, FACING, ENABLED);
     }
 }

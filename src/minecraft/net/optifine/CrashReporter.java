@@ -1,5 +1,6 @@
 package net.optifine;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.settings.GameSettings;
@@ -48,11 +49,9 @@ public class CrashReporter
 
             String s = "http://optifine.net/crashReport";
             String s1 = makeReport(crashReport);
-            byte[] abyte = s1.getBytes("ASCII");
-            IFileUploadListener ifileuploadlistener = new IFileUploadListener()
-            {
-                public void fileUploadFinished(String url, byte[] content, Throwable exception)
-                {
+            byte[] abyte = s1.getBytes(StandardCharsets.US_ASCII);
+            IFileUploadListener ifileuploadlistener = new IFileUploadListener() {
+                public void fileUploadFinished(String url, byte[] content, Throwable exception) {
                 }
             };
             Map map = new HashMap();
@@ -69,15 +68,13 @@ public class CrashReporter
         }
     }
 
-    private static String makeReport(CrashReport crashReport)
-    {
-        StringBuffer stringbuffer = new StringBuffer();
-        stringbuffer.append("OptiFineVersion: " + Config.getVersion() + "\n");
-        stringbuffer.append("Summary: " + makeSummary(crashReport) + "\n");
-        stringbuffer.append("\n");
-        stringbuffer.append(crashReport.getCompleteReport());
-        stringbuffer.append("\n");
-        return stringbuffer.toString();
+    private static String makeReport(CrashReport crashReport) {
+        String stringbuffer = "OptiFineVersion: " + Config.getVersion() + "\n" +
+                "Summary: " + makeSummary(crashReport) + "\n" +
+                "\n" +
+                crashReport.getCompleteReport() +
+                "\n";
+        return stringbuffer;
     }
 
     private static String makeSummary(CrashReport crashReport)

@@ -4,10 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -22,13 +18,7 @@ import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
-import net.minecraft.inventory.ContainerHorseInventory;
-import net.minecraft.inventory.ContainerMerchant;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.inventory.*;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMapBase;
@@ -38,31 +28,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.network.play.server.S02PacketChat;
-import net.minecraft.network.play.server.S06PacketUpdateHealth;
-import net.minecraft.network.play.server.S0APacketUseBed;
-import net.minecraft.network.play.server.S0BPacketAnimation;
-import net.minecraft.network.play.server.S13PacketDestroyEntities;
-import net.minecraft.network.play.server.S19PacketEntityStatus;
-import net.minecraft.network.play.server.S1BPacketEntityAttach;
-import net.minecraft.network.play.server.S1DPacketEntityEffect;
-import net.minecraft.network.play.server.S1EPacketRemoveEntityEffect;
-import net.minecraft.network.play.server.S1FPacketSetExperience;
-import net.minecraft.network.play.server.S21PacketChunkData;
-import net.minecraft.network.play.server.S26PacketMapChunkBulk;
-import net.minecraft.network.play.server.S29PacketSoundEffect;
-import net.minecraft.network.play.server.S2BPacketChangeGameState;
-import net.minecraft.network.play.server.S2DPacketOpenWindow;
-import net.minecraft.network.play.server.S2EPacketCloseWindow;
-import net.minecraft.network.play.server.S2FPacketSetSlot;
-import net.minecraft.network.play.server.S30PacketWindowItems;
-import net.minecraft.network.play.server.S31PacketWindowProperty;
-import net.minecraft.network.play.server.S36PacketSignEditorOpen;
-import net.minecraft.network.play.server.S39PacketPlayerAbilities;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
-import net.minecraft.network.play.server.S42PacketCombatEvent;
-import net.minecraft.network.play.server.S43PacketCamera;
-import net.minecraft.network.play.server.S48PacketResourcePackSend;
+import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.scoreboard.Score;
@@ -77,27 +43,20 @@ import net.minecraft.stats.StatList;
 import net.minecraft.stats.StatisticsFile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.JsonSerializableSet;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ReportedException;
+import net.minecraft.util.*;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.IInteractionObject;
-import net.minecraft.world.ILockableContainer;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.WorldSettings;
+import net.minecraft.world.*;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityPlayerMP extends EntityPlayer implements ICrafting
-{
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+public class EntityPlayerMP extends EntityPlayer implements ICrafting {
     private static final Logger logger = LogManager.getLogger();
     private String translator = "en_US";
     public NetHandlerPlayServer playerNetServerHandler;
@@ -105,8 +64,8 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
     public final ItemInWorldManager theItemInWorldManager;
     public double managedPosX;
     public double managedPosZ;
-    public final List<ChunkCoordIntPair> loadedChunks = Lists.<ChunkCoordIntPair>newLinkedList();
-    private final List<Integer> destroyedItemsNetCache = Lists.<Integer>newLinkedList();
+    public final List<ChunkCoordIntPair> loadedChunks = Lists.newLinkedList();
+    private final List<Integer> destroyedItemsNetCache = Lists.newLinkedList();
     private final StatisticsFile statsFile;
     private float combinedHealth = Float.MIN_VALUE;
     private float lastHealth = -1.0E8F;
@@ -133,7 +92,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         if (!worldIn.provider.getHasNoSky() && worldIn.getWorldInfo().getGameType() != WorldSettings.GameType.ADVENTURE)
         {
             int i = Math.max(5, server.getSpawnProtectionSize() - 6);
-            int j = MathHelper.floor_double(worldIn.getWorldBorder().getClosestDistance((double)blockpos.getX(), (double)blockpos.getZ()));
+            int j = MathHelper.floor_double(worldIn.getWorldBorder().getClosestDistance(blockpos.getX(), blockpos.getZ()));
 
             if (j < i)
             {
@@ -238,7 +197,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
             while (iterator.hasNext() && j < i)
             {
-                aint[j++] = ((Integer)iterator.next()).intValue();
+                aint[j++] = iterator.next().intValue();
                 iterator.remove();
             }
 
@@ -247,18 +206,15 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
         if (!this.loadedChunks.isEmpty())
         {
-            List<Chunk> list = Lists.<Chunk>newArrayList();
+            List<Chunk> list = Lists.newArrayList();
             Iterator<ChunkCoordIntPair> iterator1 = this.loadedChunks.iterator();
-            List<TileEntity> list1 = Lists.<TileEntity>newArrayList();
+            List<TileEntity> list1 = Lists.newArrayList();
 
-            while (iterator1.hasNext() && ((List)list).size() < 10)
-            {
-                ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)iterator1.next();
+            while (iterator1.hasNext() && list.size() < 10) {
+                ChunkCoordIntPair chunkcoordintpair = iterator1.next();
 
-                if (chunkcoordintpair != null)
-                {
-                    if (this.worldObj.isBlockLoaded(new BlockPos(chunkcoordintpair.chunkXPos << 4, 0, chunkcoordintpair.chunkZPos << 4)))
-                    {
+                if (chunkcoordintpair != null) {
+                    if (this.worldObj.isBlockLoaded(new BlockPos(chunkcoordintpair.chunkXPos << 4, 0, chunkcoordintpair.chunkZPos << 4))) {
                         Chunk chunk = this.worldObj.getChunkFromChunkCoords(chunkcoordintpair.chunkXPos, chunkcoordintpair.chunkZPos);
 
                         if (chunk.isPopulated())
@@ -279,7 +235,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
             {
                 if (list.size() == 1)
                 {
-                    this.playerNetServerHandler.sendPacket(new S21PacketChunkData((Chunk)list.get(0), true, 65535));
+                    this.playerNetServerHandler.sendPacket(new S21PacketChunkData(list.get(0), true, 65535));
                 }
                 else
                 {
@@ -354,7 +310,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
                 for (ScoreObjective scoreobjective : this.getWorldScoreboard().getObjectivesFromCriteria(IScoreObjectiveCriteria.health))
                 {
-                    this.getWorldScoreboard().getValueFromObjective(this.getName(), scoreobjective).func_96651_a(Arrays.<EntityPlayer>asList(new EntityPlayer[] {this}));
+                    this.getWorldScoreboard().getValueFromObjective(this.getName(), scoreobjective).func_96651_a(Arrays.asList(this));
                 }
             }
 
@@ -382,11 +338,11 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
     {
         BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(new BlockPos(MathHelper.floor_double(this.posX), 0, MathHelper.floor_double(this.posZ)));
         String s = biomegenbase.biomeName;
-        JsonSerializableSet jsonserializableset = (JsonSerializableSet)this.getStatFile().func_150870_b(AchievementList.exploreAllBiomes);
+        JsonSerializableSet jsonserializableset = this.getStatFile().func_150870_b(AchievementList.exploreAllBiomes);
 
         if (jsonserializableset == null)
         {
-            jsonserializableset = (JsonSerializableSet)this.getStatFile().func_150872_a(AchievementList.exploreAllBiomes, new JsonSerializableSet());
+            jsonserializableset = this.getStatFile().func_150872_a(AchievementList.exploreAllBiomes, new JsonSerializableSet());
         }
 
         jsonserializableset.add(s);
@@ -401,7 +357,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
                 while (iterator.hasNext())
                 {
-                    BiomeGenBase biomegenbase1 = (BiomeGenBase)iterator.next();
+                    BiomeGenBase biomegenbase1 = iterator.next();
 
                     if (biomegenbase1.biomeName.equals(s1))
                     {
@@ -460,7 +416,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
         if (entitylivingbase != null)
         {
-            EntityList.EntityEggInfo entitylist$entityegginfo = (EntityList.EntityEggInfo)EntityList.entityEggs.get(Integer.valueOf(EntityList.getEntityID(entitylivingbase)));
+            EntityList.EntityEggInfo entitylist$entityegginfo = EntityList.entityEggs.get(Integer.valueOf(EntityList.getEntityID(entitylivingbase)));
 
             if (entitylist$entityegginfo != null)
             {
@@ -518,7 +474,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
     public boolean canAttackPlayer(EntityPlayer other)
     {
-        return !this.canPlayersAttack() ? false : super.canAttackPlayer(other);
+        return this.canPlayersAttack() && super.canAttackPlayer(other);
     }
 
     private boolean canPlayersAttack()
@@ -544,7 +500,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
                 if (blockpos != null)
                 {
-                    this.playerNetServerHandler.setPlayerLocation((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), 0.0F, 0.0F);
+                    this.playerNetServerHandler.setPlayerLocation(blockpos.getX(), blockpos.getY(), blockpos.getZ(), 0.0F, 0.0F);
                 }
 
                 dimensionId = 1;
@@ -563,7 +519,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
     public boolean isSpectatedByPlayer(EntityPlayerMP player)
     {
-        return player.isSpectator() ? this.getSpectatingEntity() == this : (this.isSpectator() ? false : super.isSpectatedByPlayer(player));
+        return player.isSpectator() ? this.getSpectatingEntity() == this : (!this.isSpectator() && super.isSpectatedByPlayer(player));
     }
 
     private void sendTileEntityUpdate(TileEntity p_147097_1_)
@@ -686,7 +642,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
             if (ilockablecontainer.isLocked() && !this.canOpen(ilockablecontainer.getLockCode()) && !this.isSpectator())
             {
-                this.playerNetServerHandler.sendPacket(new S02PacketChat(new ChatComponentTranslation("container.isLocked", new Object[] {chestInventory.getDisplayName()}), (byte)2));
+                this.playerNetServerHandler.sendPacket(new S02PacketChat(new ChatComponentTranslation("container.isLocked", chestInventory.getDisplayName()), (byte) 2));
                 this.playerNetServerHandler.sendPacket(new S29PacketSoundEffect("random.door_close", this.posX, this.posY, this.posZ, 1.0F, 1.0F));
                 return;
             }
@@ -965,7 +921,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
         if (gameType == WorldSettings.GameType.SPECTATOR)
         {
-            this.mountEntity((Entity)null);
+            this.mountEntity(null);
         }
         else
         {
@@ -996,7 +952,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         {
             if (this.mcServer.getConfigurationManager().canSendCommands(this.getGameProfile()))
             {
-                UserListOpsEntry userlistopsentry = (UserListOpsEntry)this.mcServer.getConfigurationManager().getOppedPlayers().getEntry(this.getGameProfile());
+                UserListOpsEntry userlistopsentry = this.mcServer.getConfigurationManager().getOppedPlayers().getEntry(this.getGameProfile());
                 return userlistopsentry != null ? userlistopsentry.getPermissionLevel() >= permLevel : this.mcServer.getOpPermissionLevel() >= permLevel;
             }
             else
@@ -1055,7 +1011,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
     {
         if (p_152339_1_ instanceof EntityPlayer)
         {
-            this.playerNetServerHandler.sendPacket(new S13PacketDestroyEntities(new int[] {p_152339_1_.getEntityId()}));
+            this.playerNetServerHandler.sendPacket(new S13PacketDestroyEntities(p_152339_1_.getEntityId()));
         }
         else
         {
@@ -1080,13 +1036,13 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
     public Entity getSpectatingEntity()
     {
-        return (Entity)(this.spectatingEntity == null ? this : this.spectatingEntity);
+        return this.spectatingEntity == null ? this : this.spectatingEntity;
     }
 
     public void setSpectatingEntity(Entity entityToSpectate)
     {
         Entity entity = this.getSpectatingEntity();
-        this.spectatingEntity = (Entity)(entityToSpectate == null ? this : entityToSpectate);
+        this.spectatingEntity = entityToSpectate == null ? this : entityToSpectate;
 
         if (entity != this.spectatingEntity)
         {

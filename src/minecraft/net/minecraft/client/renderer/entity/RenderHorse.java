@@ -1,7 +1,6 @@
 package net.minecraft.client.renderer.entity;
 
 import com.google.common.collect.Maps;
-import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelHorse;
 import net.minecraft.client.renderer.GlStateManager;
@@ -9,9 +8,11 @@ import net.minecraft.client.renderer.texture.LayeredTexture;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.Map;
+
 public class RenderHorse extends RenderLiving<EntityHorse>
 {
-    private static final Map<String, ResourceLocation> field_110852_a = Maps.<String, ResourceLocation>newHashMap();
+    private static final Map<String, ResourceLocation> field_110852_a = Maps.newHashMap();
     private static final ResourceLocation whiteHorseTextures = new ResourceLocation("textures/entity/horse/horse_white.png");
     private static final ResourceLocation muleTextures = new ResourceLocation("textures/entity/horse/mule.png");
     private static final ResourceLocation donkeyTextures = new ResourceLocation("textures/entity/horse/donkey.png");
@@ -80,7 +81,7 @@ public class RenderHorse extends RenderLiving<EntityHorse>
         }
         else
         {
-            ResourceLocation resourcelocation = (ResourceLocation)field_110852_a.get(s);
+            ResourceLocation resourcelocation = field_110852_a.get(s);
 
             if (resourcelocation == null)
             {

@@ -7,10 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.ITextureObject;
@@ -23,19 +19,23 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ShaderManager
-{
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+public class ShaderManager {
     private static final Logger logger = LogManager.getLogger();
     private static final ShaderDefault defaultShaderUniform = new ShaderDefault();
     private static ShaderManager staticShaderManager = null;
     private static int currentProgram = -1;
     private static boolean field_148000_e = true;
-    private final Map<String, Object> shaderSamplers = Maps.<String, Object>newHashMap();
-    private final List<String> samplerNames = Lists.<String>newArrayList();
-    private final List<Integer> shaderSamplerLocations = Lists.<Integer>newArrayList();
-    private final List<ShaderUniform> shaderUniforms = Lists.<ShaderUniform>newArrayList();
-    private final List<Integer> shaderUniformLocations = Lists.<Integer>newArrayList();
-    private final Map<String, ShaderUniform> mappedShaderUniforms = Maps.<String, ShaderUniform>newHashMap();
+    private final Map<String, Object> shaderSamplers = Maps.newHashMap();
+    private final List<String> samplerNames = Lists.newArrayList();
+    private final List<Integer> shaderSamplerLocations = Lists.newArrayList();
+    private final List<ShaderUniform> shaderUniforms = Lists.newArrayList();
+    private final List<Integer> shaderUniformLocations = Lists.newArrayList();
+    private final Map<String, ShaderUniform> mappedShaderUniforms = Maps.newHashMap();
     private final int program;
     private final String programFilename;
     private final boolean useFaceCulling;
@@ -46,20 +46,18 @@ public class ShaderManager
     private final ShaderLoader vertexShaderLoader;
     private final ShaderLoader fragmentShaderLoader;
 
-    public ShaderManager(IResourceManager resourceManager, String programName) throws JsonException, IOException
-    {
+    public ShaderManager(IResourceManager resourceManager, String programName) throws IOException {
         JsonParser jsonparser = new JsonParser();
         ResourceLocation resourcelocation = new ResourceLocation("shaders/program/" + programName + ".json");
         this.programFilename = programName;
         InputStream inputstream = null;
 
-        try
-        {
+        try {
             inputstream = resourceManager.getResource(resourcelocation).getInputStream();
             JsonObject jsonobject = jsonparser.parse(IOUtils.toString(inputstream, Charsets.UTF_8)).getAsJsonObject();
             String s = JsonUtils.getString(jsonobject, "vertex");
             String s1 = JsonUtils.getString(jsonobject, "fragment");
-            JsonArray jsonarray = JsonUtils.getJsonArray(jsonobject, "samplers", (JsonArray)null);
+            JsonArray jsonarray = JsonUtils.getJsonArray(jsonobject, "samplers", null);
 
             if (jsonarray != null)
             {
@@ -82,22 +80,17 @@ public class ShaderManager
                 }
             }
 
-            JsonArray jsonarray1 = JsonUtils.getJsonArray(jsonobject, "attributes", (JsonArray)null);
+            JsonArray jsonarray1 = JsonUtils.getJsonArray(jsonobject, "attributes", null);
 
-            if (jsonarray1 != null)
-            {
+            if (jsonarray1 != null) {
                 int j = 0;
-                this.attribLocations = Lists.<Integer>newArrayListWithCapacity(jsonarray1.size());
-                this.attributes = Lists.<String>newArrayListWithCapacity(jsonarray1.size());
+                this.attribLocations = Lists.newArrayListWithCapacity(jsonarray1.size());
+                this.attributes = Lists.newArrayListWithCapacity(jsonarray1.size());
 
-                for (JsonElement jsonelement1 : jsonarray1)
-                {
-                    try
-                    {
+                for (JsonElement jsonelement1 : jsonarray1) {
+                    try {
                         this.attributes.add(JsonUtils.getString(jsonelement1, "attribute"));
-                    }
-                    catch (Exception exception1)
-                    {
+                    } catch (Exception exception1) {
                         JsonException jsonexception2 = JsonException.func_151379_a(exception1);
                         jsonexception2.func_151380_a("attributes[" + j + "]");
                         throw jsonexception2;
@@ -112,7 +105,7 @@ public class ShaderManager
                 this.attributes = null;
             }
 
-            JsonArray jsonarray2 = JsonUtils.getJsonArray(jsonobject, "uniforms", (JsonArray)null);
+            JsonArray jsonarray2 = JsonUtils.getJsonArray(jsonobject, "uniforms", null);
 
             if (jsonarray2 != null)
             {
@@ -135,7 +128,7 @@ public class ShaderManager
                 }
             }
 
-            this.field_148016_p = JsonBlendingMode.func_148110_a(JsonUtils.getJsonObject(jsonobject, "blend", (JsonObject)null));
+            this.field_148016_p = JsonBlendingMode.func_148110_a(JsonUtils.getJsonObject(jsonobject, "blend", null));
             this.useFaceCulling = JsonUtils.getBoolean(jsonobject, "cull", true);
             this.vertexShaderLoader = ShaderLoader.loadShader(resourceManager, ShaderLoader.ShaderType.VERTEX, s);
             this.fragmentShaderLoader = ShaderLoader.loadShader(resourceManager, ShaderLoader.ShaderType.FRAGMENT, s1);
@@ -234,7 +227,7 @@ public class ShaderManager
                 if (j != -1)
                 {
                     GlStateManager.bindTexture(j);
-                    OpenGlHelper.glUniform1i(OpenGlHelper.glGetUniformLocation(this.program, (CharSequence)this.samplerNames.get(i)), i);
+                    OpenGlHelper.glUniform1i(OpenGlHelper.glGetUniformLocation(this.program, this.samplerNames.get(i)), i);
                 }
             }
         }
@@ -252,12 +245,12 @@ public class ShaderManager
 
     public ShaderUniform getShaderUniform(String p_147991_1_)
     {
-        return this.mappedShaderUniforms.containsKey(p_147991_1_) ? (ShaderUniform)this.mappedShaderUniforms.get(p_147991_1_) : null;
+        return this.mappedShaderUniforms.containsKey(p_147991_1_) ? this.mappedShaderUniforms.get(p_147991_1_) : null;
     }
 
     public ShaderUniform getShaderUniformOrDefault(String p_147984_1_)
     {
-        return (ShaderUniform)(this.mappedShaderUniforms.containsKey(p_147984_1_) ? (ShaderUniform)this.mappedShaderUniforms.get(p_147984_1_) : defaultShaderUniform);
+        return this.mappedShaderUniforms.containsKey(p_147984_1_) ? this.mappedShaderUniforms.get(p_147984_1_) : defaultShaderUniform;
     }
 
     private void setupUniforms()
@@ -266,7 +259,7 @@ public class ShaderManager
 
         for (int j = 0; i < this.samplerNames.size(); ++j)
         {
-            String s = (String)this.samplerNames.get(i);
+            String s = this.samplerNames.get(i);
             int k = OpenGlHelper.glGetUniformLocation(this.program, s);
 
             if (k == -1)
@@ -309,7 +302,7 @@ public class ShaderManager
 
         if (!JsonUtils.isString(jsonobject, "file"))
         {
-            this.shaderSamplers.put(s, (Object)null);
+            this.shaderSamplers.put(s, null);
             this.samplerNames.add(s);
         }
         else
@@ -320,10 +313,7 @@ public class ShaderManager
 
     public void addSamplerTexture(String p_147992_1_, Object p_147992_2_)
     {
-        if (this.shaderSamplers.containsKey(p_147992_1_))
-        {
-            this.shaderSamplers.remove(p_147992_1_);
-        }
+        this.shaderSamplers.remove(p_147992_1_);
 
         this.shaderSamplers.put(p_147992_1_, p_147992_2_);
         this.markDirty();

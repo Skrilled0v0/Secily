@@ -2,6 +2,7 @@ package net.minecraft.server.management;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+
 import java.io.File;
 
 public class UserListWhitelist extends UserList<GameProfile, UserListWhitelistEntry>
@@ -23,7 +24,7 @@ public class UserListWhitelist extends UserList<GameProfile, UserListWhitelistEn
 
         for (UserListWhitelistEntry userlistwhitelistentry : this.getValues().values())
         {
-            astring[i++] = ((GameProfile)userlistwhitelistentry.getValue()).getName();
+            astring[i++] = userlistwhitelistentry.getValue().getName();
         }
 
         return astring;
@@ -38,9 +39,8 @@ public class UserListWhitelist extends UserList<GameProfile, UserListWhitelistEn
     {
         for (UserListWhitelistEntry userlistwhitelistentry : this.getValues().values())
         {
-            if (name.equalsIgnoreCase(((GameProfile)userlistwhitelistentry.getValue()).getName()))
-            {
-                return (GameProfile)userlistwhitelistentry.getValue();
+            if (name.equalsIgnoreCase(userlistwhitelistentry.getValue().getName())) {
+                return userlistwhitelistentry.getValue();
             }
         }
 

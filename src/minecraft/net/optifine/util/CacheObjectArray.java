@@ -5,17 +5,14 @@ import java.util.ArrayDeque;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.src.Config;
 
-public class CacheObjectArray
-{
-    private static ArrayDeque<int[]> arrays = new ArrayDeque();
-    private static int maxCacheSize = 10;
+public class CacheObjectArray {
+    private static final ArrayDeque<int[]> arrays = new ArrayDeque();
+    private static final int maxCacheSize = 10;
 
-    private static synchronized int[] allocateArray(int size)
-    {
-        int[] aint = (int[])arrays.pollLast();
+    private static synchronized int[] allocateArray(int size) {
+        int[] aint = arrays.pollLast();
 
-        if (aint == null || aint.length < size)
-        {
+        if (aint == null || aint.length < size) {
             aint = new int[size];
         }
 
@@ -58,7 +55,7 @@ public class CacheObjectArray
 
         for (int j = 0; j < count; ++j)
         {
-            int[] aint1 = (int[])aint.clone();
+            int[] aint1 = aint.clone();
         }
 
         long k = System.currentTimeMillis();
@@ -71,7 +68,7 @@ public class CacheObjectArray
 
         for (int j = 0; j < count; ++j)
         {
-            int[] aint = (int[])((int[])Array.newInstance(Integer.TYPE, size));
+            int[] aint = (int[]) Array.newInstance(Integer.TYPE, size);
         }
 
         long k = System.currentTimeMillis();
@@ -85,7 +82,7 @@ public class CacheObjectArray
 
         for (int j = 0; j < count; ++j)
         {
-            IBlockState[] aiblockstate1 = (IBlockState[])aiblockstate.clone();
+            IBlockState[] aiblockstate1 = aiblockstate.clone();
         }
 
         long k = System.currentTimeMillis();
@@ -111,7 +108,7 @@ public class CacheObjectArray
 
         for (int j = 0; j < count; ++j)
         {
-            Object[] aobject = (Object[])((Object[])Array.newInstance(cls, size));
+            Object[] aobject = (Object[]) Array.newInstance(cls, size);
         }
 
         long k = System.currentTimeMillis();

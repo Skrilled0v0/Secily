@@ -3,15 +3,12 @@ package net.minecraft.client.model;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
-public class ModelBlaze extends ModelBase
-{
-    private ModelRenderer[] blazeSticks = new ModelRenderer[12];
-    private ModelRenderer blazeHead;
+public class ModelBlaze extends ModelBase {
+    private final ModelRenderer[] blazeSticks = new ModelRenderer[12];
+    private final ModelRenderer blazeHead;
 
-    public ModelBlaze()
-    {
-        for (int i = 0; i < this.blazeSticks.length; ++i)
-        {
+    public ModelBlaze() {
+        for (int i = 0; i < this.blazeSticks.length; ++i) {
             this.blazeSticks[i] = new ModelRenderer(this, 0, 16);
             this.blazeSticks[i].addBox(0.0F, 0.0F, 0.0F, 2, 8, 2);
         }

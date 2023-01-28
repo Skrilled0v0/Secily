@@ -4,10 +4,9 @@ import java.util.Properties;
 import net.minecraft.util.ResourceLocation;
 import net.optifine.config.ConnectedParser;
 
-public class CustomPanoramaProperties
-{
-    private String path;
-    private ResourceLocation[] panoramaLocations;
+public class CustomPanoramaProperties {
+    private final String path;
+    private final ResourceLocation[] panoramaLocations;
     private int weight = 1;
     private int blur1 = 64;
     private int blur2 = 3;

@@ -18,17 +18,15 @@ public class GuiUtilRenderComponents
     {
         int i = 0;
         IChatComponent ichatcomponent = new ChatComponentText("");
-        List<IChatComponent> list = Lists.<IChatComponent>newArrayList();
+        List<IChatComponent> list = Lists.newArrayList();
         List<IChatComponent> list1 = Lists.newArrayList(p_178908_0_);
 
-        for (int j = 0; j < ((List)list1).size(); ++j)
-        {
-            IChatComponent ichatcomponent1 = (IChatComponent)list1.get(j);
+        for (int j = 0; j < list1.size(); ++j) {
+            IChatComponent ichatcomponent1 = list1.get(j);
             String s = ichatcomponent1.getUnformattedTextForChat();
             boolean flag = false;
 
-            if (s.contains("\n"))
-            {
+            if (s.contains("\n")) {
                 int k = s.indexOf(10);
                 String s1 = s.substring(k + 1);
                 s = s.substring(0, k + 1);

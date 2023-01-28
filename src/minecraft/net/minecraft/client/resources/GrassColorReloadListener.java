@@ -1,9 +1,10 @@
 package net.minecraft.client.resources;
 
-import java.io.IOException;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.ColorizerGrass;
+
+import java.io.IOException;
 
 public class GrassColorReloadListener implements IResourceManagerReloadListener
 {
@@ -17,7 +18,6 @@ public class GrassColorReloadListener implements IResourceManagerReloadListener
         }
         catch (IOException var3)
         {
-            ;
         }
     }
 }

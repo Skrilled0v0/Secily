@@ -14,31 +14,28 @@ import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class CommandHandler implements ICommandManager
-{
+public class CommandHandler implements ICommandManager {
     private static final Logger logger = LogManager.getLogger();
-    private final Map<String, ICommand> commandMap = Maps.<String, ICommand>newHashMap();
-    private final Set<ICommand> commandSet = Sets.<ICommand>newHashSet();
+    private final Map<String, ICommand> commandMap = Maps.newHashMap();
+    private final Set<ICommand> commandSet = Sets.newHashSet();
 
-    public int executeCommand(ICommandSender sender, String rawCommand)
-    {
+    public int executeCommand(ICommandSender sender, String rawCommand) {
         rawCommand = rawCommand.trim();
 
-        if (rawCommand.startsWith("/"))
-        {
+        if (rawCommand.startsWith("/")) {
             rawCommand = rawCommand.substring(1);
         }
 
         String[] astring = rawCommand.split(" ");
         String s = astring[0];
         astring = dropFirstString(astring);
-        ICommand icommand = (ICommand)this.commandMap.get(s);
+        ICommand icommand = this.commandMap.get(s);
         int i = this.getUsernameIndex(icommand, astring);
         int j = 0;
 
         if (icommand == null)
         {
-            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.notFound", new Object[0]);
+            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.notFound");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
         }
@@ -46,7 +43,7 @@ public class CommandHandler implements ICommandManager
         {
             if (i > -1)
             {
-                List<Entity> list = PlayerSelector.<Entity>matchEntities(sender, astring[i], Entity.class);
+                List<Entity> list = PlayerSelector.matchEntities(sender, astring[i], Entity.class);
                 String s1 = astring[i];
                 sender.setCommandStat(CommandResultStats.Type.AFFECTED_ENTITIES, list.size());
 
@@ -74,7 +71,7 @@ public class CommandHandler implements ICommandManager
         }
         else
         {
-            ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
+            ChatComponentTranslation chatcomponenttranslation1 = new ChatComponentTranslation("commands.generic.permission");
             chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation1);
         }
@@ -92,7 +89,7 @@ public class CommandHandler implements ICommandManager
         }
         catch (WrongUsageException wrongusageexception)
         {
-            ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.usage", new Object[] {new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorObjects())});
+            ChatComponentTranslation chatcomponenttranslation2 = new ChatComponentTranslation("commands.generic.usage", new ChatComponentTranslation(wrongusageexception.getMessage(), wrongusageexception.getErrorObjects()));
             chatcomponenttranslation2.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation2);
         }
@@ -104,10 +101,10 @@ public class CommandHandler implements ICommandManager
         }
         catch (Throwable var9)
         {
-            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception", new Object[0]);
+            ChatComponentTranslation chatcomponenttranslation = new ChatComponentTranslation("commands.generic.exception");
             chatcomponenttranslation.getChatStyle().setColor(EnumChatFormatting.RED);
             sender.addChatMessage(chatcomponenttranslation);
-            logger.warn("Couldn\'t process command: \'" + input + "\'");
+            logger.warn("Couldn't process command: '" + input + "'");
         }
 
         return false;
@@ -120,7 +117,7 @@ public class CommandHandler implements ICommandManager
 
         for (String s : command.getCommandAliases())
         {
-            ICommand icommand = (ICommand)this.commandMap.get(s);
+            ICommand icommand = this.commandMap.get(s);
 
             if (icommand == null || !icommand.getCommandName().equals(s))
             {
@@ -145,12 +142,11 @@ public class CommandHandler implements ICommandManager
 
         if (astring.length == 1)
         {
-            List<String> list = Lists.<String>newArrayList();
+            List<String> list = Lists.newArrayList();
 
             for (Entry<String, ICommand> entry : this.commandMap.entrySet())
             {
-                if (CommandBase.doesStringStartWith(s, (String)entry.getKey()) && ((ICommand)entry.getValue()).canCommandSenderUseCommand(sender))
-                {
+                if (CommandBase.doesStringStartWith(s, entry.getKey()) && entry.getValue().canCommandSenderUseCommand(sender)) {
                     list.add(entry.getKey());
                 }
             }
@@ -161,7 +157,7 @@ public class CommandHandler implements ICommandManager
         {
             if (astring.length > 1)
             {
-                ICommand icommand = (ICommand)this.commandMap.get(s);
+                ICommand icommand = this.commandMap.get(s);
 
                 if (icommand != null && icommand.canCommandSenderUseCommand(sender))
                 {
@@ -175,7 +171,7 @@ public class CommandHandler implements ICommandManager
 
     public List<ICommand> getPossibleCommands(ICommandSender sender)
     {
-        List<ICommand> list = Lists.<ICommand>newArrayList();
+        List<ICommand> list = Lists.newArrayList();
 
         for (ICommand icommand : this.commandSet)
         {

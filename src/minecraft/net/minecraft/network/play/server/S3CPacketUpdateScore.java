@@ -1,11 +1,12 @@
 package net.minecraft.network.play.server;
 
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
+
+import java.io.IOException;
 
 public class S3CPacketUpdateScore implements Packet<INetHandlerPlayClient>
 {
@@ -45,7 +46,7 @@ public class S3CPacketUpdateScore implements Packet<INetHandlerPlayClient>
     public void readPacketData(PacketBuffer buf) throws IOException
     {
         this.name = buf.readStringFromBuffer(40);
-        this.action = (S3CPacketUpdateScore.Action)buf.readEnumValue(S3CPacketUpdateScore.Action.class);
+        this.action = buf.readEnumValue(Action.class);
         this.objective = buf.readStringFromBuffer(16);
 
         if (this.action != S3CPacketUpdateScore.Action.REMOVE)
@@ -91,9 +92,8 @@ public class S3CPacketUpdateScore implements Packet<INetHandlerPlayClient>
         return this.action;
     }
 
-    public static enum Action
-    {
+    public enum Action {
         CHANGE,
-        REMOVE;
+        REMOVE
     }
 }

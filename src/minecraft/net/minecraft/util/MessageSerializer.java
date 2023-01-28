@@ -26,18 +26,15 @@ public class MessageSerializer extends MessageToByteEncoder<Packet>
         this.direction = direction;
     }
 
-    protected void encode(ChannelHandlerContext p_encode_1_, Packet p_encode_2_, ByteBuf p_encode_3_) throws IOException, Exception
-    {
-        Integer integer = ((EnumConnectionState)p_encode_1_.channel().attr(NetworkManager.attrKeyConnectionState).get()).getPacketId(this.direction, p_encode_2_);
+    protected void encode(ChannelHandlerContext p_encode_1_, Packet p_encode_2_, ByteBuf p_encode_3_) throws Exception {
+        Integer integer = p_encode_1_.channel().attr(NetworkManager.attrKeyConnectionState).get().getPacketId(this.direction, p_encode_2_);
 
-        if (logger.isDebugEnabled())
-        {
-            logger.debug(RECEIVED_PACKET_MARKER, "OUT: [{}:{}] {}", new Object[] {p_encode_1_.channel().attr(NetworkManager.attrKeyConnectionState).get(), integer, p_encode_2_.getClass().getName()});
+        if (logger.isDebugEnabled()) {
+            logger.debug(RECEIVED_PACKET_MARKER, "OUT: [{}:{}] {}", p_encode_1_.channel().attr(NetworkManager.attrKeyConnectionState).get(), integer, p_encode_2_.getClass().getName());
         }
 
-        if (integer == null)
-        {
-            throw new IOException("Can\'t serialize unregistered packet");
+        if (integer == null) {
+            throw new IOException("Can't serialize unregistered packet");
         }
         else
         {
@@ -50,7 +47,7 @@ public class MessageSerializer extends MessageToByteEncoder<Packet>
             }
             catch (Throwable throwable)
             {
-                logger.error((Object)throwable);
+                logger.error(throwable);
             }
         }
     }

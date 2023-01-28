@@ -1,32 +1,26 @@
 package net.minecraft.entity;
 
-import java.util.Collection;
-import java.util.UUID;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.BaseAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.ai.attributes.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SharedMonsterAttributes
-{
-    private static final Logger logger = LogManager.getLogger();
-    public static final IAttribute maxHealth = (new RangedAttribute((IAttribute)null, "generic.maxHealth", 20.0D, 0.0D, 1024.0D)).setDescription("Max Health").setShouldWatch(true);
-    public static final IAttribute followRange = (new RangedAttribute((IAttribute)null, "generic.followRange", 32.0D, 0.0D, 2048.0D)).setDescription("Follow Range");
-    public static final IAttribute knockbackResistance = (new RangedAttribute((IAttribute)null, "generic.knockbackResistance", 0.0D, 0.0D, 1.0D)).setDescription("Knockback Resistance");
-    public static final IAttribute movementSpeed = (new RangedAttribute((IAttribute)null, "generic.movementSpeed", 0.699999988079071D, 0.0D, 1024.0D)).setDescription("Movement Speed").setShouldWatch(true);
-    public static final IAttribute attackDamage = new RangedAttribute((IAttribute)null, "generic.attackDamage", 2.0D, 0.0D, 2048.0D);
+import java.util.Collection;
+import java.util.UUID;
 
-    public static NBTTagList writeBaseAttributeMapToNBT(BaseAttributeMap map)
-    {
+public class SharedMonsterAttributes {
+    private static final Logger logger = LogManager.getLogger();
+    public static final IAttribute maxHealth = (new RangedAttribute(null, "generic.maxHealth", 20.0D, 0.0D, 1024.0D)).setDescription("Max Health").setShouldWatch(true);
+    public static final IAttribute followRange = (new RangedAttribute(null, "generic.followRange", 32.0D, 0.0D, 2048.0D)).setDescription("Follow Range");
+    public static final IAttribute knockbackResistance = (new RangedAttribute(null, "generic.knockbackResistance", 0.0D, 0.0D, 1.0D)).setDescription("Knockback Resistance");
+    public static final IAttribute movementSpeed = (new RangedAttribute(null, "generic.movementSpeed", 0.699999988079071D, 0.0D, 1024.0D)).setDescription("Movement Speed").setShouldWatch(true);
+    public static final IAttribute attackDamage = new RangedAttribute(null, "generic.attackDamage", 2.0D, 0.0D, 2048.0D);
+
+    public static NBTTagList writeBaseAttributeMapToNBT(BaseAttributeMap map) {
         NBTTagList nbttaglist = new NBTTagList();
 
-        for (IAttributeInstance iattributeinstance : map.getAllAttributes())
-        {
+        for (IAttributeInstance iattributeinstance : map.getAllAttributes()) {
             nbttaglist.appendTag(writeAttributeInstanceToNBT(iattributeinstance));
         }
 
@@ -83,7 +77,7 @@ public class SharedMonsterAttributes
             }
             else
             {
-                logger.warn("Ignoring unknown attribute \'" + nbttagcompound.getString("Name") + "\'");
+                logger.warn("Ignoring unknown attribute '" + nbttagcompound.getString("Name") + "'");
             }
         }
     }

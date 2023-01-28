@@ -15,22 +15,19 @@ import net.minecraft.world.chunk.IChunkProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ChunkProviderClient implements IChunkProvider
-{
+public class ChunkProviderClient implements IChunkProvider {
     private static final Logger logger = LogManager.getLogger();
-    private Chunk blankChunk;
-    private LongHashMap<Chunk> chunkMapping = new LongHashMap();
-    private List<Chunk> chunkListing = Lists.<Chunk>newArrayList();
-    private World worldObj;
+    private final Chunk blankChunk;
+    private final LongHashMap<Chunk> chunkMapping = new LongHashMap();
+    private final List<Chunk> chunkListing = Lists.newArrayList();
+    private final World worldObj;
 
-    public ChunkProviderClient(World worldIn)
-    {
+    public ChunkProviderClient(World worldIn) {
         this.blankChunk = new EmptyChunk(worldIn, 0, 0);
         this.worldObj = worldIn;
     }
 
-    public boolean chunkExists(int x, int z)
-    {
+    public boolean chunkExists(int x, int z) {
         return true;
     }
 
@@ -58,7 +55,7 @@ public class ChunkProviderClient implements IChunkProvider
 
     public Chunk provideChunk(int x, int z)
     {
-        Chunk chunk = (Chunk)this.chunkMapping.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(x, z));
+        Chunk chunk = this.chunkMapping.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(x, z));
         return chunk == null ? this.blankChunk : chunk;
     }
 
@@ -82,7 +79,7 @@ public class ChunkProviderClient implements IChunkProvider
 
         if (System.currentTimeMillis() - i > 100L)
         {
-            logger.info("Warning: Clientside chunk ticking took {} ms", new Object[] {Long.valueOf(System.currentTimeMillis() - i)});
+            logger.info("Warning: Clientside chunk ticking took {} ms", Long.valueOf(System.currentTimeMillis() - i));
         }
 
         return false;

@@ -1,8 +1,6 @@
 package net.minecraft.client.gui.spectator.categories;
 
 import com.google.common.collect.Lists;
-import java.util.List;
-import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,9 +18,12 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
+import java.util.Random;
+
 public class TeleportToTeam implements ISpectatorMenuView, ISpectatorMenuObject
 {
-    private final List<ISpectatorMenuObject> field_178672_a = Lists.<ISpectatorMenuObject>newArrayList();
+    private final List<ISpectatorMenuObject> field_178672_a = Lists.newArrayList();
 
     public TeleportToTeam()
     {
@@ -82,7 +83,7 @@ public class TeleportToTeam implements ISpectatorMenuView, ISpectatorMenuObject
         public TeamSelectionObject(ScorePlayerTeam p_i45492_2_)
         {
             this.field_178676_b = p_i45492_2_;
-            this.field_178675_d = Lists.<NetworkPlayerInfo>newArrayList();
+            this.field_178675_d = Lists.newArrayList();
 
             for (String s : p_i45492_2_.getMembershipCollection())
             {
@@ -96,7 +97,7 @@ public class TeleportToTeam implements ISpectatorMenuView, ISpectatorMenuObject
 
             if (!this.field_178675_d.isEmpty())
             {
-                String s1 = ((NetworkPlayerInfo)this.field_178675_d.get((new Random()).nextInt(this.field_178675_d.size()))).getGameProfile().getName();
+                String s1 = this.field_178675_d.get((new Random()).nextInt(this.field_178675_d.size())).getGameProfile().getName();
                 this.field_178677_c = AbstractClientPlayer.getLocationSkin(s1);
                 AbstractClientPlayer.getDownloadImageSkin(this.field_178677_c, s1);
             }

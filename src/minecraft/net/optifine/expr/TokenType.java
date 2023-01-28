@@ -1,7 +1,6 @@
 package net.optifine.expr;
 
-public enum TokenType
-{
+public enum TokenType {
     IDENTIFIER("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_:."),
     NUMBER("0123456789", "0123456789."),
     OPERATOR("+-*/%!&|<>=", "&|="),
@@ -9,17 +8,15 @@ public enum TokenType
     BRACKET_OPEN("("),
     BRACKET_CLOSE(")");
 
-    private String charsFirst;
-    private String charsNext;
+    private final String charsFirst;
+    private final String charsNext;
     public static final TokenType[] VALUES = values();
 
-    private TokenType(String charsFirst)
-    {
+    TokenType(String charsFirst) {
         this(charsFirst, "");
     }
 
-    private TokenType(String charsFirst, String charsNext)
-    {
+    TokenType(String charsFirst, String charsNext) {
         this.charsFirst = charsFirst;
         this.charsNext = charsNext;
     }

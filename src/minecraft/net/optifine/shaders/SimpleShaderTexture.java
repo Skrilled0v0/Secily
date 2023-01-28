@@ -28,7 +28,7 @@ import org.apache.commons.io.IOUtils;
 
 public class SimpleShaderTexture extends AbstractTexture
 {
-    private String texturePath;
+    private final String texturePath;
     private static final IMetadataSerializer METADATA_SERIALIZER = makeMetadataSerializer();
 
     public SimpleShaderTexture(String texturePath)
@@ -72,13 +72,11 @@ public class SimpleShaderTexture extends AbstractTexture
             BufferedReader bufferedreader = new BufferedReader(new InputStreamReader(inputstream));
             TextureMetadataSection texturemetadatasection1;
 
-            try
-            {
-                JsonObject jsonobject = (new JsonParser()).parse((Reader)bufferedreader).getAsJsonObject();
-                TextureMetadataSection texturemetadatasection = (TextureMetadataSection)imetadataserializer.parseMetadataSection(s1, jsonobject);
+            try {
+                JsonObject jsonobject = (new JsonParser()).parse(bufferedreader).getAsJsonObject();
+                TextureMetadataSection texturemetadatasection = imetadataserializer.parseMetadataSection(s1, jsonobject);
 
-                if (texturemetadatasection == null)
-                {
+                if (texturemetadatasection == null) {
                     return def;
                 }
 
@@ -92,7 +90,7 @@ public class SimpleShaderTexture extends AbstractTexture
             }
             finally
             {
-                IOUtils.closeQuietly((Reader)bufferedreader);
+                IOUtils.closeQuietly(bufferedreader);
                 IOUtils.closeQuietly(inputstream);
             }
 

@@ -312,7 +312,7 @@ public class RenderUtil implements IMC {
             font.drawString(str.substring(split.get(i),split.get(i+1)),posX+lrMargin,posY+udMargin+i*(fontHeight+lineSpacing),fontColor);
         }
         //画文字最后一行
-        font.drawString(str.substring(split.get(row-1),str.length()),posX+lrMargin,posY+udMargin+(row-1)*(fontHeight+lineSpacing),fontColor);
+        font.drawString(str.substring(split.get(row - 1)), posX + lrMargin, posY + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
     }
 
@@ -344,7 +344,7 @@ public class RenderUtil implements IMC {
             font.drawString(s1,posX+lrMargin+(maxStringWidth-font.getStringWidth(s1))/2f,posY+udMargin+i*(fontHeight+lineSpacing),fontColor);
         }
         //画文字最后一行
-        String s1 = str.substring(split.get(row-1),str.length());
+        String s1 = str.substring(split.get(row - 1));
         font.drawString(s1,posX+lrMargin+(maxStringWidth-font.getStringWidth(s1))/2f,posY+udMargin+(row-1)*(fontHeight+lineSpacing),fontColor);
         return boxHeight;
     }

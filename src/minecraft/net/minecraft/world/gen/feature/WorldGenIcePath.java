@@ -6,20 +6,16 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldGenIcePath extends WorldGenerator
-{
-    private Block block = Blocks.packed_ice;
-    private int basePathWidth;
+public class WorldGenIcePath extends WorldGenerator {
+    private final Block block = Blocks.packed_ice;
+    private final int basePathWidth;
 
-    public WorldGenIcePath(int p_i45454_1_)
-    {
+    public WorldGenIcePath(int p_i45454_1_) {
         this.basePathWidth = p_i45454_1_;
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position)
-    {
-        while (worldIn.isAirBlock(position) && position.getY() > 2)
-        {
+    public boolean generate(World worldIn, Random rand, BlockPos position) {
+        while (worldIn.isAirBlock(position) && position.getY() > 2) {
             position = position.down();
         }
 

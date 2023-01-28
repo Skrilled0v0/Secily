@@ -2,36 +2,16 @@ package net.minecraft.entity;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityEnderCrystal;
-import net.minecraft.entity.item.EntityEnderEye;
-import net.minecraft.entity.item.EntityEnderPearl;
-import net.minecraft.entity.item.EntityExpBottle;
-import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.item.EntityFireworkRocket;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.item.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.entity.projectile.EntityFireball;
-import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.entity.projectile.EntitySnowball;
+import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
@@ -40,22 +20,23 @@ import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class EntityTracker
-{
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
+public class EntityTracker {
     private static final Logger logger = LogManager.getLogger();
     private final WorldServer theWorld;
-    private Set<EntityTrackerEntry> trackedEntities = Sets.<EntityTrackerEntry>newHashSet();
-    private IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap();
-    private int maxTrackingDistanceThreshold;
+    private final Set<EntityTrackerEntry> trackedEntities = Sets.newHashSet();
+    private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap();
+    private final int maxTrackingDistanceThreshold;
 
-    public EntityTracker(WorldServer theWorldIn)
-    {
+    public EntityTracker(WorldServer theWorldIn) {
         this.theWorld = theWorldIn;
         this.maxTrackingDistanceThreshold = theWorldIn.getMinecraftServer().getConfigurationManager().getEntityViewDistance();
     }
 
-    public void trackEntity(Entity entityIn)
-    {
+    public void trackEntity(Entity entityIn) {
         if (entityIn instanceof EntityPlayerMP)
         {
             this.trackEntity(entityIn, 512, 2);
@@ -216,7 +197,7 @@ public class EntityTracker
             });
             entityIn.addEntityCrashInfo(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.makeCategory("Entity That Is Already Tracked");
-            ((EntityTrackerEntry)this.trackedEntityHashTable.lookup(entityIn.getEntityId())).trackedEntity.addEntityCrashInfo(crashreportcategory1);
+            this.trackedEntityHashTable.lookup(entityIn.getEntityId()).trackedEntity.addEntityCrashInfo(crashreportcategory1);
 
             try
             {
@@ -224,7 +205,7 @@ public class EntityTracker
             }
             catch (ReportedException reportedexception)
             {
-                logger.error((String)"\"Silently\" catching entity tracking error.", (Throwable)reportedexception);
+                logger.error("\"Silently\" catching entity tracking error.", reportedexception);
             }
         }
     }
@@ -241,7 +222,7 @@ public class EntityTracker
             }
         }
 
-        EntityTrackerEntry entitytrackerentry1 = (EntityTrackerEntry)this.trackedEntityHashTable.removeObject(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry1 = this.trackedEntityHashTable.removeObject(entityIn.getEntityId());
 
         if (entitytrackerentry1 != null)
         {
@@ -252,7 +233,7 @@ public class EntityTracker
 
     public void updateTrackedEntities()
     {
-        List<EntityPlayerMP> list = Lists.<EntityPlayerMP>newArrayList();
+        List<EntityPlayerMP> list = Lists.newArrayList();
 
         for (EntityTrackerEntry entitytrackerentry : this.trackedEntities)
         {
@@ -264,14 +245,11 @@ public class EntityTracker
             }
         }
 
-        for (int i = 0; i < ((List)list).size(); ++i)
-        {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP)list.get(i);
+        for (int i = 0; i < list.size(); ++i) {
+            EntityPlayerMP entityplayermp = list.get(i);
 
-            for (EntityTrackerEntry entitytrackerentry1 : this.trackedEntities)
-            {
-                if (entitytrackerentry1.trackedEntity != entityplayermp)
-                {
+            for (EntityTrackerEntry entitytrackerentry1 : this.trackedEntities) {
+                if (entitytrackerentry1.trackedEntity != entityplayermp) {
                     entitytrackerentry1.updatePlayerEntity(entityplayermp);
                 }
             }
@@ -295,7 +273,7 @@ public class EntityTracker
 
     public void sendToAllTrackingEntity(Entity entityIn, Packet p_151247_2_)
     {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry)this.trackedEntityHashTable.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = this.trackedEntityHashTable.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -305,7 +283,7 @@ public class EntityTracker
 
     public void func_151248_b(Entity entityIn, Packet p_151248_2_)
     {
-        EntityTrackerEntry entitytrackerentry = (EntityTrackerEntry)this.trackedEntityHashTable.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = this.trackedEntityHashTable.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {

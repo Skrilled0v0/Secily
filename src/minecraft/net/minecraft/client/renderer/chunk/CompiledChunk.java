@@ -1,12 +1,13 @@
 package net.minecraft.client.renderer.chunk;
 
 import com.google.common.collect.Lists;
-import java.util.BitSet;
-import java.util.List;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
+
+import java.util.BitSet;
+import java.util.List;
 
 public class CompiledChunk
 {
@@ -32,10 +33,10 @@ public class CompiledChunk
     private final boolean[] layersUsed = new boolean[RenderChunk.ENUM_WORLD_BLOCK_LAYERS.length];
     private final boolean[] layersStarted = new boolean[RenderChunk.ENUM_WORLD_BLOCK_LAYERS.length];
     private boolean empty = true;
-    private final List<TileEntity> tileEntities = Lists.<TileEntity>newArrayList();
+    private final List<TileEntity> tileEntities = Lists.newArrayList();
     private SetVisibility setVisibility = new SetVisibility();
     private WorldRenderer.State state;
-    private BitSet[] animatedSprites = new BitSet[RenderChunk.ENUM_WORLD_BLOCK_LAYERS.length];
+    private final BitSet[] animatedSprites = new BitSet[RenderChunk.ENUM_WORLD_BLOCK_LAYERS.length];
 
     public boolean isEmpty()
     {

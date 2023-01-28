@@ -8,14 +8,12 @@ import net.minecraft.inventory.ContainerHopper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiHopper extends GuiContainer
-{
+public class GuiHopper extends GuiContainer {
     private static final ResourceLocation HOPPER_GUI_TEXTURE = new ResourceLocation("textures/gui/container/hopper.png");
-    private IInventory playerInventory;
-    private IInventory hopperInventory;
+    private final IInventory playerInventory;
+    private final IInventory hopperInventory;
 
-    public GuiHopper(InventoryPlayer playerInv, IInventory hopperInv)
-    {
+    public GuiHopper(InventoryPlayer playerInv, IInventory hopperInv) {
         super(new ContainerHopper(playerInv, hopperInv, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = playerInv;
         this.hopperInventory = hopperInv;

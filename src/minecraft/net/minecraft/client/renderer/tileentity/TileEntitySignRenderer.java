@@ -1,6 +1,5 @@
 package net.minecraft.client.renderer.tileentity;
 
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -18,11 +17,45 @@ import net.optifine.CustomColors;
 import net.optifine.shaders.Shaders;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
+
 public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntitySign>
 {
     private static final ResourceLocation SIGN_TEXTURE = new ResourceLocation("textures/entity/sign.png");
     private final ModelSign model = new ModelSign();
     private static double textRenderDistanceSq = 4096.0D;
+
+    private static boolean isRenderText(TileEntitySign p_isRenderText_0_)
+    {
+        if (Shaders.isShadowPass)
+        {
+            return false;
+        }
+        else if (Config.getMinecraft().currentScreen instanceof GuiEditSign)
+        {
+            return true;
+        }
+        else
+        {
+            if (!Config.zoomMode && p_isRenderText_0_.lineBeingEdited < 0)
+            {
+                Entity entity = Config.getMinecraft().getRenderViewEntity();
+                double d0 = p_isRenderText_0_.getDistanceSq(entity.posX, entity.posY, entity.posZ);
+
+                return !(d0 > textRenderDistanceSq);
+            }
+
+            return true;
+        }
+    }
+
+    public static void updateTextRenderDistance()
+    {
+        Minecraft minecraft = Config.getMinecraft();
+        double d0 = Config.limit(minecraft.gameSettings.fovSetting, 1.0F, 120.0F);
+        double d1 = Math.max(1.5D * (double) minecraft.displayHeight / d0, 16.0D);
+        textRenderDistanceSq = d1 * d1;
+    }
 
     public void renderTileEntityAt(TileEntitySign te, double x, double y, double z, float partialTicks, int destroyStage)
     {
@@ -106,7 +139,7 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntity
                     {
                         IChatComponent ichatcomponent = te.signText[j];
                         List<IChatComponent> list = GuiUtilRenderComponents.splitText(ichatcomponent, 90, fontrenderer, false, true);
-                        String s = list != null && list.size() > 0 ? ((IChatComponent)list.get(0)).getFormattedText() : "";
+                        String s = list != null && list.size() > 0 ? list.get(0).getFormattedText() : "";
 
                         if (j == te.lineBeingEdited)
                         {
@@ -132,40 +165,5 @@ public class TileEntitySignRenderer extends TileEntitySpecialRenderer<TileEntity
             GlStateManager.popMatrix();
             GlStateManager.matrixMode(5888);
         }
-    }
-
-    private static boolean isRenderText(TileEntitySign p_isRenderText_0_)
-    {
-        if (Shaders.isShadowPass)
-        {
-            return false;
-        }
-        else if (Config.getMinecraft().currentScreen instanceof GuiEditSign)
-        {
-            return true;
-        }
-        else
-        {
-            if (!Config.zoomMode && p_isRenderText_0_.lineBeingEdited < 0)
-            {
-                Entity entity = Config.getMinecraft().getRenderViewEntity();
-                double d0 = p_isRenderText_0_.getDistanceSq(entity.posX, entity.posY, entity.posZ);
-
-                if (d0 > textRenderDistanceSq)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-    }
-
-    public static void updateTextRenderDistance()
-    {
-        Minecraft minecraft = Config.getMinecraft();
-        double d0 = (double)Config.limit(minecraft.gameSettings.fovSetting, 1.0F, 120.0F);
-        double d1 = Math.max(1.5D * (double)minecraft.displayHeight / d0, 16.0D);
-        textRenderDistanceSq = d1 * d1;
     }
 }

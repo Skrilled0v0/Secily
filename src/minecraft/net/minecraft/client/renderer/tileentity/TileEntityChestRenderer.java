@@ -1,6 +1,5 @@
 package net.minecraft.client.renderer.tileentity;
 
-import java.util.Calendar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.client.model.ModelChest;
@@ -9,24 +8,23 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 
-public class TileEntityChestRenderer extends TileEntitySpecialRenderer<TileEntityChest>
-{
+import java.util.Calendar;
+
+public class TileEntityChestRenderer extends TileEntitySpecialRenderer<TileEntityChest> {
     private static final ResourceLocation textureTrappedDouble = new ResourceLocation("textures/entity/chest/trapped_double.png");
     private static final ResourceLocation textureChristmasDouble = new ResourceLocation("textures/entity/chest/christmas_double.png");
     private static final ResourceLocation textureNormalDouble = new ResourceLocation("textures/entity/chest/normal_double.png");
     private static final ResourceLocation textureTrapped = new ResourceLocation("textures/entity/chest/trapped.png");
     private static final ResourceLocation textureChristmas = new ResourceLocation("textures/entity/chest/christmas.png");
     private static final ResourceLocation textureNormal = new ResourceLocation("textures/entity/chest/normal.png");
-    private ModelChest simpleChest = new ModelChest();
-    private ModelChest largeChest = new ModelLargeChest();
+    private final ModelChest simpleChest = new ModelChest();
+    private final ModelChest largeChest = new ModelLargeChest();
     private boolean isChristmas;
 
-    public TileEntityChestRenderer()
-    {
+    public TileEntityChestRenderer() {
         Calendar calendar = Calendar.getInstance();
 
-        if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26)
-        {
+        if (calendar.get(2) + 1 == 12 && calendar.get(5) >= 24 && calendar.get(5) <= 26) {
             this.isChristmas = true;
         }
     }

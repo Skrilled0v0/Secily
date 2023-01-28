@@ -1,12 +1,13 @@
 package net.minecraft.enchantment;
 
-import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Random;
 
 public class EnchantmentThorns extends Enchantment
 {
@@ -31,9 +32,9 @@ public class EnchantmentThorns extends Enchantment
         return 3;
     }
 
-    public boolean canApply(ItemStack stack)
+    public static boolean func_92094_a(int p_92094_0_, Random p_92094_1_)
     {
-        return stack.getItem() instanceof ItemArmor ? true : super.canApply(stack);
+        return p_92094_0_ > 0 && p_92094_1_.nextFloat() < 0.15F * (float) p_92094_0_;
     }
 
     public void onUserHurt(EntityLivingBase user, Entity attacker, int level)
@@ -60,9 +61,9 @@ public class EnchantmentThorns extends Enchantment
         }
     }
 
-    public static boolean func_92094_a(int p_92094_0_, Random p_92094_1_)
+    public boolean canApply(ItemStack stack)
     {
-        return p_92094_0_ <= 0 ? false : p_92094_1_.nextFloat() < 0.15F * (float)p_92094_0_;
+        return stack.getItem() instanceof ItemArmor || super.canApply(stack);
     }
 
     public static int func_92095_b(int p_92095_0_, Random p_92095_1_)

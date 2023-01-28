@@ -3,15 +3,17 @@ package net.minecraft.client.gui;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import me.ashyx.blur.util.Blur;
 import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.utils.math.TimerUtil;
+import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.stream.GuiTwitchUserMode;
+import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityList;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -48,6 +50,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Set<String> PROTOCOLS = Sets.newHashSet("http", "https");
     private static final Splitter NEWLINE_SPLITTER = Splitter.on('\n');
+    TimerUtil timerUtil = new TimerUtil();
+    int i = 1;
     public int width;
     public int height;
     public boolean allowUserInput;
@@ -451,8 +455,11 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     public void handleKeyboardInput() throws IOException {
-        if (Keyboard.getEventKeyState()) {
-            this.keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+        int i = Keyboard.getEventKey();
+        char c0 = Keyboard.getEventCharacter();
+
+        if (Keyboard.getEventKeyState() || i == 0 && Character.isDefined(c0)) {
+            this.keyTyped(c0, i);
         }
 
         this.mc.dispatchKeypresses();
@@ -464,32 +471,20 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     public void onGuiClosed() {
     }
 
-    public void drawDefaultBackground() {
-        this.drawWorldBackground(0);
-    }
 
-    public void drawWorldBackground(int tint) {
+    public void drawBackground() {
         if (this.mc.theWorld != null) {
-            this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
+            Blur.renderBlur(5);
         } else {
-            this.drawBackground(tint);
+            GlStateManager.disableLighting();
+            GlStateManager.disableFog();
+            RenderUtil.drawImage(Main.bgs.get(i - 1), 0, 0, width, height);
+            if (timerUtil.hasReached(50)) {
+                i++;
+                timerUtil.reset();
+            }
+            if (i >= Main.BACKGROUNDMAXINDEX) i = 1;
         }
-    }
-
-    public void drawBackground(int tint) {
-        GlStateManager.disableLighting();
-        GlStateManager.disableFog();
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        this.mc.getTextureManager().bindTexture(optionsBackground);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        float f = 32.0F;
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        worldrenderer.pos(0.0D, this.height, 0.0D).tex(0.0D, (float) this.height / 32.0F + (float) tint).color(64, 64, 64, 255).endVertex();
-        worldrenderer.pos(this.width, this.height, 0.0D).tex((float) this.width / 32.0F, (float) this.height / 32.0F + (float) tint).color(64, 64, 64, 255).endVertex();
-        worldrenderer.pos(this.width, 0.0D, 0.0D).tex((float) this.width / 32.0F, tint).color(64, 64, 64, 255).endVertex();
-        worldrenderer.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
-        tessellator.draw();
     }
 
     public boolean doesGuiPauseGame() {

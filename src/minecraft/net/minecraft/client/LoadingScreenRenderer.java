@@ -14,18 +14,16 @@ import net.optifine.CustomLoadingScreen;
 import net.optifine.CustomLoadingScreens;
 import net.optifine.reflect.Reflector;
 
-public class LoadingScreenRenderer implements IProgressUpdate
-{
+public class LoadingScreenRenderer implements IProgressUpdate {
     private String message = "";
-    private Minecraft mc;
+    private final Minecraft mc;
     private String currentlyDisplayedText = "";
     private long systemTime = Minecraft.getSystemTime();
     private boolean loadingSuccess;
-    private ScaledResolution scaledResolution;
-    private Framebuffer framebuffer;
+    private final ScaledResolution scaledResolution;
+    private final Framebuffer framebuffer;
 
-    public LoadingScreenRenderer(Minecraft mcIn)
-    {
+    public LoadingScreenRenderer(Minecraft mcIn) {
         this.mc = mcIn;
         this.scaledResolution = new ScaledResolution(mcIn);
         this.framebuffer = new Framebuffer(mcIn.displayWidth, mcIn.displayHeight, false);
@@ -64,7 +62,7 @@ public class LoadingScreenRenderer implements IProgressUpdate
             if (OpenGlHelper.isFramebufferEnabled())
             {
                 int i = this.scaledResolution.getScaleFactor();
-                GlStateManager.ortho(0.0D, (double)(this.scaledResolution.getScaledWidth() * i), (double)(this.scaledResolution.getScaledHeight() * i), 0.0D, 100.0D, 300.0D);
+                GlStateManager.ortho(0.0D, this.scaledResolution.getScaledWidth() * i, this.scaledResolution.getScaledHeight() * i, 0.0D, 100.0D, 300.0D);
             }
             else
             {
@@ -143,11 +141,11 @@ public class LoadingScreenRenderer implements IProgressUpdate
 
                 if (Reflector.FMLClientHandler_handleLoadingScreen.exists())
                 {
-                    Object object = Reflector.call(Reflector.FMLClientHandler_instance, new Object[0]);
+                    Object object = Reflector.call(Reflector.FMLClientHandler_instance);
 
                     if (object != null)
                     {
-                        flag = !Reflector.callBoolean(object, Reflector.FMLClientHandler_handleLoadingScreen, new Object[] {scaledresolution});
+                        flag = !Reflector.callBoolean(object, Reflector.FMLClientHandler_handleLoadingScreen, scaledresolution);
                     }
                 }
 
@@ -161,34 +159,32 @@ public class LoadingScreenRenderer implements IProgressUpdate
                     {
                         customloadingscreen.drawBackground(scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight());
                     }
-                    else
-                    {
+                    else {
                         this.mc.getTextureManager().bindTexture(Gui.optionsBackground);
                         float f = 32.0F;
                         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-                        worldrenderer.pos(0.0D, (double)l, 0.0D).tex(0.0D, (double)((float)l / f)).color(64, 64, 64, 255).endVertex();
-                        worldrenderer.pos((double)k, (double)l, 0.0D).tex((double)((float)k / f), (double)((float)l / f)).color(64, 64, 64, 255).endVertex();
-                        worldrenderer.pos((double)k, 0.0D, 0.0D).tex((double)((float)k / f), 0.0D).color(64, 64, 64, 255).endVertex();
+                        worldrenderer.pos(0.0D, l, 0.0D).tex(0.0D, (float) l / f).color(64, 64, 64, 255).endVertex();
+                        worldrenderer.pos(k, l, 0.0D).tex((float) k / f, (float) l / f).color(64, 64, 64, 255).endVertex();
+                        worldrenderer.pos(k, 0.0D, 0.0D).tex((float) k / f, 0.0D).color(64, 64, 64, 255).endVertex();
                         worldrenderer.pos(0.0D, 0.0D, 0.0D).tex(0.0D, 0.0D).color(64, 64, 64, 255).endVertex();
                         tessellator.draw();
                     }
 
-                    if (progress >= 0)
-                    {
+                    if (progress >= 0) {
                         int l1 = 100;
                         int i1 = 2;
                         int j1 = k / 2 - l1 / 2;
                         int k1 = l / 2 + 16;
                         GlStateManager.disableTexture2D();
                         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-                        worldrenderer.pos((double)j1, (double)k1, 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)(k1 + i1), 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + l1), (double)(k1 + i1), 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + l1), (double)k1, 0.0D).color(128, 128, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)k1, 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)j1, (double)(k1 + i1), 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + progress), (double)(k1 + i1), 0.0D).color(128, 255, 128, 255).endVertex();
-                        worldrenderer.pos((double)(j1 + progress), (double)k1, 0.0D).color(128, 255, 128, 255).endVertex();
+                        worldrenderer.pos(j1, k1, 0.0D).color(128, 128, 128, 255).endVertex();
+                        worldrenderer.pos(j1, k1 + i1, 0.0D).color(128, 128, 128, 255).endVertex();
+                        worldrenderer.pos(j1 + l1, k1 + i1, 0.0D).color(128, 128, 128, 255).endVertex();
+                        worldrenderer.pos(j1 + l1, k1, 0.0D).color(128, 128, 128, 255).endVertex();
+                        worldrenderer.pos(j1, k1, 0.0D).color(128, 255, 128, 255).endVertex();
+                        worldrenderer.pos(j1, k1 + i1, 0.0D).color(128, 255, 128, 255).endVertex();
+                        worldrenderer.pos(j1 + progress, k1 + i1, 0.0D).color(128, 255, 128, 255).endVertex();
+                        worldrenderer.pos(j1 + progress, k1, 0.0D).color(128, 255, 128, 255).endVertex();
                         tessellator.draw();
                         GlStateManager.enableTexture2D();
                     }
@@ -214,7 +210,6 @@ public class LoadingScreenRenderer implements IProgressUpdate
                 }
                 catch (Exception var16)
                 {
-                    ;
                 }
             }
         }

@@ -1,14 +1,10 @@
 package net.minecraft.client.audio;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import java.lang.reflect.Type;
+import com.google.gson.*;
 import net.minecraft.util.JsonUtils;
 import org.apache.commons.lang3.Validate;
+
+import java.lang.reflect.Type;
 
 public class SoundListSerializer implements JsonDeserializer<SoundList>
 {
@@ -19,7 +15,7 @@ public class SoundListSerializer implements JsonDeserializer<SoundList>
         soundlist.setReplaceExisting(JsonUtils.getBoolean(jsonobject, "replace", false));
         SoundCategory soundcategory = SoundCategory.getCategory(JsonUtils.getString(jsonobject, "category", SoundCategory.MASTER.getCategoryName()));
         soundlist.setSoundCategory(soundcategory);
-        Validate.notNull(soundcategory, "Invalid category", new Object[0]);
+        Validate.notNull(soundcategory, "Invalid category");
 
         if (jsonobject.has("sounds"))
         {
@@ -42,28 +38,28 @@ public class SoundListSerializer implements JsonDeserializer<SoundList>
                     if (jsonobject1.has("type"))
                     {
                         SoundList.SoundEntry.Type soundlist$soundentry$type = SoundList.SoundEntry.Type.getType(JsonUtils.getString(jsonobject1, "type"));
-                        Validate.notNull(soundlist$soundentry$type, "Invalid type", new Object[0]);
+                        Validate.notNull(soundlist$soundentry$type, "Invalid type");
                         soundlist$soundentry.setSoundEntryType(soundlist$soundentry$type);
                     }
 
                     if (jsonobject1.has("volume"))
                     {
                         float f = JsonUtils.getFloat(jsonobject1, "volume");
-                        Validate.isTrue(f > 0.0F, "Invalid volume", new Object[0]);
+                        Validate.isTrue(f > 0.0F, "Invalid volume");
                         soundlist$soundentry.setSoundEntryVolume(f);
                     }
 
                     if (jsonobject1.has("pitch"))
                     {
                         float f1 = JsonUtils.getFloat(jsonobject1, "pitch");
-                        Validate.isTrue(f1 > 0.0F, "Invalid pitch", new Object[0]);
+                        Validate.isTrue(f1 > 0.0F, "Invalid pitch");
                         soundlist$soundentry.setSoundEntryPitch(f1);
                     }
 
                     if (jsonobject1.has("weight"))
                     {
                         int j = JsonUtils.getInt(jsonobject1, "weight");
-                        Validate.isTrue(j > 0, "Invalid weight", new Object[0]);
+                        Validate.isTrue(j > 0, "Invalid weight");
                         soundlist$soundentry.setSoundEntryWeight(j);
                     }
 

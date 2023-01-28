@@ -1,27 +1,13 @@
 package net.minecraft.client.renderer.chunk;
 
 import com.google.common.collect.Sets;
-import java.nio.FloatBuffer;
-import java.util.BitSet;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.locks.ReentrantLock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCactus;
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RegionRenderCache;
-import net.minecraft.client.renderer.RegionRenderCacheBuilder;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.ViewFrustum;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -45,6 +31,13 @@ import net.optifine.render.AabbFrame;
 import net.optifine.render.RenderEnv;
 import net.optifine.shaders.SVertexBuilder;
 
+import java.nio.FloatBuffer;
+import java.util.BitSet;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class RenderChunk
 {
     private final World world;
@@ -55,15 +48,15 @@ public class RenderChunk
     private final ReentrantLock lockCompileTask = new ReentrantLock();
     private final ReentrantLock lockCompiledChunk = new ReentrantLock();
     private ChunkCompileTaskGenerator compileTask = null;
-    private final Set<TileEntity> setTileEntities = Sets.<TileEntity>newHashSet();
+    private final Set<TileEntity> setTileEntities = Sets.newHashSet();
     private final int index;
     private final FloatBuffer modelviewMatrix = GLAllocation.createDirectFloatBuffer(16);
     private final VertexBuffer[] vertexBuffers = new VertexBuffer[EnumWorldBlockLayer.values().length];
     public AxisAlignedBB boundingBox;
     private int frameIndex = -1;
     private boolean needsUpdate = true;
-    private EnumMap<EnumFacing, BlockPos> mapEnumFacing = null;
-    private BlockPos[] positionOffsets16 = new BlockPos[EnumFacing.VALUES.length];
+    private final EnumMap<EnumFacing, BlockPos> mapEnumFacing = null;
+    private final BlockPos[] positionOffsets16 = new BlockPos[EnumFacing.VALUES.length];
     public static final EnumWorldBlockLayer[] ENUM_WORLD_BLOCK_LAYERS = EnumWorldBlockLayer.values();
     private final EnumWorldBlockLayer[] blockLayersSingle = new EnumWorldBlockLayer[1];
     private final boolean isMipmaps = Config.isMipmaps();
@@ -74,14 +67,13 @@ public class RenderChunk
     private final RenderChunk[] renderChunksOfset16 = new RenderChunk[6];
     private boolean renderChunksOffset16Updated = false;
     private Chunk chunk;
-    private RenderChunk[] renderChunkNeighbours = new RenderChunk[EnumFacing.VALUES.length];
-    private RenderChunk[] renderChunkNeighboursValid = new RenderChunk[EnumFacing.VALUES.length];
+    private final RenderChunk[] renderChunkNeighbours = new RenderChunk[EnumFacing.VALUES.length];
+    private final RenderChunk[] renderChunkNeighboursValid = new RenderChunk[EnumFacing.VALUES.length];
     private boolean renderChunkNeighboursUpated = false;
-    private RenderGlobal.ContainerLocalRenderInformation renderInfo = new RenderGlobal.ContainerLocalRenderInformation(this, (EnumFacing)null, 0);
+    private final RenderGlobal.ContainerLocalRenderInformation renderInfo = new RenderGlobal.ContainerLocalRenderInformation(this, null, 0);
     public AabbFrame boundingBoxParent;
 
-    public RenderChunk(World worldIn, RenderGlobal renderGlobalIn, BlockPos blockPosIn, int indexIn)
-    {
+    public RenderChunk(World worldIn, RenderGlobal renderGlobalIn, BlockPos blockPosIn, int indexIn) {
         this.world = worldIn;
         this.renderGlobal = renderGlobalIn;
         this.index = indexIn;
@@ -212,7 +204,7 @@ public class RenderChunk
                 if (ReflectorForge.blockHasTileEntity(iblockstate))
                 {
                     TileEntity tileentity = chunkcacheof.getTileEntity(new BlockPos(blockposm));
-                    TileEntitySpecialRenderer<TileEntity> tileentityspecialrenderer = TileEntityRendererDispatcher.instance.<TileEntity>getSpecialRenderer(tileentity);
+                    TileEntitySpecialRenderer<TileEntity> tileentityspecialrenderer = TileEntityRendererDispatcher.instance.getSpecialRenderer(tileentity);
 
                     if (tileentity != null && tileentityspecialrenderer != null)
                     {
@@ -243,7 +235,7 @@ public class RenderChunk
 
                     if (flag)
                     {
-                        boolean flag2 = Reflector.callBoolean(block, Reflector.ForgeBlock_canRenderInLayer, new Object[] {enumworldblocklayer});
+                        boolean flag2 = Reflector.callBoolean(block, Reflector.ForgeBlock_canRenderInLayer, enumworldblocklayer);
 
                         if (!flag2)
                         {
@@ -253,7 +245,7 @@ public class RenderChunk
 
                     if (flag1)
                     {
-                        Reflector.callVoid(Reflector.ForgeHooksClient_setRenderLayer, new Object[] {enumworldblocklayer});
+                        Reflector.callVoid(Reflector.ForgeHooksClient_setRenderLayer, enumworldblocklayer);
                     }
 
                     enumworldblocklayer = this.fixBlockLayer(iblockstate, enumworldblocklayer);
@@ -284,7 +276,7 @@ public class RenderChunk
 
                 if (flag1)
                 {
-                    Reflector.callVoid(Reflector.ForgeHooksClient_setRenderLayer, new Object[] {(Object)null});
+                    Reflector.callVoid(Reflector.ForgeHooksClient_setRenderLayer, null);
                 }
             }
 
@@ -312,7 +304,7 @@ public class RenderChunk
                 }
                 else
                 {
-                    compiledchunk.setAnimatedSprites(enumworldblocklayer1, (BitSet)null);
+                    compiledchunk.setAnimatedSprites(enumworldblocklayer1, null);
                 }
             }
 
@@ -424,11 +416,11 @@ public class RenderChunk
             int l = pos.getZ() >> i << i;
             j = this.regionX;
             l = this.regionZ;
-            worldRendererIn.setTranslation((double)(-j), (double)(-k), (double)(-l));
+            worldRendererIn.setTranslation(-j, -k, -l);
         }
         else
         {
-            worldRendererIn.setTranslation((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
+            worldRendererIn.setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
         }
     }
 
@@ -639,7 +631,7 @@ public class RenderChunk
 
         if (Reflector.MinecraftForgeClient_onRebuildChunk.exists())
         {
-            Reflector.call(Reflector.MinecraftForgeClient_onRebuildChunk, new Object[] {this.world, p_makeChunkCacheOF_1_, chunkcache});
+            Reflector.call(Reflector.MinecraftForgeClient_onRebuildChunk, this.world, p_makeChunkCacheOF_1_, chunkcache);
         }
 
         ChunkCacheOF chunkcacheof = new ChunkCacheOF(chunkcache, blockpos, blockpos1, 1);
@@ -734,7 +726,7 @@ public class RenderChunk
 
     public boolean isBoundingBoxInFrustum(ICamera p_isBoundingBoxInFrustum_1_, int p_isBoundingBoxInFrustum_2_)
     {
-        return this.getBoundingBoxParent().isBoundingBoxInFrustumFully(p_isBoundingBoxInFrustum_1_, p_isBoundingBoxInFrustum_2_) ? true : p_isBoundingBoxInFrustum_1_.isBoundingBoxInFrustum(this.boundingBox);
+        return this.getBoundingBoxParent().isBoundingBoxInFrustumFully(p_isBoundingBoxInFrustum_1_, p_isBoundingBoxInFrustum_2_) || p_isBoundingBoxInFrustum_1_.isBoundingBoxInFrustum(this.boundingBox);
     }
 
     public AabbFrame getBoundingBoxParent()
@@ -763,7 +755,7 @@ public class RenderChunk
             if (this.boundingBoxParent == null)
             {
                 int l1 = 1 << l;
-                this.boundingBoxParent = new AabbFrame((double)i1, (double)j1, (double)k1, (double)(i1 + l1), (double)(j1 + l1), (double)(k1 + l1));
+                this.boundingBoxParent = new AabbFrame(i1, j1, k1, i1 + l1, j1 + l1, k1 + l1);
             }
         }
 

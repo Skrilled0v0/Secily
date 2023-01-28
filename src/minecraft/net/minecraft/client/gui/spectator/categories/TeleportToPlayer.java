@@ -3,9 +3,6 @@ package net.minecraft.client.gui.spectator.categories;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiSpectator;
@@ -17,6 +14,10 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.WorldSettings;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 public class TeleportToPlayer implements ISpectatorMenuView, ISpectatorMenuObject
 {
@@ -31,12 +32,12 @@ public class TeleportToPlayer implements ISpectatorMenuView, ISpectatorMenuObjec
 
     public TeleportToPlayer()
     {
-        this(field_178674_a.<NetworkPlayerInfo>sortedCopy(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()));
+        this(field_178674_a.sortedCopy(Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()));
     }
 
     public TeleportToPlayer(Collection<NetworkPlayerInfo> p_i45493_1_)
     {
-        this.field_178673_b = Lists.<ISpectatorMenuObject>newArrayList();
+        this.field_178673_b = Lists.newArrayList();
 
         for (NetworkPlayerInfo networkplayerinfo : field_178674_a.sortedCopy(p_i45493_1_))
         {

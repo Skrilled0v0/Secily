@@ -11,17 +11,15 @@ import net.minecraft.world.World;
 import net.optifine.shaders.Program;
 import net.optifine.shaders.Shaders;
 
-public class EntityPickupFX extends EntityFX
-{
-    private Entity field_174840_a;
-    private Entity field_174843_ax;
+public class EntityPickupFX extends EntityFX {
+    private final Entity field_174840_a;
+    private final Entity field_174843_ax;
     private int age;
-    private int maxAge;
-    private float field_174841_aA;
-    private RenderManager field_174842_aB = Minecraft.getMinecraft().getRenderManager();
+    private final int maxAge;
+    private final float field_174841_aA;
+    private final RenderManager field_174842_aB = Minecraft.getMinecraft().getRenderManager();
 
-    public EntityPickupFX(World worldIn, Entity p_i1233_2_, Entity p_i1233_3_, float p_i1233_4_)
-    {
+    public EntityPickupFX(World worldIn, Entity p_i1233_2_, Entity p_i1233_3_, float p_i1233_4_) {
         super(worldIn, p_i1233_2_.posX, p_i1233_2_.posY, p_i1233_2_.posZ, p_i1233_2_.motionX, p_i1233_2_.motionY, p_i1233_2_.motionZ);
         this.field_174840_a = p_i1233_2_;
         this.field_174843_ax = p_i1233_3_;
@@ -53,16 +51,16 @@ public class EntityPickupFX extends EntityFX
         int i = this.getBrightnessForRender(partialTicks);
         int j = i % 65536;
         int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         d6 = d6 - interpPosX;
         d7 = d7 - interpPosY;
         d8 = d8 - interpPosZ;
-        this.field_174842_aB.renderEntityWithPosYaw(this.field_174840_a, (double)((float)d6), (double)((float)d7), (double)((float)d8), this.field_174840_a.rotationYaw, partialTicks);
+        this.field_174842_aB.renderEntityWithPosYaw(this.field_174840_a, (float) d6, (float) d7, (float) d8, this.field_174840_a.rotationYaw, partialTicks);
 
         if (Config.isShaders())
         {
-            Shaders.setEntityId((Entity)null);
+            Shaders.setEntityId(null);
             Shaders.useProgram(program);
         }
     }

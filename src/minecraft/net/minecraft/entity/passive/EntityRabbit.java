@@ -3,24 +3,8 @@ package net.minecraft.entity.passive;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCarrot;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIMate;
-import net.minecraft.entity.ai.EntityAIMoveToBlock;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityJumpHelper;
-import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,18 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityRabbit extends EntityAnimal
 {
-    private EntityRabbit.AIAvoidEntity<EntityWolf> aiAvoidWolves;
+    private final EntityRabbit.AIAvoidEntity<EntityWolf> aiAvoidWolves;
     private int field_175540_bm = 0;
     private int field_175535_bn = 0;
     private boolean field_175536_bo = false;
@@ -48,7 +27,7 @@ public class EntityRabbit extends EntityAnimal
     private int currentMoveTypeDuration = 0;
     private EntityRabbit.EnumMoveType moveType = EntityRabbit.EnumMoveType.HOP;
     private int carrotTicks = 0;
-    private EntityPlayer field_175543_bt = null;
+    private final EntityPlayer field_175543_bt = null;
 
     public EntityRabbit(World worldIn)
     {
@@ -316,7 +295,7 @@ public class EntityRabbit extends EntityAnimal
 
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-        return this.isEntityInvulnerable(source) ? false : super.attackEntityFrom(source, amount);
+        return !this.isEntityInvulnerable(source) && super.attackEntityFrom(source, amount);
     }
 
     protected void addRandomDrop()
@@ -381,7 +360,7 @@ public class EntityRabbit extends EntityAnimal
         {
             this.tasks.removeTask(this.aiAvoidWolves);
             this.tasks.addTask(4, new EntityRabbit.AIEvilAttack(this));
-            this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
+            this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
             this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
             this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityWolf.class, true));
 
@@ -432,7 +411,7 @@ public class EntityRabbit extends EntityAnimal
 
     protected void createEatingParticles()
     {
-        this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, 0.0D, 0.0D, 0.0D, new int[] {Block.getStateId(Blocks.carrots.getStateFromMeta(7))});
+        this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0.0D, 0.0D, 0.0D, Block.getStateId(Blocks.carrots.getStateFromMeta(7)));
         this.carrotTicks = 100;
     }
 
@@ -450,9 +429,49 @@ public class EntityRabbit extends EntityAnimal
         }
     }
 
+    enum EnumMoveType {
+        NONE(0.0F, 0.0F, 30, 1),
+        HOP(0.8F, 0.2F, 20, 10),
+        STEP(1.0F, 0.45F, 14, 14),
+        SPRINT(1.75F, 0.4F, 1, 8),
+        ATTACK(2.0F, 0.7F, 7, 8);
+
+        private final float speed;
+        private final float field_180077_g;
+        private final int duration;
+        private final int field_180085_i;
+
+        EnumMoveType(float typeSpeed, float p_i45866_4_, int typeDuration, int p_i45866_6_) {
+            this.speed = typeSpeed;
+            this.field_180077_g = p_i45866_4_;
+            this.duration = typeDuration;
+            this.field_180085_i = p_i45866_6_;
+        }
+
+        public float getSpeed()
+        {
+            return this.speed;
+        }
+
+        public float func_180074_b()
+        {
+            return this.field_180077_g;
+        }
+
+        public int getDuration()
+        {
+            return this.duration;
+        }
+
+        public int func_180073_d()
+        {
+            return this.field_180085_i;
+        }
+    }
+
     static class AIAvoidEntity<T extends Entity> extends EntityAIAvoidEntity<T>
     {
-        private EntityRabbit entityInstance;
+        private final EntityRabbit entityInstance;
 
         public AIAvoidEntity(EntityRabbit rabbit, Class<T> p_i46403_2_, float p_i46403_3_, double p_i46403_4_, double p_i46403_6_)
         {
@@ -475,13 +494,13 @@ public class EntityRabbit extends EntityAnimal
 
         protected double func_179512_a(EntityLivingBase attackTarget)
         {
-            return (double)(4.0F + attackTarget.width);
+            return 4.0F + attackTarget.width;
         }
     }
 
     static class AIPanic extends EntityAIPanic
     {
-        private EntityRabbit theEntity;
+        private final EntityRabbit theEntity;
 
         public AIPanic(EntityRabbit rabbit, double speedIn)
         {
@@ -542,7 +561,7 @@ public class EntityRabbit extends EntityAnimal
         public void updateTask()
         {
             super.updateTask();
-            this.rabbit.getLookHelper().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.rabbit.getVerticalFaceSpeed());
+            this.rabbit.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.rabbit.getVerticalFaceSpeed());
 
             if (this.getIsAboveDestination())
             {
@@ -551,8 +570,7 @@ public class EntityRabbit extends EntityAnimal
                 IBlockState iblockstate = world.getBlockState(blockpos);
                 Block block = iblockstate.getBlock();
 
-                if (this.field_179499_e && block instanceof BlockCarrot && ((Integer)iblockstate.getValue(BlockCarrot.AGE)).intValue() == 7)
-                {
+                if (this.field_179499_e && block instanceof BlockCarrot && iblockstate.getValue(BlockCarrot.AGE).intValue() == 7) {
                     world.setBlockState(blockpos, Blocks.air.getDefaultState(), 2);
                     world.destroyBlock(blockpos, true);
                     this.rabbit.createEatingParticles();
@@ -573,8 +591,7 @@ public class EntityRabbit extends EntityAnimal
                 IBlockState iblockstate = worldIn.getBlockState(pos);
                 block = iblockstate.getBlock();
 
-                if (block instanceof BlockCarrot && ((Integer)iblockstate.getValue(BlockCarrot.AGE)).intValue() == 7 && this.field_179498_d && !this.field_179499_e)
-                {
+                if (block instanceof BlockCarrot && iblockstate.getValue(BlockCarrot.AGE).intValue() == 7 && this.field_179498_d && !this.field_179499_e) {
                     this.field_179499_e = true;
                     return true;
                 }
@@ -584,51 +601,30 @@ public class EntityRabbit extends EntityAnimal
         }
     }
 
-    static enum EnumMoveType
+    static class RabbitMoveHelper extends EntityMoveHelper
     {
-        NONE(0.0F, 0.0F, 30, 1),
-        HOP(0.8F, 0.2F, 20, 10),
-        STEP(1.0F, 0.45F, 14, 14),
-        SPRINT(1.75F, 0.4F, 1, 8),
-        ATTACK(2.0F, 0.7F, 7, 8);
+        private final EntityRabbit theEntity;
 
-        private final float speed;
-        private final float field_180077_g;
-        private final int duration;
-        private final int field_180085_i;
-
-        private EnumMoveType(float typeSpeed, float p_i45866_4_, int typeDuration, int p_i45866_6_)
+        public RabbitMoveHelper(EntityRabbit rabbit)
         {
-            this.speed = typeSpeed;
-            this.field_180077_g = p_i45866_4_;
-            this.duration = typeDuration;
-            this.field_180085_i = p_i45866_6_;
+            super(rabbit);
+            this.theEntity = rabbit;
         }
 
-        public float getSpeed()
+        public void onUpdateMoveHelper()
         {
-            return this.speed;
-        }
+            if (this.theEntity.onGround && !this.theEntity.func_175523_cj())
+            {
+                this.theEntity.setMovementSpeed(0.0D);
+            }
 
-        public float func_180074_b()
-        {
-            return this.field_180077_g;
-        }
-
-        public int getDuration()
-        {
-            return this.duration;
-        }
-
-        public int func_180073_d()
-        {
-            return this.field_180085_i;
+            super.onUpdateMoveHelper();
         }
     }
 
     public class RabbitJumpHelper extends EntityJumpHelper
     {
-        private EntityRabbit theEntity;
+        private final EntityRabbit theEntity;
         private boolean field_180068_d = false;
 
         public RabbitJumpHelper(EntityRabbit rabbit)
@@ -659,27 +655,6 @@ public class EntityRabbit extends EntityAnimal
                 this.theEntity.doMovementAction(EntityRabbit.EnumMoveType.STEP);
                 this.isJumping = false;
             }
-        }
-    }
-
-    static class RabbitMoveHelper extends EntityMoveHelper
-    {
-        private EntityRabbit theEntity;
-
-        public RabbitMoveHelper(EntityRabbit rabbit)
-        {
-            super(rabbit);
-            this.theEntity = rabbit;
-        }
-
-        public void onUpdateMoveHelper()
-        {
-            if (this.theEntity.onGround && !this.theEntity.func_175523_cj())
-            {
-                this.theEntity.setMovementSpeed(0.0D);
-            }
-
-            super.onUpdateMoveHelper();
         }
     }
 

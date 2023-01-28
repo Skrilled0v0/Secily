@@ -1,28 +1,23 @@
 package net.minecraft.client.resources;
 
-import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiListExtended;
-import net.minecraft.client.gui.GuiScreenResourcePacks;
-import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class ResourcePackListEntry implements GuiListExtended.IGuiListEntry
-{
+import java.util.List;
+
+public abstract class ResourcePackListEntry implements GuiListExtended.IGuiListEntry {
     private static final ResourceLocation RESOURCE_PACKS_TEXTURE = new ResourceLocation("textures/gui/resource_packs.png");
-    private static final IChatComponent field_183020_d = new ChatComponentTranslation("resourcePack.incompatible", new Object[0]);
-    private static final IChatComponent field_183021_e = new ChatComponentTranslation("resourcePack.incompatible.old", new Object[0]);
-    private static final IChatComponent field_183022_f = new ChatComponentTranslation("resourcePack.incompatible.new", new Object[0]);
+    private static final IChatComponent field_183020_d = new ChatComponentTranslation("resourcePack.incompatible");
+    private static final IChatComponent field_183021_e = new ChatComponentTranslation("resourcePack.incompatible.old");
+    private static final IChatComponent field_183022_f = new ChatComponentTranslation("resourcePack.incompatible.new");
     protected final Minecraft mc;
     protected final GuiScreenResourcePacks resourcePacksGUI;
 
-    public ResourcePackListEntry(GuiScreenResourcePacks resourcePacksGUIIn)
-    {
+    public ResourcePackListEntry(GuiScreenResourcePacks resourcePacksGUIIn) {
         this.resourcePacksGUI = resourcePacksGUIIn;
         this.mc = Minecraft.getMinecraft();
     }
@@ -125,7 +120,7 @@ public abstract class ResourcePackListEntry implements GuiListExtended.IGuiListE
 
         for (int l = 0; l < 2 && l < list.size(); ++l)
         {
-            this.mc.fontRendererObj.drawStringWithShadow((String)list.get(l), (float)(x + 32 + 2), (float)(y + 12 + 10 * l), 8421504);
+            this.mc.fontRendererObj.drawStringWithShadow(list.get(l), (float) (x + 32 + 2), (float) (y + 12 + 10 * l), 8421504);
         }
     }
 
@@ -156,14 +151,14 @@ public abstract class ResourcePackListEntry implements GuiListExtended.IGuiListE
     {
         List<ResourcePackListEntry> list = this.resourcePacksGUI.getListContaining(this);
         int i = list.indexOf(this);
-        return i > 0 && ((ResourcePackListEntry)list.get(i - 1)).func_148310_d();
+        return i > 0 && list.get(i - 1).func_148310_d();
     }
 
     protected boolean func_148307_h()
     {
         List<ResourcePackListEntry> list = this.resourcePacksGUI.getListContaining(this);
         int i = list.indexOf(this);
-        return i >= 0 && i < list.size() - 1 && ((ResourcePackListEntry)list.get(i + 1)).func_148310_d();
+        return i >= 0 && i < list.size() - 1 && list.get(i + 1).func_148310_d();
     }
 
     public boolean mousePressed(int slotIndex, int p_148278_2_, int p_148278_3_, int p_148278_4_, int p_148278_5_, int p_148278_6_)
@@ -175,19 +170,15 @@ public abstract class ResourcePackListEntry implements GuiListExtended.IGuiListE
                 this.resourcePacksGUI.markChanged();
                 int j = this.func_183019_a();
 
-                if (j != 1)
-                {
-                    String s1 = I18n.format("resourcePack.incompatible.confirm.title", new Object[0]);
-                    String s = I18n.format("resourcePack.incompatible.confirm." + (j > 1 ? "new" : "old"), new Object[0]);
-                    this.mc.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback()
-                    {
-                        public void confirmClicked(boolean result, int id)
-                        {
+                if (j != 1) {
+                    String s1 = I18n.format("resourcePack.incompatible.confirm.title");
+                    String s = I18n.format("resourcePack.incompatible.confirm." + (j > 1 ? "new" : "old"));
+                    this.mc.displayGuiScreen(new GuiYesNo(new GuiYesNoCallback() {
+                        public void confirmClicked(boolean result, int id) {
                             List<ResourcePackListEntry> list2 = ResourcePackListEntry.this.resourcePacksGUI.getListContaining(ResourcePackListEntry.this);
                             ResourcePackListEntry.this.mc.displayGuiScreen(ResourcePackListEntry.this.resourcePacksGUI);
 
-                            if (result)
-                            {
+                            if (result) {
                                 list2.remove(ResourcePackListEntry.this);
                                 ResourcePackListEntry.this.resourcePacksGUI.getSelectedResourcePacks().add(0, ResourcePackListEntry.this);
                             }

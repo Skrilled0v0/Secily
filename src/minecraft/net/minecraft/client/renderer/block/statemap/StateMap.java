@@ -2,14 +2,14 @@ package net.minecraft.client.renderer.block.statemap;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class StateMap extends StateMapperBase
 {
@@ -26,16 +26,16 @@ public class StateMap extends StateMapperBase
 
     protected ModelResourceLocation getModelResourceLocation(IBlockState state)
     {
-        Map<IProperty, Comparable> map = Maps.<IProperty, Comparable>newLinkedHashMap(state.getProperties());
+        Map<IProperty, Comparable> map = Maps.newLinkedHashMap(state.getProperties());
         String s;
 
         if (this.name == null)
         {
-            s = ((ResourceLocation)Block.blockRegistry.getNameForObject(state.getBlock())).toString();
+            s = Block.blockRegistry.getNameForObject(state.getBlock()).toString();
         }
         else
         {
-            s = ((IProperty)this.name).getName((Comparable)map.remove(this.name));
+            s = ((IProperty) this.name).getName(map.remove(this.name));
         }
 
         if (this.suffix != null)
@@ -55,7 +55,7 @@ public class StateMap extends StateMapperBase
     {
         private IProperty<?> name;
         private String suffix;
-        private final List < IProperty<? >> ignored = Lists. < IProperty<? >> newArrayList();
+        private final List<IProperty<?>> ignored = Lists.newArrayList();
 
         public StateMap.Builder withName(IProperty<?> builderPropertyIn)
         {

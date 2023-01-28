@@ -19,14 +19,12 @@ public class LanServerDetector
     private static final AtomicInteger field_148551_a = new AtomicInteger(0);
     private static final Logger logger = LogManager.getLogger();
 
-    public static class LanServer
-    {
-        private String lanServerMotd;
-        private String lanServerIpPort;
+    public static class LanServer {
+        private final String lanServerMotd;
+        private final String lanServerIpPort;
         private long timeLastSeen;
 
-        public LanServer(String motd, String address)
-        {
+        public LanServer(String motd, String address) {
             this.lanServerMotd = motd;
             this.lanServerIpPort = address;
             this.timeLastSeen = Minecraft.getSystemTime();
@@ -50,7 +48,7 @@ public class LanServerDetector
 
     public static class LanServerList
     {
-        private List<LanServerDetector.LanServer> listOfLanServers = Lists.<LanServerDetector.LanServer>newArrayList();
+        private final List<LanServerDetector.LanServer> listOfLanServers = Lists.newArrayList();
         boolean wasUpdated;
 
         public synchronized boolean getWasUpdated()
@@ -65,7 +63,7 @@ public class LanServerDetector
 
         public synchronized List<LanServerDetector.LanServer> getLanServers()
         {
-            return Collections.<LanServerDetector.LanServer>unmodifiableList(this.listOfLanServers);
+            return Collections.unmodifiableList(this.listOfLanServers);
         }
 
         public synchronized void func_77551_a(String p_77551_1_, InetAddress p_77551_2_)
@@ -132,7 +130,7 @@ public class LanServerDetector
                 }
                 catch (IOException ioexception)
                 {
-                    LanServerDetector.logger.error((String)"Couldn\'t ping server", (Throwable)ioexception);
+                    LanServerDetector.logger.error("Couldn't ping server", ioexception);
                     break;
                 }
 
@@ -147,7 +145,6 @@ public class LanServerDetector
             }
             catch (IOException var4)
             {
-                ;
             }
 
             this.socket.close();

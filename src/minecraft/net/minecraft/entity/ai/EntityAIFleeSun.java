@@ -1,22 +1,21 @@
 package net.minecraft.entity.ai;
 
-import java.util.Random;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-public class EntityAIFleeSun extends EntityAIBase
-{
-    private EntityCreature theCreature;
+import java.util.Random;
+
+public class EntityAIFleeSun extends EntityAIBase {
+    private final EntityCreature theCreature;
     private double shelterX;
     private double shelterY;
     private double shelterZ;
-    private double movementSpeed;
-    private World theWorld;
+    private final double movementSpeed;
+    private final World theWorld;
 
-    public EntityAIFleeSun(EntityCreature theCreatureIn, double movementSpeedIn)
-    {
+    public EntityAIFleeSun(EntityCreature theCreatureIn, double movementSpeedIn) {
         this.theCreature = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
         this.theWorld = theCreatureIn.worldObj;
@@ -76,7 +75,7 @@ public class EntityAIFleeSun extends EntityAIBase
 
             if (!this.theWorld.canSeeSky(blockpos1) && this.theCreature.getBlockPathWeight(blockpos1) < 0.0F)
             {
-                return new Vec3((double)blockpos1.getX(), (double)blockpos1.getY(), (double)blockpos1.getZ());
+                return new Vec3(blockpos1.getX(), blockpos1.getY(), blockpos1.getZ());
             }
         }
 

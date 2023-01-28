@@ -3,7 +3,6 @@ package net.minecraft.tileentity;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import java.util.UUID;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
@@ -31,28 +30,42 @@ public class TileEntitySkull extends TileEntity
         }
     }
 
-    public void readFromNBT(NBTTagCompound compound)
+    public static GameProfile updateGameprofile(GameProfile input)
     {
-        super.readFromNBT(compound);
-        this.skullType = compound.getByte("SkullType");
-        this.skullRotation = compound.getByte("Rot");
-
-        if (this.skullType == 3)
+        if (input != null && !StringUtils.isNullOrEmpty(input.getName()))
         {
-            if (compound.hasKey("Owner", 10))
+            if (input.isComplete() && input.getProperties().containsKey("textures"))
             {
-                this.playerProfile = NBTUtil.readGameProfileFromNBT(compound.getCompoundTag("Owner"));
+                return input;
             }
-            else if (compound.hasKey("ExtraType", 8))
+            else if (MinecraftServer.getServer() == null)
             {
-                String s = compound.getString("ExtraType");
+                return input;
+            }
+            else
+            {
+                GameProfile gameprofile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(input.getName());
 
-                if (!StringUtils.isNullOrEmpty(s))
+                if (gameprofile == null)
                 {
-                    this.playerProfile = new GameProfile((UUID)null, s);
-                    this.updatePlayerProfile();
+                    return input;
+                }
+                else
+                {
+                    Property property = Iterables.getFirst(gameprofile.getProperties().get("textures"), null);
+
+                    if (property == null)
+                    {
+                        gameprofile = MinecraftServer.getServer().getMinecraftSessionService().fillProfileProperties(gameprofile, true);
+                    }
+
+                    return gameprofile;
                 }
             }
+        }
+        else
+        {
+            return input;
         }
     }
 
@@ -87,42 +100,28 @@ public class TileEntitySkull extends TileEntity
         this.markDirty();
     }
 
-    public static GameProfile updateGameprofile(GameProfile input)
+    public void readFromNBT(NBTTagCompound compound)
     {
-        if (input != null && !StringUtils.isNullOrEmpty(input.getName()))
+        super.readFromNBT(compound);
+        this.skullType = compound.getByte("SkullType");
+        this.skullRotation = compound.getByte("Rot");
+
+        if (this.skullType == 3)
         {
-            if (input.isComplete() && input.getProperties().containsKey("textures"))
+            if (compound.hasKey("Owner", 10))
             {
-                return input;
+                this.playerProfile = NBTUtil.readGameProfileFromNBT(compound.getCompoundTag("Owner"));
             }
-            else if (MinecraftServer.getServer() == null)
+            else if (compound.hasKey("ExtraType", 8))
             {
-                return input;
-            }
-            else
-            {
-                GameProfile gameprofile = MinecraftServer.getServer().getPlayerProfileCache().getGameProfileForUsername(input.getName());
+                String s = compound.getString("ExtraType");
 
-                if (gameprofile == null)
+                if (!StringUtils.isNullOrEmpty(s))
                 {
-                    return input;
-                }
-                else
-                {
-                    Property property = (Property)Iterables.getFirst(gameprofile.getProperties().get("textures"), null);
-
-                    if (property == null)
-                    {
-                        gameprofile = MinecraftServer.getServer().getMinecraftSessionService().fillProfileProperties(gameprofile, true);
-                    }
-
-                    return gameprofile;
+                    this.playerProfile = new GameProfile(null, s);
+                    this.updatePlayerProfile();
                 }
             }
-        }
-        else
-        {
-            return input;
         }
     }
 

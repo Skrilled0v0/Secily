@@ -3,6 +3,7 @@ package net.minecraft.network;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+
 import java.util.zip.Deflater;
 
 public class NettyCompressionEncoder extends MessageToByteEncoder<ByteBuf>
@@ -38,7 +39,7 @@ public class NettyCompressionEncoder extends MessageToByteEncoder<ByteBuf>
             while (!this.deflater.finished())
             {
                 int j = this.deflater.deflate(this.buffer);
-                packetbuffer.writeBytes((byte[])this.buffer, 0, j);
+                packetbuffer.writeBytes(this.buffer, 0, j);
             }
 
             this.deflater.reset();

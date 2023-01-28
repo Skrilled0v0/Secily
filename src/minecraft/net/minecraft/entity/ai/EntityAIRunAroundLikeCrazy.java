@@ -1,20 +1,17 @@
 package net.minecraft.entity.ai;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
-public class EntityAIRunAroundLikeCrazy extends EntityAIBase
-{
-    private EntityHorse horseHost;
-    private double speed;
+public class EntityAIRunAroundLikeCrazy extends EntityAIBase {
+    private final EntityHorse horseHost;
+    private final double speed;
     private double targetX;
     private double targetY;
     private double targetZ;
 
-    public EntityAIRunAroundLikeCrazy(EntityHorse horse, double speedIn)
-    {
+    public EntityAIRunAroundLikeCrazy(EntityHorse horse, double speedIn) {
         this.horseHost = horse;
         this.speed = speedIn;
         this.setMutexBits(1);
@@ -73,7 +70,7 @@ public class EntityAIRunAroundLikeCrazy extends EntityAIBase
                 this.horseHost.increaseTemper(5);
             }
 
-            this.horseHost.riddenByEntity.mountEntity((Entity)null);
+            this.horseHost.riddenByEntity.mountEntity(null);
             this.horseHost.riddenByEntity = null;
             this.horseHost.makeHorseRearWithSound();
             this.horseHost.worldObj.setEntityState(this.horseHost, (byte)6);

@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
@@ -12,13 +10,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityPiston;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockPistonMoving extends BlockContainer
 {
@@ -68,11 +64,10 @@ public class BlockPistonMoving extends BlockContainer
 
     public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state)
     {
-        BlockPos blockpos = pos.offset(((EnumFacing)state.getValue(FACING)).getOpposite());
+        BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
         IBlockState iblockstate = worldIn.getBlockState(blockpos);
 
-        if (iblockstate.getBlock() instanceof BlockPistonBase && ((Boolean)iblockstate.getValue(BlockPistonBase.EXTENDED)).booleanValue())
-        {
+        if (iblockstate.getBlock() instanceof BlockPistonBase && iblockstate.getValue(BlockPistonBase.EXTENDED).booleanValue()) {
             worldIn.setBlockToAir(blockpos);
         }
     }
@@ -212,29 +207,29 @@ public class BlockPistonMoving extends BlockContainer
 
                 if (direction.getFrontOffsetX() < 0)
                 {
-                    d0 -= (double)((float)direction.getFrontOffsetX() * progress);
+                    d0 -= (float) direction.getFrontOffsetX() * progress;
                 }
                 else
                 {
-                    d3 -= (double)((float)direction.getFrontOffsetX() * progress);
+                    d3 -= (float) direction.getFrontOffsetX() * progress;
                 }
 
                 if (direction.getFrontOffsetY() < 0)
                 {
-                    d1 -= (double)((float)direction.getFrontOffsetY() * progress);
+                    d1 -= (float) direction.getFrontOffsetY() * progress;
                 }
                 else
                 {
-                    d4 -= (double)((float)direction.getFrontOffsetY() * progress);
+                    d4 -= (float) direction.getFrontOffsetY() * progress;
                 }
 
                 if (direction.getFrontOffsetZ() < 0)
                 {
-                    d2 -= (double)((float)direction.getFrontOffsetZ() * progress);
+                    d2 -= (float) direction.getFrontOffsetZ() * progress;
                 }
                 else
                 {
-                    d5 -= (double)((float)direction.getFrontOffsetZ() * progress);
+                    d5 -= (float) direction.getFrontOffsetZ() * progress;
                 }
 
                 return new AxisAlignedBB(d0, d1, d2, d3, d4, d5);
@@ -265,7 +260,7 @@ public class BlockPistonMoving extends BlockContainer
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getIndex();
+        i = i | state.getValue(FACING).getIndex();
 
         if (state.getValue(TYPE) == BlockPistonExtension.EnumPistonType.STICKY)
         {
@@ -277,6 +272,6 @@ public class BlockPistonMoving extends BlockContainer
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING, TYPE});
+        return new BlockState(this, FACING, TYPE);
     }
 }

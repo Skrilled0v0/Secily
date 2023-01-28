@@ -9,19 +9,16 @@ import net.minecraft.network.play.server.S29PacketSoundEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 
-public class WorldManager implements IWorldAccess
-{
-    private MinecraftServer mcServer;
-    private WorldServer theWorldServer;
+public class WorldManager implements IWorldAccess {
+    private final MinecraftServer mcServer;
+    private final WorldServer theWorldServer;
 
-    public WorldManager(MinecraftServer mcServerIn, WorldServer worldServerIn)
-    {
+    public WorldManager(MinecraftServer mcServerIn, WorldServer worldServerIn) {
         this.mcServer = mcServerIn;
         this.theWorldServer = worldServerIn;
     }
 
-    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xOffset, double yOffset, double zOffset, int... parameters)
-    {
+    public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xOffset, double yOffset, double zOffset, int... parameters) {
     }
 
     public void onEntityAdded(Entity entityIn)
@@ -64,7 +61,7 @@ public class WorldManager implements IWorldAccess
 
     public void playAuxSFX(EntityPlayer player, int sfxType, BlockPos blockPosIn, int data)
     {
-        this.mcServer.getConfigurationManager().sendToAllNearExcept(player, (double)blockPosIn.getX(), (double)blockPosIn.getY(), (double)blockPosIn.getZ(), 64.0D, this.theWorldServer.provider.getDimensionId(), new S28PacketEffect(sfxType, blockPosIn, data, false));
+        this.mcServer.getConfigurationManager().sendToAllNearExcept(player, blockPosIn.getX(), blockPosIn.getY(), blockPosIn.getZ(), 64.0D, this.theWorldServer.provider.getDimensionId(), new S28PacketEffect(sfxType, blockPosIn, data, false));
     }
 
     public void broadcastSound(int soundID, BlockPos pos, int data)

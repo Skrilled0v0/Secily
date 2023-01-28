@@ -1,9 +1,7 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +12,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockMycelium extends Block
 {
@@ -67,7 +67,7 @@ public class BlockMycelium extends Block
 
         if (rand.nextInt(10) == 0)
         {
-            worldIn.spawnParticle(EnumParticleTypes.TOWN_AURA, (double)((float)pos.getX() + rand.nextFloat()), (double)((float)pos.getY() + 1.1F), (double)((float)pos.getZ() + rand.nextFloat()), 0.0D, 0.0D, 0.0D, new int[0]);
+            worldIn.spawnParticle(EnumParticleTypes.TOWN_AURA, (float) pos.getX() + rand.nextFloat(), (float) pos.getY() + 1.1F, (float) pos.getZ() + rand.nextFloat(), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -83,6 +83,6 @@ public class BlockMycelium extends Block
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {SNOWY});
+        return new BlockState(this, SNOWY);
     }
 }

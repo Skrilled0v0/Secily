@@ -14,7 +14,7 @@
 -       return p_147547_1_ == null?null:this.func_147546_a(p_147547_1_.getClass());
      }
   
-     public void func_178470_a(World p_178470_1_, TextureManager p_178470_2_, FontRenderer p_178470_3_, Entity p_178470_4_, float p_178470_5_) {
+     public void func_178470_a(World p_178470_1_, TextureManager p_178470_2_, FontDrawer p_178470_3_, Entity p_178470_4_, float p_178470_5_) {
 --- 72,86 ----
      public <T extends TileEntity> TileEntitySpecialRenderer<T> func_147546_a(Class<? extends TileEntity> p_147546_1_) {
         TileEntitySpecialRenderer<? extends TileEntity> tileentityspecialrenderer = (TileEntitySpecialRenderer)this.field_147559_m.get(p_147546_1_);
@@ -30,4 +30,4 @@
 +       return (TileEntitySpecialRenderer<T>)(p_147547_1_ == null?null:this.func_147546_a(p_147547_1_.getClass()));
      }
   
-     public void func_178470_a(World p_178470_1_, TextureManager p_178470_2_, FontRenderer p_178470_3_, Entity p_178470_4_, float p_178470_5_) {
+     public void func_178470_a(World p_178470_1_, TextureManager p_178470_2_, FontDrawer p_178470_3_, Entity p_178470_4_, float p_178470_5_) {

@@ -33,21 +33,16 @@ import net.optifine.override.PlayerControllerOF;
 import net.optifine.util.PropertiesOrdered;
 import net.optifine.util.ResUtils;
 
-public class CustomGuis
-{
-    private static Minecraft mc = Config.getMinecraft();
-    private static PlayerControllerOF playerControllerOF = null;
-    private static CustomGuiProperties[][] guiProperties = (CustomGuiProperties[][])null;
+public class CustomGuis {
+    private static final Minecraft mc = Config.getMinecraft();
+    private static final PlayerControllerOF playerControllerOF = null;
+    private static CustomGuiProperties[][] guiProperties = null;
     public static boolean isChristmas = isChristmas();
 
-    public static ResourceLocation getTextureLocation(ResourceLocation loc)
-    {
-        if (guiProperties == null)
-        {
+    public static ResourceLocation getTextureLocation(ResourceLocation loc) {
+        if (guiProperties == null) {
             return loc;
-        }
-        else
-        {
+        } else {
             GuiScreen guiscreen = mc.currentScreen;
 
             if (!(guiscreen instanceof GuiContainer))
@@ -204,7 +199,7 @@ public class CustomGuis
 
     public static void update()
     {
-        guiProperties = (CustomGuiProperties[][])null;
+        guiProperties = null;
 
         if (Config.isCustomGuis())
         {
@@ -225,7 +220,7 @@ public class CustomGuis
     {
         if (listProps.isEmpty())
         {
-            return (CustomGuiProperties[][])null;
+            return null;
         }
         else
         {
@@ -235,11 +230,11 @@ public class CustomGuis
             {
                 if (listProps.size() > i)
                 {
-                    List<CustomGuiProperties> list = (List)listProps.get(i);
+                    List<CustomGuiProperties> list = listProps.get(i);
 
                     if (list != null)
                     {
-                        CustomGuiProperties[] acustomguiproperties1 = (CustomGuiProperties[])((CustomGuiProperties[])list.toArray(new CustomGuiProperties[list.size()]));
+                        CustomGuiProperties[] acustomguiproperties1 = list.toArray(new CustomGuiProperties[list.size()]);
                         acustomguiproperties[i] = acustomguiproperties1;
                     }
                 }
@@ -249,18 +244,15 @@ public class CustomGuis
         }
     }
 
-    private static void update(IResourcePack rp, List<List<CustomGuiProperties>> listProps)
-    {
-        String[] astring = ResUtils.collectFiles(rp, (String)"optifine/gui/container/", (String)".properties", (String[])null);
-        Arrays.sort((Object[])astring);
+    private static void update(IResourcePack rp, List<List<CustomGuiProperties>> listProps) {
+        String[] astring = ResUtils.collectFiles(rp, "optifine/gui/container/", ".properties", null);
+        Arrays.sort(astring);
 
-        for (int i = 0; i < astring.length; ++i)
-        {
+        for (int i = 0; i < astring.length; ++i) {
             String s = astring[i];
             Config.dbg("CustomGuis: " + s);
 
-            try
-            {
+            try {
                 ResourceLocation resourcelocation = new ResourceLocation(s);
                 InputStream inputstream = rp.getInputStream(resourcelocation);
 
@@ -307,7 +299,7 @@ public class CustomGuis
                 listProps.add(null);
             }
 
-            List<CustomGuiProperties> list = (List)listProps.get(i);
+            List<CustomGuiProperties> list = listProps.get(i);
 
             if (list == null)
             {

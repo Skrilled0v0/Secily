@@ -2,12 +2,13 @@ package net.minecraft.potion;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.src.Config;
 import net.minecraft.util.IntegerCache;
 import net.optifine.CustomColors;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class PotionHelper
 {
@@ -25,18 +26,16 @@ public class PotionHelper
     public static final String goldenCarrotEffect = "-0+1+2-3+13&4-4";
     public static final String pufferfishEffect = "+0-1+2+3+13&4-4";
     public static final String rabbitFootEffect = "+0+1-2+3&4-4+13";
-    private static final Map<Integer, String> potionRequirements = Maps.<Integer, String>newHashMap();
-    private static final Map<Integer, String> potionAmplifiers = Maps.<Integer, String>newHashMap();
-    private static final Map<Integer, Integer> DATAVALUE_COLORS = Maps.<Integer, Integer>newHashMap();
-    private static final String[] potionPrefixes = new String[] {"potion.prefix.mundane", "potion.prefix.uninteresting", "potion.prefix.bland", "potion.prefix.clear", "potion.prefix.milky", "potion.prefix.diffuse", "potion.prefix.artless", "potion.prefix.thin", "potion.prefix.awkward", "potion.prefix.flat", "potion.prefix.bulky", "potion.prefix.bungling", "potion.prefix.buttered", "potion.prefix.smooth", "potion.prefix.suave", "potion.prefix.debonair", "potion.prefix.thick", "potion.prefix.elegant", "potion.prefix.fancy", "potion.prefix.charming", "potion.prefix.dashing", "potion.prefix.refined", "potion.prefix.cordial", "potion.prefix.sparkling", "potion.prefix.potent", "potion.prefix.foul", "potion.prefix.odorless", "potion.prefix.rank", "potion.prefix.harsh", "potion.prefix.acrid", "potion.prefix.gross", "potion.prefix.stinky"};
+    private static final Map<Integer, String> potionRequirements = Maps.newHashMap();
+    private static final Map<Integer, String> potionAmplifiers = Maps.newHashMap();
+    private static final Map<Integer, Integer> DATAVALUE_COLORS = Maps.newHashMap();
+    private static final String[] potionPrefixes = new String[]{"potion.prefix.mundane", "potion.prefix.uninteresting", "potion.prefix.bland", "potion.prefix.clear", "potion.prefix.milky", "potion.prefix.diffuse", "potion.prefix.artless", "potion.prefix.thin", "potion.prefix.awkward", "potion.prefix.flat", "potion.prefix.bulky", "potion.prefix.bungling", "potion.prefix.buttered", "potion.prefix.smooth", "potion.prefix.suave", "potion.prefix.debonair", "potion.prefix.thick", "potion.prefix.elegant", "potion.prefix.fancy", "potion.prefix.charming", "potion.prefix.dashing", "potion.prefix.refined", "potion.prefix.cordial", "potion.prefix.sparkling", "potion.prefix.potent", "potion.prefix.foul", "potion.prefix.odorless", "potion.prefix.rank", "potion.prefix.harsh", "potion.prefix.acrid", "potion.prefix.gross", "potion.prefix.stinky"};
 
-    public static boolean checkFlag(int p_77914_0_, int p_77914_1_)
-    {
+    public static boolean checkFlag(int p_77914_0_, int p_77914_1_) {
         return (p_77914_0_ & 1 << p_77914_1_) != 0;
     }
 
-    private static int isFlagSet(int p_77910_0_, int p_77910_1_)
-    {
+    private static int isFlagSet(int p_77910_0_, int p_77910_1_) {
         return checkFlag(p_77910_0_, p_77910_1_) ? 1 : 0;
     }
 
@@ -121,7 +120,7 @@ public class PotionHelper
         {
             if (DATAVALUE_COLORS.containsKey(integer))
             {
-                return ((Integer)DATAVALUE_COLORS.get(integer)).intValue();
+                return DATAVALUE_COLORS.get(integer).intValue();
             }
             else
             {
@@ -369,7 +368,7 @@ public class PotionHelper
         {
             if (potion != null && (!potion.isUsable() || p_77917_1_))
             {
-                String s = (String)potionRequirements.get(Integer.valueOf(potion.getId()));
+                String s = potionRequirements.get(Integer.valueOf(potion.getId()));
 
                 if (s != null)
                 {
@@ -378,7 +377,7 @@ public class PotionHelper
                     if (i > 0)
                     {
                         int j = 0;
-                        String s1 = (String)potionAmplifiers.get(Integer.valueOf(potion.getId()));
+                        String s1 = potionAmplifiers.get(Integer.valueOf(potion.getId()));
 
                         if (s1 != null)
                         {
@@ -408,7 +407,7 @@ public class PotionHelper
 
                         if (list == null)
                         {
-                            list = Lists.<PotionEffect>newArrayList();
+                            list = Lists.newArrayList();
                         }
 
                         PotionEffect potioneffect = new PotionEffect(potion.getId(), i, j);

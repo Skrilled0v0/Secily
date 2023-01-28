@@ -59,7 +59,7 @@ public class EntityAIHarvestFarmland extends EntityAIMoveToBlock
     public void updateTask()
     {
         super.updateTask();
-        this.theVillager.getLookHelper().setLookPosition((double)this.destinationBlock.getX() + 0.5D, (double)(this.destinationBlock.getY() + 1), (double)this.destinationBlock.getZ() + 0.5D, 10.0F, (float)this.theVillager.getVerticalFaceSpeed());
+        this.theVillager.getLookHelper().setLookPosition((double) this.destinationBlock.getX() + 0.5D, this.destinationBlock.getY() + 1, (double) this.destinationBlock.getZ() + 0.5D, 10.0F, (float) this.theVillager.getVerticalFaceSpeed());
 
         if (this.getIsAboveDestination())
         {
@@ -68,16 +68,12 @@ public class EntityAIHarvestFarmland extends EntityAIMoveToBlock
             IBlockState iblockstate = world.getBlockState(blockpos);
             Block block = iblockstate.getBlock();
 
-            if (this.field_179501_f == 0 && block instanceof BlockCrops && ((Integer)iblockstate.getValue(BlockCrops.AGE)).intValue() == 7)
-            {
+            if (this.field_179501_f == 0 && block instanceof BlockCrops && iblockstate.getValue(BlockCrops.AGE).intValue() == 7) {
                 world.destroyBlock(blockpos, true);
-            }
-            else if (this.field_179501_f == 1 && block == Blocks.air)
-            {
+            } else if (this.field_179501_f == 1 && block == Blocks.air) {
                 InventoryBasic inventorybasic = this.theVillager.getVillagerInventory();
 
-                for (int i = 0; i < inventorybasic.getSizeInventory(); ++i)
-                {
+                for (int i = 0; i < inventorybasic.getSizeInventory(); ++i) {
                     ItemStack itemstack = inventorybasic.getStackInSlot(i);
                     boolean flag = false;
 
@@ -106,7 +102,7 @@ public class EntityAIHarvestFarmland extends EntityAIMoveToBlock
 
                         if (itemstack.stackSize <= 0)
                         {
-                            inventorybasic.setInventorySlotContents(i, (ItemStack)null);
+                            inventorybasic.setInventorySlotContents(i, null);
                         }
 
                         break;
@@ -129,8 +125,7 @@ public class EntityAIHarvestFarmland extends EntityAIMoveToBlock
             IBlockState iblockstate = worldIn.getBlockState(pos);
             block = iblockstate.getBlock();
 
-            if (block instanceof BlockCrops && ((Integer)iblockstate.getValue(BlockCrops.AGE)).intValue() == 7 && this.field_179503_e && (this.field_179501_f == 0 || this.field_179501_f < 0))
-            {
+            if (block instanceof BlockCrops && iblockstate.getValue(BlockCrops.AGE).intValue() == 7 && this.field_179503_e && (this.field_179501_f == 0 || this.field_179501_f < 0)) {
                 this.field_179501_f = 0;
                 return true;
             }

@@ -1,20 +1,17 @@
 package net.optifine.config;
 
-public class GlVersion
-{
-    private int major;
-    private int minor;
-    private int release;
-    private String suffix;
+public class GlVersion {
+    private final int major;
+    private final int minor;
+    private final int release;
+    private final String suffix;
 
-    public GlVersion(int major, int minor)
-    {
+    public GlVersion(int major, int minor) {
         this(major, minor, 0);
     }
 
-    public GlVersion(int major, int minor, int release)
-    {
-        this(major, minor, release, (String)null);
+    public GlVersion(int major, int minor, int release) {
+        this(major, minor, release, null);
     }
 
     public GlVersion(int major, int minor, int release, String suffix)

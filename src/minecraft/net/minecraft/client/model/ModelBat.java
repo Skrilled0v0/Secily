@@ -4,17 +4,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.util.MathHelper;
 
-public class ModelBat extends ModelBase
-{
-    private ModelRenderer batHead;
-    private ModelRenderer batBody;
-    private ModelRenderer batRightWing;
-    private ModelRenderer batLeftWing;
-    private ModelRenderer batOuterRightWing;
-    private ModelRenderer batOuterLeftWing;
+public class ModelBat extends ModelBase {
+    private final ModelRenderer batHead;
+    private final ModelRenderer batBody;
+    private final ModelRenderer batRightWing;
+    private final ModelRenderer batLeftWing;
+    private final ModelRenderer batOuterRightWing;
+    private final ModelRenderer batOuterLeftWing;
 
-    public ModelBat()
-    {
+    public ModelBat() {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.batHead = new ModelRenderer(this, 0, 0);

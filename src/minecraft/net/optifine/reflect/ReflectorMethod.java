@@ -15,7 +15,7 @@ public class ReflectorMethod implements IResolvable
 
     public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName)
     {
-        this(reflectorClass, targetMethodName, (Class[])null);
+        this(reflectorClass, targetMethodName, null);
     }
 
     public ReflectorMethod(ReflectorClass reflectorClass, String targetMethodName, Class[] targetMethodParameterTypes)
@@ -147,34 +147,48 @@ public class ReflectorMethod implements IResolvable
         return Reflector.callString(this, params);
     }
 
+    public static Method[] getMethods(Class cls, String methodName)
+    {
+        List list = new ArrayList();
+        Method[] amethod = cls.getDeclaredMethods();
+
+        for (int i = 0; i < amethod.length; ++i)
+        {
+            Method method = amethod[i];
+
+            if (method.getName().equals(methodName))
+            {
+                list.add(method);
+            }
+        }
+
+        Method[] amethod1 = (Method[]) list.toArray(new Method[list.size()]);
+        return amethod1;
+    }
+
     public Object call(Object param)
     {
-        return Reflector.call(this, new Object[] {param});
+        return Reflector.call(this, param);
     }
 
     public boolean callBoolean(Object param)
     {
-        return Reflector.callBoolean(this, new Object[] {param});
+        return Reflector.callBoolean(this, param);
     }
 
     public int callInt(Object param)
     {
-        return Reflector.callInt(this, new Object[] {param});
+        return Reflector.callInt(this, param);
     }
 
     public float callFloat(Object param)
     {
-        return Reflector.callFloat(this, new Object[] {param});
+        return Reflector.callFloat(this, param);
     }
 
     public double callDouble(Object param)
     {
-        return Reflector.callDouble(this, new Object[] {param});
-    }
-
-    public String callString1(Object param)
-    {
-        return Reflector.callString(this, new Object[] {param});
+        return Reflector.callDouble(this, param);
     }
 
     public void callVoid(Object... params)
@@ -204,23 +218,9 @@ public class ReflectorMethod implements IResolvable
         return null;
     }
 
-    public static Method[] getMethods(Class cls, String methodName)
+    public String callString1(Object param)
     {
-        List list = new ArrayList();
-        Method[] amethod = cls.getDeclaredMethods();
-
-        for (int i = 0; i < amethod.length; ++i)
-        {
-            Method method = amethod[i];
-
-            if (method.getName().equals(methodName))
-            {
-                list.add(method);
-            }
-        }
-
-        Method[] amethod1 = (Method[])((Method[])list.toArray(new Method[list.size()]));
-        return amethod1;
+        return Reflector.callString(this, param);
     }
 
     public void resolve()

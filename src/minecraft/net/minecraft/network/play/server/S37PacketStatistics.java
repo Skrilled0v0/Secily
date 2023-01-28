@@ -1,14 +1,15 @@
 package net.minecraft.network.play.server;
 
 import com.google.common.collect.Maps;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class S37PacketStatistics implements Packet<INetHandlerPlayClient>
 {
@@ -31,7 +32,7 @@ public class S37PacketStatistics implements Packet<INetHandlerPlayClient>
     public void readPacketData(PacketBuffer buf) throws IOException
     {
         int i = buf.readVarIntFromBuffer();
-        this.field_148976_a = Maps.<StatBase, Integer>newHashMap();
+        this.field_148976_a = Maps.newHashMap();
 
         for (int j = 0; j < i; ++j)
         {
@@ -49,10 +50,9 @@ public class S37PacketStatistics implements Packet<INetHandlerPlayClient>
     {
         buf.writeVarIntToBuffer(this.field_148976_a.size());
 
-        for (Entry<StatBase, Integer> entry : this.field_148976_a.entrySet())
-        {
-            buf.writeString(((StatBase)entry.getKey()).statId);
-            buf.writeVarIntToBuffer(((Integer)entry.getValue()).intValue());
+        for (Entry<StatBase, Integer> entry : this.field_148976_a.entrySet()) {
+            buf.writeString(entry.getKey().statId);
+            buf.writeVarIntToBuffer(entry.getValue().intValue());
         }
     }
 

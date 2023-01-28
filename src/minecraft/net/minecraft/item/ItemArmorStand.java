@@ -48,19 +48,15 @@ public class ItemArmorStand extends Item
                 }
                 else
                 {
-                    double d0 = (double)blockpos.getX();
-                    double d1 = (double)blockpos.getY();
-                    double d2 = (double)blockpos.getZ();
-                    List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity((Entity)null, AxisAlignedBB.fromBounds(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
+                    double d0 = blockpos.getX();
+                    double d1 = blockpos.getY();
+                    double d2 = blockpos.getZ();
+                    List<Entity> list = worldIn.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.fromBounds(d0, d1, d2, d0 + 1.0D, d1 + 2.0D, d2 + 1.0D));
 
-                    if (list.size() > 0)
-                    {
+                    if (list.size() > 0) {
                         return false;
-                    }
-                    else
-                    {
-                        if (!worldIn.isRemote)
-                        {
+                    } else {
+                        if (!worldIn.isRemote) {
                             worldIn.setBlockToAir(blockpos);
                             worldIn.setBlockToAir(blockpos1);
                             EntityArmorStand entityarmorstand = new EntityArmorStand(worldIn, d0 + 0.5D, d1, d2 + 0.5D);

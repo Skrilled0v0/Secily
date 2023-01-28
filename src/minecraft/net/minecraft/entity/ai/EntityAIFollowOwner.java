@@ -12,20 +12,18 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityAIFollowOwner extends EntityAIBase
-{
-    private EntityTameable thePet;
+public class EntityAIFollowOwner extends EntityAIBase {
+    private final EntityTameable thePet;
     private EntityLivingBase theOwner;
     World theWorld;
-    private double followSpeed;
-    private PathNavigate petPathfinder;
+    private final double followSpeed;
+    private final PathNavigate petPathfinder;
     private int field_75343_h;
     float maxDist;
     float minDist;
     private boolean field_75344_i;
 
-    public EntityAIFollowOwner(EntityTameable thePetIn, double followSpeedIn, float minDistIn, float maxDistIn)
-    {
+    public EntityAIFollowOwner(EntityTameable thePetIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.thePet = thePetIn;
         this.theWorld = thePetIn.worldObj;
         this.followSpeed = followSpeedIn;
@@ -90,7 +88,7 @@ public class EntityAIFollowOwner extends EntityAIBase
     {
         IBlockState iblockstate = this.theWorld.getBlockState(p_181065_1_);
         Block block = iblockstate.getBlock();
-        return block == Blocks.air ? true : !block.isFullCube();
+        return block == Blocks.air || !block.isFullCube();
     }
 
     public void updateTask()
@@ -119,7 +117,7 @@ public class EntityAIFollowOwner extends EntityAIBase
                                 {
                                     if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.doesBlockHaveSolidTopSurface(this.theWorld, new BlockPos(i + l, k - 1, j + i1)) && this.func_181065_a(new BlockPos(i + l, k, j + i1)) && this.func_181065_a(new BlockPos(i + l, k + 1, j + i1)))
                                     {
-                                        this.thePet.setLocationAndAngles((double)((float)(i + l) + 0.5F), (double)k, (double)((float)(j + i1) + 0.5F), this.thePet.rotationYaw, this.thePet.rotationPitch);
+                                        this.thePet.setLocationAndAngles((float) (i + l) + 0.5F, k, (float) (j + i1) + 0.5F, this.thePet.rotationYaw, this.thePet.rotationPitch);
                                         this.petPathfinder.clearPathEntity();
                                         return;
                                     }

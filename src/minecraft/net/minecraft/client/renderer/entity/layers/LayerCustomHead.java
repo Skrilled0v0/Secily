@@ -1,7 +1,6 @@
 package net.minecraft.client.renderer.entity.layers;
 
 import com.mojang.authlib.GameProfile;
-import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -97,7 +96,7 @@ public class LayerCustomHead implements LayerRenderer<EntityLivingBase>
 
                         if (!StringUtils.isNullOrEmpty(s))
                         {
-                            gameprofile = TileEntitySkull.updateGameprofile(new GameProfile((UUID)null, s));
+                            gameprofile = TileEntitySkull.updateGameprofile(new GameProfile(null, s));
                             nbttagcompound.setTag("SkullOwner", NBTUtil.writeGameProfile(new NBTTagCompound(), gameprofile));
                         }
                     }

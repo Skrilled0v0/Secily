@@ -1,7 +1,5 @@
 package net.minecraft.client.renderer;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.src.Config;
@@ -13,23 +11,24 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.optifine.DynamicLights;
 
-public class RegionRenderCache extends ChunkCache
-{
+import java.util.ArrayDeque;
+import java.util.Arrays;
+
+public class RegionRenderCache extends ChunkCache {
     private static final IBlockState DEFAULT_STATE = Blocks.air.getDefaultState();
     private final BlockPos position;
-    private int[] combinedLights;
-    private IBlockState[] blockStates;
-    private static ArrayDeque<int[]> cacheLights = new ArrayDeque();
-    private static ArrayDeque<IBlockState[]> cacheStates = new ArrayDeque();
-    private static int maxCacheSize = Config.limit(Runtime.getRuntime().availableProcessors(), 1, 32);
+    private static final ArrayDeque<int[]> cacheLights = new ArrayDeque();
+    private static final ArrayDeque<IBlockState[]> cacheStates = new ArrayDeque();
+    private static final int maxCacheSize = Config.limit(Runtime.getRuntime().availableProcessors(), 1, 32);
+    private final int[] combinedLights;
+    private final IBlockState[] blockStates;
 
-    public RegionRenderCache(World worldIn, BlockPos posFromIn, BlockPos posToIn, int subIn)
-    {
+    public RegionRenderCache(World worldIn, BlockPos posFromIn, BlockPos posToIn, int subIn) {
         super(worldIn, posFromIn, posToIn, subIn);
         this.position = posFromIn.subtract(new Vec3i(subIn, subIn, subIn));
         int i = 8000;
         this.combinedLights = allocateLights(8000);
-        Arrays.fill((int[])((int[])this.combinedLights), (int) - 1);
+        Arrays.fill(this.combinedLights, -1);
         this.blockStates = allocateStates(8000);
     }
 
@@ -97,7 +96,7 @@ public class RegionRenderCache extends ChunkCache
     {
         synchronized (cacheLights)
         {
-            int[] aint = (int[])cacheLights.pollLast();
+            int[] aint = cacheLights.pollLast();
 
             if (aint == null || aint.length < p_allocateLights_0_)
             {
@@ -123,11 +122,11 @@ public class RegionRenderCache extends ChunkCache
     {
         synchronized (cacheStates)
         {
-            IBlockState[] aiblockstate = (IBlockState[])cacheStates.pollLast();
+            IBlockState[] aiblockstate = cacheStates.pollLast();
 
             if (aiblockstate != null && aiblockstate.length >= p_allocateStates_0_)
             {
-                Arrays.fill(aiblockstate, (Object)null);
+                Arrays.fill(aiblockstate, null);
             }
             else
             {

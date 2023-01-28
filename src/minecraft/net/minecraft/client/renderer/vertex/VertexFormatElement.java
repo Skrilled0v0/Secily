@@ -3,23 +3,18 @@ package net.minecraft.client.renderer.vertex;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class VertexFormatElement
-{
+public class VertexFormatElement {
     private static final Logger LOGGER = LogManager.getLogger();
     private final VertexFormatElement.EnumType type;
     private final VertexFormatElement.EnumUsage usage;
-    private int index;
-    private int elementCount;
+    private final int index;
+    private final int elementCount;
 
-    public VertexFormatElement(int indexIn, VertexFormatElement.EnumType typeIn, VertexFormatElement.EnumUsage usageIn, int count)
-    {
-        if (!this.func_177372_a(indexIn, usageIn))
-        {
+    public VertexFormatElement(int indexIn, VertexFormatElement.EnumType typeIn, VertexFormatElement.EnumUsage usageIn, int count) {
+        if (!this.func_177372_a(indexIn, usageIn)) {
             LOGGER.warn("Multiple vertex elements of the same type other than UVs are not supported. Forcing type to UV.");
             this.usage = VertexFormatElement.EnumUsage.UV;
-        }
-        else
-        {
+        } else {
             this.usage = usageIn;
         }
 
@@ -77,7 +72,7 @@ public class VertexFormatElement
         else if (p_equals_1_ != null && this.getClass() == p_equals_1_.getClass())
         {
             VertexFormatElement vertexformatelement = (VertexFormatElement)p_equals_1_;
-            return this.elementCount != vertexformatelement.elementCount ? false : (this.index != vertexformatelement.index ? false : (this.type != vertexformatelement.type ? false : this.usage == vertexformatelement.usage));
+            return this.elementCount == vertexformatelement.elementCount && (this.index == vertexformatelement.index && (this.type == vertexformatelement.type && this.usage == vertexformatelement.usage));
         }
         else
         {
@@ -94,8 +89,7 @@ public class VertexFormatElement
         return i;
     }
 
-    public static enum EnumType
-    {
+    public enum EnumType {
         FLOAT(4, "Float", 5126),
         UBYTE(1, "Unsigned Byte", 5121),
         BYTE(1, "Byte", 5120),
@@ -108,8 +102,7 @@ public class VertexFormatElement
         private final String displayName;
         private final int glConstant;
 
-        private EnumType(int sizeIn, String displayNameIn, int glConstantIn)
-        {
+        EnumType(int sizeIn, String displayNameIn, int glConstantIn) {
             this.size = sizeIn;
             this.displayName = displayNameIn;
             this.glConstant = glConstantIn;
@@ -131,8 +124,7 @@ public class VertexFormatElement
         }
     }
 
-    public static enum EnumUsage
-    {
+    public enum EnumUsage {
         POSITION("Position"),
         NORMAL("Normal"),
         COLOR("Vertex Color"),
@@ -143,8 +135,7 @@ public class VertexFormatElement
 
         private final String displayName;
 
-        private EnumUsage(String displayNameIn)
-        {
+        EnumUsage(String displayNameIn) {
             this.displayName = displayNameIn;
         }
 

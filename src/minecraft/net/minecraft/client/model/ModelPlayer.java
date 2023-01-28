@@ -3,19 +3,17 @@ package net.minecraft.client.model;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
-public class ModelPlayer extends ModelBiped
-{
+public class ModelPlayer extends ModelBiped {
     public ModelRenderer bipedLeftArmwear;
     public ModelRenderer bipedRightArmwear;
     public ModelRenderer bipedLeftLegwear;
     public ModelRenderer bipedRightLegwear;
     public ModelRenderer bipedBodyWear;
-    private ModelRenderer bipedCape;
-    private ModelRenderer bipedDeadmau5Head;
-    private boolean smallArms;
+    private final ModelRenderer bipedCape;
+    private final ModelRenderer bipedDeadmau5Head;
+    private final boolean smallArms;
 
-    public ModelPlayer(float p_i46304_1_, boolean p_i46304_2_)
-    {
+    public ModelPlayer(float p_i46304_1_, boolean p_i46304_2_) {
         super(p_i46304_1_, 0.0F, 64, 64);
         this.smallArms = p_i46304_2_;
         this.bipedDeadmau5Head = new ModelRenderer(this, 24, 0);

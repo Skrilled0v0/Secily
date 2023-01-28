@@ -2,16 +2,17 @@ package net.minecraft.client.settings;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.Set;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.IntHashMap;
 
+import java.util.List;
+import java.util.Set;
+
 public class KeyBinding implements Comparable<KeyBinding>
 {
-    private static final List<KeyBinding> keybindArray = Lists.<KeyBinding>newArrayList();
+    private static final List<KeyBinding> keybindArray = Lists.newArrayList();
     private static final IntHashMap<KeyBinding> hash = new IntHashMap();
-    private static final Set<String> keybindSet = Sets.<String>newHashSet();
+    private static final Set<String> keybindSet = Sets.newHashSet();
     private final String keyDescription;
     private final int keyCodeDefault;
     private final String keyCategory;
@@ -23,7 +24,7 @@ public class KeyBinding implements Comparable<KeyBinding>
     {
         if (keyCode != 0)
         {
-            KeyBinding keybinding = (KeyBinding)hash.lookup(keyCode);
+            KeyBinding keybinding = hash.lookup(keyCode);
 
             if (keybinding != null)
             {
@@ -36,7 +37,7 @@ public class KeyBinding implements Comparable<KeyBinding>
     {
         if (keyCode != 0)
         {
-            KeyBinding keybinding = (KeyBinding)hash.lookup(keyCode);
+            KeyBinding keybinding = hash.lookup(keyCode);
 
             if (keybinding != null)
             {
@@ -130,11 +131,11 @@ public class KeyBinding implements Comparable<KeyBinding>
 
     public int compareTo(KeyBinding p_compareTo_1_)
     {
-        int i = I18n.format(this.keyCategory, new Object[0]).compareTo(I18n.format(p_compareTo_1_.keyCategory, new Object[0]));
+        int i = I18n.format(this.keyCategory).compareTo(I18n.format(p_compareTo_1_.keyCategory));
 
         if (i == 0)
         {
-            i = I18n.format(this.keyDescription, new Object[0]).compareTo(I18n.format(p_compareTo_1_.keyDescription, new Object[0]));
+            i = I18n.format(this.keyDescription).compareTo(I18n.format(p_compareTo_1_.keyDescription));
         }
 
         return i;

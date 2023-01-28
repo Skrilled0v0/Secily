@@ -65,8 +65,8 @@ public abstract class BiomeGenBase
     protected static final BiomeGenBase.Height height_LowIslands = new BiomeGenBase.Height(0.2F, 0.3F);
     protected static final BiomeGenBase.Height height_PartiallySubmerged = new BiomeGenBase.Height(-0.2F, 0.1F);
     private static final BiomeGenBase[] biomeList = new BiomeGenBase[256];
-    public static final Set<BiomeGenBase> explorationBiomesList = Sets.<BiomeGenBase>newHashSet();
-    public static final Map<String, BiomeGenBase> BIOME_ID_MAP = Maps.<String, BiomeGenBase>newHashMap();
+    public static final Set<BiomeGenBase> explorationBiomesList = Sets.newHashSet();
+    public static final Map<String, BiomeGenBase> BIOME_ID_MAP = Maps.newHashMap();
     public static final BiomeGenBase ocean = (new BiomeGenOcean(0)).setColor(112).setBiomeName("Ocean").setHeight(height_Oceans);
     public static final BiomeGenBase plains = (new BiomeGenPlains(1)).setColor(9286496).setBiomeName("Plains");
     public static final BiomeGenBase desert = (new BiomeGenDesert(2)).setColor(16421912).setBiomeName("Desert").setDisableRain().setTemperatureRainfall(2.0F, 0.0F).setHeight(height_LowPlains);
@@ -134,38 +134,55 @@ public abstract class BiomeGenBase
     protected WorldGenBigTree worldGeneratorBigTree;
     protected WorldGenSwamp worldGeneratorSwamp;
 
-    protected BiomeGenBase(int id)
+    static
     {
-        this.minHeight = height_Default.rootHeight;
-        this.maxHeight = height_Default.variation;
-        this.temperature = 0.5F;
-        this.rainfall = 0.5F;
-        this.waterColorMultiplier = 16777215;
-        this.spawnableMonsterList = Lists.<BiomeGenBase.SpawnListEntry>newArrayList();
-        this.spawnableCreatureList = Lists.<BiomeGenBase.SpawnListEntry>newArrayList();
-        this.spawnableWaterCreatureList = Lists.<BiomeGenBase.SpawnListEntry>newArrayList();
-        this.spawnableCaveCreatureList = Lists.<BiomeGenBase.SpawnListEntry>newArrayList();
-        this.enableRain = true;
-        this.worldGeneratorTrees = new WorldGenTrees(false);
-        this.worldGeneratorBigTree = new WorldGenBigTree(false);
-        this.worldGeneratorSwamp = new WorldGenSwamp();
-        this.biomeID = id;
-        biomeList[id] = this;
-        this.theBiomeDecorator = this.createBiomeDecorator();
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySheep.class, 12, 4, 4));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityRabbit.class, 10, 3, 3));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityPig.class, 10, 4, 4));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityChicken.class, 10, 4, 4));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityCow.class, 8, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySpider.class, 100, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityZombie.class, 100, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySkeleton.class, 100, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityCreeper.class, 100, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySlime.class, 100, 4, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityEnderman.class, 10, 1, 4));
-        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityWitch.class, 5, 1, 1));
-        this.spawnableWaterCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySquid.class, 10, 4, 4));
-        this.spawnableCaveCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityBat.class, 10, 8, 8));
+        plains.createMutation();
+        desert.createMutation();
+        forest.createMutation();
+        taiga.createMutation();
+        swampland.createMutation();
+        icePlains.createMutation();
+        jungle.createMutation();
+        jungleEdge.createMutation();
+        coldTaiga.createMutation();
+        savanna.createMutation();
+        savannaPlateau.createMutation();
+        mesa.createMutation();
+        mesaPlateau_F.createMutation();
+        mesaPlateau.createMutation();
+        birchForest.createMutation();
+        birchForestHills.createMutation();
+        roofedForest.createMutation();
+        megaTaiga.createMutation();
+        extremeHills.createMutation();
+        extremeHillsPlus.createMutation();
+        megaTaiga.createMutatedBiome(megaTaigaHills.biomeID + 128).setBiomeName("Redwood Taiga Hills M");
+
+        for (BiomeGenBase biomegenbase : biomeList)
+        {
+            if (biomegenbase != null)
+            {
+                if (BIOME_ID_MAP.containsKey(biomegenbase.biomeName))
+                {
+                    throw new Error("Biome \"" + biomegenbase.biomeName + "\" is defined as both ID " + BIOME_ID_MAP.get(biomegenbase.biomeName).biomeID + " and " + biomegenbase.biomeID);
+                }
+
+                BIOME_ID_MAP.put(biomegenbase.biomeName, biomegenbase);
+
+                if (biomegenbase.biomeID < 128)
+                {
+                    explorationBiomesList.add(biomegenbase);
+                }
+            }
+        }
+
+        explorationBiomesList.remove(hell);
+        explorationBiomesList.remove(sky);
+        explorationBiomesList.remove(frozenOcean);
+        explorationBiomesList.remove(extremeHillsEdge);
+        temperatureNoise = new NoiseGeneratorPerlin(new Random(1234L), 1);
+        GRASS_COLOR_NOISE = new NoiseGeneratorPerlin(new Random(2345L), 1);
+        DOUBLE_PLANT_GENERATOR = new WorldGenDoublePlant();
     }
 
     protected BiomeDecorator createBiomeDecorator()
@@ -200,9 +217,37 @@ public abstract class BiomeGenBase
         return this;
     }
 
-    public WorldGenAbstractTree genBigTreeChance(Random rand)
-    {
-        return (WorldGenAbstractTree)(rand.nextInt(10) == 0 ? this.worldGeneratorBigTree : this.worldGeneratorTrees);
+    protected BiomeGenBase(int id) {
+        this.minHeight = height_Default.rootHeight;
+        this.maxHeight = height_Default.variation;
+        this.temperature = 0.5F;
+        this.rainfall = 0.5F;
+        this.waterColorMultiplier = 16777215;
+        this.spawnableMonsterList = Lists.newArrayList();
+        this.spawnableCreatureList = Lists.newArrayList();
+        this.spawnableWaterCreatureList = Lists.newArrayList();
+        this.spawnableCaveCreatureList = Lists.newArrayList();
+        this.enableRain = true;
+        this.worldGeneratorTrees = new WorldGenTrees(false);
+        this.worldGeneratorBigTree = new WorldGenBigTree(false);
+        this.worldGeneratorSwamp = new WorldGenSwamp();
+        this.biomeID = id;
+        biomeList[id] = this;
+        this.theBiomeDecorator = this.createBiomeDecorator();
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySheep.class, 12, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityRabbit.class, 10, 3, 3));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityPig.class, 10, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityChicken.class, 10, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityCow.class, 8, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySpider.class, 100, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityZombie.class, 100, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySkeleton.class, 100, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityCreeper.class, 100, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntitySlime.class, 100, 4, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityEnderman.class, 10, 1, 4));
+        this.spawnableMonsterList.add(new BiomeGenBase.SpawnListEntry(EntityWitch.class, 5, 1, 1));
+        this.spawnableWaterCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySquid.class, 10, 4, 4));
+        this.spawnableCaveCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityBat.class, 10, 8, 8));
     }
 
     public WorldGenerator getRandomWorldGenForGrass(Random rand)
@@ -268,25 +313,9 @@ public abstract class BiomeGenBase
         return MathHelper.hsvToRGB(0.62222224F - p_76731_1_ * 0.05F, 0.5F + p_76731_1_ * 0.1F, 1.0F);
     }
 
-    public List<BiomeGenBase.SpawnListEntry> getSpawnableList(EnumCreatureType creatureType)
+    public static BiomeGenBase getBiome(int id)
     {
-        switch (creatureType)
-        {
-            case MONSTER:
-                return this.spawnableMonsterList;
-
-            case CREATURE:
-                return this.spawnableCreatureList;
-
-            case WATER_CREATURE:
-                return this.spawnableWaterCreatureList;
-
-            case AMBIENT:
-                return this.spawnableCaveCreatureList;
-
-            default:
-                return Collections.<BiomeGenBase.SpawnListEntry>emptyList();
-        }
+        return getBiomeFromBiomeList(id, null);
     }
 
     public boolean getEnableSnow()
@@ -294,9 +323,9 @@ public abstract class BiomeGenBase
         return this.isSnowyBiome();
     }
 
-    public boolean canRain()
+    public WorldGenAbstractTree genBigTreeChance(Random rand)
     {
-        return this.isSnowyBiome() ? false : this.enableRain;
+        return rand.nextInt(10) == 0 ? this.worldGeneratorBigTree : this.worldGeneratorTrees;
     }
 
     public boolean isHighHumidity()
@@ -319,16 +348,24 @@ public abstract class BiomeGenBase
         return this.rainfall;
     }
 
-    public final float getFloatTemperature(BlockPos pos)
+    public List<BiomeGenBase.SpawnListEntry> getSpawnableList(EnumCreatureType creatureType)
     {
-        if (pos.getY() > 64)
+        switch (creatureType)
         {
-            float f = (float)(temperatureNoise.func_151601_a((double)pos.getX() * 1.0D / 8.0D, (double)pos.getZ() * 1.0D / 8.0D) * 4.0D);
-            return this.temperature - (f + (float)pos.getY() - 64.0F) * 0.05F / 30.0F;
-        }
-        else
-        {
-            return this.temperature;
+            case MONSTER:
+                return this.spawnableMonsterList;
+
+            case CREATURE:
+                return this.spawnableCreatureList;
+
+            case WATER_CREATURE:
+                return this.spawnableWaterCreatureList;
+
+            case AMBIENT:
+                return this.spawnableCaveCreatureList;
+
+            default:
+                return Collections.emptyList();
         }
     }
 
@@ -337,18 +374,22 @@ public abstract class BiomeGenBase
         this.theBiomeDecorator.decorate(worldIn, rand, this, pos);
     }
 
-    public int getGrassColorAtPos(BlockPos pos)
+    public boolean canRain()
     {
-        double d0 = (double)MathHelper.clamp_float(this.getFloatTemperature(pos), 0.0F, 1.0F);
-        double d1 = (double)MathHelper.clamp_float(this.getFloatRainfall(), 0.0F, 1.0F);
-        return ColorizerGrass.getGrassColor(d0, d1);
+        return !this.isSnowyBiome() && this.enableRain;
     }
 
-    public int getFoliageColorAtPos(BlockPos pos)
+    public final float getFloatTemperature(BlockPos pos)
     {
-        double d0 = (double)MathHelper.clamp_float(this.getFloatTemperature(pos), 0.0F, 1.0F);
-        double d1 = (double)MathHelper.clamp_float(this.getFloatRainfall(), 0.0F, 1.0F);
-        return ColorizerFoliage.getFoliageColor(d0, d1);
+        if (pos.getY() > 64)
+        {
+            float f = (float) (temperatureNoise.func_151601_a((double) pos.getX() / 8.0D, (double) pos.getZ() / 8.0D) * 4.0D);
+            return this.temperature - (f + (float)pos.getY() - 64.0F) * 0.05F / 30.0F;
+        }
+        else
+        {
+            return this.temperature;
+        }
     }
 
     public boolean isSnowyBiome()
@@ -461,9 +502,10 @@ public abstract class BiomeGenBase
         return this.getClass();
     }
 
-    public boolean isEqualTo(BiomeGenBase biome)
-    {
-        return biome == this ? true : (biome == null ? false : this.getBiomeClass() == biome.getBiomeClass());
+    public int getGrassColorAtPos(BlockPos pos) {
+        double d0 = MathHelper.clamp_float(this.getFloatTemperature(pos), 0.0F, 1.0F);
+        double d1 = MathHelper.clamp_float(this.getFloatRainfall(), 0.0F, 1.0F);
+        return ColorizerGrass.getGrassColor(d0, d1);
     }
 
     public BiomeGenBase.TempCategory getTempCategory()
@@ -476,9 +518,10 @@ public abstract class BiomeGenBase
         return biomeList;
     }
 
-    public static BiomeGenBase getBiome(int id)
-    {
-        return getBiomeFromBiomeList(id, (BiomeGenBase)null);
+    public int getFoliageColorAtPos(BlockPos pos) {
+        double d0 = MathHelper.clamp_float(this.getFloatTemperature(pos), 0.0F, 1.0F);
+        double d1 = MathHelper.clamp_float(this.getFloatRainfall(), 0.0F, 1.0F);
+        return ColorizerFoliage.getFoliageColor(d0, d1);
     }
 
     public static BiomeGenBase getBiomeFromBiomeList(int biomeId, BiomeGenBase biome)
@@ -495,55 +538,9 @@ public abstract class BiomeGenBase
         }
     }
 
-    static
+    public boolean isEqualTo(BiomeGenBase biome)
     {
-        plains.createMutation();
-        desert.createMutation();
-        forest.createMutation();
-        taiga.createMutation();
-        swampland.createMutation();
-        icePlains.createMutation();
-        jungle.createMutation();
-        jungleEdge.createMutation();
-        coldTaiga.createMutation();
-        savanna.createMutation();
-        savannaPlateau.createMutation();
-        mesa.createMutation();
-        mesaPlateau_F.createMutation();
-        mesaPlateau.createMutation();
-        birchForest.createMutation();
-        birchForestHills.createMutation();
-        roofedForest.createMutation();
-        megaTaiga.createMutation();
-        extremeHills.createMutation();
-        extremeHillsPlus.createMutation();
-        megaTaiga.createMutatedBiome(megaTaigaHills.biomeID + 128).setBiomeName("Redwood Taiga Hills M");
-
-        for (BiomeGenBase biomegenbase : biomeList)
-        {
-            if (biomegenbase != null)
-            {
-                if (BIOME_ID_MAP.containsKey(biomegenbase.biomeName))
-                {
-                    throw new Error("Biome \"" + biomegenbase.biomeName + "\" is defined as both ID " + ((BiomeGenBase)BIOME_ID_MAP.get(biomegenbase.biomeName)).biomeID + " and " + biomegenbase.biomeID);
-                }
-
-                BIOME_ID_MAP.put(biomegenbase.biomeName, biomegenbase);
-
-                if (biomegenbase.biomeID < 128)
-                {
-                    explorationBiomesList.add(biomegenbase);
-                }
-            }
-        }
-
-        explorationBiomesList.remove(hell);
-        explorationBiomesList.remove(sky);
-        explorationBiomesList.remove(frozenOcean);
-        explorationBiomesList.remove(extremeHillsEdge);
-        temperatureNoise = new NoiseGeneratorPerlin(new Random(1234L), 1);
-        GRASS_COLOR_NOISE = new NoiseGeneratorPerlin(new Random(2345L), 1);
-        DOUBLE_PLANT_GENERATOR = new WorldGenDoublePlant();
+        return biome == this || (biome != null && this.getBiomeClass() == biome.getBiomeClass());
     }
 
     public static class Height
@@ -583,11 +580,10 @@ public abstract class BiomeGenBase
         }
     }
 
-    public static enum TempCategory
-    {
+    public enum TempCategory {
         OCEAN,
         COLD,
         MEDIUM,
-        WARM;
+        WARM
     }
 }

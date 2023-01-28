@@ -24,7 +24,7 @@ public class BlockCrops extends BlockBush implements IGrowable
         this.setTickRandomly(true);
         float f = 0.5F;
         this.setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
-        this.setCreativeTab((CreativeTabs)null);
+        this.setCreativeTab(null);
         this.setHardness(0.0F);
         this.setStepSound(soundTypeGrass);
         this.disableStats();
@@ -33,38 +33,6 @@ public class BlockCrops extends BlockBush implements IGrowable
     protected boolean canPlaceBlockOn(Block ground)
     {
         return ground == Blocks.farmland;
-    }
-
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
-    {
-        super.updateTick(worldIn, pos, state, rand);
-
-        if (worldIn.getLightFromNeighbors(pos.up()) >= 9)
-        {
-            int i = ((Integer)state.getValue(AGE)).intValue();
-
-            if (i < 7)
-            {
-                float f = getGrowthChance(this, worldIn, pos);
-
-                if (rand.nextInt((int)(25.0F / f) + 1) == 0)
-                {
-                    worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(i + 1)), 2);
-                }
-            }
-        }
-    }
-
-    public void grow(World worldIn, BlockPos pos, IBlockState state)
-    {
-        int i = ((Integer)state.getValue(AGE)).intValue() + MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
-
-        if (i > 7)
-        {
-            i = 7;
-        }
-
-        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(i)), 2);
     }
 
     protected static float getGrowthChance(Block blockIn, World worldIn, BlockPos pos)
@@ -83,8 +51,7 @@ public class BlockCrops extends BlockBush implements IGrowable
                 {
                     f1 = 1.0F;
 
-                    if (((Integer)iblockstate.getValue(BlockFarmland.MOISTURE)).intValue() > 0)
-                    {
+                    if (iblockstate.getValue(BlockFarmland.MOISTURE).intValue() > 0) {
                         f1 = 3.0F;
                     }
                 }
@@ -113,8 +80,7 @@ public class BlockCrops extends BlockBush implements IGrowable
         {
             boolean flag2 = blockIn == worldIn.getBlockState(blockpos3.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.north()).getBlock() || blockIn == worldIn.getBlockState(blockpos4.south()).getBlock() || blockIn == worldIn.getBlockState(blockpos3.south()).getBlock();
 
-            if (flag2)
-            {
+            if (flag2) {
                 f /= 2.0F;
             }
         }
@@ -122,13 +88,37 @@ public class BlockCrops extends BlockBush implements IGrowable
         return f;
     }
 
-    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state)
-    {
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(worldIn, pos, state, rand);
+
+        if (worldIn.getLightFromNeighbors(pos.up()) >= 9) {
+            int i = state.getValue(AGE).intValue();
+
+            if (i < 7) {
+                float f = getGrowthChance(this, worldIn, pos);
+
+                if (rand.nextInt((int) (25.0F / f) + 1) == 0) {
+                    worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(i + 1)), 2);
+                }
+            }
+        }
+    }
+
+    public void grow(World worldIn, BlockPos pos, IBlockState state) {
+        int i = state.getValue(AGE).intValue() + MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+
+        if (i > 7) {
+            i = 7;
+        }
+
+        worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(i)), 2);
+    }
+
+    public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
         return (worldIn.getLight(pos) >= 8 || worldIn.canSeeSky(pos)) && this.canPlaceBlockOn(worldIn.getBlockState(pos.down()).getBlock());
     }
 
-    protected Item getSeed()
-    {
+    protected Item getSeed() {
         return Items.wheat_seeds;
     }
 
@@ -143,7 +133,7 @@ public class BlockCrops extends BlockBush implements IGrowable
 
         if (!worldIn.isRemote)
         {
-            int i = ((Integer)state.getValue(AGE)).intValue();
+            int i = state.getValue(AGE).intValue();
 
             if (i >= 7)
             {
@@ -162,7 +152,7 @@ public class BlockCrops extends BlockBush implements IGrowable
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return ((Integer)state.getValue(AGE)).intValue() == 7 ? this.getCrop() : this.getSeed();
+        return state.getValue(AGE).intValue() == 7 ? this.getCrop() : this.getSeed();
     }
 
     public Item getItem(World worldIn, BlockPos pos)
@@ -172,7 +162,7 @@ public class BlockCrops extends BlockBush implements IGrowable
 
     public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
     {
-        return ((Integer)state.getValue(AGE)).intValue() < 7;
+        return state.getValue(AGE).intValue() < 7;
     }
 
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
@@ -192,11 +182,11 @@ public class BlockCrops extends BlockBush implements IGrowable
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {AGE});
+        return new BlockState(this, AGE);
     }
 }

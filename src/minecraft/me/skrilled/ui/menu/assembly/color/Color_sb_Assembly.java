@@ -17,7 +17,7 @@ public class Color_sb_Assembly extends Assembly {
     public SolidCicleAssembly solidCicleAssembly;
     public float h;
     public ArrayList<ArrayList<ColorPoint>> colorPointLists;
-    private boolean init = false;
+    private final boolean init = false;
 
 
     private Color_sb_Assembly(float[] pos, Assembly fatherWindow) {

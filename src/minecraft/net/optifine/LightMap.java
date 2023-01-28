@@ -3,19 +3,16 @@ package net.optifine;
 import net.minecraft.src.Config;
 import net.minecraft.world.World;
 
-public class LightMap
-{
+public class LightMap {
     private CustomColormap lightMapRgb = null;
-    private float[][] sunRgbs = new float[16][3];
-    private float[][] torchRgbs = new float[16][3];
+    private final float[][] sunRgbs = new float[16][3];
+    private final float[][] torchRgbs = new float[16][3];
 
-    public LightMap(CustomColormap lightMapRgb)
-    {
+    public LightMap(CustomColormap lightMapRgb) {
         this.lightMapRgb = lightMapRgb;
     }
 
-    public CustomColormap getColormap()
-    {
+    public CustomColormap getColormap() {
         return this.lightMapRgb;
     }
 
@@ -100,22 +97,16 @@ public class LightMap
         }
     }
 
-    private void getLightMapColumn(float[][] origMap, float x, int offset, int width, float[][] colRgb)
-    {
-        int i = (int)Math.floor((double)x);
-        int j = (int)Math.ceil((double)x);
+    private void getLightMapColumn(float[][] origMap, float x, int offset, int width, float[][] colRgb) {
+        int i = (int) Math.floor(x);
+        int j = (int) Math.ceil(x);
 
-        if (i == j)
-        {
-            for (int i1 = 0; i1 < 16; ++i1)
-            {
+        if (i == j) {
+            for (int i1 = 0; i1 < 16; ++i1) {
                 float[] afloat3 = origMap[offset + i1 * width + i];
                 float[] afloat4 = colRgb[i1];
 
-                for (int j1 = 0; j1 < 3; ++j1)
-                {
-                    afloat4[j1] = afloat3[j1];
-                }
+                System.arraycopy(afloat3, 0, afloat4, 0, 3);
             }
         }
         else

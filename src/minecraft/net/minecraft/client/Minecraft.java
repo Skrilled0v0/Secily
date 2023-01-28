@@ -513,8 +513,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.disableDepth();
         this.getTextureManager().bindTexture(new ResourceLocation("skrilled/bgNoBlur.png"));
         Gui.drawModalRectWithCustomSizedTexture(0, 0, 0f, 0f, w, h, w, h);
-        Main.fontLoader.EN72.drawCenteredStringWithShadow("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(), -1);
-        Main.fontLoader.EN36.drawCenteredStringWithShadow((loadingCount + 1) + "/3", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), -1);
+        Main.fontLoader.EN72.drawCenteredStringWithShadow("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(), 1.2f, -1);
+        Main.fontLoader.EN36.drawCenteredStringWithShadow((loadingCount + 1) + "/3", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), 1.2f, -1);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);

@@ -57,7 +57,6 @@ public class VersionCheckThread extends Thread
                     }
 
                     Config.setNewRelease(s1);
-                    return;
                 }
             }
             finally

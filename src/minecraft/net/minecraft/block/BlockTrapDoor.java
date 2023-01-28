@@ -1,7 +1,6 @@
 package net.minecraft.block;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -11,13 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -25,7 +18,7 @@ public class BlockTrapDoor extends Block
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final PropertyBool OPEN = PropertyBool.create("open");
-    public static final PropertyEnum<BlockTrapDoor.DoorHalf> HALF = PropertyEnum.<BlockTrapDoor.DoorHalf>create("half", BlockTrapDoor.DoorHalf.class);
+    public static final PropertyEnum<BlockTrapDoor.DoorHalf> HALF = PropertyEnum.create("half", BlockTrapDoor.DoorHalf.class);
 
     protected BlockTrapDoor(Material materialIn)
     {
@@ -49,7 +42,7 @@ public class BlockTrapDoor extends Block
 
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
     {
-        return !((Boolean)worldIn.getBlockState(pos).getValue(OPEN)).booleanValue();
+        return !worldIn.getBlockState(pos).getValue(OPEN).booleanValue();
     }
 
     public AxisAlignedBB getSelectedBoundingBox(World worldIn, BlockPos pos)
@@ -77,19 +70,15 @@ public class BlockTrapDoor extends Block
 
     public void setBounds(IBlockState state)
     {
-        if (state.getBlock() == this)
-        {
+        if (state.getBlock() == this) {
             boolean flag = state.getValue(HALF) == BlockTrapDoor.DoorHalf.TOP;
-            Boolean obool = (Boolean)state.getValue(OPEN);
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+            Boolean obool = state.getValue(OPEN);
+            EnumFacing enumfacing = state.getValue(FACING);
             float f = 0.1875F;
 
-            if (flag)
-            {
+            if (flag) {
                 this.setBlockBounds(0.0F, 0.8125F, 0.0F, 1.0F, 1.0F, 1.0F);
-            }
-            else
-            {
+            } else {
                 this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.1875F, 1.0F);
             }
 
@@ -128,7 +117,7 @@ public class BlockTrapDoor extends Block
         {
             state = state.cycleProperty(OPEN);
             worldIn.setBlockState(pos, state, 2);
-            worldIn.playAuxSFXAtEntity(playerIn, ((Boolean)state.getValue(OPEN)).booleanValue() ? 1003 : 1006, pos, 0);
+            worldIn.playAuxSFXAtEntity(playerIn, state.getValue(OPEN).booleanValue() ? 1003 : 1006, pos, 0);
             return true;
         }
     }
@@ -137,7 +126,7 @@ public class BlockTrapDoor extends Block
     {
         if (!worldIn.isRemote)
         {
-            BlockPos blockpos = pos.offset(((EnumFacing)state.getValue(FACING)).getOpposite());
+            BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
 
             if (!isValidSupportBlock(worldIn.getBlockState(blockpos).getBlock()))
             {
@@ -150,12 +139,12 @@ public class BlockTrapDoor extends Block
 
                 if (flag || neighborBlock.canProvidePower())
                 {
-                    boolean flag1 = ((Boolean)state.getValue(OPEN)).booleanValue();
+                    boolean flag1 = state.getValue(OPEN).booleanValue();
 
                     if (flag1 != flag)
                     {
                         worldIn.setBlockState(pos, state.withProperty(OPEN, Boolean.valueOf(flag)), 2);
-                        worldIn.playAuxSFXAtEntity((EntityPlayer)null, flag ? 1003 : 1006, pos, 0);
+                        worldIn.playAuxSFXAtEntity(null, flag ? 1003 : 1006, pos, 0);
                     }
                 }
             }
@@ -242,10 +231,9 @@ public class BlockTrapDoor extends Block
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | getMetaForFacing((EnumFacing)state.getValue(FACING));
+        i = i | getMetaForFacing(state.getValue(FACING));
 
-        if (((Boolean)state.getValue(OPEN)).booleanValue())
-        {
+        if (state.getValue(OPEN).booleanValue()) {
             i |= 4;
         }
 
@@ -259,18 +247,16 @@ public class BlockTrapDoor extends Block
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING, OPEN, HALF});
+        return new BlockState(this, FACING, OPEN, HALF);
     }
 
-    public static enum DoorHalf implements IStringSerializable
-    {
+    public enum DoorHalf implements IStringSerializable {
         TOP("top"),
         BOTTOM("bottom");
 
         private final String name;
 
-        private DoorHalf(String name)
-        {
+        DoorHalf(String name) {
             this.name = name;
         }
 

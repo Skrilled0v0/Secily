@@ -35,7 +35,7 @@ public class LoadingGui extends GuiScreen {
         loading.setState(true);
         RenderUtil.drawImage(bg, 0, 0, w, h);
         RenderUtil.drawIcon(w / 2f - genshinSize / 2f, h / 2f - genshinSize, genshinSize, genshinSize, genshin);
-        fontRenderer.drawCenteredStringWithShadow("Final Status Loading", w / 2f, h / 2f + h / 10f, -1);
+        fontRenderer.drawCenteredStringWithShadow("Final Status Loading", w / 2f, h / 2f + h / 10f, 1.2f, -1);
         RenderUtil.drawRoundRect(w / 6f - 5, h / 2f + h / 6f - 5, w - w / 6f + 5, h / 2f + h / 6f + 35f, 10, new Color(62, 62, 62).getRGB());
         RenderUtil.drawRoundRect(w / 6f, h / 2f + h / 6f, (float) loading.getAnimationValue(), h / 2f + h / 6f + 30f, 10, color.getColour().getRGB());
         if (loading.getAnimationFactor() == 1) mc.displayGuiScreen(new GuiMainMenu());

@@ -32,9 +32,36 @@ public class SaveFormatOld implements ISaveFormat
         return "Old Format";
     }
 
+    protected static boolean deleteFiles(File[] files)
+    {
+        for (int i = 0; i < files.length; ++i)
+        {
+            File file1 = files[i];
+            logger.debug("Deleting " + file1);
+
+            if (file1.isDirectory() && !deleteFiles(file1.listFiles()))
+            {
+                logger.warn("Couldn't delete directory " + file1);
+                return false;
+            }
+
+            if (!file1.delete())
+            {
+                logger.warn("Couldn't delete file " + file1);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void flushCache()
+    {
+    }
+
     public List<SaveFormatComparator> getSaveList() throws AnvilConverterException
     {
-        List<SaveFormatComparator> list = Lists.<SaveFormatComparator>newArrayList();
+        List<SaveFormatComparator> list = Lists.newArrayList();
 
         for (int i = 0; i < 5; ++i)
         {
@@ -48,56 +75,6 @@ public class SaveFormatOld implements ISaveFormat
         }
 
         return list;
-    }
-
-    public void flushCache()
-    {
-    }
-
-    public WorldInfo getWorldInfo(String saveName)
-    {
-        File file1 = new File(this.savesDirectory, saveName);
-
-        if (!file1.exists())
-        {
-            return null;
-        }
-        else
-        {
-            File file2 = new File(file1, "level.dat");
-
-            if (file2.exists())
-            {
-                try
-                {
-                    NBTTagCompound nbttagcompound2 = CompressedStreamTools.readCompressed(new FileInputStream(file2));
-                    NBTTagCompound nbttagcompound3 = nbttagcompound2.getCompoundTag("Data");
-                    return new WorldInfo(nbttagcompound3);
-                }
-                catch (Exception exception1)
-                {
-                    logger.error((String)("Exception reading " + file2), (Throwable)exception1);
-                }
-            }
-
-            file2 = new File(file1, "level.dat_old");
-
-            if (file2.exists())
-            {
-                try
-                {
-                    NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(new FileInputStream(file2));
-                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("Data");
-                    return new WorldInfo(nbttagcompound1);
-                }
-                catch (Exception exception)
-                {
-                    logger.error((String)("Exception reading " + file2), (Throwable)exception);
-                }
-            }
-
-            return null;
-        }
     }
 
     public void renameWorld(String dirName, String newName)
@@ -125,27 +102,49 @@ public class SaveFormatOld implements ISaveFormat
         }
     }
 
-    public boolean isNewLevelIdAcceptable(String saveName)
+    public WorldInfo getWorldInfo(String saveName)
     {
         File file1 = new File(this.savesDirectory, saveName);
 
-        if (file1.exists())
+        if (!file1.exists())
         {
-            return false;
+            return null;
         }
         else
         {
-            try
+            File file2 = new File(file1, "level.dat");
+
+            if (file2.exists())
             {
-                file1.mkdir();
-                file1.delete();
-                return true;
+                try
+                {
+                    NBTTagCompound nbttagcompound2 = CompressedStreamTools.readCompressed(new FileInputStream(file2));
+                    NBTTagCompound nbttagcompound3 = nbttagcompound2.getCompoundTag("Data");
+                    return new WorldInfo(nbttagcompound3);
+                }
+                catch (Exception exception1)
+                {
+                    logger.error("Exception reading " + file2, exception1);
+                }
             }
-            catch (Throwable throwable)
+
+            file2 = new File(file1, "level.dat_old");
+
+            if (file2.exists())
             {
-                logger.warn("Couldn\'t make new level", throwable);
-                return false;
+                try
+                {
+                    NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(new FileInputStream(file2));
+                    NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("Data");
+                    return new WorldInfo(nbttagcompound1);
+                }
+                catch (Exception exception)
+                {
+                    logger.error("Exception reading " + file2, exception);
+                }
             }
+
+            return null;
         }
     }
 
@@ -180,7 +179,6 @@ public class SaveFormatOld implements ISaveFormat
                     }
                     catch (InterruptedException var5)
                     {
-                        ;
                     }
                 }
             }
@@ -189,27 +187,28 @@ public class SaveFormatOld implements ISaveFormat
         }
     }
 
-    protected static boolean deleteFiles(File[] files)
+    public boolean isNewLevelIdAcceptable(String saveName)
     {
-        for (int i = 0; i < files.length; ++i)
+        File file1 = new File(this.savesDirectory, saveName);
+
+        if (file1.exists())
         {
-            File file1 = files[i];
-            logger.debug("Deleting " + file1);
-
-            if (file1.isDirectory() && !deleteFiles(file1.listFiles()))
+            return false;
+        }
+        else
+        {
+            try
             {
-                logger.warn("Couldn\'t delete directory " + file1);
-                return false;
+                file1.mkdir();
+                file1.delete();
+                return true;
             }
-
-            if (!file1.delete())
+            catch (Throwable throwable)
             {
-                logger.warn("Couldn\'t delete file " + file1);
+                logger.warn("Couldn't make new level", throwable);
                 return false;
             }
         }
-
-        return true;
     }
 
     public ISaveHandler getSaveLoader(String saveName, boolean storePlayerdata)

@@ -5,19 +5,16 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.util.BlockPos;
 
-public class WorldChunkManagerHell extends WorldChunkManager
-{
-    private BiomeGenBase biomeGenerator;
-    private float rainfall;
+public class WorldChunkManagerHell extends WorldChunkManager {
+    private final BiomeGenBase biomeGenerator;
+    private final float rainfall;
 
-    public WorldChunkManagerHell(BiomeGenBase p_i45374_1_, float p_i45374_2_)
-    {
+    public WorldChunkManagerHell(BiomeGenBase p_i45374_1_, float p_i45374_2_) {
         this.biomeGenerator = p_i45374_1_;
         this.rainfall = p_i45374_2_;
     }
 
-    public BiomeGenBase getBiomeGenerator(BlockPos pos)
-    {
+    public BiomeGenBase getBiomeGenerator(BlockPos pos) {
         return this.biomeGenerator;
     }
 

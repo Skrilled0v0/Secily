@@ -41,7 +41,7 @@ public class ContainerPlayer extends Container
                 }
                 public boolean isItemValid(ItemStack stack)
                 {
-                    return stack == null ? false : (stack.getItem() instanceof ItemArmor ? ((ItemArmor)stack.getItem()).armorType == k_f : (stack.getItem() != Item.getItemFromBlock(Blocks.pumpkin) && stack.getItem() != Items.skull ? false : k_f == 0));
+                    return stack != null && (stack.getItem() instanceof ItemArmor ? ((ItemArmor) stack.getItem()).armorType == k_f : ((stack.getItem() == Item.getItemFromBlock(Blocks.pumpkin) || stack.getItem() == Items.skull) && k_f == 0));
                 }
                 public String getSlotTexture()
                 {
@@ -85,7 +85,7 @@ public class ContainerPlayer extends Container
             }
         }
 
-        this.craftResult.setInventorySlotContents(0, (ItemStack)null);
+        this.craftResult.setInventorySlotContents(0, null);
     }
 
     public boolean canInteractWith(EntityPlayer playerIn)
@@ -96,7 +96,7 @@ public class ContainerPlayer extends Container
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -119,24 +119,17 @@ public class ContainerPlayer extends Container
                     return null;
                 }
             }
-            else if (index >= 5 && index < 9)
-            {
-                if (!this.mergeItemStack(itemstack1, 9, 45, false))
-                {
+            else if (index >= 5 && index < 9) {
+                if (!this.mergeItemStack(itemstack1, 9, 45, false)) {
                     return null;
                 }
-            }
-            else if (itemstack.getItem() instanceof ItemArmor && !((Slot)this.inventorySlots.get(5 + ((ItemArmor)itemstack.getItem()).armorType)).getHasStack())
-            {
-                int i = 5 + ((ItemArmor)itemstack.getItem()).armorType;
+            } else if (itemstack.getItem() instanceof ItemArmor && !this.inventorySlots.get(5 + ((ItemArmor) itemstack.getItem()).armorType).getHasStack()) {
+                int i = 5 + ((ItemArmor) itemstack.getItem()).armorType;
 
-                if (!this.mergeItemStack(itemstack1, i, i + 1, false))
-                {
+                if (!this.mergeItemStack(itemstack1, i, i + 1, false)) {
                     return null;
                 }
-            }
-            else if (index >= 9 && index < 36)
-            {
+            } else if (index >= 9 && index < 36) {
                 if (!this.mergeItemStack(itemstack1, 36, 45, false))
                 {
                     return null;
@@ -156,7 +149,7 @@ public class ContainerPlayer extends Container
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(null);
             }
             else
             {

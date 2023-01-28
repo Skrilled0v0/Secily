@@ -1,7 +1,6 @@
 package net.minecraft.entity.ai;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathNavigateGround;
@@ -11,24 +10,23 @@ import net.minecraft.util.Vec3;
 import net.minecraft.village.Village;
 import net.minecraft.village.VillageDoorInfo;
 
-public class EntityAIMoveThroughVillage extends EntityAIBase
-{
-    private EntityCreature theEntity;
-    private double movementSpeed;
+import java.util.List;
+
+public class EntityAIMoveThroughVillage extends EntityAIBase {
+    private final EntityCreature theEntity;
+    private final double movementSpeed;
     private PathEntity entityPathNavigate;
     private VillageDoorInfo doorInfo;
-    private boolean isNocturnal;
-    private List<VillageDoorInfo> doorList = Lists.<VillageDoorInfo>newArrayList();
+    private final boolean isNocturnal;
+    private final List<VillageDoorInfo> doorList = Lists.newArrayList();
 
-    public EntityAIMoveThroughVillage(EntityCreature theEntityIn, double movementSpeedIn, boolean isNocturnalIn)
-    {
+    public EntityAIMoveThroughVillage(EntityCreature theEntityIn, double movementSpeedIn, boolean isNocturnalIn) {
         this.theEntity = theEntityIn;
         this.movementSpeed = movementSpeedIn;
         this.isNocturnal = isNocturnalIn;
         this.setMutexBits(1);
 
-        if (!(theEntityIn.getNavigator() instanceof PathNavigateGround))
-        {
+        if (!(theEntityIn.getNavigator() instanceof PathNavigateGround)) {
             throw new IllegalArgumentException("Unsupported mob for MoveThroughVillageGoal");
         }
     }
@@ -71,7 +69,7 @@ public class EntityAIMoveThroughVillage extends EntityAIBase
                     }
                     else
                     {
-                        Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 10, 7, new Vec3((double)this.doorInfo.getDoorBlockPos().getX(), (double)this.doorInfo.getDoorBlockPos().getY(), (double)this.doorInfo.getDoorBlockPos().getZ()));
+                        Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockTowards(this.theEntity, 10, 7, new Vec3(this.doorInfo.getDoorBlockPos().getX(), this.doorInfo.getDoorBlockPos().getY(), this.doorInfo.getDoorBlockPos().getZ()));
 
                         if (vec3 == null)
                         {

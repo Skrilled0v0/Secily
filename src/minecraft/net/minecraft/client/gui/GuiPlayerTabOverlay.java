@@ -54,7 +54,7 @@ public class GuiPlayerTabOverlay extends Gui
     public void renderPlayerlist(int width, Scoreboard scoreboardIn, ScoreObjective scoreObjectiveIn)
     {
         NetHandlerPlayClient nethandlerplayclient = this.mc.thePlayer.sendQueue;
-        List<NetworkPlayerInfo> list = field_175252_a.<NetworkPlayerInfo>sortedCopy(nethandlerplayclient.getPlayerInfoMap());
+        List<NetworkPlayerInfo> list = field_175252_a.sortedCopy(nethandlerplayclient.getPlayerInfoMap());
         int i = 0;
         int j = 0;
 
@@ -156,7 +156,7 @@ public class GuiPlayerTabOverlay extends Gui
 
             if (k4 < list.size())
             {
-                NetworkPlayerInfo networkplayerinfo1 = (NetworkPlayerInfo)list.get(k4);
+                NetworkPlayerInfo networkplayerinfo1 = list.get(k4);
                 String s1 = this.getPlayerName(networkplayerinfo1);
                 GameProfile gameprofile = networkplayerinfo1.getGameProfile();
 
@@ -251,7 +251,7 @@ public class GuiPlayerTabOverlay extends Gui
         }
 
         this.zLevel += 100.0F;
-        this.drawTexturedModalRect(p_175245_2_ + p_175245_1_ - 11, p_175245_3_, 0 + i * 10, 176 + j * 8, 10, 8);
+        this.drawTexturedModalRect(p_175245_2_ + p_175245_1_ - 11, p_175245_3_, i * 10, 176 + j * 8, 10, 8);
         this.zLevel -= 100.0F;
     }
 
@@ -268,12 +268,12 @@ public class GuiPlayerTabOverlay extends Gui
                 if (i < p_175247_6_.func_178835_l())
                 {
                     p_175247_6_.func_178846_a(Minecraft.getSystemTime());
-                    p_175247_6_.func_178844_b((long)(this.guiIngame.getUpdateCounter() + 20));
+                    p_175247_6_.func_178844_b(this.guiIngame.getUpdateCounter() + 20);
                 }
                 else if (i > p_175247_6_.func_178835_l())
                 {
                     p_175247_6_.func_178846_a(Minecraft.getSystemTime());
-                    p_175247_6_.func_178844_b((long)(this.guiIngame.getUpdateCounter() + 10));
+                    p_175247_6_.func_178844_b(this.guiIngame.getUpdateCounter() + 10);
                 }
             }
 

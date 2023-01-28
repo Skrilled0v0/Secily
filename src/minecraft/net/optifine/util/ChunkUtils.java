@@ -11,20 +11,17 @@ import net.optifine.reflect.Reflector;
 import net.optifine.reflect.ReflectorClass;
 import net.optifine.reflect.ReflectorField;
 
-public class ChunkUtils
-{
-    private static ReflectorClass chunkClass = new ReflectorClass(Chunk.class);
-    private static ReflectorField fieldHasEntities = findFieldHasEntities();
-    private static ReflectorField fieldPrecipitationHeightMap = new ReflectorField(chunkClass, int[].class, 0);
+public class ChunkUtils {
+    private static final ReflectorClass chunkClass = new ReflectorClass(Chunk.class);
+    private static final ReflectorField fieldHasEntities = findFieldHasEntities();
+    private static final ReflectorField fieldPrecipitationHeightMap = new ReflectorField(chunkClass, int[].class, 0);
 
-    public static boolean hasEntities(Chunk chunk)
-    {
+    public static boolean hasEntities(Chunk chunk) {
         return Reflector.getFieldValueBoolean(chunk, fieldHasEntities, true);
     }
 
-    public static int getPrecipitationHeight(Chunk chunk, BlockPos pos)
-    {
-        int[] aint = (int[])((int[])Reflector.getFieldValue(chunk, fieldPrecipitationHeightMap));
+    public static int getPrecipitationHeight(Chunk chunk, BlockPos pos) {
+        int[] aint = (int[]) Reflector.getFieldValue(chunk, fieldPrecipitationHeightMap);
 
         if (aint != null && aint.length == 256)
         {
@@ -53,7 +50,7 @@ public class ChunkUtils
     {
         try
         {
-            Chunk chunk = new Chunk((World)null, 0, 0);
+            Chunk chunk = new Chunk(null, 0, 0);
             List list = new ArrayList();
             List list1 = new ArrayList();
             Field[] afield = Chunk.class.getDeclaredFields();
@@ -90,16 +87,14 @@ public class ChunkUtils
 
             List list4 = new ArrayList();
 
-            for (int j = 0; j < ((List)list).size(); ++j)
-            {
-                Field field3 = (Field)list.get(j);
-                Boolean obool = (Boolean)list2.get(j);
-                Boolean obool1 = (Boolean)list3.get(j);
+            for (int j = 0; j < list.size(); ++j) {
+                Field field3 = (Field) list.get(j);
+                Boolean obool = (Boolean) list2.get(j);
+                Boolean obool1 = (Boolean) list3.get(j);
 
-                if (!obool.booleanValue() && obool1.booleanValue())
-                {
+                if (!obool.booleanValue() && obool1.booleanValue()) {
                     list4.add(field3);
-                    Boolean obool2 = (Boolean)list1.get(j);
+                    Boolean obool2 = (Boolean) list1.get(j);
                     field3.set(chunk, obool2);
                 }
             }

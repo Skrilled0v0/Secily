@@ -1,7 +1,6 @@
 package net.minecraft.client.resources;
 
 import com.google.gson.JsonParseException;
-import java.io.IOException;
 import net.minecraft.client.gui.GuiScreenResourcePacks;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -10,6 +9,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 
 public class ResourcePackListEntryDefault extends ResourcePackListEntry
 {
@@ -44,7 +45,7 @@ public class ResourcePackListEntryDefault extends ResourcePackListEntry
     {
         try
         {
-            PackMetadataSection packmetadatasection = (PackMetadataSection)this.field_148320_d.getPackMetadata(this.mc.getResourcePackRepository().rprMetadataSerializer, "pack");
+            PackMetadataSection packmetadatasection = this.field_148320_d.getPackMetadata(this.mc.getResourcePackRepository().rprMetadataSerializer, "pack");
 
             if (packmetadatasection != null)
             {
@@ -53,11 +54,11 @@ public class ResourcePackListEntryDefault extends ResourcePackListEntry
         }
         catch (JsonParseException jsonparseexception)
         {
-            logger.error((String)"Couldn\'t load metadata info", (Throwable)jsonparseexception);
+            logger.error("Couldn't load metadata info", jsonparseexception);
         }
         catch (IOException ioexception)
         {
-            logger.error((String)"Couldn\'t load metadata info", (Throwable)ioexception);
+            logger.error("Couldn't load metadata info", ioexception);
         }
 
         return EnumChatFormatting.RED + "Missing " + "pack.mcmeta" + " :(";

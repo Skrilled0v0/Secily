@@ -1,6 +1,5 @@
 package net.minecraft.client.gui.inventory;
 
-import java.io.IOException;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,9 +14,11 @@ import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraft.util.ChatComponentText;
 import org.lwjgl.input.Keyboard;
 
+import java.io.IOException;
+
 public class GuiEditSign extends GuiScreen
 {
-    private TileEntitySign tileSign;
+    private final TileEntitySign tileSign;
     private int updateCounter;
     private int editLine;
     private GuiButton doneBtn;
@@ -31,7 +32,7 @@ public class GuiEditSign extends GuiScreen
     {
         this.buttonList.clear();
         Keyboard.enableRepeatEvents(true);
-        this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done", new Object[0])));
+        this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120, I18n.format("gui.done")));
         this.tileSign.setEditable(false);
     }
 
@@ -60,7 +61,7 @@ public class GuiEditSign extends GuiScreen
             if (button.id == 0)
             {
                 this.tileSign.markDirty();
-                this.mc.displayGuiScreen((GuiScreen)null);
+                this.mc.displayGuiScreen(null);
             }
         }
     }
@@ -97,20 +98,18 @@ public class GuiEditSign extends GuiScreen
         }
     }
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRendererObj, I18n.format("sign.edit", new Object[0]), this.width / 2, 40, 16777215);
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawBackground();
+        this.drawCenteredString(this.fontRendererObj, I18n.format("sign.edit"), this.width / 2, 40, 16777215);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)(this.width / 2), 0.0F, 50.0F);
+        GlStateManager.translate((float) (this.width / 2), 0.0F, 50.0F);
         float f = 93.75F;
         GlStateManager.scale(-f, -f, -f);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         Block block = this.tileSign.getBlockType();
 
-        if (block == Blocks.standing_sign)
-        {
+        if (block == Blocks.standing_sign) {
             float f1 = (float)(this.tileSign.getBlockMetadata() * 360) / 16.0F;
             GlStateManager.rotate(f1, 0.0F, 1.0F, 0.0F);
             GlStateManager.translate(0.0F, -1.0625F, 0.0F);

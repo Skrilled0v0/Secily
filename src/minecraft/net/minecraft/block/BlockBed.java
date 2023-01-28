@@ -22,27 +22,74 @@ import net.minecraft.world.biome.BiomeGenBase;
 
 public class BlockBed extends BlockDirectional
 {
-    public static final PropertyEnum<BlockBed.EnumPartType> PART = PropertyEnum.<BlockBed.EnumPartType>create("part", BlockBed.EnumPartType.class);
+    public static final PropertyEnum<BlockBed.EnumPartType> PART = PropertyEnum.create("part", BlockBed.EnumPartType.class);
     public static final PropertyBool OCCUPIED = PropertyBool.create("occupied");
 
-    public BlockBed()
-    {
+    public BlockBed() {
         super(Material.cloth);
         this.setDefaultState(this.blockState.getBaseState().withProperty(PART, BlockBed.EnumPartType.FOOT).withProperty(OCCUPIED, Boolean.valueOf(false)));
         this.setBedBounds();
     }
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ)
-    {
-        if (worldIn.isRemote)
-        {
-            return true;
+    public static BlockPos getSafeExitLocation(World worldIn, BlockPos pos, int tries) {
+        EnumFacing enumfacing = worldIn.getBlockState(pos).getValue(FACING);
+        int i = pos.getX();
+        int j = pos.getY();
+        int k = pos.getZ();
+
+        for (int l = 0; l <= 1; ++l) {
+            int i1 = i - enumfacing.getFrontOffsetX() * l - 1;
+            int j1 = k - enumfacing.getFrontOffsetZ() * l - 1;
+            int k1 = i1 + 2;
+            int l1 = j1 + 2;
+
+            for (int i2 = i1; i2 <= k1; ++i2) {
+                for (int j2 = j1; j2 <= l1; ++j2) {
+                    BlockPos blockpos = new BlockPos(i2, j, j2);
+
+                    if (hasRoomForPlayer(worldIn, blockpos)) {
+                        if (tries <= 0) {
+                            return blockpos;
+                        }
+
+                        --tries;
+                    }
+                }
+            }
         }
-        else
-        {
+
+        return null;
+    }
+
+    private EntityPlayer getPlayerInBed(World worldIn, BlockPos pos) {
+        for (EntityPlayer entityplayer : worldIn.playerEntities) {
+            if (entityplayer.isPlayerSleeping() && entityplayer.playerLocation.equals(pos)) {
+                return entityplayer;
+            }
+        }
+
+        return null;
+    }
+
+    public boolean isFullCube() {
+        return false;
+    }
+
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos) {
+        this.setBedBounds();
+    }
+
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (worldIn.isRemote) {
+            return true;
+        } else {
             if (state.getValue(PART) != BlockBed.EnumPartType.HEAD)
             {
-                pos = pos.offset((EnumFacing)state.getValue(FACING));
+                pos = pos.offset(state.getValue(FACING));
                 state = worldIn.getBlockState(pos);
 
                 if (state.getBlock() != this)
@@ -53,13 +100,11 @@ public class BlockBed extends BlockDirectional
 
             if (worldIn.provider.canRespawnHere() && worldIn.getBiomeGenForCoords(pos) != BiomeGenBase.hell)
             {
-                if (((Boolean)state.getValue(OCCUPIED)).booleanValue())
-                {
+                if (state.getValue(OCCUPIED).booleanValue()) {
                     EntityPlayer entityplayer = this.getPlayerInBed(worldIn, pos);
 
-                    if (entityplayer != null)
-                    {
-                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied", new Object[0]));
+                    if (entityplayer != null) {
+                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.occupied"));
                         return true;
                     }
 
@@ -79,11 +124,11 @@ public class BlockBed extends BlockDirectional
                 {
                     if (entityplayer$enumstatus == EntityPlayer.EnumStatus.NOT_POSSIBLE_NOW)
                     {
-                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep", new Object[0]));
+                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.noSleep"));
                     }
                     else if (entityplayer$enumstatus == EntityPlayer.EnumStatus.NOT_SAFE)
                     {
-                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe", new Object[0]));
+                        playerIn.addChatComponentMessage(new ChatComponentTranslation("tile.bed.notSafe"));
                     }
 
                     return true;
@@ -92,50 +137,28 @@ public class BlockBed extends BlockDirectional
             else
             {
                 worldIn.setBlockToAir(pos);
-                BlockPos blockpos = pos.offset(((EnumFacing)state.getValue(FACING)).getOpposite());
+                BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
 
-                if (worldIn.getBlockState(blockpos).getBlock() == this)
-                {
+                if (worldIn.getBlockState(blockpos).getBlock() == this) {
                     worldIn.setBlockToAir(blockpos);
                 }
 
-                worldIn.newExplosion((Entity)null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 5.0F, true, true);
+                worldIn.newExplosion(null, (double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, 5.0F, true, true);
                 return true;
             }
         }
     }
 
-    private EntityPlayer getPlayerInBed(World worldIn, BlockPos pos)
-    {
-        for (EntityPlayer entityplayer : worldIn.playerEntities)
-        {
-            if (entityplayer.isPlayerSleeping() && entityplayer.playerLocation.equals(pos))
-            {
-                return entityplayer;
-            }
-        }
-
-        return null;
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : Items.bed;
     }
 
-    public boolean isFullCube()
-    {
-        return false;
+    private void setBedBounds() {
+        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
     }
 
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    public void setBlockBoundsBasedOnState(IBlockAccess worldIn, BlockPos pos)
-    {
-        this.setBedBounds();
-    }
-
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock)
-    {
-        EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+        EnumFacing enumfacing = state.getValue(FACING);
 
         if (state.getValue(PART) == BlockBed.EnumPartType.HEAD)
         {
@@ -153,52 +176,6 @@ public class BlockBed extends BlockDirectional
                 this.dropBlockAsItem(worldIn, pos, state, 0);
             }
         }
-    }
-
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
-    {
-        return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : Items.bed;
-    }
-
-    private void setBedBounds()
-    {
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);
-    }
-
-    public static BlockPos getSafeExitLocation(World worldIn, BlockPos pos, int tries)
-    {
-        EnumFacing enumfacing = (EnumFacing)worldIn.getBlockState(pos).getValue(FACING);
-        int i = pos.getX();
-        int j = pos.getY();
-        int k = pos.getZ();
-
-        for (int l = 0; l <= 1; ++l)
-        {
-            int i1 = i - enumfacing.getFrontOffsetX() * l - 1;
-            int j1 = k - enumfacing.getFrontOffsetZ() * l - 1;
-            int k1 = i1 + 2;
-            int l1 = j1 + 2;
-
-            for (int i2 = i1; i2 <= k1; ++i2)
-            {
-                for (int j2 = j1; j2 <= l1; ++j2)
-                {
-                    BlockPos blockpos = new BlockPos(i2, j, j2);
-
-                    if (hasRoomForPlayer(worldIn, blockpos))
-                    {
-                        if (tries <= 0)
-                        {
-                            return blockpos;
-                        }
-
-                        --tries;
-                    }
-                }
-            }
-        }
-
-        return null;
     }
 
     protected static boolean hasRoomForPlayer(World worldIn, BlockPos pos)
@@ -233,7 +210,7 @@ public class BlockBed extends BlockDirectional
     {
         if (player.capabilities.isCreativeMode && state.getValue(PART) == BlockBed.EnumPartType.HEAD)
         {
-            BlockPos blockpos = pos.offset(((EnumFacing)state.getValue(FACING)).getOpposite());
+            BlockPos blockpos = pos.offset(state.getValue(FACING).getOpposite());
 
             if (worldIn.getBlockState(blockpos).getBlock() == this)
             {
@@ -252,7 +229,7 @@ public class BlockBed extends BlockDirectional
     {
         if (state.getValue(PART) == BlockBed.EnumPartType.FOOT)
         {
-            IBlockState iblockstate = worldIn.getBlockState(pos.offset((EnumFacing)state.getValue(FACING)));
+            IBlockState iblockstate = worldIn.getBlockState(pos.offset(state.getValue(FACING)));
 
             if (iblockstate.getBlock() == this)
             {
@@ -266,14 +243,13 @@ public class BlockBed extends BlockDirectional
     public int getMetaFromState(IBlockState state)
     {
         int i = 0;
-        i = i | ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+        i = i | state.getValue(FACING).getHorizontalIndex();
 
         if (state.getValue(PART) == BlockBed.EnumPartType.HEAD)
         {
             i |= 8;
 
-            if (((Boolean)state.getValue(OCCUPIED)).booleanValue())
-            {
+            if (state.getValue(OCCUPIED).booleanValue()) {
                 i |= 4;
             }
         }
@@ -283,18 +259,16 @@ public class BlockBed extends BlockDirectional
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {FACING, PART, OCCUPIED});
+        return new BlockState(this, FACING, PART, OCCUPIED);
     }
 
-    public static enum EnumPartType implements IStringSerializable
-    {
+    public enum EnumPartType implements IStringSerializable {
         HEAD("head"),
         FOOT("foot");
 
         private final String name;
 
-        private EnumPartType(String name)
-        {
+        EnumPartType(String name) {
             this.name = name;
         }
 

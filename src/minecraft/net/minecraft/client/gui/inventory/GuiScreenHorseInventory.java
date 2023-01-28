@@ -7,17 +7,15 @@ import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiScreenHorseInventory extends GuiContainer
-{
+public class GuiScreenHorseInventory extends GuiContainer {
     private static final ResourceLocation horseGuiTextures = new ResourceLocation("textures/gui/container/horse.png");
-    private IInventory playerInventory;
-    private IInventory horseInventory;
-    private EntityHorse horseEntity;
+    private final IInventory playerInventory;
+    private final IInventory horseInventory;
+    private final EntityHorse horseEntity;
     private float mousePosx;
     private float mousePosY;
 
-    public GuiScreenHorseInventory(IInventory playerInv, IInventory horseInv, EntityHorse horse)
-    {
+    public GuiScreenHorseInventory(IInventory playerInv, IInventory horseInv, EntityHorse horse) {
         super(new ContainerHorseInventory(playerInv, horseInv, horse, Minecraft.getMinecraft().thePlayer));
         this.playerInventory = playerInv;
         this.horseInventory = horseInv;

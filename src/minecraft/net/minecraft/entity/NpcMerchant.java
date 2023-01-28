@@ -8,15 +8,13 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-public class NpcMerchant implements IMerchant
-{
-    private InventoryMerchant theMerchantInventory;
-    private EntityPlayer customer;
+public class NpcMerchant implements IMerchant {
+    private final InventoryMerchant theMerchantInventory;
+    private final EntityPlayer customer;
     private MerchantRecipeList recipeList;
-    private IChatComponent field_175548_d;
+    private final IChatComponent field_175548_d;
 
-    public NpcMerchant(EntityPlayer p_i45817_1_, IChatComponent p_i45817_2_)
-    {
+    public NpcMerchant(EntityPlayer p_i45817_1_, IChatComponent p_i45817_2_) {
         this.customer = p_i45817_1_;
         this.field_175548_d = p_i45817_2_;
         this.theMerchantInventory = new InventoryMerchant(p_i45817_1_, this);
@@ -52,6 +50,6 @@ public class NpcMerchant implements IMerchant
 
     public IChatComponent getDisplayName()
     {
-        return (IChatComponent)(this.field_175548_d != null ? this.field_175548_d : new ChatComponentTranslation("entity.Villager.name", new Object[0]));
+        return this.field_175548_d != null ? this.field_175548_d : new ChatComponentTranslation("entity.Villager.name", new Object[0]);
     }
 }

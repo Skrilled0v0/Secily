@@ -29,23 +29,20 @@ import net.minecraft.world.storage.ThreadedFileIOBase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
-{
+public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO {
     private static final Logger logger = LogManager.getLogger();
-    private Map<ChunkCoordIntPair, NBTTagCompound> chunksToRemove = new ConcurrentHashMap();
-    private Set<ChunkCoordIntPair> pendingAnvilChunksCoordinates = Collections.<ChunkCoordIntPair>newSetFromMap(new ConcurrentHashMap());
+    private final Map<ChunkCoordIntPair, NBTTagCompound> chunksToRemove = new ConcurrentHashMap();
+    private final Set<ChunkCoordIntPair> pendingAnvilChunksCoordinates = Collections.<ChunkCoordIntPair>newSetFromMap(new ConcurrentHashMap());
     private final File chunkSaveLocation;
     private boolean field_183014_e = false;
 
-    public AnvilChunkLoader(File chunkSaveLocationIn)
-    {
+    public AnvilChunkLoader(File chunkSaveLocationIn) {
         this.chunkSaveLocation = chunkSaveLocationIn;
     }
 
-    public Chunk loadChunk(World worldIn, int x, int z) throws IOException
-    {
+    public Chunk loadChunk(World worldIn, int x, int z) throws IOException {
         ChunkCoordIntPair chunkcoordintpair = new ChunkCoordIntPair(x, z);
-        NBTTagCompound nbttagcompound = (NBTTagCompound)this.chunksToRemove.get(chunkcoordintpair);
+        NBTTagCompound nbttagcompound = this.chunksToRemove.get(chunkcoordintpair);
 
         if (nbttagcompound == null)
         {
@@ -109,7 +106,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
         }
         catch (Exception exception)
         {
-            logger.error((String)"Failed to save chunk", (Throwable)exception);
+            logger.error("Failed to save chunk", exception);
         }
     }
 
@@ -129,20 +126,20 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
         {
             if (this.field_183014_e)
             {
-                logger.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", new Object[] {this.chunkSaveLocation.getName()});
+                logger.info("ThreadedAnvilChunkStorage ({}): All chunks are saved", this.chunkSaveLocation.getName());
             }
 
             return false;
         }
         else
         {
-            ChunkCoordIntPair chunkcoordintpair = (ChunkCoordIntPair)this.chunksToRemove.keySet().iterator().next();
+            ChunkCoordIntPair chunkcoordintpair = this.chunksToRemove.keySet().iterator().next();
             boolean lvt_3_1_;
 
             try
             {
                 this.pendingAnvilChunksCoordinates.add(chunkcoordintpair);
-                NBTTagCompound nbttagcompound = (NBTTagCompound)this.chunksToRemove.remove(chunkcoordintpair);
+                NBTTagCompound nbttagcompound = this.chunksToRemove.remove(chunkcoordintpair);
 
                 if (nbttagcompound != null)
                 {
@@ -152,7 +149,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
                     }
                     catch (Exception exception)
                     {
-                        logger.error((String)"Failed to save chunk", (Throwable)exception);
+                        logger.error("Failed to save chunk", exception);
                     }
                 }
 
@@ -310,7 +307,7 @@ public class AnvilChunkLoader implements IChunkLoader, IThreadedFileIO
             for (NextTickListEntry nextticklistentry : list)
             {
                 NBTTagCompound nbttagcompound3 = new NBTTagCompound();
-                ResourceLocation resourcelocation = (ResourceLocation)Block.blockRegistry.getNameForObject(nextticklistentry.getBlock());
+                ResourceLocation resourcelocation = Block.blockRegistry.getNameForObject(nextticklistentry.getBlock());
                 nbttagcompound3.setString("i", resourcelocation == null ? "" : resourcelocation.toString());
                 nbttagcompound3.setInteger("x", nextticklistentry.position.getX());
                 nbttagcompound3.setInteger("y", nextticklistentry.position.getY());

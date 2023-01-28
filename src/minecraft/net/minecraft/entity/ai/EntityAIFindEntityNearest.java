@@ -1,8 +1,6 @@
 package net.minecraft.entity.ai;
 
 import com.google.common.base.Predicate;
-import java.util.Collections;
-import java.util.List;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,14 +10,17 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
+import java.util.List;
+
 public class EntityAIFindEntityNearest extends EntityAIBase
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private EntityLiving mob;
+    private final EntityLiving mob;
     private final Predicate<EntityLivingBase> field_179443_c;
     private final EntityAINearestAttackableTarget.Sorter field_179440_d;
     private EntityLivingBase target;
-    private Class <? extends EntityLivingBase > field_179439_f;
+    private final Class<? extends EntityLivingBase> field_179439_f;
 
     public EntityAIFindEntityNearest(EntityLiving mobIn, Class <? extends EntityLivingBase > p_i45884_2_)
     {
@@ -42,7 +43,7 @@ public class EntityAIFindEntityNearest extends EntityAIBase
                     d0 *= 0.800000011920929D;
                 }
 
-                return p_apply_1_.isInvisible() ? false : ((double)p_apply_1_.getDistanceToEntity(EntityAIFindEntityNearest.this.mob) > d0 ? false : EntityAITarget.isSuitableTarget(EntityAIFindEntityNearest.this.mob, p_apply_1_, false, true));
+                return !p_apply_1_.isInvisible() && (!((double) p_apply_1_.getDistanceToEntity(EntityAIFindEntityNearest.this.mob) > d0) && EntityAITarget.isSuitableTarget(EntityAIFindEntityNearest.this.mob, p_apply_1_, false, true));
             }
         };
         this.field_179440_d = new EntityAINearestAttackableTarget.Sorter(mobIn);
@@ -51,7 +52,7 @@ public class EntityAIFindEntityNearest extends EntityAIBase
     public boolean shouldExecute()
     {
         double d0 = this.getFollowRange();
-        List<EntityLivingBase> list = this.mob.worldObj.<EntityLivingBase>getEntitiesWithinAABB(this.field_179439_f, this.mob.getEntityBoundingBox().expand(d0, 4.0D, d0), this.field_179443_c);
+        List<EntityLivingBase> list = this.mob.worldObj.getEntitiesWithinAABB(this.field_179439_f, this.mob.getEntityBoundingBox().expand(d0, 4.0D, d0), this.field_179443_c);
         Collections.sort(list, this.field_179440_d);
 
         if (list.isEmpty())
@@ -60,7 +61,7 @@ public class EntityAIFindEntityNearest extends EntityAIBase
         }
         else
         {
-            this.target = (EntityLivingBase)list.get(0);
+            this.target = list.get(0);
             return true;
         }
     }
@@ -80,7 +81,7 @@ public class EntityAIFindEntityNearest extends EntityAIBase
         else
         {
             double d0 = this.getFollowRange();
-            return this.mob.getDistanceSqToEntity(entitylivingbase) > d0 * d0 ? false : !(entitylivingbase instanceof EntityPlayerMP) || !((EntityPlayerMP)entitylivingbase).theItemInWorldManager.isCreative();
+            return !(this.mob.getDistanceSqToEntity(entitylivingbase) > d0 * d0) && (!(entitylivingbase instanceof EntityPlayerMP) || !((EntityPlayerMP) entitylivingbase).theItemInWorldManager.isCreative());
         }
     }
 
@@ -92,7 +93,7 @@ public class EntityAIFindEntityNearest extends EntityAIBase
 
     public void resetTask()
     {
-        this.mob.setAttackTarget((EntityLivingBase)null);
+        this.mob.setAttackTarget(null);
         super.startExecuting();
     }
 

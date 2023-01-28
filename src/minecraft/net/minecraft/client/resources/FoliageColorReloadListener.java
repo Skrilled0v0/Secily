@@ -1,9 +1,10 @@
 package net.minecraft.client.resources;
 
-import java.io.IOException;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.ColorizerFoliage;
+
+import java.io.IOException;
 
 public class FoliageColorReloadListener implements IResourceManagerReloadListener
 {
@@ -17,7 +18,6 @@ public class FoliageColorReloadListener implements IResourceManagerReloadListene
         }
         catch (IOException var3)
         {
-            ;
         }
     }
 }

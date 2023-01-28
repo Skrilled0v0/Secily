@@ -175,20 +175,20 @@ public class RenderManager {
             if (Reflector.callBoolean(block, Reflector.ForgeBlock_isBed, iblockstate, worldIn, new BlockPos(livingPlayerIn), livingPlayerIn)) {
                 EnumFacing enumfacing = (EnumFacing) Reflector.call(block, Reflector.ForgeBlock_getBedDirection, new Object[]{iblockstate, worldIn, new BlockPos(livingPlayerIn)});
                 int i = enumfacing.getHorizontalIndex();
-                this.playerViewY = (float) (i * 90 + 180);
-                this.playerViewX = 0.0F;
+                playerViewY = (float) (i * 90 + 180);
+                playerViewX = 0.0F;
             } else if (block == Blocks.bed) {
                 int j = iblockstate.getValue(BlockBed.FACING).getHorizontalIndex();
-                this.playerViewY = (float) (j * 90 + 180);
-                this.playerViewX = 0.0F;
+                playerViewY = (float) (j * 90 + 180);
+                playerViewX = 0.0F;
             }
         } else {
-            this.playerViewY = livingPlayerIn.prevRotationYaw + (livingPlayerIn.rotationYaw - livingPlayerIn.prevRotationYaw) * partialTicks;
-            this.playerViewX = livingPlayerIn.prevRotationPitch + (livingPlayerIn.rotationPitch - livingPlayerIn.prevRotationPitch) * partialTicks;
+            playerViewY = livingPlayerIn.prevRotationYaw + (livingPlayerIn.rotationYaw - livingPlayerIn.prevRotationYaw) * partialTicks;
+            playerViewX = livingPlayerIn.prevRotationPitch + (livingPlayerIn.rotationPitch - livingPlayerIn.prevRotationPitch) * partialTicks;
         }
 
         if (optionsIn.thirdPersonView == 2) {
-            this.playerViewY += 180.0F;
+            playerViewY += 180.0F;
         }
 
         this.viewerPosX = livingPlayerIn.lastTickPosX + (livingPlayerIn.posX - livingPlayerIn.lastTickPosX) * (double) partialTicks;
@@ -197,7 +197,7 @@ public class RenderManager {
     }
 
     public void setPlayerViewY(float playerViewYIn) {
-        this.playerViewY = playerViewYIn;
+        playerViewY = playerViewYIn;
     }
 
     public boolean isRenderShadow() {

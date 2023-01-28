@@ -2,6 +2,7 @@ package net.minecraft.server.management;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+
 import java.io.File;
 
 public class UserListOps extends UserList<GameProfile, UserListOpsEntry>
@@ -23,16 +24,15 @@ public class UserListOps extends UserList<GameProfile, UserListOpsEntry>
 
         for (UserListOpsEntry userlistopsentry : this.getValues().values())
         {
-            astring[i++] = ((GameProfile)userlistopsentry.getValue()).getName();
+            astring[i++] = userlistopsentry.getValue().getName();
         }
 
         return astring;
     }
 
-    public boolean bypassesPlayerLimit(GameProfile profile)
-    {
-        UserListOpsEntry userlistopsentry = (UserListOpsEntry)this.getEntry(profile);
-        return userlistopsentry != null ? userlistopsentry.bypassesPlayerLimit() : false;
+    public boolean bypassesPlayerLimit(GameProfile profile) {
+        UserListOpsEntry userlistopsentry = this.getEntry(profile);
+        return userlistopsentry != null && userlistopsentry.bypassesPlayerLimit();
     }
 
     protected String getObjectKey(GameProfile obj)
@@ -44,9 +44,8 @@ public class UserListOps extends UserList<GameProfile, UserListOpsEntry>
     {
         for (UserListOpsEntry userlistopsentry : this.getValues().values())
         {
-            if (username.equalsIgnoreCase(((GameProfile)userlistopsentry.getValue()).getName()))
-            {
-                return (GameProfile)userlistopsentry.getValue();
+            if (username.equalsIgnoreCase(userlistopsentry.getValue().getName())) {
+                return userlistopsentry.getValue();
             }
         }
 

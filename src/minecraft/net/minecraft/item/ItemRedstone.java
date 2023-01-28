@@ -2,7 +2,6 @@ package net.minecraft.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
@@ -29,17 +28,13 @@ public class ItemRedstone extends Item
         {
             Block block = worldIn.getBlockState(blockpos).getBlock();
 
-            if (!worldIn.canBlockBePlaced(block, blockpos, false, side, (Entity)null, stack))
-            {
+            if (!worldIn.canBlockBePlaced(block, blockpos, false, side, null, stack)) {
                 return false;
-            }
-            else if (Blocks.redstone_wire.canPlaceBlockAt(worldIn, blockpos))
-            {
+            } else if (Blocks.redstone_wire.canPlaceBlockAt(worldIn, blockpos)) {
                 --stack.stackSize;
                 worldIn.setBlockState(blockpos, Blocks.redstone_wire.getDefaultState());
                 return true;
-            }
-            else
+            } else
             {
                 return false;
             }

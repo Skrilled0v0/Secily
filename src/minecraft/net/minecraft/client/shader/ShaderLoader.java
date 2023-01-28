@@ -1,11 +1,6 @@
 package net.minecraft.client.shader;
 
 import com.google.common.collect.Maps;
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.Map;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.util.JsonException;
@@ -14,11 +9,16 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.BufferUtils;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Map;
+
 public class ShaderLoader
 {
     private final ShaderLoader.ShaderType shaderType;
     private final String shaderFilename;
-    private int shader;
+    private final int shader;
     private int shaderAttachCount = 0;
 
     private ShaderLoader(ShaderLoader.ShaderType type, int shaderId, String filename)
@@ -52,7 +52,7 @@ public class ShaderLoader
 
     public static ShaderLoader loadShader(IResourceManager resourceManager, ShaderLoader.ShaderType type, String filename) throws IOException
     {
-        ShaderLoader shaderloader = (ShaderLoader)type.getLoadedShaders().get(filename);
+        ShaderLoader shaderloader = type.getLoadedShaders().get(filename);
 
         if (shaderloader == null)
         {
@@ -69,7 +69,7 @@ public class ShaderLoader
             if (OpenGlHelper.glGetShaderi(i, OpenGlHelper.GL_COMPILE_STATUS) == 0)
             {
                 String s = StringUtils.trim(OpenGlHelper.glGetShaderInfoLog(i, 32768));
-                JsonException jsonexception = new JsonException("Couldn\'t compile " + type.getShaderName() + " program: " + s);
+                JsonException jsonexception = new JsonException("Couldn't compile " + type.getShaderName() + " program: " + s);
                 jsonexception.func_151381_b(resourcelocation.getResourcePath());
                 throw jsonexception;
             }
@@ -87,7 +87,7 @@ public class ShaderLoader
 
         try
         {
-            abyte = IOUtils.toByteArray((InputStream)p_177064_0_);
+            abyte = IOUtils.toByteArray(p_177064_0_);
         }
         finally
         {
@@ -97,18 +97,16 @@ public class ShaderLoader
         return abyte;
     }
 
-    public static enum ShaderType
-    {
+    public enum ShaderType {
         VERTEX("vertex", ".vsh", OpenGlHelper.GL_VERTEX_SHADER),
         FRAGMENT("fragment", ".fsh", OpenGlHelper.GL_FRAGMENT_SHADER);
 
         private final String shaderName;
         private final String shaderExtension;
         private final int shaderMode;
-        private final Map<String, ShaderLoader> loadedShaders = Maps.<String, ShaderLoader>newHashMap();
+        private final Map<String, ShaderLoader> loadedShaders = Maps.newHashMap();
 
-        private ShaderType(String p_i45090_3_, String p_i45090_4_, int p_i45090_5_)
-        {
+        ShaderType(String p_i45090_3_, String p_i45090_4_, int p_i45090_5_) {
             this.shaderName = p_i45090_3_;
             this.shaderExtension = p_i45090_4_;
             this.shaderMode = p_i45090_5_;
@@ -119,18 +117,15 @@ public class ShaderLoader
             return this.shaderName;
         }
 
-        protected String getShaderExtension()
-        {
+        private String getShaderExtension() {
             return this.shaderExtension;
         }
 
-        protected int getShaderMode()
-        {
+        private int getShaderMode() {
             return this.shaderMode;
         }
 
-        protected Map<String, ShaderLoader> getLoadedShaders()
-        {
+        private Map<String, ShaderLoader> getLoadedShaders() {
             return this.loadedShaders;
         }
     }

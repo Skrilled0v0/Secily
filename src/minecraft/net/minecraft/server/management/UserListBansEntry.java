@@ -2,6 +2,7 @@ package net.minecraft.server.management;
 
 import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -9,7 +10,7 @@ public class UserListBansEntry extends BanEntry<GameProfile>
 {
     public UserListBansEntry(GameProfile profile)
     {
-        this(profile, (Date)null, (String)null, (Date)null, (String)null);
+        this(profile, null, null, null, null);
     }
 
     public UserListBansEntry(GameProfile profile, Date startDate, String banner, Date endDate, String banReason)
@@ -24,10 +25,9 @@ public class UserListBansEntry extends BanEntry<GameProfile>
 
     protected void onSerialization(JsonObject data)
     {
-        if (this.getValue() != null)
-        {
-            data.addProperty("uuid", ((GameProfile)this.getValue()).getId() == null ? "" : ((GameProfile)this.getValue()).getId().toString());
-            data.addProperty("name", ((GameProfile)this.getValue()).getName());
+        if (this.getValue() != null) {
+            data.addProperty("uuid", this.getValue().getId() == null ? "" : this.getValue().getId().toString());
+            data.addProperty("name", this.getValue().getName());
             super.onSerialization(data);
         }
     }

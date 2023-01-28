@@ -6,15 +6,13 @@ import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
-public class ModelGuardian extends ModelBase
-{
-    private ModelRenderer guardianBody;
-    private ModelRenderer guardianEye;
-    private ModelRenderer[] guardianSpines;
-    private ModelRenderer[] guardianTail;
+public class ModelGuardian extends ModelBase {
+    private final ModelRenderer guardianBody;
+    private final ModelRenderer guardianEye;
+    private final ModelRenderer[] guardianSpines;
+    private final ModelRenderer[] guardianTail;
 
-    public ModelGuardian()
-    {
+    public ModelGuardian() {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.guardianSpines = new ModelRenderer[12];

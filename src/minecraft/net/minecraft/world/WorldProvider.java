@@ -66,9 +66,9 @@ public abstract class WorldProvider
         }
     }
 
-    public IChunkProvider createChunkGenerator()
+    public static WorldProvider getProviderForDimension(int dimension)
     {
-        return (IChunkProvider)(this.terrainType == WorldType.FLAT ? new ChunkProviderFlat(this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled(), this.generatorSettings) : (this.terrainType == WorldType.DEBUG_WORLD ? new ChunkProviderDebug(this.worldObj) : (this.terrainType == WorldType.CUSTOMIZED ? new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled(), this.generatorSettings) : new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled(), this.generatorSettings))));
+        return dimension == -1 ? new WorldProviderHell() : (dimension == 0 ? new WorldProviderSurface() : (dimension == 1 ? new WorldProviderEnd() : null));
     }
 
     public boolean canCoordinateBeSpawn(int x, int z)
@@ -76,24 +76,9 @@ public abstract class WorldProvider
         return this.worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)) == Blocks.grass;
     }
 
-    public float calculateCelestialAngle(long worldTime, float partialTicks)
+    public IChunkProvider createChunkGenerator()
     {
-        int i = (int)(worldTime % 24000L);
-        float f = ((float)i + partialTicks) / 24000.0F - 0.25F;
-
-        if (f < 0.0F)
-        {
-            ++f;
-        }
-
-        if (f > 1.0F)
-        {
-            --f;
-        }
-
-        f = 1.0F - (float)((Math.cos((double)f * Math.PI) + 1.0D) / 2.0D);
-        f = f + (f - f) / 3.0F;
-        return f;
+        return this.terrainType == WorldType.FLAT ? new ChunkProviderFlat(this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled(), this.generatorSettings) : (this.terrainType == WorldType.DEBUG_WORLD ? new ChunkProviderDebug(this.worldObj) : (new ChunkProviderGenerate(this.worldObj, this.worldObj.getSeed(), this.worldObj.getWorldInfo().isMapFeaturesEnabled(), this.generatorSettings)));
     }
 
     public int getMoonPhase(long worldTime)
@@ -129,6 +114,31 @@ public abstract class WorldProvider
         }
     }
 
+    public float calculateCelestialAngle(long worldTime, float partialTicks)
+    {
+        int i = (int)(worldTime % 24000L);
+        float f = ((float)i + partialTicks) / 24000.0F - 0.25F;
+
+        if (f < 0.0F)
+        {
+            ++f;
+        }
+
+        if (f > 1.0F)
+        {
+            --f;
+        }
+
+        f = 1.0F - (float) ((Math.cos((double) f * Math.PI) + 1.0D) / 2.0D);
+        f = f + (0.0f) / 3.0F;
+        return f;
+    }
+
+    public boolean canRespawnHere()
+    {
+        return true;
+    }
+
     public Vec3 getFogColor(float p_76562_1_, float p_76562_2_)
     {
         float f = MathHelper.cos(p_76562_1_ * (float)Math.PI * 2.0F) * 2.0F + 0.5F;
@@ -139,17 +149,7 @@ public abstract class WorldProvider
         f1 = f1 * (f * 0.94F + 0.06F);
         f2 = f2 * (f * 0.94F + 0.06F);
         f3 = f3 * (f * 0.91F + 0.09F);
-        return new Vec3((double)f1, (double)f2, (double)f3);
-    }
-
-    public boolean canRespawnHere()
-    {
-        return true;
-    }
-
-    public static WorldProvider getProviderForDimension(int dimension)
-    {
-        return (WorldProvider)(dimension == -1 ? new WorldProviderHell() : (dimension == 0 ? new WorldProviderSurface() : (dimension == 1 ? new WorldProviderEnd() : null)));
+        return new Vec3(f1, f2, f3);
     }
 
     public float getCloudHeight()

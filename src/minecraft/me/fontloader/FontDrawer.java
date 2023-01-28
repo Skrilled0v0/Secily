@@ -212,8 +212,8 @@ public final class FontDrawer {
         postDraw();
     }
 
-    public void drawCenteredStringWithShadow(String s, double x, double y, int color) {
-        drawStringWithShadow(s, x - getStringWidth(s) / 2.0, y, color);
+    public void drawCenteredStringWithShadow(String s, double x, double y, float shadow, int color) {
+        drawStringWithShadow(s, x - getStringWidth(s) / 2.0, y, shadow, color);
     }
 
     public void drawCenteredString(String s, double x, double y, int color) {
@@ -228,8 +228,8 @@ public final class FontDrawer {
         drawString(s, x, y, color);
     }
 
-    public void drawStringWithShadow(String s, double x, double y, int color) {
-        drawString(s, x + 1.5, y + 1.5, color, true);
+    public void drawStringWithShadow(String s, double x, double y, float shadow, int color) {
+        drawString(s, x + shadow, y + shadow, color, true);
         drawString(s, x, y, color, false);
     }
 

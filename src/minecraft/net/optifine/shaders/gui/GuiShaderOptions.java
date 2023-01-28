@@ -16,12 +16,11 @@ import net.optifine.shaders.config.ShaderOption;
 import net.optifine.shaders.config.ShaderOptionProfile;
 import net.optifine.shaders.config.ShaderOptionScreen;
 
-public class GuiShaderOptions extends GuiScreenOF
-{
-    private GuiScreen prevScreen;
+public class GuiShaderOptions extends GuiScreenOF {
+    private final GuiScreen prevScreen;
     protected String title;
-    private GameSettings settings;
-    private TooltipManager tooltipManager;
+    private final GameSettings settings;
+    private final TooltipManager tooltipManager;
     private String screenName;
     private String screenText;
     private boolean changed;
@@ -29,8 +28,7 @@ public class GuiShaderOptions extends GuiScreenOF
     public static final String OPTION_EMPTY = "<empty>";
     public static final String OPTION_REST = "*";
 
-    public GuiShaderOptions(GuiScreen guiscreen, GameSettings gamesettings)
-    {
+    public GuiShaderOptions(GuiScreen guiscreen, GameSettings gamesettings) {
         this.tooltipManager = new TooltipManager(this, new TooltipProviderShaderOptions());
         this.screenName = null;
         this.screenText = null;
@@ -53,7 +51,7 @@ public class GuiShaderOptions extends GuiScreenOF
 
     public void initGui()
     {
-        this.title = I18n.format("of.options.shaderOptionsTitle", new Object[0]);
+        this.title = I18n.format("of.options.shaderOptionsTitle");
         int i = 100;
         int j = 0;
         int k = 30;
@@ -92,8 +90,7 @@ public class GuiShaderOptions extends GuiScreenOF
                     {
                         guibuttonshaderoption = new GuiSliderShaderOption(i + i2, i3, j3, k3, j1, shaderoption, s);
                     }
-                    else
-                    {
+                    else {
                         guibuttonshaderoption = new GuiButtonShaderOption(i + i2, i3, j3, k3, j1, shaderoption, s);
                     }
 
@@ -103,8 +100,8 @@ public class GuiShaderOptions extends GuiScreenOF
             }
         }
 
-        this.buttonList.add(new GuiButton(201, this.width / 2 - i1 - 20, this.height / 6 + 168 + 11, i1, j1, I18n.format("controls.reset", new Object[0])));
-        this.buttonList.add(new GuiButton(200, this.width / 2 + 20, this.height / 6 + 168 + 11, i1, j1, I18n.format("gui.done", new Object[0])));
+        this.buttonList.add(new GuiButton(201, this.width / 2 - i1 - 20, this.height / 6 + 168 + 11, i1, j1, I18n.format("controls.reset")));
+        this.buttonList.add(new GuiButton(200, this.width / 2 + 20, this.height / 6 + 168 + 11, i1, j1, I18n.format("gui.done")));
     }
 
     public static String getButtonText(ShaderOption so, int btnWidth)
@@ -122,7 +119,6 @@ public class GuiShaderOptions extends GuiScreenOF
 
             for (int i = fontrenderer.getStringWidth(": " + Lang.getOff()) + 5; fontrenderer.getStringWidth(s) + i >= btnWidth && s.length() > 0; s = s.substring(0, s.length() - 1))
             {
-                ;
             }
 
             String s1 = so.isChanged() ? so.getValueColor(so.getValue()) : "";
@@ -245,7 +241,7 @@ public class GuiShaderOptions extends GuiScreenOF
 
     public void drawScreen(int x, int y, float f)
     {
-        this.drawDefaultBackground();
+        this.drawBackground();
 
         if (this.screenText != null)
         {

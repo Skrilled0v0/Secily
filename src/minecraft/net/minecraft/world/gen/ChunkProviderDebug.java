@@ -17,7 +17,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 public class ChunkProviderDebug implements IChunkProvider
 {
-    private static final List<IBlockState> field_177464_a = Lists.<IBlockState>newArrayList();
+    private static final List<IBlockState> field_177464_a = Lists.newArrayList();
     private static final int field_177462_b;
     private static final int field_181039_c;
     private final World world;
@@ -25,6 +25,29 @@ public class ChunkProviderDebug implements IChunkProvider
     public ChunkProviderDebug(World worldIn)
     {
         this.world = worldIn;
+    }
+
+    public static IBlockState func_177461_b(int p_177461_0_, int p_177461_1_)
+    {
+        IBlockState iblockstate = null;
+
+        if (p_177461_0_ > 0 && p_177461_1_ > 0 && p_177461_0_ % 2 != 0 && p_177461_1_ % 2 != 0)
+        {
+            p_177461_0_ = p_177461_0_ / 2;
+            p_177461_1_ = p_177461_1_ / 2;
+
+            if (p_177461_0_ <= field_177462_b && p_177461_1_ <= field_181039_c)
+            {
+                int i = MathHelper.abs_int(p_177461_0_ * field_177462_b + p_177461_1_);
+
+                if (i < field_177464_a.size())
+                {
+                    iblockstate = field_177464_a.get(i);
+                }
+            }
+        }
+
+        return iblockstate;
     }
 
     public Chunk provideChunk(int x, int z)
@@ -49,7 +72,7 @@ public class ChunkProviderDebug implements IChunkProvider
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
         chunk.generateSkylightMap();
-        BiomeGenBase[] abiomegenbase = this.world.getWorldChunkManager().loadBlockGeneratorData((BiomeGenBase[])null, x * 16, z * 16, 16, 16);
+        BiomeGenBase[] abiomegenbase = this.world.getWorldChunkManager().loadBlockGeneratorData(null, x * 16, z * 16, 16, 16);
         byte[] abyte = chunk.getBiomeArray();
 
         for (int i1 = 0; i1 < abyte.length; ++i1)
@@ -59,29 +82,6 @@ public class ChunkProviderDebug implements IChunkProvider
 
         chunk.generateSkylightMap();
         return chunk;
-    }
-
-    public static IBlockState func_177461_b(int p_177461_0_, int p_177461_1_)
-    {
-        IBlockState iblockstate = null;
-
-        if (p_177461_0_ > 0 && p_177461_1_ > 0 && p_177461_0_ % 2 != 0 && p_177461_1_ % 2 != 0)
-        {
-            p_177461_0_ = p_177461_0_ / 2;
-            p_177461_1_ = p_177461_1_ / 2;
-
-            if (p_177461_0_ <= field_177462_b && p_177461_1_ <= field_181039_c)
-            {
-                int i = MathHelper.abs_int(p_177461_0_ * field_177462_b + p_177461_1_);
-
-                if (i < field_177464_a.size())
-                {
-                    iblockstate = (IBlockState)field_177464_a.get(i);
-                }
-            }
-        }
-
-        return iblockstate;
     }
 
     public boolean chunkExists(int x, int z)

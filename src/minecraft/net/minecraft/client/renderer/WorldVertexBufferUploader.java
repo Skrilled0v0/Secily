@@ -1,13 +1,14 @@
 package net.minecraft.client.renderer;
 
-import java.nio.ByteBuffer;
-import java.util.List;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.src.Config;
 import net.optifine.reflect.Reflector;
 import net.optifine.shaders.SVertexBuilder;
 import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
+import java.util.List;
 
 public class WorldVertexBufferUploader
 {
@@ -30,12 +31,12 @@ public class WorldVertexBufferUploader
 
             for (int j = 0; j < list.size(); ++j)
             {
-                VertexFormatElement vertexformatelement = (VertexFormatElement)list.get(j);
+                VertexFormatElement vertexformatelement = list.get(j);
                 VertexFormatElement.EnumUsage vertexformatelement$enumusage = vertexformatelement.getUsage();
 
                 if (flag)
                 {
-                    Reflector.callVoid(vertexformatelement$enumusage, Reflector.ForgeVertexFormatElementEnumUseage_preDraw, new Object[] {vertexformat, Integer.valueOf(j), Integer.valueOf(i), bytebuffer});
+                    Reflector.callVoid(vertexformatelement$enumusage, Reflector.ForgeVertexFormatElementEnumUseage_preDraw, vertexformat, Integer.valueOf(j), Integer.valueOf(i), bytebuffer);
                 }
                 else
                 {
@@ -86,12 +87,12 @@ public class WorldVertexBufferUploader
 
             for (int k1 = list.size(); j1 < k1; ++j1)
             {
-                VertexFormatElement vertexformatelement1 = (VertexFormatElement)list.get(j1);
+                VertexFormatElement vertexformatelement1 = list.get(j1);
                 VertexFormatElement.EnumUsage vertexformatelement$enumusage1 = vertexformatelement1.getUsage();
 
                 if (flag1)
                 {
-                    Reflector.callVoid(vertexformatelement$enumusage1, Reflector.ForgeVertexFormatElementEnumUseage_postDraw, new Object[] {vertexformat, Integer.valueOf(j1), Integer.valueOf(i), bytebuffer});
+                    Reflector.callVoid(vertexformatelement$enumusage1, Reflector.ForgeVertexFormatElementEnumUseage_postDraw, vertexformat, Integer.valueOf(j1), Integer.valueOf(i), bytebuffer);
                 }
                 else
                 {

@@ -3,11 +3,7 @@ package net.minecraft.stats;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.IJsonSerializable;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 
 public class Achievement extends StatBase
 {
@@ -31,7 +27,7 @@ public class Achievement extends StatBase
 
     public Achievement(String statIdIn, String unlocalizedName, int column, int row, ItemStack stack, Achievement parent)
     {
-        super(statIdIn, new ChatComponentTranslation("achievement." + unlocalizedName, new Object[0]));
+        super(statIdIn, new ChatComponentTranslation("achievement." + unlocalizedName));
         this.theItemStack = stack;
         this.achievementDescription = "achievement." + unlocalizedName + ".desc";
         this.displayColumn = column;

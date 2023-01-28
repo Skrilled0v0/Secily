@@ -3,20 +3,17 @@ package net.minecraft.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class ContainerChest extends Container
-{
-    private IInventory lowerChestInventory;
-    private int numRows;
+public class ContainerChest extends Container {
+    private final IInventory lowerChestInventory;
+    private final int numRows;
 
-    public ContainerChest(IInventory playerInventory, IInventory chestInventory, EntityPlayer player)
-    {
+    public ContainerChest(IInventory playerInventory, IInventory chestInventory, EntityPlayer player) {
         this.lowerChestInventory = chestInventory;
         this.numRows = chestInventory.getSizeInventory() / 9;
         chestInventory.openInventory(player);
         int i = (this.numRows - 4) * 18;
 
-        for (int j = 0; j < this.numRows; ++j)
-        {
+        for (int j = 0; j < this.numRows; ++j) {
             for (int k = 0; k < 9; ++k)
             {
                 this.addSlotToContainer(new Slot(chestInventory, k + j * 9, 8 + k * 18, 18 + j * 18));
@@ -45,7 +42,7 @@ public class ContainerChest extends Container
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -66,7 +63,7 @@ public class ContainerChest extends Container
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(null);
             }
             else
             {

@@ -8,7 +8,7 @@ import net.minecraft.stats.AchievementList;
 
 public class ContainerBrewingStand extends Container
 {
-    private IInventory tileBrewingStand;
+    private final IInventory tileBrewingStand;
     private final Slot theSlot;
     private int brewTime;
 
@@ -46,7 +46,7 @@ public class ContainerBrewingStand extends Container
 
         for (int i = 0; i < this.crafters.size(); ++i)
         {
-            ICrafting icrafting = (ICrafting)this.crafters.get(i);
+            ICrafting icrafting = this.crafters.get(i);
 
             if (this.brewTime != this.tileBrewingStand.getField(0))
             {
@@ -70,7 +70,7 @@ public class ContainerBrewingStand extends Container
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index)
     {
         ItemStack itemstack = null;
-        Slot slot = (Slot)this.inventorySlots.get(index);
+        Slot slot = this.inventorySlots.get(index);
 
         if (slot != null && slot.getHasStack())
         {
@@ -124,7 +124,7 @@ public class ContainerBrewingStand extends Container
 
             if (itemstack1.stackSize == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(null);
             }
             else
             {
@@ -142,27 +142,9 @@ public class ContainerBrewingStand extends Container
         return itemstack;
     }
 
-    class Ingredient extends Slot
-    {
-        public Ingredient(IInventory inventoryIn, int index, int xPosition, int yPosition)
-        {
-            super(inventoryIn, index, xPosition, yPosition);
-        }
-
-        public boolean isItemValid(ItemStack stack)
-        {
-            return stack != null ? stack.getItem().isPotionIngredient(stack) : false;
-        }
-
-        public int getSlotStackLimit()
-        {
-            return 64;
-        }
-    }
-
     static class Potion extends Slot
     {
-        private EntityPlayer player;
+        private final EntityPlayer player;
 
         public Potion(EntityPlayer playerIn, IInventory inventoryIn, int index, int xPosition, int yPosition)
         {
@@ -193,6 +175,24 @@ public class ContainerBrewingStand extends Container
         public static boolean canHoldPotion(ItemStack stack)
         {
             return stack != null && (stack.getItem() == Items.potionitem || stack.getItem() == Items.glass_bottle);
+        }
+    }
+
+    class Ingredient extends Slot
+    {
+        public Ingredient(IInventory inventoryIn, int index, int xPosition, int yPosition)
+        {
+            super(inventoryIn, index, xPosition, yPosition);
+        }
+
+        public boolean isItemValid(ItemStack stack)
+        {
+            return stack != null && stack.getItem().isPotionIngredient(stack);
+        }
+
+        public int getSlotStackLimit()
+        {
+            return 64;
         }
     }
 }

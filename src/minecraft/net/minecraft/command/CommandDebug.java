@@ -32,51 +32,17 @@ public class CommandDebug extends CommandBase
         return "commands.debug.usage";
     }
 
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException
+    private static String getWittyComment()
     {
-        if (args.length < 1)
+        String[] astring = new String[]{"Shiny numbers!", "Am I not running fast enough? :(", "I'm working as hard as I can!", "Will I ever be good enough for you? :(", "Speedy. Zoooooom!", "Hello world", "40% better than a crash report.", "Now with extra numbers", "Now with less numbers", "Now with the same numbers", "You should add flames to things, it makes them go faster!", "Do you feel the need for... optimization?", "*cracks redstone whip*", "Maybe if you treated it better then it'll have more motivation to work faster! Poor server."};
+
+        try
         {
-            throw new WrongUsageException("commands.debug.usage", new Object[0]);
+            return astring[(int)(System.nanoTime() % (long)astring.length)];
         }
-        else
+        catch (Throwable var2)
         {
-            if (args[0].equals("start"))
-            {
-                if (args.length != 1)
-                {
-                    throw new WrongUsageException("commands.debug.usage", new Object[0]);
-                }
-
-                notifyOperators(sender, this, "commands.debug.start", new Object[0]);
-                MinecraftServer.getServer().enableProfiling();
-                this.profileStartTime = MinecraftServer.getCurrentTimeMillis();
-                this.profileStartTick = MinecraftServer.getServer().getTickCounter();
-            }
-            else
-            {
-                if (!args[0].equals("stop"))
-                {
-                    throw new WrongUsageException("commands.debug.usage", new Object[0]);
-                }
-
-                if (args.length != 1)
-                {
-                    throw new WrongUsageException("commands.debug.usage", new Object[0]);
-                }
-
-                if (!MinecraftServer.getServer().theProfiler.profilingEnabled)
-                {
-                    throw new CommandException("commands.debug.notStarted", new Object[0]);
-                }
-
-                long i = MinecraftServer.getCurrentTimeMillis();
-                int j = MinecraftServer.getServer().getTickCounter();
-                long k = i - this.profileStartTime;
-                int l = j - this.profileStartTick;
-                this.saveProfileResults(k, l);
-                MinecraftServer.getServer().theProfiler.profilingEnabled = false;
-                notifyOperators(sender, this, "commands.debug.stop", new Object[] {Float.valueOf((float)k / 1000.0F), Integer.valueOf(l)});
-            }
+            return "Witty comment unavailable :(";
         }
     }
 
@@ -97,6 +63,54 @@ public class CommandDebug extends CommandBase
         }
     }
 
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException
+    {
+        if (args.length < 1)
+        {
+            throw new WrongUsageException("commands.debug.usage");
+        }
+        else
+        {
+            if (args[0].equals("start"))
+            {
+                if (args.length != 1)
+                {
+                    throw new WrongUsageException("commands.debug.usage");
+                }
+
+                notifyOperators(sender, this, "commands.debug.start");
+                MinecraftServer.getServer().enableProfiling();
+                this.profileStartTime = MinecraftServer.getCurrentTimeMillis();
+                this.profileStartTick = MinecraftServer.getServer().getTickCounter();
+            }
+            else
+            {
+                if (!args[0].equals("stop"))
+                {
+                    throw new WrongUsageException("commands.debug.usage");
+                }
+
+                if (args.length != 1)
+                {
+                    throw new WrongUsageException("commands.debug.usage");
+                }
+
+                if (!MinecraftServer.getServer().theProfiler.profilingEnabled)
+                {
+                    throw new CommandException("commands.debug.notStarted");
+                }
+
+                long i = MinecraftServer.getCurrentTimeMillis();
+                int j = MinecraftServer.getServer().getTickCounter();
+                long k = i - this.profileStartTime;
+                int l = j - this.profileStartTick;
+                this.saveProfileResults(k, l);
+                MinecraftServer.getServer().theProfiler.profilingEnabled = false;
+                notifyOperators(sender, this, "commands.debug.stop", Float.valueOf((float) k / 1000.0F), Integer.valueOf(l));
+            }
+        }
+    }
+
     private String getProfileResults(long timeSpan, int tickSpan)
     {
         StringBuilder stringbuilder = new StringBuilder();
@@ -106,7 +120,7 @@ public class CommandDebug extends CommandBase
         stringbuilder.append("\n\n");
         stringbuilder.append("Time span: ").append(timeSpan).append(" ms\n");
         stringbuilder.append("Tick span: ").append(tickSpan).append(" ticks\n");
-        stringbuilder.append("// This is approximately ").append(String.format("%.2f", new Object[] {Float.valueOf((float)tickSpan / ((float)timeSpan / 1000.0F))})).append(" ticks per second. It should be ").append((int)20).append(" ticks per second\n\n");
+        stringbuilder.append("// This is approximately ").append(String.format("%.2f", Float.valueOf((float) tickSpan / ((float) timeSpan / 1000.0F)))).append(" ticks per second. It should be ").append(20).append(" ticks per second\n\n");
         stringbuilder.append("--- BEGIN PROFILE DUMP ---\n\n");
         this.func_147202_a(0, "root", stringbuilder);
         stringbuilder.append("--- END PROFILE DUMP ---\n\n");
@@ -119,49 +133,32 @@ public class CommandDebug extends CommandBase
 
         if (list != null && list.size() >= 3)
         {
-            for (int i = 1; i < list.size(); ++i)
-            {
-                Profiler.Result profiler$result = (Profiler.Result)list.get(i);
-                stringBuilder.append(String.format("[%02d] ", new Object[] {Integer.valueOf(p_147202_1_)}));
+            for (int i = 1; i < list.size(); ++i) {
+                Profiler.Result profiler$result = list.get(i);
+                stringBuilder.append(String.format("[%02d] ", Integer.valueOf(p_147202_1_)));
 
-                for (int j = 0; j < p_147202_1_; ++j)
-                {
+                for (int j = 0; j < p_147202_1_; ++j) {
                     stringBuilder.append(" ");
                 }
 
-                stringBuilder.append(profiler$result.field_76331_c).append(" - ").append(String.format("%.2f", new Object[] {Double.valueOf(profiler$result.field_76332_a)})).append("%/").append(String.format("%.2f", new Object[] {Double.valueOf(profiler$result.field_76330_b)})).append("%\n");
+                stringBuilder.append(profiler$result.field_76331_c).append(" - ").append(String.format("%.2f", Double.valueOf(profiler$result.field_76332_a))).append("%/").append(String.format("%.2f", Double.valueOf(profiler$result.field_76330_b))).append("%\n");
 
-                if (!profiler$result.field_76331_c.equals("unspecified"))
-                {
+                if (!profiler$result.field_76331_c.equals("unspecified")) {
                     try
                     {
                         this.func_147202_a(p_147202_1_ + 1, p_147202_2_ + "." + profiler$result.field_76331_c, stringBuilder);
                     }
                     catch (Exception exception)
                     {
-                        stringBuilder.append("[[ EXCEPTION ").append((Object)exception).append(" ]]");
+                        stringBuilder.append("[[ EXCEPTION ").append(exception).append(" ]]");
                     }
                 }
             }
         }
     }
 
-    private static String getWittyComment()
-    {
-        String[] astring = new String[] {"Shiny numbers!", "Am I not running fast enough? :(", "I\'m working as hard as I can!", "Will I ever be good enough for you? :(", "Speedy. Zoooooom!", "Hello world", "40% better than a crash report.", "Now with extra numbers", "Now with less numbers", "Now with the same numbers", "You should add flames to things, it makes them go faster!", "Do you feel the need for... optimization?", "*cracks redstone whip*", "Maybe if you treated it better then it\'ll have more motivation to work faster! Poor server."};
-
-        try
-        {
-            return astring[(int)(System.nanoTime() % (long)astring.length)];
-        }
-        catch (Throwable var2)
-        {
-            return "Witty comment unavailable :(";
-        }
-    }
-
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, new String[] {"start", "stop"}): null;
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "start", "stop") : null;
     }
 }

@@ -1,10 +1,11 @@
 package net.minecraft.network.play.server;
 
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.util.IChatComponent;
+
+import java.io.IOException;
 
 public class S45PacketTitle implements Packet<INetHandlerPlayClient>
 {
@@ -25,7 +26,7 @@ public class S45PacketTitle implements Packet<INetHandlerPlayClient>
 
     public S45PacketTitle(int fadeInTime, int displayTime, int fadeOutTime)
     {
-        this(S45PacketTitle.Type.TIMES, (IChatComponent)null, fadeInTime, displayTime, fadeOutTime);
+        this(S45PacketTitle.Type.TIMES, null, fadeInTime, displayTime, fadeOutTime);
     }
 
     public S45PacketTitle(S45PacketTitle.Type type, IChatComponent message, int fadeInTime, int displayTime, int fadeOutTime)
@@ -39,7 +40,7 @@ public class S45PacketTitle implements Packet<INetHandlerPlayClient>
 
     public void readPacketData(PacketBuffer buf) throws IOException
     {
-        this.type = (S45PacketTitle.Type)buf.readEnumValue(S45PacketTitle.Type.class);
+        this.type = buf.readEnumValue(Type.class);
 
         if (this.type == S45PacketTitle.Type.TITLE || this.type == S45PacketTitle.Type.SUBTITLE)
         {
@@ -101,16 +102,14 @@ public class S45PacketTitle implements Packet<INetHandlerPlayClient>
         return this.fadeOutTime;
     }
 
-    public static enum Type
-    {
+    public enum Type {
         TITLE,
         SUBTITLE,
         TIMES,
         CLEAR,
         RESET;
 
-        public static S45PacketTitle.Type byName(String name)
-        {
+        public static S45PacketTitle.Type byName(String name) {
             for (S45PacketTitle.Type s45packettitle$type : values())
             {
                 if (s45packettitle$type.name().equalsIgnoreCase(name))

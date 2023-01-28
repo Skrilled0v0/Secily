@@ -1,10 +1,11 @@
 package net.minecraft.network.play.server;
 
-import java.io.IOException;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.util.EnumParticleTypes;
+
+import java.io.IOException;
 
 public class S2APacketParticles implements Packet<INetHandlerPlayClient>
 {
@@ -98,17 +99,17 @@ public class S2APacketParticles implements Packet<INetHandlerPlayClient>
 
     public double getXCoordinate()
     {
-        return (double)this.xCoord;
+        return this.xCoord;
     }
 
     public double getYCoordinate()
     {
-        return (double)this.yCoord;
+        return this.yCoord;
     }
 
     public double getZCoordinate()
     {
-        return (double)this.zCoord;
+        return this.zCoord;
     }
 
     public float getXOffset()

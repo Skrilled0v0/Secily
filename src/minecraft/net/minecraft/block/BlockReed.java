@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.Random;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -15,6 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockReed extends Block
 {
@@ -39,12 +39,11 @@ public class BlockReed extends Block
 
                 for (i = 1; worldIn.getBlockState(pos.down(i)).getBlock() == this; ++i)
                 {
-                    ;
                 }
 
                 if (i < 3)
                 {
-                    int j = ((Integer)state.getValue(AGE)).intValue();
+                    int j = state.getValue(AGE).intValue();
 
                     if (j == 15)
                     {
@@ -152,11 +151,11 @@ public class BlockReed extends Block
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {AGE});
+        return new BlockState(this, AGE);
     }
 }

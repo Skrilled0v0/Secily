@@ -3,20 +3,17 @@ package net.minecraft.client.model;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
-public class ModelEnderCrystal extends ModelBase
-{
-    private ModelRenderer cube;
-    private ModelRenderer glass = new ModelRenderer(this, "glass");
+public class ModelEnderCrystal extends ModelBase {
+    private final ModelRenderer cube;
+    private final ModelRenderer glass = new ModelRenderer(this, "glass");
     private ModelRenderer base;
 
-    public ModelEnderCrystal(float p_i1170_1_, boolean p_i1170_2_)
-    {
+    public ModelEnderCrystal(float p_i1170_1_, boolean p_i1170_2_) {
         this.glass.setTextureOffset(0, 0).addBox(-4.0F, -4.0F, -4.0F, 8, 8, 8);
         this.cube = new ModelRenderer(this, "cube");
         this.cube.setTextureOffset(32, 0).addBox(-4.0F, -4.0F, -4.0F, 8, 8, 8);
 
-        if (p_i1170_2_)
-        {
+        if (p_i1170_2_) {
             this.base = new ModelRenderer(this, "base");
             this.base.setTextureOffset(0, 16).addBox(-6.0F, 0.0F, -6.0F, 12, 4, 12);
         }

@@ -1,6 +1,5 @@
 package net.minecraft.client.gui.stream;
 
-import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -9,6 +8,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.stream.IngestServerTester;
 import net.minecraft.util.EnumChatFormatting;
 import tv.twitch.broadcast.IngestServer;
+
+import java.io.IOException;
 
 public class GuiIngestServers extends GuiScreen
 {
@@ -23,16 +24,15 @@ public class GuiIngestServers extends GuiScreen
 
     public void initGui()
     {
-        this.field_152310_f = I18n.format("options.stream.ingest.title", new Object[0]);
+        this.field_152310_f = I18n.format("options.stream.ingest.title");
         this.field_152311_g = new GuiIngestServers.ServerList(this.mc);
 
-        if (!this.mc.getTwitchStream().func_152908_z())
-        {
+        if (!this.mc.getTwitchStream().func_152908_z()) {
             this.mc.getTwitchStream().func_152909_x();
         }
 
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 155, this.height - 24 - 6, 150, 20, I18n.format("gui.done", new Object[0])));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + 5, this.height - 24 - 6, 150, 20, I18n.format("options.stream.ingest.reset", new Object[0])));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 155, this.height - 24 - 6, 150, 20, I18n.format("gui.done")));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + 5, this.height - 24 - 6, 150, 20, I18n.format("options.stream.ingest.reset")));
     }
 
     public void handleMouseInput() throws IOException
@@ -65,10 +65,9 @@ public class GuiIngestServers extends GuiScreen
         }
     }
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    {
-        this.drawDefaultBackground();
-        this.field_152311_g.drawScreen(mouseX, mouseY, partialTicks);
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawBackground();
+        this.field_152311_g.drawScreen(mouseX, mouseY);
         this.drawCenteredString(this.fontRendererObj, this.field_152310_f, this.width / 2, 20, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

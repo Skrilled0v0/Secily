@@ -4,7 +4,7 @@
 package me.skrilled.utils.render.gl;
 
 public interface GLenum {
-	public String getName();
+	String getName();
 
-	public int getCap();
+    int getCap();
 }

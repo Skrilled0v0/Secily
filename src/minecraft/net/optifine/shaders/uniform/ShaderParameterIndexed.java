@@ -3,19 +3,16 @@ package net.optifine.shaders.uniform;
 import net.optifine.expr.ExpressionType;
 import net.optifine.expr.IExpressionFloat;
 
-public class ShaderParameterIndexed implements IExpressionFloat
-{
-    private ShaderParameterFloat type;
-    private int index1;
-    private int index2;
+public class ShaderParameterIndexed implements IExpressionFloat {
+    private final ShaderParameterFloat type;
+    private final int index1;
+    private final int index2;
 
-    public ShaderParameterIndexed(ShaderParameterFloat type)
-    {
+    public ShaderParameterIndexed(ShaderParameterFloat type) {
         this(type, 0, 0);
     }
 
-    public ShaderParameterIndexed(ShaderParameterFloat type, int index1)
-    {
+    public ShaderParameterIndexed(ShaderParameterFloat type, int index1) {
         this(type, index1, 0);
     }
 

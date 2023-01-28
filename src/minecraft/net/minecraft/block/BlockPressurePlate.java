@@ -1,8 +1,6 @@
 package net.minecraft.block;
 
-import java.util.List;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +9,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BlockPressurePlate extends BlockBasePressurePlate
 {
@@ -26,7 +26,7 @@ public class BlockPressurePlate extends BlockBasePressurePlate
 
     protected int getRedstoneStrength(IBlockState state)
     {
-        return ((Boolean)state.getValue(POWERED)).booleanValue() ? 15 : 0;
+        return state.getValue(POWERED).booleanValue() ? 15 : 0;
     }
 
     protected IBlockState setRedstoneStrength(IBlockState state, int strength)
@@ -42,7 +42,7 @@ public class BlockPressurePlate extends BlockBasePressurePlate
         switch (this.sensitivity)
         {
             case EVERYTHING:
-                list = worldIn.getEntitiesWithinAABBExcludingEntity((Entity)null, axisalignedbb);
+                list = worldIn.getEntitiesWithinAABBExcludingEntity(null, axisalignedbb);
                 break;
 
             case MOBS:
@@ -74,17 +74,16 @@ public class BlockPressurePlate extends BlockBasePressurePlate
 
     public int getMetaFromState(IBlockState state)
     {
-        return ((Boolean)state.getValue(POWERED)).booleanValue() ? 1 : 0;
+        return state.getValue(POWERED).booleanValue() ? 1 : 0;
     }
 
     protected BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] {POWERED});
+        return new BlockState(this, POWERED);
     }
 
-    public static enum Sensitivity
-    {
+    public enum Sensitivity {
         EVERYTHING,
-        MOBS;
+        MOBS
     }
 }

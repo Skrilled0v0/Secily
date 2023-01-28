@@ -1,18 +1,15 @@
 package net.optifine.expr;
 
-public class FunctionBool implements IExpressionBool
-{
-    private FunctionType type;
-    private IExpression[] arguments;
+public class FunctionBool implements IExpressionBool {
+    private final FunctionType type;
+    private final IExpression[] arguments;
 
-    public FunctionBool(FunctionType type, IExpression[] arguments)
-    {
+    public FunctionBool(FunctionType type, IExpression[] arguments) {
         this.type = type;
         this.arguments = arguments;
     }
 
-    public boolean eval()
-    {
+    public boolean eval() {
         return this.type.evalBool(this.arguments);
     }
 

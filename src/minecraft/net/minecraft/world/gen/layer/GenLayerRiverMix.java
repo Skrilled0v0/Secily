@@ -2,20 +2,17 @@ package net.minecraft.world.gen.layer;
 
 import net.minecraft.world.biome.BiomeGenBase;
 
-public class GenLayerRiverMix extends GenLayer
-{
-    private GenLayer biomePatternGeneratorChain;
-    private GenLayer riverPatternGeneratorChain;
+public class GenLayerRiverMix extends GenLayer {
+    private final GenLayer biomePatternGeneratorChain;
+    private final GenLayer riverPatternGeneratorChain;
 
-    public GenLayerRiverMix(long p_i2129_1_, GenLayer p_i2129_3_, GenLayer p_i2129_4_)
-    {
+    public GenLayerRiverMix(long p_i2129_1_, GenLayer p_i2129_3_, GenLayer p_i2129_4_) {
         super(p_i2129_1_);
         this.biomePatternGeneratorChain = p_i2129_3_;
         this.riverPatternGeneratorChain = p_i2129_4_;
     }
 
-    public void initWorldGenSeed(long seed)
-    {
+    public void initWorldGenSeed(long seed) {
         this.biomePatternGeneratorChain.initWorldGenSeed(seed);
         this.riverPatternGeneratorChain.initWorldGenSeed(seed);
         super.initWorldGenSeed(seed);

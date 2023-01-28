@@ -1,7 +1,6 @@
 package net.minecraft.tileentity;
 
 import com.google.common.collect.Lists;
-import java.util.List;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -11,6 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+
+import java.util.List;
 
 public class TileEntityBanner extends TileEntity
 {
@@ -128,42 +129,6 @@ public class TileEntityBanner extends TileEntity
         return this.patternResourceLocation;
     }
 
-    private void initializeBannerData()
-    {
-        if (this.patternList == null || this.colorList == null || this.patternResourceLocation == null)
-        {
-            if (!this.field_175119_g)
-            {
-                this.patternResourceLocation = "";
-            }
-            else
-            {
-                this.patternList = Lists.<TileEntityBanner.EnumBannerPattern>newArrayList();
-                this.colorList = Lists.<EnumDyeColor>newArrayList();
-                this.patternList.add(TileEntityBanner.EnumBannerPattern.BASE);
-                this.colorList.add(EnumDyeColor.byDyeDamage(this.baseColor));
-                this.patternResourceLocation = "b" + this.baseColor;
-
-                if (this.patterns != null)
-                {
-                    for (int i = 0; i < this.patterns.tagCount(); ++i)
-                    {
-                        NBTTagCompound nbttagcompound = this.patterns.getCompoundTagAt(i);
-                        TileEntityBanner.EnumBannerPattern tileentitybanner$enumbannerpattern = TileEntityBanner.EnumBannerPattern.getPatternByID(nbttagcompound.getString("Pattern"));
-
-                        if (tileentitybanner$enumbannerpattern != null)
-                        {
-                            this.patternList.add(tileentitybanner$enumbannerpattern);
-                            int j = nbttagcompound.getInteger("Color");
-                            this.colorList.add(EnumDyeColor.byDyeDamage(j));
-                            this.patternResourceLocation = this.patternResourceLocation + tileentitybanner$enumbannerpattern.getPatternID() + j;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public static void removeBannerData(ItemStack stack)
     {
         NBTTagCompound nbttagcompound = stack.getSubCompound("BlockEntityTag", false);
@@ -182,15 +147,48 @@ public class TileEntityBanner extends TileEntity
 
                     if (stack.getTagCompound().hasNoTags())
                     {
-                        stack.setTagCompound((NBTTagCompound)null);
+                        stack.setTagCompound(null);
                     }
                 }
             }
         }
     }
 
-    public static enum EnumBannerPattern
+    private void initializeBannerData()
     {
+        if (this.patternList == null || this.colorList == null || this.patternResourceLocation == null)
+        {
+            if (!this.field_175119_g)
+            {
+                this.patternResourceLocation = "";
+            }
+            else
+            {
+                this.patternList = Lists.newArrayList();
+                this.colorList = Lists.newArrayList();
+                this.patternList.add(TileEntityBanner.EnumBannerPattern.BASE);
+                this.colorList.add(EnumDyeColor.byDyeDamage(this.baseColor));
+                this.patternResourceLocation = "b" + this.baseColor;
+
+                if (this.patterns != null) {
+                    for (int i = 0; i < this.patterns.tagCount(); ++i) {
+                        NBTTagCompound nbttagcompound = this.patterns.getCompoundTagAt(i);
+                        TileEntityBanner.EnumBannerPattern tileentitybanner$enumbannerpattern = TileEntityBanner.EnumBannerPattern.getPatternByID(nbttagcompound.getString("Pattern"));
+
+                        if (tileentitybanner$enumbannerpattern != null)
+                        {
+                            this.patternList.add(tileentitybanner$enumbannerpattern);
+                            int j = nbttagcompound.getInteger("Color");
+                            this.colorList.add(EnumDyeColor.byDyeDamage(j));
+                            this.patternResourceLocation = this.patternResourceLocation + tileentitybanner$enumbannerpattern.getPatternID() + j;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public enum EnumBannerPattern {
         BASE("base", "b"),
         SQUARE_BOTTOM_LEFT("square_bottom_left", "bl", "   ", "   ", "#  "),
         SQUARE_BOTTOM_RIGHT("square_bottom_right", "br", "   ", "   ", "  #"),
@@ -231,26 +229,23 @@ public class TileEntityBanner extends TileEntity
         FLOWER("flower", "flo", new ItemStack(Blocks.red_flower, 1, BlockFlower.EnumFlowerType.OXEYE_DAISY.getMeta())),
         MOJANG("mojang", "moj", new ItemStack(Items.golden_apple, 1, 1));
 
-        private String patternName;
-        private String patternID;
-        private String[] craftingLayers;
+        private final String patternName;
+        private final String patternID;
+        private final String[] craftingLayers;
         private ItemStack patternCraftingStack;
 
-        private EnumBannerPattern(String name, String id)
-        {
+        EnumBannerPattern(String name, String id) {
             this.craftingLayers = new String[3];
             this.patternName = name;
             this.patternID = id;
         }
 
-        private EnumBannerPattern(String name, String id, ItemStack craftingItem)
-        {
+        EnumBannerPattern(String name, String id, ItemStack craftingItem) {
             this(name, id);
             this.patternCraftingStack = craftingItem;
         }
 
-        private EnumBannerPattern(String name, String id, String craftingTop, String craftingMid, String craftingBot)
-        {
+        EnumBannerPattern(String name, String id, String craftingTop, String craftingMid, String craftingBot) {
             this(name, id);
             this.craftingLayers[0] = craftingTop;
             this.craftingLayers[1] = craftingMid;

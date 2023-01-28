@@ -9,21 +9,19 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.src.Config;
 
-public class GuiMessage extends GuiScreen
-{
-    private GuiScreen parentScreen;
-    private String messageLine1;
-    private String messageLine2;
+public class GuiMessage extends GuiScreen {
+    private final GuiScreen parentScreen;
+    private final String messageLine1;
+    private final String messageLine2;
     private final List listLines2 = Lists.newArrayList();
     protected String confirmButtonText;
     private int ticksUntilEnable;
 
-    public GuiMessage(GuiScreen parentScreen, String line1, String line2)
-    {
+    public GuiMessage(GuiScreen parentScreen, String line1, String line2) {
         this.parentScreen = parentScreen;
         this.messageLine1 = line1;
         this.messageLine2 = line2;
-        this.confirmButtonText = I18n.format("gui.done", new Object[0]);
+        this.confirmButtonText = I18n.format("gui.done");
     }
 
     public void initGui()
@@ -40,7 +38,7 @@ public class GuiMessage extends GuiScreen
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-        this.drawDefaultBackground();
+        this.drawBackground();
         this.drawCenteredString(this.fontRendererObj, this.messageLine1, this.width / 2, 70, 16777215);
         int i = 90;
 

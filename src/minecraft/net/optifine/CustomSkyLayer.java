@@ -86,7 +86,7 @@ public class CustomSkyLayer
 
     private List<String> parseWeatherList(String str)
     {
-        List<String> list = Arrays.<String>asList(new String[] {"clear", "rain", "thunder"});
+        List<String> list = Arrays.asList("clear", "rain", "thunder");
         List<String> list1 = new ArrayList();
         String[] astring = Config.tokenize(str, " ");
 
@@ -152,20 +152,13 @@ public class CustomSkyLayer
 
     private boolean parseBoolean(String str, boolean defVal)
     {
-        if (str == null)
-        {
+        if (str == null) {
             return defVal;
-        }
-        else if (str.toLowerCase().equals("true"))
-        {
+        } else if (str.equalsIgnoreCase("true")) {
             return true;
-        }
-        else if (str.toLowerCase().equals("false"))
-        {
+        } else if (str.equalsIgnoreCase("false")) {
             return false;
-        }
-        else
-        {
+        } else {
             Config.warn("Unknown boolean: " + str);
             return defVal;
         }
@@ -341,8 +334,8 @@ public class CustomSkyLayer
                 if (this.speed != (float)Math.round(this.speed))
                 {
                     long i = (world.getWorldTime() + 18000L) / 24000L;
-                    double d0 = (double)(this.speed % 1.0F);
-                    double d1 = (double)i * d0;
+                    double d0 = this.speed % 1.0F;
+                    double d1 = (double) i * d0;
                     f4 = (float)(d1 % 1.0D);
                 }
 
@@ -503,18 +496,13 @@ public class CustomSkyLayer
                 long i = world.getWorldTime();
                 long j;
 
-                for (j = i - (long)this.startFadeIn; j < 0L; j += (long)(24000 * this.daysLoop))
-                {
-                    ;
+                for (j = i - (long) this.startFadeIn; j < 0L; j += 24000L * this.daysLoop) {
                 }
 
                 int k = (int)(j / 24000L);
                 int l = k % this.daysLoop;
 
-                if (!this.days.isInRange(l))
-                {
-                    return false;
-                }
+                return this.days.isInRange(l);
             }
 
             return true;

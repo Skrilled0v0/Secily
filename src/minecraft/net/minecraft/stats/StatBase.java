@@ -1,14 +1,15 @@
 package net.minecraft.stats;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.scoreboard.IScoreObjectiveCriteria;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IJsonSerializable;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class StatBase
 {
@@ -17,21 +18,16 @@ public class StatBase
     public boolean isIndependent;
     private final IStatType type;
     private final IScoreObjectiveCriteria objectiveCriteria;
-    private Class <? extends IJsonSerializable > field_150956_d;
-    private static NumberFormat numberFormat = NumberFormat.getIntegerInstance(Locale.US);
-    public static IStatType simpleStatType = new IStatType()
-    {
-        public String format(int number)
-        {
-            return StatBase.numberFormat.format((long)number);
+    private static final NumberFormat numberFormat = NumberFormat.getIntegerInstance(Locale.US);
+    private static final DecimalFormat decimalFormat = new DecimalFormat("########0.00");
+    public static IStatType simpleStatType = new IStatType() {
+        public String format(int number) {
+            return StatBase.numberFormat.format(number);
         }
     };
-    private static DecimalFormat decimalFormat = new DecimalFormat("########0.00");
-    public static IStatType timeStatType = new IStatType()
-    {
-        public String format(int number)
-        {
-            double d0 = (double)number / 20.0D;
+    public static IStatType timeStatType = new IStatType() {
+        public String format(int number) {
+            double d0 = (double) number / 20.0D;
             double d1 = d0 / 60.0D;
             double d2 = d1 / 60.0D;
             double d3 = d2 / 24.0D;
@@ -39,6 +35,7 @@ public class StatBase
             return d4 > 0.5D ? StatBase.decimalFormat.format(d4) + " y" : (d3 > 0.5D ? StatBase.decimalFormat.format(d3) + " d" : (d2 > 0.5D ? StatBase.decimalFormat.format(d2) + " h" : (d1 > 0.5D ? StatBase.decimalFormat.format(d1) + " m" : d0 + " s")));
         }
     };
+    private Class<? extends IJsonSerializable> field_150956_d;
     public static IStatType distanceStatType = new IStatType()
     {
         public String format(int number)
@@ -80,7 +77,7 @@ public class StatBase
     {
         if (StatList.oneShotStats.containsKey(this.statId))
         {
-            throw new RuntimeException("Duplicate stat id: \"" + ((StatBase)StatList.oneShotStats.get(this.statId)).statName + "\" and \"" + this.statName + "\" at id " + this.statId);
+            throw new RuntimeException("Duplicate stat id: \"" + StatList.oneShotStats.get(this.statId).statName + "\" and \"" + this.statName + "\" at id " + this.statId);
         }
         else
         {
