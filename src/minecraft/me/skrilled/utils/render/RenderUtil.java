@@ -287,18 +287,32 @@ public class RenderUtil implements IMC {
 
     public static float drawStringBox(FontDrawer font, String str, float posX, float posY, float motion, int bgColor, int fontColor) {
         float fontHeight = font.getHeight();
-        float margin = fontHeight / 4f;
-        float boxHeight = fontHeight + margin * 2;
-        float maxStringWidth = font.getCharWidth('A') * 15;
-        float stringWidth;
-        char[] temp = new char[0];
-
-        for (int i = 0; i < str.length(); i++) {
-            str.getChars(i, i, temp, i);
-            stringWidth += font.getCharWidth(temp[i]);
-            if (maxStringWidth <= stringWidth)
+        float udMargin = fontHeight / 4f;
+        float lrMargin = 1.5f*font.getCharWidth('A');
+        float lineSpacing = fontHeight*0.9f;
+        float boxHeight = fontHeight + lrMargin * 2;
+        float maxStringWidth = font.getCharWidth('A') * 19;
+        //计算所需行数
+        int row = 1;
+        ArrayList<Integer> split = new ArrayList<>();
+        int strHead =0;
+        split.add(strHead);
+        for (int i = 0;i<str.length();i++){
+            if (font.getStringWidth(str.substring(strHead,i))>maxStringWidth){
+                strHead = i;
+                split.add(i);
+                row++;
+            }
         }
-        drawRoundRect(posX, posY, posX +);
+        boxHeight = row*(fontHeight+lineSpacing)-lineSpacing+2*udMargin;
+        //画背景
+        RenderUtil.drawRoundRect(posX,posY,posX+maxStringWidth+2*lrMargin,posY+boxHeight,font.getHeight()/2,bgColor);
+        //画文字前row-1行
+        for (int i = 0;i<row-1;i++){
+            font.drawString(str.substring(split.get(i),split.get(i+1)),posX+lrMargin,posY+udMargin+i*(fontHeight+lineSpacing),fontColor);
+        }
+        //画文字最后一行
+        font.drawString(str.substring(split.get(row-1),str.length()),posX+lrMargin,posY+udMargin+(row-1)*(fontHeight+lineSpacing),fontColor);
         return boxHeight;
     }
 
