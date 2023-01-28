@@ -285,17 +285,17 @@ public class RenderUtil implements IMC {
         return barHeight;
     }
 
-    public static float drawStringBox(FontDrawer font, String str, float posX, float posY, float motion, int bgColor, int fontColor) {
+    public static float drawStringBox(FontDrawer font, String str, float posX, float posY, int bgColor, int fontColor) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f*font.getCharWidth('A');
-        float lineSpacing = fontHeight*0.6f;
-        float boxHeight = fontHeight + lrMargin * 2;
+        float lrMargin = 1.5f * font.getCharWidth('A');
+        float lineSpacing = fontHeight * 0.6f;
+        float boxHeight;
         float maxStringWidth = font.getCharWidth('A') * 13;
         //计算所需行数
         int row = 1;
         ArrayList<Integer> split = new ArrayList<>();
-        int strHead =0;
+        int strHead = 0;
         split.add(strHead);
         for (int i = 0;i<str.length();i++){
             if (font.getStringWidth(str.substring(strHead,i))>maxStringWidth){
@@ -870,7 +870,7 @@ public class RenderUtil implements IMC {
     public static void drawColorPointsWithYThickness(ArrayList<ColorPoint> colorPoints, float thickness) {
         glEnable(3042);
         glDisable(3553);
-        glBlendFunc(770, 771);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(2848);
         glPushMatrix();
 
@@ -881,7 +881,7 @@ public class RenderUtil implements IMC {
                 color = colorPoint.color;
                 x = colorPoint.pos[0];
                 y = colorPoint.pos[1];
-                glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
+                glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
                 glBegin(GL_POINTS);
                 glVertex2d(x, y + t / 2f);
                 glEnd();

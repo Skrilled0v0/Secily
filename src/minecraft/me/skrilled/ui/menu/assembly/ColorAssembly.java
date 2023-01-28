@@ -37,8 +37,8 @@ public class ColorAssembly extends Assembly {
         float[] bg_pos = new float[]{0, 0, deltaX, deltaY};
         float[] sb_pos = new float[]{margin, margin, deltaX - margin, deltaX - margin};
         //y坐标计算：(dY-2*margin-0.9dX)/2
-        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, 1.02f*deltaX};
-        float[] alpha_pos = new float[]{margin,1.07f*deltaX , deltaX - margin, 1.09f*deltaX};
+        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, 1.08f * deltaX};
+        float[] alpha_pos = new float[]{margin, 1.1f * deltaX, deltaX - margin, 1.17f * deltaX};
         bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
         color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h);
         color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b);

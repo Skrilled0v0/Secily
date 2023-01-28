@@ -18,6 +18,7 @@ import com.darkmagician6.eventapi.EventTarget;
 import me.skrilled.api.event.EventKey;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
+import me.skrilled.api.modules.module.combat.Aura;
 import me.skrilled.api.modules.module.combat.AutoClicker;
 import me.skrilled.api.modules.module.combat.HitBox;
 import me.skrilled.api.modules.module.combat.Reach;
@@ -62,6 +63,7 @@ public class ModuleManager {
         mList.add(new AutoJump());
         //Combat
         mList.add(new AutoClicker());
+        mList.add(new Aura());
         mList.add(new Reach());
         mList.add(new HitBox());
         mList.add(new SettingMenu());

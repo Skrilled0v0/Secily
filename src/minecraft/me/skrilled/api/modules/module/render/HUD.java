@@ -20,7 +20,6 @@ import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -64,7 +63,7 @@ public class HUD extends ModuleHeader {
         }
 
         //Test
-        float[] cAPos = new float[]{100,100,200,213};
+        float[] cAPos = new float[]{100, 100, 300, 350};
         ColorAssembly colorAssembly = new ColorAssembly(cAPos, null, 360, 1f, 1f, 1f);
         colorAssembly.draw();
 

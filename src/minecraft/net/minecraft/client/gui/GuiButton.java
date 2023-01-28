@@ -3,6 +3,7 @@ package net.minecraft.client.gui;
 
 import me.fontloader.FontDrawer;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
@@ -27,8 +28,8 @@ public class GuiButton extends Gui implements IMC {
     protected int height;
     protected boolean hovered;
     Animation motion = new Animation(1000f, false, Easing.LINEAR);
-    ColourAnimation upBgMotion = new ColourAnimation(new Color(255, 255, 255, 50), new Color(108, 108, 255, 125), 1000f, false, Easing.LINEAR);
-    ColourAnimation downBgMotion = new ColourAnimation(new Color(108, 108, 255, 50), new Color(255, 255, 255, 125), 1000f, false, Easing.LINEAR);
+    ColourAnimation upBgMotion = new ColourAnimation(new Color(255, 255, 255, 50), new Color(108, 108, 255, 75), 1000f, false, Easing.LINEAR);
+    ColourAnimation downBgMotion = new ColourAnimation(new Color(108, 108, 255, 50), new Color(255, 255, 255, 75), 1000f, false, Easing.LINEAR);
     ColourAnimation rectMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 102, 102), 1000f, false, Easing.LINEAR);
     ColourAnimation strMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 140, 0), 1000f, false, Easing.LINEAR);
 
@@ -59,6 +60,7 @@ public class GuiButton extends Gui implements IMC {
             FontDrawer font = Main.fontLoader.EN18;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
             RenderUtil.drawGradientSideways(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, upBgMotion.getColour().getRGB(), downBgMotion.getColour().getRGB());
+            BlurUtil.blurArea(this.xPosition, this.yPosition, this.xPosition + width, this.yPosition + height, 10);
             //up line
             RenderUtil.drawRect(this.xPosition, this.yPosition, this.xPosition + width * motion.getAnimationFactor(), this.yPosition + lineWidth, rectMotion.getColour().getRGB());
             //right line
@@ -68,7 +70,6 @@ public class GuiButton extends Gui implements IMC {
             //left line
             RenderUtil.drawRect(this.xPosition, this.yPosition + height - height * motion.getAnimationFactor(), this.xPosition + lineWidth, this.yPosition + height, rectMotion.getColour().getRGB());
             this.mouseDragged(mc, mouseX, mouseY);
-
             font.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 8) / 2f, strMotion.getColour().getRGB());
         }
     }
