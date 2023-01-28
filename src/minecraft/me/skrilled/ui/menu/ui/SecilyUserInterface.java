@@ -32,7 +32,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void initGui() {
-        BGAssembly bigBg = new BGAssembly(windowsPos, mainGui, new Color(0, 0, 0, 125), BackGroundType.RoundRect, true, 10f);
+        BGAssembly bigBg = new BGAssembly(new float[]{0,0,mainGui.deltaX,mainGui.deltaY}, mainGui, new Color(0, 0, 0, 125), BackGroundType.RoundRect, true, 10f);
         //添加 背景 至 底层窗口
         mainGui.addAssembly(bigBg);
 
@@ -43,12 +43,10 @@ public class SecilyUserInterface extends GuiScreen {
 
         //计算 编辑区 背景 Pos
         float[] areaEditPos = {
-                windowsPos[0] + 0.018f * mainGui.deltaX,
-                windowsPos[1] + 0.143f * mainGui.deltaY,
-                windowsPos[0] + 0.981f * mainGui.deltaX,
-                windowsPos[1] + 0.959f * mainGui.deltaY};
-        SenseHeader.getSense.printINFO( "win都死pos1："+windowsPos[1]);
-        SenseHeader.getSense.printINFO( "win都死pos2："+0.959f * mainGui.deltaY);
+                0.01704958975262581302525836774406f * bigBg.deltaX,
+                0.14244186046511627906976744186047f * bigBg.deltaY,
+                0.98295041024737418697474163225594f * bigBg.deltaX,
+                0.96220930232558139534883720930233f * bigBg.deltaY};
 
         //初始化 编辑区背景 组件
         BGAssembly areaEdit = new BGAssembly(areaEditPos, mainGui, new Color(204, 204, 204, 60), BackGroundType.RoundRect, false, 10f);
@@ -56,9 +54,12 @@ public class SecilyUserInterface extends GuiScreen {
         //添加 编辑区背景 组件 至 底层窗口
         mainGui.addAssembly(areaEdit);
 
-/*
         //计算 左边栏 窗口 Pos
-        float[] leftSideBarPos = {areaEditPos[0] + 0.01374292643492320129345189975748f * areaEdit.deltaX, (areaEditPos[1] + areaEditPos[3]) / 2f - (0.9256637168141592920353982300885f / 2f) * (areaEdit.deltaY), areaEditPos[0] + 0.28698464025869037995149555375909f * areaEdit.deltaX, (areaEditPos[1] + areaEditPos[3]) / 2f + (0.9256637168141592920353982300885f / 2f) * (areaEdit.deltaY)};
+        float[] leftSideBarPos = {
+                0.02911877394636015325670498084291f * bigBg.deltaX,
+                0.16424418604651162790697674418605f* bigBg.deltaY,
+                0.28888888888888888888888888888889f * bigBg.deltaX,
+                0.9273255813953488372093023255814f * bigBg.deltaY};
 
         //初始化 左边栏 窗口
         WindowAssembly leftSideBar = new WindowAssembly(leftSideBarPos, mainGui);
@@ -67,7 +68,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.addWindow(leftSideBar);
 
         //初始化 左边栏 背景
-        BGAssembly leftSideBarBG = new BGAssembly(leftSideBarPos, leftSideBar, new Color(121, 121, 121, 114), BackGroundType.RoundRect, false, 9);
+        BGAssembly leftSideBarBG = new BGAssembly(new float[]{0,0,leftSideBar.deltaX,leftSideBar.deltaY}, leftSideBar, new Color(121, 121, 121, 114), BackGroundType.RoundRect, false, 9);
 
         //添加 左边栏 背景 至 左边栏窗口
         leftSideBar.addAssembly(leftSideBarBG);
@@ -82,10 +83,12 @@ public class SecilyUserInterface extends GuiScreen {
         leftSideBar.addAssembly(leftModuleTypeICONBarBg);
 
         //计算 ModuleTypeICON 组件 Pos
-        float[] moduleTypeICONPos = {leftSideBar.pos[0] + 0.0751533742331288343558282208589f * leftSideBar.deltaX, leftSideBar.pos[1] + 0.04662698412698412698412698412698f * leftSideBar.deltaY, 0, 0};
+        float[] moduleTypeICONPos = {0.07374631268436578171091445427729f * leftSideBar.deltaX,
+                0.04580152671755725190839694656489f * leftSideBar.deltaY,
+                0, 0};
 
         //计算 ModuleTypeICON 组件 Spacing
-        float spacing = 0.03834355828220858895705521472393f * leftSideBar.deltaX;
+        float spacing = 0.03421828908554572271386430678466f * leftSideBar.deltaX;
 
         //初始化 ModuleTypeICON 组件
         IconAssembly ModuleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON64, new String[]{"A", "B", "C", "D", "E"}, spacing, new Animation(1000, false, Easing.LINEAR), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247), true);
@@ -94,7 +97,11 @@ public class SecilyUserInterface extends GuiScreen {
         leftSideBar.addAssembly(ModuleTypeICONBar);
 
         //计算 Modules Pos
-        float[] modulesBGsStartPos = {leftSideBar.pos[0] + 0.0444104134762633996937212863706f * leftSideBar.deltaX, leftSideBar.pos[1] + 0.17261904761904761904761904761905f * leftSideBar.deltaY, leftSideBar.pos[2] - 0.0444104134762633996937212863706f * leftSideBar.deltaX, leftSideBar.pos[1] + 0.28472222222222222222222222222222f * leftSideBar.deltaY};
+        float[] modulesBGsStartPos = {
+                0.04277286135693215339233038348083f * leftSideBar.deltaX,
+                0.17175572519083969465648854961832f * leftSideBar.deltaY,
+                0.95427728613569321533923303834808f * leftSideBar.deltaX,
+                0.28475190839694656488549618320611f * leftSideBar.deltaY};
 
         //计算 边距/高度
         float modulesUDMargin = 0.02579365079365079365079365079365f * leftSideBar.deltaY;
@@ -104,8 +111,6 @@ public class SecilyUserInterface extends GuiScreen {
         for (int i = 0; i < 6; i++) {
             leftSideBar.addAssembly(new BGAssembly(new float[]{modulesBGsStartPos[0], modulesBGsStartPos[1] + i * (modulesBGHeight + modulesUDMargin), modulesBGsStartPos[2], modulesBGsStartPos[3] + i * (modulesBGHeight + modulesUDMargin)}, leftSideBar, new Color(255, 255, 255, 30), BackGroundType.RoundRect, false, 5f));
         }
-*/
-
         super.initGui();
     }
 

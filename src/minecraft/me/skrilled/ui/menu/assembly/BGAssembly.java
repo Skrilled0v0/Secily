@@ -50,7 +50,7 @@ public class BGAssembly extends Assembly {
     @Override
     public void draw() {
         float absX = calcAbsX();
-        float absY = calcAbsX();
+        float absY = calcAbsY();
         switch (bgType) {
             case Rect:
                 if (canBlur) BlurUtil.blurArea(absX, absY, absX + deltaX, absY + deltaY, 10);

@@ -389,17 +389,16 @@ public class RenderUtil implements IMC {
         float iconWidth = 0;
         if(isTransverse) {
             for (String icon : Icons) {
-                iconWidth = font.getStringWidth(icon) * 1.2f;
-                drawRoundRect(posX + spacing * count, posY, posX + iconWidth + spacing * count, posY + iconWidth, iconWidth / 8f, bgColor);
+                iconWidth = font.getStringWidth(icon) * 1.0f;
+                drawRoundRect(posX + (spacing+iconWidth) * count, posY, posX + iconWidth + (spacing+iconWidth) * count, posY + iconWidth, iconWidth / 8f, bgColor);
                 count++;
             }
-            drawRoundRect(posX + (motion - 1) * spacing, posY, posX + (motion - 1) * spacing + iconWidth, posY + iconWidth, iconWidth / 8f, currentColor);
+            drawRoundRect(posX + (motion - 1) * (spacing+iconWidth), posY, posX + (motion - 1) * (spacing+iconWidth) + iconWidth, posY + iconWidth, iconWidth / 8f, currentColor);
             count = 0;
             for (String icon : Icons) {
-                font.drawCenteredString(icon, posX + iconWidth / 2f + spacing * count, posY + (iconWidth - font.getHeight()) / 2f, iconColor);
+                font.drawCenteredString(icon, posX + iconWidth / 2f + (spacing+iconWidth) * count, posY + (iconWidth - font.getHeight()) / 2f, iconColor);
                 count++;
             }
-            return iconWidth;
         }else{
             for (String icon : Icons) {
                 iconWidth = font.getStringWidth(icon) * 1.2f;
@@ -412,8 +411,8 @@ public class RenderUtil implements IMC {
                 font.drawCenteredString(icon, posX + iconWidth / 2f, posY + (iconWidth - font.getHeight()) / 2f + spacing * count, iconColor);
                 count++;
             }
-            return iconWidth;
         }
+        return iconWidth;
     }
 
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
