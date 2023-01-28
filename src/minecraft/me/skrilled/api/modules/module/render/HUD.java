@@ -63,7 +63,7 @@ public class HUD extends ModuleHeader {
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
-        RenderUtil.drawStringBox(Main.fontLoader.EN24,"TestString TestString TestString TestString ",50,50,0f,Color.GRAY.getRGB(),Color.ORANGE.getRGB());
+        RenderUtil.drawCenteredStringBox(Main.fontLoader.EN24,"TestString ",50,50,0f,Color.GRAY.getRGB(),Color.ORANGE.getRGB());
 
 //        RenderUtil.drawPoint(50, 50, -1);
 //        ColorAssembly colorAssembly = new ColorAssembly(new float[]{w/2, h/2, w/2+50f, h/2+50f}, null);
