@@ -15,20 +15,16 @@ public final class Priority {
             /**
              * Highest priority, called first.
              */
-            HIGHEST = 0,
-    /**
+            HIGHEST = 0, /**
      * High priority, called after the highest priority.
      */
-    HIGH = 1,
-    /**
+    HIGH = 1, /**
      * Medium priority, called after the high priority.
      */
-    MEDIUM = 2,
-    /**
+    MEDIUM = 2, /**
      * Low priority, called after the medium priority.
      */
-    LOW = 3,
-    /**
+    LOW = 3, /**
      * Lowest priority, called after all the other priorities.
      */
     LOWEST = 4;
@@ -42,13 +38,7 @@ public final class Priority {
      * Sets up the VALUE_ARRAY the first time anything in this class is called.
      */
     static {
-        VALUE_ARRAY = new byte[]{
-                HIGHEST,
-                HIGH,
-                MEDIUM,
-                LOW,
-                LOWEST
-        };
+        VALUE_ARRAY = new byte[]{HIGHEST, HIGH, MEDIUM, LOW, LOWEST};
     }
 
 }

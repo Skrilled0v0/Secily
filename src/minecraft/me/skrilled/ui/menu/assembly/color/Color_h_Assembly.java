@@ -1,7 +1,7 @@
 package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
-import me.skrilled.ui.menu.assembly.SolidCicleAssembly;
+import me.skrilled.ui.menu.assembly.CicleAssembly;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class Color_h_Assembly extends Assembly {
     public Color_sb_Assembly color_sb_assembly;
-    SolidCicleAssembly solidCircleAssembly;
     public float h;
     public ArrayList<ColorPoint> colorPoints;
+    CicleAssembly circleAssembly;
     private boolean init;
 
     private Color_h_Assembly(float[] pos, Assembly fatherWindow) {
@@ -24,15 +24,16 @@ public class Color_h_Assembly extends Assembly {
     public Color_h_Assembly(float[] pos, Assembly fatherWindow, float h) {
         super(pos, fatherWindow);
         this.h = h;
-        float[] solidCirclePos = new float[]{pos[0]+deltaX*(h/360),pos[1]+deltaY/2f,pos[0]+deltaX*(h/360),pos[1]+deltaY/2f};
-        this.solidCircleAssembly = new SolidCicleAssembly(solidCirclePos,fatherWindow,deltaY*0.6f,Color.blue);
+        float[] circlePos = new float[]{pos[0] + deltaX * h, pos[1] + (deltaY - 1) / 2f, pos[0] + deltaX * (h / 360), pos[1] + (deltaY - 1) / 2f};
+        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
     }
 
     @Override
     public void draw() {
         if (!init) InitColorPoints();
-        RenderUtil.drawColorPointsWithYThickness(colorPoints,0.8f*deltaY);
-        solidCircleAssembly.draw();
+        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
+//        SenseHeader.getSense.printINFO("h: "+deltaY);
+        circleAssembly.draw();
     }
 
     public void InitColorPoints() {
@@ -43,5 +44,13 @@ public class Color_h_Assembly extends Assembly {
         for (int i = 0; i < 2f * (pos[2] - pos[0]); i++) {
             colorPoints.add(new ColorPoint(Color.getHSBColor(i / (2f * (pos[2] - pos[0])), 1f, 1f), new float[]{absX + (i / 2f), absY}));
         }
+        init = true;
+    }
+
+    public void SetH(float h) {
+        this.h = h;
+        float[] circlePos = new float[]{pos[0] + deltaX * h, pos[1] + (deltaY - 1) / 2f, pos[0] + deltaX * (h / 360), pos[1] + (deltaY - 1) / 2f};
+        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
+        init = false;
     }
 }

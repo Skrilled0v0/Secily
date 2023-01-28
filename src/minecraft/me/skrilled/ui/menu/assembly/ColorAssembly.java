@@ -27,6 +27,7 @@ public class ColorAssembly extends Assembly {
 
     /**
      * 创建一个加载初始有默认选择点hsb,alpha值的颜色选区
+     * 推荐长宽比5：6
      */
     public ColorAssembly(float[] pos, Assembly fatherWindow, float h, float s, float b, float a) {
         super(pos, fatherWindow);
@@ -37,8 +38,9 @@ public class ColorAssembly extends Assembly {
         float[] bg_pos = new float[]{0, 0, deltaX, deltaY};
         float[] sb_pos = new float[]{margin, margin, deltaX - margin, deltaX - margin};
         //y坐标计算：(dY-2*margin-0.9dX)/2
-        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, 1.08f * deltaX};
-        float[] alpha_pos = new float[]{margin, 1.1f * deltaX, deltaX - margin, 1.17f * deltaX};
+        float height = 0.08f * deltaX;
+        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, deltaX + height};
+        float[] alpha_pos = new float[]{margin, 1.1f * deltaX, deltaX - margin, 1.1f * deltaX + height};
         bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
         color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h);
         color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b);
@@ -47,6 +49,7 @@ public class ColorAssembly extends Assembly {
 
     /**
      * 创建一个加载初始有默认选择点hsb值的颜色选区
+     * 推荐长宽比5：6
      * 无alpha
      */
     public ColorAssembly(float[] pos, Assembly fatherWindow, float h, float s, float b) {
@@ -103,5 +106,10 @@ public class ColorAssembly extends Assembly {
         }
         SenseHeader.getSense.printINFO("鼠标超出选区？？？//alpha");
         return null;
+    }
+    public void SetH(float h){
+        color_sb_assembly.SetH(h);
+        color_h_assembly.SetH(h);
+        color_alpha_assembly.SetH(h);
     }
 }

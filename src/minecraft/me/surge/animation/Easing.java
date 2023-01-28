@@ -193,7 +193,7 @@ public enum Easing {
     CIRC_IN_OUT {
         @Override
         public double ease(double factor) {
-            return factor < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * factor, 2))) / 2 :  (Math.sqrt(1 - Math.pow(-2 * factor + 2, 2)) + 1) / 2;
+            return factor < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * factor, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * factor + 2, 2)) + 1) / 2;
         }
     },
 
@@ -323,6 +323,7 @@ public enum Easing {
 
     /**
      * Eases the given factor
+     *
      * @param factor The linear animation factor - between 0 and 1
      * @return The eased factor
      */
@@ -330,6 +331,7 @@ public enum Easing {
 
     /**
      * Internal use only! Bounce out method because that's how easings.net does it.
+     *
      * @param in The linear factor we provide.
      * @return The eased value
      */

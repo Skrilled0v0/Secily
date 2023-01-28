@@ -580,8 +580,7 @@ public class SecilyMenu extends GuiScreen implements IMC {
                 }
                 //double拖动调整
                 if (value.getValueType().equals(ValueHeader.ValueType.DOUBLE)) {
-                    if (isMouseInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2))
-                        value.onClicking = true;
+                    if (isMouseInside(mouseX, mouseY, value.x1, value.y1, value.x2, value.y2)) value.onClicking = true;
                 }
             }
         }

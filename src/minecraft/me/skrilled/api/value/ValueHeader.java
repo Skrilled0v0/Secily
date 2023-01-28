@@ -118,16 +118,14 @@ public class ValueHeader {
                 int colorBoardHeight = 360;
 
                 colorBar = new Color[colorBoardWidth];
-                for (int h=0;h<colorBoardWidth;h++){
-                    colorBar[h] = Color.getHSBColor(h,1f,1f);
-                    for (int s=0;s<colorBoardWidth;s++){
-                        for (int b= 0;b<colorBoardHeight;b++){
-                            colorPoints[s][b]=Color.getHSBColor(h,s/colorBoardWidth,b/colorBoardHeight);
+                for (int h = 0; h < colorBoardWidth; h++) {
+                    colorBar[h] = Color.getHSBColor(h, 1f, 1f);
+                    for (int s = 0; s < colorBoardWidth; s++) {
+                        for (int b = 0; b < colorBoardHeight; b++) {
+                            colorPoints[s][b] = Color.getHSBColor(h, s / colorBoardWidth, b / colorBoardHeight);
                         }
                     }
                 }
-
-
 
 
                 break;
@@ -253,6 +251,7 @@ public class ValueHeader {
     public void setDoubleCurrentValue(double settingValue) {
         this.doubleCurrentValue = settingValue;
     }
+
     public String getValueName() {
         return valueName;
     }

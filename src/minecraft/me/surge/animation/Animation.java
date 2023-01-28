@@ -25,9 +25,10 @@ public class Animation {
 
     /**
      * Constructor that takes two suppliers
-     * @param length The length of the animation
+     *
+     * @param length       The length of the animation
      * @param initialState The initial state of the animation (where it should start)
-     * @param easing Which easing method to use
+     * @param easing       Which easing method to use
      */
     public Animation(Supplier<Float> length, boolean initialState, Supplier<Easing> easing) {
         this.length = length;
@@ -38,9 +39,10 @@ public class Animation {
 
     /**
      * Constructor that does not take suppliers as parameters
-     * @param length The length of the animation
+     *
+     * @param length       The length of the animation
      * @param initialState The initial state of the animation (where it should start)
-     * @param easing Which easing method to use
+     * @param easing       Which easing method to use
      */
     public Animation(float length, boolean initialState, Easing easing) {
         this(() -> length, initialState, () -> easing);
@@ -48,9 +50,10 @@ public class Animation {
 
     /**
      * Constructor that only takes one supplier (length) and an immutable easing
-     * @param length The length of the animation
+     *
+     * @param length       The length of the animation
      * @param initialState The initial state of the animation (where it should start)
-     * @param easing Which easing method to use
+     * @param easing       Which easing method to use
      */
     public Animation(Supplier<Float> length, boolean initialState, Easing easing) {
         this(length, initialState, () -> easing);
@@ -58,9 +61,10 @@ public class Animation {
 
     /**
      * Constructor that only takes one supplier (easing) and an immutable length
-     * @param length The length of the animation
+     *
+     * @param length       The length of the animation
      * @param initialState The initial state of the animation (where it should start)
-     * @param easing Which easing method to use
+     * @param easing       Which easing method to use
      */
     public Animation(float length, boolean initialState, Supplier<Easing> easing) {
         this(() -> length, initialState, easing);
@@ -68,6 +72,7 @@ public class Animation {
 
     /**
      * Gets how much the animation has progressed
+     *
      * @return A value between 0 and 1.
      */
     public double getAnimationFactor() {
@@ -85,6 +90,7 @@ public class Animation {
 
     /**
      * Gets the current state of the animation
+     *
      * @return The state of the animation
      */
     public boolean getState() {
@@ -93,6 +99,7 @@ public class Animation {
 
     /**
      * Sets the state of the animation
+     *
      * @param in The new state of the animation
      */
     public void setState(boolean in) {
@@ -104,6 +111,7 @@ public class Animation {
     /**
      * Gets the linear animation factor. This method ignores the <code>{@link Easing#ease(double)}</code> methods found in each
      * Easing element.
+     *
      * @return The animation factor without the given easing being applied
      */
     public double getLinearFactor() {
@@ -112,6 +120,7 @@ public class Animation {
 
     /**
      * Internal use only! Clamps the given value in between 0 and 1
+     *
      * @param in The given value.
      * @return The clamped value.
      */

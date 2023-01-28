@@ -14,10 +14,8 @@ public class CommandSetPrefix extends CommandHeader {
 
     @Override
     public void executed(String commandBody) {
-        if (!commandBody.isEmpty())
-            SenseHeader.getSense.setClientPrefix(commandBody);
-        else
-            SenseHeader.getSense.printINFO("Please enter string that match the rule. :D");
+        if (!commandBody.isEmpty()) SenseHeader.getSense.setClientPrefix(commandBody);
+        else SenseHeader.getSense.printINFO("Please enter string that match the rule. :D");
         super.executed(commandBody);
     }
 }

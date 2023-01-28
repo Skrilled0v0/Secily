@@ -1,8 +1,5 @@
 package me.skrilled.api.value;
 
-import me.surge.animation.BoundedAnimation;
-import me.surge.animation.Easing;
-
 public class SubEnumValueHeader {
     public String name;
     public ValueHeader valueHeader;

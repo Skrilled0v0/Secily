@@ -12,10 +12,6 @@ public final class GLUtils {
     }
 
     public static void color(int hex) {
-        GlStateManager.color(
-                (hex >> 16 & 0xFF) / 255.0f,
-                (hex >> 8 & 0xFF) / 255.0f,
-                (hex & 0xFF) / 255.0f,
-                (hex >> 24 & 0xFF) / 255.0f);
+        GlStateManager.color((hex >> 16 & 0xFF) / 255.0f, (hex >> 8 & 0xFF) / 255.0f, (hex & 0xFF) / 255.0f, (hex >> 24 & 0xFF) / 255.0f);
     }
 }

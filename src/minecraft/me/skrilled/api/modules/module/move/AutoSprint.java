@@ -18,7 +18,6 @@ public class AutoSprint extends ModuleHeader {
 
     @EventTarget
     public void onOpen(EventUpdate eventUpdate) {
-        if (mc.thePlayer.moveForward != 0)
-            mc.thePlayer.setSprinting(true);
+        if (mc.thePlayer.moveForward != 0) mc.thePlayer.setSprinting(true);
     }
 }

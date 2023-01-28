@@ -19,8 +19,8 @@ public abstract class Assembly {
 
     public Assembly(float[] pos, Assembly fatherWindow) {
         this.pos = pos;
-        deltaX  = pos[2] - pos[0];
-        deltaY  = pos[3] - pos[1];
+        deltaX = pos[2] - pos[0];
+        deltaY = pos[3] - pos[1];
         this.fatherWindow = fatherWindow;
     }
 

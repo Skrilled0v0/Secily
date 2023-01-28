@@ -1,7 +1,7 @@
 package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
-import me.skrilled.ui.menu.assembly.SolidCicleAssembly;
+import me.skrilled.ui.menu.assembly.CicleAssembly;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -9,11 +9,12 @@ import java.util.ArrayList;
 
 public class Color_alpha_Assembly extends Assembly {
     public float h, s, b, a;
+
     public float[] rgba = new float[4];
     public ArrayList<ColorPoint> colorPoints;
     Color color;
     boolean init = false;
-    SolidCicleAssembly solidCicleAssembly;
+    CicleAssembly cicleAssembly;
 
 
     private Color_alpha_Assembly(float[] pos, Assembly fatherWindow) {
@@ -31,15 +32,20 @@ public class Color_alpha_Assembly extends Assembly {
         rgba[1] = color.getGreen();
         rgba[2] = color.getBlue();
         rgba[3] = a;
-        float[] circlePos = new float[]{pos[0]+a * deltaX, pos[1]+0.5f * deltaY,pos[0]+a * deltaX,pos[1]+ 0.5f * deltaY};
-        solidCicleAssembly = new SolidCicleAssembly(circlePos, fatherWindow, 0.6f * deltaY, Color.blue);
+        float[] circlePos = new float[]{pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f, pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f};
+        cicleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
     }
 
     @Override
     public void draw() {
         if (!init) InitColorPoints();
-        RenderUtil.drawColorPointsWithYThickness(colorPoints,0.8f*deltaY);
-        solidCicleAssembly.draw();
+        float absX, absY;
+        absX = calcAbsX();
+        absY = calcAbsY();
+        RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY - 1, -1);
+        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
+//        SenseHeader.getSense.printINFO("alpha: "+deltaY);
+        cicleAssembly.draw();
     }
 
     public void InitColorPoints() {
@@ -47,10 +53,14 @@ public class Color_alpha_Assembly extends Assembly {
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
-        for (int i = 0; i < 2f * (pos[2] - pos[0]); i++) {
+        for (int i = 0; i < 2f * deltaX; i++) {
             Color tempColor = new Color(rgba[0] / 255f, rgba[1] / 255f, rgba[2] / 255f, i / (2f * (pos[2] - pos[0])));
             colorPoints.add(new ColorPoint(tempColor, new float[]{absX + (i / 2f), absY}));
         }
         init = true;
+    }
+    public void SetH(float h){
+        this.h = h;
+        init = false;
     }
 }

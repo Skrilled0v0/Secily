@@ -19,6 +19,7 @@ public class TimerUtil {
     public long getCurrentMS() {
         return System.currentTimeMillis();
     }
+
     public boolean hasReached(int milliseconds) {
 
         return (this.getCurrentMS() - this.lastMS) >= milliseconds;

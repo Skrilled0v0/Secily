@@ -305,12 +305,7 @@ public final class FontDrawer {
 
                             final int finalColor = COLORS[colorIndex];
 
-                            color = ColorUtils.getRGB(
-                                    ColorUtils.getRed(finalColor),
-                                    ColorUtils.getGreen(finalColor),
-                                    ColorUtils.getBlue(finalColor),
-                                    ColorUtils.getAlpha(color)
-                            );
+                            color = ColorUtils.getRGB(ColorUtils.getRed(finalColor), ColorUtils.getGreen(finalColor), ColorUtils.getBlue(finalColor), ColorUtils.getAlpha(color));
 
                             break;
                     }

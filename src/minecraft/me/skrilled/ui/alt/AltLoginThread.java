@@ -7,7 +7,6 @@ import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
-import me.skrilled.SenseHeader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 

@@ -11,8 +11,7 @@ public class FileUtils {
             FileInputStream fileInputStream = new FileInputStream(file);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
             String line;
-            while ((line = bufferedReader.readLine()) != null)
-                stringBuilder.append(line).append('\n');
+            while ((line = bufferedReader.readLine()) != null) stringBuilder.append(line).append('\n');
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,8 +25,7 @@ public class FileUtils {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            while ((line = bufferedReader.readLine()) != null)
-                stringBuilder.append(line).append('\n');
+            while ((line = bufferedReader.readLine()) != null) stringBuilder.append(line).append('\n');
 
         } catch (Exception e) {
             e.printStackTrace();

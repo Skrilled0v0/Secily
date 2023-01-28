@@ -3,7 +3,7 @@
  */
 package me.skrilled.utils.render.tessellate;
 
-import java.awt.Color;
+import java.awt.*;
 
 
 public interface Tessellation {

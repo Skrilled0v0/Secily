@@ -16,6 +16,7 @@ import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.ui.menu.assembly.ColorAssembly;
+import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
@@ -25,13 +26,16 @@ import java.util.Comparator;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
+    public static ValueHeader fontReplace = new ValueHeader("fontReplace", true);
     ArrayList<String> didis = new ArrayList<>();
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader not = new ValueHeader("Notifications", true);
     ValueHeader didi = new ValueHeader("drawDIDI", true);
-    public static ValueHeader fontReplace = new ValueHeader("fontReplace", true);
     ValueHeader diType = new ValueHeader("didiType", "Red", didis);
+
+/*    ColorAssembly cA = new ColorAssembly(new float[]{100, 100, 200, 220}, null, 164, 0.4f, 0.6f, 0.7f);
+    TimerUtil timerUtil = new TimerUtil();*/
 
 
     public HUD() {
@@ -63,8 +67,13 @@ public class HUD extends ModuleHeader {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
 
-        //Test
-
+/*
+        cA.draw();
+        if (timerUtil.hasReached(333)) {
+            timerUtil.reset();
+            cA.SetH((float) (Math.random()));
+        }
+*/
 
         //Information
         if ((Boolean) this.getValue(info)) {

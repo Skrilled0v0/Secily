@@ -16,7 +16,7 @@ public class EventKey implements Event {
     }
 
     /**
-     * »ñÈ¡
+     * è·å–
      *
      * @return key
      */
