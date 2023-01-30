@@ -53,13 +53,11 @@ public class BGAssembly extends Assembly {
         float absY = calcAbsY();
         switch (bgType) {
             case Rect:
-                if (canBlur) BlurUtil.blurArea(absX, absY, absX + deltaX, absY + deltaY, 10);
+                if (canBlur) BlurUtil.blurArea(absX, absY, absX + deltaX, absY + deltaY, 20);
                 RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY, color.getRGB());
                 break;
             case RoundRect:
-                if (canBlur) BlurUtil.blurAreaRounded(absX, absY, absX + deltaX, absY + deltaY, radius, 10);
-//                SenseHeader.getSense.printINFO("x1 ["+absX+"] y1 ["+absY+"] x2 ["+(absX+ deltaX)+"] y2 ["+(absY + deltaY)+"]");
-//                SenseHeader.getSense.printINFO("bbb"+deltaY);
+                if (canBlur) BlurUtil.blurAreaRounded(absX, absY, absX + deltaX, absY + deltaY, radius, 20);
                 RenderUtil.drawRoundRect(absX, absY, absX + deltaX, absY + deltaY, radius, color.getRGB());
                 break;
         }

@@ -65,14 +65,7 @@ public class HUD extends ModuleHeader {
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
-        RenderUtil.drawTitleIcon(Main.fontLoader.ICON64, w / 2f-300, h / 2f-200, new String[]{"A","B","C","D","E"}, 100, 4, -1, Color.DARK_GRAY.getRGB(), Color.BLUE.getRGB(),false);
-/*
-        cA.draw();
-        if (timerUtil.hasReached(333)) {
-            timerUtil.reset();
-            cA.SetH((float) (Math.random()));
-        }
-*/
+
 
         //Information
         if ((Boolean) this.getValue(info)) {

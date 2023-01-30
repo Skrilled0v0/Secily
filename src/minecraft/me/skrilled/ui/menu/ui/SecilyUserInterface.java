@@ -36,11 +36,6 @@ public class SecilyUserInterface extends GuiScreen {
         //添加 背景 至 底层窗口
         mainGui.addAssembly(bigBg);
 
-        //pos1+0.14301191765980498374864572047671*dY
-        //pos1+0.95991332611050920910075839653304*dY
-        //pos0+0.01887871853546910755148741418764*dX
-        //pos0+0.98112128146453089244851258581236*dX
-
         //计算 编辑区 背景 Pos
         float[] areaEditPos = {
                 0.01704958975262581302525836774406f * bigBg.deltaX,
@@ -91,7 +86,7 @@ public class SecilyUserInterface extends GuiScreen {
         float spacing = 0.03421828908554572271386430678466f * leftSideBar.deltaX;
 
         //初始化 ModuleTypeICON 组件
-        IconAssembly ModuleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON64, new String[]{"A", "B", "C", "D", "E"}, spacing, new Animation(1000, false, Easing.LINEAR), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247), true);
+        IconAssembly ModuleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new String[]{"A", "B", "C", "D", "E"}, spacing, new Animation(1000, false, Easing.LINEAR), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247), true);
 
         //添加 ModuleTypeICON 组件 至 左边栏窗口
         leftSideBar.addAssembly(ModuleTypeICONBar);
@@ -110,6 +105,7 @@ public class SecilyUserInterface extends GuiScreen {
         //遍历计算Modules Pos并且自动New 组件 Add
         for (int i = 0; i < 6; i++) {
             leftSideBar.addAssembly(new BGAssembly(new float[]{modulesBGsStartPos[0], modulesBGsStartPos[1] + i * (modulesBGHeight + modulesUDMargin), modulesBGsStartPos[2], modulesBGsStartPos[3] + i * (modulesBGHeight + modulesUDMargin)}, leftSideBar, new Color(255, 255, 255, 30), BackGroundType.RoundRect, false, 5f));
+
         }
         super.initGui();
     }
@@ -122,6 +118,11 @@ public class SecilyUserInterface extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void drawBackground() {
+        super.drawBackground();
     }
 
     @Override

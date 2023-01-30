@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import me.ashyx.blur.util.Blur;
 import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.Minecraft;
@@ -473,7 +474,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
 
 
     public void drawBackground() {
-        if (this.mc.theWorld != null) {
+        if (this.mc.theWorld != null&&!(mc.currentScreen instanceof SecilyUserInterface)) {
             Blur.renderBlur(5);
         } else {
             GlStateManager.disableLighting();

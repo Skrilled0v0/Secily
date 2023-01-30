@@ -15,6 +15,7 @@ public class StringAssembly extends Assembly {
     boolean centered;
     Color bgColor;
     Color fontColor;
+    boolean border;
     FontDrawer font;
 
     private StringAssembly(float[] pos, Assembly fatherWindow) {
@@ -27,6 +28,16 @@ public class StringAssembly extends Assembly {
         this.centered = centered;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
+        this.font = font;
+    }
+
+    public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, boolean border, FontDrawer font) {
+        super(pos, fatherWindow);
+        this.value = value;
+        this.centered = centered;
+        this.bgColor = bgColor;
+        this.fontColor = fontColor;
+        this.border = border;
         this.font = font;
     }
 

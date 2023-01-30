@@ -389,7 +389,7 @@ public class RenderUtil implements IMC {
         float iconWidth = 0;
         if(isTransverse) {
             for (String icon : Icons) {
-                iconWidth = font.getStringWidth(icon) * 1.2f;
+                iconWidth = font.getStringWidth(icon) * 1f;
                 drawRoundRect(posX + (spacing+iconWidth) * count, posY, posX + iconWidth + (spacing+iconWidth) * count, posY + iconWidth, iconWidth / 8f, bgColor);
                 count++;
             }
