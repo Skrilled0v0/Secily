@@ -21,6 +21,6 @@ public class Reach extends ModuleHeader {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-        this.setSuffix("C:" + combat.getDoubleCurrentValue() + " B:" + build.getDoubleCurrentValue());
+        this.setSuffix("C:" + Math.round(combat.getDoubleCurrentValue()) + " B:" + Math.round(build.getDoubleCurrentValue()));
     }
 }

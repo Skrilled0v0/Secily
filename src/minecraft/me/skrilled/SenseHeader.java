@@ -71,7 +71,7 @@ public class SenseHeader implements IMC {
     }
 
     public String getClientPrefix() {
-        return "§6[§d" + clientInfo[2] + "§6]§r";
+        return "\u00A76[\u00A7d" + clientInfo[2] + "\u00A76]\u00A7r";
     }
 
     public void setClientPrefix(String str) {

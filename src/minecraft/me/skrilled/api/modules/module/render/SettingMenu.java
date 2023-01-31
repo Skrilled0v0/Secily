@@ -22,16 +22,16 @@ public class SettingMenu extends ModuleHeader {
     public static SecilyMenu menu = new SecilyMenu();
     static ArrayList<String> cmode = new ArrayList<>();
     public static ValueHeader colorMode = new ValueHeader("ColorMode", "Dark", cmode);
-    static double[] x2 = {0.0, 550, 199999, 0.5f};
+    static double[] x2 = {0.0, 659.5, 199999, 0.5f};
     public static ValueHeader posX2 = new ValueHeader("X2", x2);
-    static double[] y2 = {0.0, 375, 199999, 0.5f};
+    static double[] y2 = {0.0, 344, 199999, 0.5f};
     public static ValueHeader posY2 = new ValueHeader("Y2", y2);
     static double[] x1 = {0.0, 50, 199999, 0.5f};
     public static ValueHeader posX1 = new ValueHeader("X1", x1);
     static double[] y1 = {0.0, 50, 199999, 0.5f};
     public static ValueHeader posY1 = new ValueHeader("Y1", y1);
     ArrayList<String> mode = new ArrayList<>();
-    ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
+    ValueHeader sideMode = new ValueHeader("Mode", "Test", mode);
 
     public SettingMenu() {
         this.setCanView(false);

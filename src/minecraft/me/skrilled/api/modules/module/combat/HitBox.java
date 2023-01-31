@@ -20,6 +20,6 @@ public class HitBox extends ModuleHeader {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-        this.setSuffix("Size:" + size.getDoubleCurrentValue());
+        this.setSuffix("Size:" + Math.round(size.getDoubleCurrentValue()));
     }
 }

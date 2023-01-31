@@ -261,7 +261,7 @@ public final class FontDrawer {
             final char c = s.charAt(i);
             final boolean isEmojiCharacter = isEmojiCharacter(c);
 
-            if ((c == '§' || isEmojiCharacter) && i < s.length() - 1) {
+            if ((c == '\u00A7' || isEmojiCharacter) && i < s.length() - 1) {
                 i++;
 
                 if (!isEmojiCharacter) {

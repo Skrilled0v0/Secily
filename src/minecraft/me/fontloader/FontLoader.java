@@ -38,6 +38,7 @@ public class FontLoader implements IMC {
         System.out.println("Loading-" + fontName);
         try {
             InputStream inputStream = this.getClass().getResourceAsStream(fontName + ".ttf");
+            assert inputStream != null;
             font = Font.createFont(0, inputStream);
             font = font.deriveFont(Font.PLAIN, size);
         } catch (Exception ex) {
