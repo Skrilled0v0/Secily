@@ -45,6 +45,9 @@ public abstract class Assembly {
         return new float[]{calcAbsX(),calcAbsY(),calcAbsX()+deltaX,calcAbsY()+deltaY};
     }
 
-    public abstract void MouseClicked(int mouseX,int mouseY,int button);
+    public abstract void mouseClicked(int mouseX, int mouseY, int button);
+    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
+    }
 
 }

@@ -403,7 +403,6 @@ public class RenderUtil implements IMC {
     }
 
 
-
     public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
@@ -467,6 +466,7 @@ public class RenderUtil implements IMC {
         font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
     }
+
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
         glPushMatrix();
         glEnable(3042);
@@ -935,7 +935,7 @@ public class RenderUtil implements IMC {
      * @param font
      * @param posX
      * @param posY
-     * @param Icons
+     * @param icons
      * @param spacing
      * @param motion
      * @param iconColor
@@ -943,35 +943,32 @@ public class RenderUtil implements IMC {
      * @param currentColor
      * @return 高度
      */
-    public static float drawTitleIcon(FontDrawer font, float posX, float posY, String[] Icons, float spacing, float motion, int iconColor, int bgColor, int currentColor, boolean isTransverse) {
+    public static float drawTitleIcon(FontDrawer font, float posX, float posY, char[] icons, float boxWidth, float spacing, float motion, int iconColor, int bgColor, int currentColor, boolean isTransverse) {
         int count = 0;
-        float iconWidth = 0;
         if (isTransverse) {
-            for (String icon : Icons) {
-                iconWidth = font.getStringWidth(icon) * 1.2f;
-                drawRoundRect(posX + (spacing + iconWidth) * count, posY, posX + iconWidth + (spacing + iconWidth) * count, posY + iconWidth, iconWidth / 8f, bgColor);
+            for (char icon : icons) {
+                drawRoundRect(posX + (spacing + boxWidth) * count, posY, posX + boxWidth + (spacing + boxWidth) * count, posY + boxWidth, boxWidth / 8f, bgColor);
                 count++;
             }
-            drawRoundRect(posX + (motion - 1) * (spacing + iconWidth), posY, posX + (motion - 1) * (spacing + iconWidth) + iconWidth, posY + iconWidth, iconWidth / 8f, currentColor);
+            drawRoundRect(posX + (motion - 1) * (spacing + boxWidth), posY, posX + (motion - 1) * (spacing + boxWidth) + boxWidth, posY + boxWidth, boxWidth / 8f, currentColor);
             count = 0;
-            for (String icon : Icons) {
-                font.drawCenteredString(icon, posX + iconWidth / 2f + (spacing + iconWidth) * count, posY + (iconWidth - font.getHeight()) / 2f, iconColor);
+            for (char icon : icons) {
+                font.drawCenteredString(String.valueOf(icon), posX + boxWidth / 2f + (spacing + boxWidth) * count, posY + (boxWidth - font.getHeight()) / 2f, iconColor);
                 count++;
             }
         } else {
-            for (String icon : Icons) {
-                iconWidth = font.getStringWidth(icon) * 1.2f;
-                drawRoundRect(posX, posY + spacing * count, posX + iconWidth, posY + iconWidth + spacing * count, iconWidth / 8f, bgColor);
+            for (char icon : icons) {
+                drawRoundRect(posX, posY + spacing * count, posX + boxWidth, posY + boxWidth + spacing * count, boxWidth / 8f, bgColor);
                 count++;
             }
-            drawRoundRect(posX, posY + (motion - 1) * spacing, posX + iconWidth, posY + (motion - 1) * spacing + iconWidth, iconWidth / 8f, currentColor);
+            drawRoundRect(posX, posY + (motion - 1) * spacing, posX + boxWidth, posY + (motion - 1) * spacing + boxWidth, boxWidth / 8f, currentColor);
             count = 0;
-            for (String icon : Icons) {
-                font.drawCenteredString(icon, posX + iconWidth / 2f, posY + (iconWidth - font.getHeight()) / 2f + spacing * count, iconColor);
+            for (char icon : icons) {
+                font.drawCenteredString(String.valueOf(icon), posX + boxWidth / 2f, posY + (boxWidth - font.getHeight()) / 2f + spacing * count, iconColor);
                 count++;
             }
         }
-        return iconWidth;
+        return boxWidth;
     }
 
     public static void drawColorPointLists(ArrayList<ArrayList<ColorPoint>> colorPointLists) {

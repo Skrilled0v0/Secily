@@ -49,7 +49,7 @@ public class Color_alpha_Assembly extends Assembly {
     }
 
     @Override
-    public void MouseClicked(int mouseX,int mouseY,int button) {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
 
     }
 

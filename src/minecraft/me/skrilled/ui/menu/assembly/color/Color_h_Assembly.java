@@ -37,7 +37,7 @@ public class Color_h_Assembly extends Assembly {
     }
 
     @Override
-    public void MouseClicked(int mouseX,int mouseY,int button) {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
 
     }
 

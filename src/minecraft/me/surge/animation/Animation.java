@@ -9,16 +9,16 @@ import java.util.function.Supplier;
 public class Animation {
 
     // The length of the animation
-    private final Supplier<Float> length;
+    public final Supplier<Float> length;
 
     // The easing method to use
     private final Supplier<Easing> easing;
 
     // The time since the last state change
-    private long lastMillis = 0L;
+    public long lastMillis = 0L;
 
     // The original state we set the animation to
-    private final boolean initialState;
+    public final boolean initialState;
 
     // The current state of the animation
     private boolean state = false;

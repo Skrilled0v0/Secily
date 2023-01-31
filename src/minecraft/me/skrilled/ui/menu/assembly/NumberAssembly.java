@@ -42,7 +42,7 @@ public class NumberAssembly extends Assembly {
     }
 
     @Override
-    public void MouseClicked(int mouseX,int mouseY,int button) {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
 
     }
 }

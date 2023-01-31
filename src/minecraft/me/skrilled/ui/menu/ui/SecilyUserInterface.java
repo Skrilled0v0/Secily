@@ -91,10 +91,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.addAssembly(areaEdit);
 
         //计算 左边栏 窗口 Pos
-        float[] leftSideBarPos = {0.02911877394636015325670498084291f * bigBg.deltaX,
-                0.16424418604651162790697674418605f * bigBg.deltaY,
-                0.28588888888888888888888888888888f * bigBg.deltaX,
-                0.9273255813953488372093023255814f * bigBg.deltaY};
+        float[] leftSideBarPos = {0.02911877394636015325670498084291f * bigBg.deltaX, 0.16424418604651162790697674418605f * bigBg.deltaY, 0.28588888888888888888888888888888f * bigBg.deltaX, 0.9273255813953488372093023255814f * bigBg.deltaY};
 
         //初始化 左边栏 窗口
         leftSideBar = new WindowAssembly(leftSideBarPos, mainGui);
@@ -118,13 +115,13 @@ public class SecilyUserInterface extends GuiScreen {
         leftSideBar.addAssembly(leftModuleTypeICONBarBg);
 
         //计算 ModuleTypeICON 组件 Pos
-        float[] moduleTypeICONPos = {0.08714631268436578171091445427729f * leftSideBar.deltaX, 0.04280152671755725190839694656489f * leftSideBar.deltaY, 0, 0};
+        float[] moduleTypeICONPos = {0.08714631268436578171091445427729f * leftSideBar.deltaX, 0.04280152671755725190839694656489f * leftSideBar.deltaY, 0.96166134185303514376996805111821f * leftSideBar.deltaX, 0.14031180400890868596881959910913f * leftSideBar.deltaY};
 
         //计算 ModuleTypeICON 组件 Spacing
         float spacing = 0.03421828908554572271386430678466f * leftSideBar.deltaX;
 
         //初始化 ModuleTypeICON 组件
-        ModuleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new String[]{"A", "B", "C", "D", "E"}, spacing, new Animation(1000, false, Easing.LINEAR), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247), true);
+        ModuleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new char[]{'A', 'B', 'C', 'D', 'E'}, spacing, new Animation(200, false, Easing.LINEAR), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247), true);
 
         //添加 ModuleTypeICON 组件 至 左边栏窗口
         leftSideBar.addAssembly(ModuleTypeICONBar);
@@ -161,7 +158,8 @@ public class SecilyUserInterface extends GuiScreen {
         //组件点击判定
         for (Assembly assembly : mainGui.getAssembliesClicked(mouseX, mouseY)) {
             //组件点击处理
-            assembly.MouseClicked(mouseX, mouseY, mouseButton);
+            assembly.mouseClicked(mouseX, mouseY, mouseButton);
+//            SenseHeader.getSense.printINFO("组件点击处理");
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
