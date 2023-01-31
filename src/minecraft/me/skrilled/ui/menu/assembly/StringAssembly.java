@@ -17,18 +17,20 @@ public class StringAssembly extends Assembly {
     Color fontColor;
     boolean border;
     FontDrawer font;
+    float radius;
 
     private StringAssembly(float[] pos, Assembly fatherWindow) {
         super(pos, fatherWindow);
     }
 
-    public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font) {
+    public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font,float radius) {
         super(pos, fatherWindow);
         this.value = value;
         this.centered = centered;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
         this.font = font;
+        this.radius = radius;
     }
 
     public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, boolean border, FontDrawer font) {
@@ -43,12 +45,17 @@ public class StringAssembly extends Assembly {
 
     @Override
     public void draw() {
-        if (centered) RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
+        if (centered) RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(),radius);
         else RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
     }
 
     @Override
-    public void mouseClicked(int mouseX, int mouseY, int button) {
+    public void mouseEventHandle(int mouseX, int mouseY, int button) {
+
+    }
+
+    @Override
+    public void reInit() {
 
     }
 }

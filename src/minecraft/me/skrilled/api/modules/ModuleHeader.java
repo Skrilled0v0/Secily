@@ -206,4 +206,8 @@ public class ModuleHeader implements IMC {
     }
 
 
+    @Override
+    public String toString() {
+        return moduleName;
+    }
 }

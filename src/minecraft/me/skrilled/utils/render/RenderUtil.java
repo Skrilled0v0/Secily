@@ -403,7 +403,7 @@ public class RenderUtil implements IMC {
     }
 
 
-    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
+    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor,float radius) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
         float lrMargin = 1.5f * font.getCharWidth('A');
@@ -424,7 +424,7 @@ public class RenderUtil implements IMC {
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
         //画背景
-        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2] - pos[0], pos[3] - pos[1], font.getHeight() / 2, bgColor);
+        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor);
         //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             String s1 = str.substring(split.get(i), split.get(i + 1));
