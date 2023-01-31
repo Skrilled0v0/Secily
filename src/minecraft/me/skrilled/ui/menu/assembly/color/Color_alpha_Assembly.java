@@ -48,6 +48,11 @@ public class Color_alpha_Assembly extends Assembly {
         cicleAssembly.draw();
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public void InitColorPoints() {
         colorPoints = new ArrayList<>();
         float absX, absY;

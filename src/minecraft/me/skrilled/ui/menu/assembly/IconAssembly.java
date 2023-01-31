@@ -41,6 +41,11 @@ public class IconAssembly extends Assembly {
         RenderUtil.drawTitleIcon(font, absX, absY, icons, spacing, (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor()), iconColor.getRGB(), bgColor.getRGB(), currentColor.getRGB(), isTransverse);
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public void SetAimingIndex(int i) {
         currentPos = (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor());
         if (i < 1 || i > icons.length) throw new IndexOutOfBoundsException("最小1，最大icons的数目！");//设置值越界

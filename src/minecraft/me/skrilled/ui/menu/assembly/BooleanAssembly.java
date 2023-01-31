@@ -38,6 +38,11 @@ public class BooleanAssembly extends Assembly {
                 , falseColor.getRGB());
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public void SetAnimState(boolean in) {
         animation.setState(in);
     }

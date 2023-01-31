@@ -371,6 +371,102 @@ public class RenderUtil implements IMC {
         return boxHeight;
     }
 
+    public static float drawStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
+        float fontHeight = font.getHeight();
+        float udMargin = fontHeight / 4f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
+        float lineSpacing = fontHeight * 0.6f;
+        float boxHeight;
+        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
+        //计算所需行数
+        int row = 1;
+        ArrayList<Integer> split = new ArrayList<>();
+        int strHead = 0;
+        split.add(strHead);
+        for (int i = 0; i < str.length(); i++) {
+            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
+                strHead = i;
+                split.add(i);
+                row++;
+            }
+        }
+        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
+        //画背景
+        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2], pos[3], font.getHeight() / 2f, bgColor);
+        //画文字前row-1行
+        for (int i = 0; i < row - 1; i++) {
+            font.drawString(str.substring(split.get(i), split.get(i + 1)), pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
+        }
+        //画文字最后一行
+        font.drawString(str.substring(split.get(row - 1)), pos[0] + lrMargin, (pos[1] + pos[3] - fontHeight) / 2 + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        return boxHeight;
+    }
+
+
+
+    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
+        float fontHeight = font.getHeight();
+        float udMargin = fontHeight / 4f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
+        float lineSpacing = fontHeight * 0.6f;
+        float boxHeight;
+        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
+        //计算所需行数
+        int row = 1;
+        ArrayList<Integer> split = new ArrayList<>();
+        int strHead = 0;
+        split.add(strHead);
+        for (int i = 0; i < str.length(); i++) {
+            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
+                strHead = i;
+                split.add(i);
+                row++;
+            }
+        }
+        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
+        //画背景
+        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2] - pos[0], pos[3] - pos[1], font.getHeight() / 2, bgColor);
+        //画文字前row-1行
+        for (int i = 0; i < row - 1; i++) {
+            String s1 = str.substring(split.get(i), split.get(i + 1));
+            font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
+        }
+        //画文字最后一行
+        String s1 = str.substring(split.get(row - 1));
+        font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        return boxHeight;
+    }
+
+    public static float drawCenteredString(float[] pos, FontDrawer font, String str, int fontColor) {
+        float fontHeight = font.getHeight();
+        float udMargin = fontHeight / 4f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
+        float lineSpacing = fontHeight * 0.6f;
+        float boxHeight;
+        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
+        //计算所需行数
+        int row = 1;
+        ArrayList<Integer> split = new ArrayList<>();
+        int strHead = 0;
+        split.add(strHead);
+        for (int i = 0; i < str.length(); i++) {
+            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
+                strHead = i;
+                split.add(i);
+                row++;
+            }
+        }
+        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
+        //画文字前row-1行
+        for (int i = 0; i < row - 1; i++) {
+            String s1 = str.substring(split.get(i), split.get(i + 1));
+            font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
+        }
+        //画文字最后一行
+        String s1 = str.substring(split.get(row - 1));
+        font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        return boxHeight;
+    }
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
         glPushMatrix();
         glEnable(3042);
@@ -835,6 +931,7 @@ public class RenderUtil implements IMC {
 
     /**
      * 标题枚举Box绘制
+     *
      * @param font
      * @param posX
      * @param posY
@@ -846,28 +943,28 @@ public class RenderUtil implements IMC {
      * @param currentColor
      * @return 高度
      */
-    public static float drawTitleIcon(FontDrawer font, float posX, float posY, String[] Icons, float spacing, float motion, int iconColor, int bgColor, int currentColor,boolean isTransverse) {
+    public static float drawTitleIcon(FontDrawer font, float posX, float posY, String[] Icons, float spacing, float motion, int iconColor, int bgColor, int currentColor, boolean isTransverse) {
         int count = 0;
         float iconWidth = 0;
-        if(isTransverse) {
+        if (isTransverse) {
             for (String icon : Icons) {
                 iconWidth = font.getStringWidth(icon) * 1.2f;
-                drawRoundRect(posX + (spacing+iconWidth) * count, posY, posX + iconWidth + (spacing+iconWidth) * count, posY + iconWidth, iconWidth / 8f, bgColor);
+                drawRoundRect(posX + (spacing + iconWidth) * count, posY, posX + iconWidth + (spacing + iconWidth) * count, posY + iconWidth, iconWidth / 8f, bgColor);
                 count++;
             }
-            drawRoundRect(posX + (motion - 1) * (spacing+iconWidth), posY, posX + (motion - 1) * (spacing+iconWidth) + iconWidth, posY + iconWidth, iconWidth / 8f, currentColor);
+            drawRoundRect(posX + (motion - 1) * (spacing + iconWidth), posY, posX + (motion - 1) * (spacing + iconWidth) + iconWidth, posY + iconWidth, iconWidth / 8f, currentColor);
             count = 0;
             for (String icon : Icons) {
-                font.drawCenteredString(icon, posX + iconWidth / 2f + (spacing+iconWidth) * count, posY + (iconWidth - font.getHeight()) / 2f, iconColor);
+                font.drawCenteredString(icon, posX + iconWidth / 2f + (spacing + iconWidth) * count, posY + (iconWidth - font.getHeight()) / 2f, iconColor);
                 count++;
             }
-        }else{
+        } else {
             for (String icon : Icons) {
                 iconWidth = font.getStringWidth(icon) * 1.2f;
-                drawRoundRect(posX , posY+ spacing * count, posX + iconWidth, posY + iconWidth + spacing * count, iconWidth / 8f, bgColor);
+                drawRoundRect(posX, posY + spacing * count, posX + iconWidth, posY + iconWidth + spacing * count, iconWidth / 8f, bgColor);
                 count++;
             }
-            drawRoundRect(posX , posY+ (motion - 1) * spacing, posX + iconWidth, posY  + (motion - 1) * spacing+ iconWidth, iconWidth / 8f, currentColor);
+            drawRoundRect(posX, posY + (motion - 1) * spacing, posX + iconWidth, posY + (motion - 1) * spacing + iconWidth, iconWidth / 8f, currentColor);
             count = 0;
             for (String icon : Icons) {
                 font.drawCenteredString(icon, posX + iconWidth / 2f, posY + (iconWidth - font.getHeight()) / 2f + spacing * count, iconColor);

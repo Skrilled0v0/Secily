@@ -44,4 +44,9 @@ public class EnumAssembly extends Assembly {
         float absX = calcAbsX(), absY = calcAbsY();
         RenderUtil.drawEnumTypeBox(font, currentValue, restChoice, absX, absY, (float) animation.getAnimationFactor(), bgColor.getRGB(), fontColor.getRGB());
     }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
 }

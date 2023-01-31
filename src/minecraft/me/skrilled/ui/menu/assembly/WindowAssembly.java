@@ -3,11 +3,11 @@ package me.skrilled.ui.menu.assembly;
 import java.util.ArrayList;
 
 public class WindowAssembly extends Assembly {
-    BGAssembly bgAssembly;
-    StringAssembly windowName;
-    ArrayList<IconAssembly> icons = new ArrayList<>();
-    ArrayList<WindowAssembly> subWindows = new ArrayList<>();
-    ArrayList<Assembly> otherAssemblies = new ArrayList<>();
+    public BGAssembly bgAssembly;
+    public Assembly windowName;
+    public ArrayList<IconAssembly> icons = new ArrayList<>();
+    public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
+    public ArrayList<Assembly> otherAssemblies = new ArrayList<>();
 
     public WindowAssembly(float[] pos, Assembly fatherWindow) {
         super(pos, fatherWindow);
@@ -53,5 +53,32 @@ public class WindowAssembly extends Assembly {
         for (WindowAssembly windowAssembly : subWindows) {
             windowAssembly.draw();
         }
+    }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
+    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
+    }
+    public ArrayList<Assembly> getAssembliesClicked(int mouseX,int mouseY) {
+        ArrayList<Assembly> result = new ArrayList<>();
+        float[] absPos = null;
+        //本窗口组件
+        for (Assembly assembly : otherAssemblies) {
+            absPos = assembly.calcAbsPos();
+            if (isMouseInside(mouseX,mouseY,absPos[0],absPos[1],absPos[2],absPos[3])){
+                result.add(assembly);
+            }
+        }
+        //子窗口的组件
+        for (WindowAssembly subWindow : subWindows) {
+            for (Assembly assembly : subWindow.getAssembliesClicked(mouseX, mouseY)) {
+                result.add(assembly);
+            }
+        }
+        return result;
     }
 }

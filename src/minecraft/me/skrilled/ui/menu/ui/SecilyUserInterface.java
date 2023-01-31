@@ -9,10 +9,7 @@ import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
-import me.skrilled.ui.menu.assembly.BGAssembly;
-import me.skrilled.ui.menu.assembly.IconAssembly;
-import me.skrilled.ui.menu.assembly.StringAssembly;
-import me.skrilled.ui.menu.assembly.WindowAssembly;
+import me.skrilled.ui.menu.assembly.*;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
@@ -24,6 +21,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class SecilyUserInterface extends GuiScreen {
+    private final ModuleType currentModuleType = ModuleType.COMBAT;
+    private final ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     /**
      * 点击拖动定位x轴
      */
@@ -37,20 +36,18 @@ public class SecilyUserInterface extends GuiScreen {
      */
     float[] windowsPos = SettingMenu.getGuiPos();
     /**
-     * 拖动布尔
-     */
-    private boolean clickDag = false;
-    private final ModuleType currentModuleType = ModuleType.COMBAT;
-    private final ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
-    /**
      * 初始化 底层窗口
      */
     private final WindowAssembly mainGui = new WindowAssembly(windowsPos, null);
-
+    /**
+     * 拖动布尔
+     */
+    private boolean clickDag = false;
     /**
      * 初始化 大背景
      */
     private BGAssembly bigBg;
+    private StringWithoutBGAssembly currentModuleTypeAssembly;
     /**
      * 初始化 编辑区
      */
@@ -72,19 +69,20 @@ public class SecilyUserInterface extends GuiScreen {
      */
     private IconAssembly ModuleTypeICONBar;
 
+
     @Override
     public void initGui() {
         //实例化 大背景
         bigBg = new BGAssembly(new float[]{0, 0, mainGui.deltaX, mainGui.deltaY}, mainGui, new Color(0, 0, 0, 125), BackGroundType.RoundRect, true, 10f);
-        //添加 背景 至 底层窗口
-        mainGui.addAssembly(bigBg);
+        //添加 大背景 至 底层窗口
+        mainGui.bgAssembly = bigBg;
+
+        //实例化 currentModuleType string
+        currentModuleTypeAssembly = new StringWithoutBGAssembly(new float[]{0, 0, mainGui.deltaX, ((mainGui.deltaY * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, currentModuleType.name().toLowerCase(), Main.fontLoader.EN36, Color.white);
+        mainGui.windowName = currentModuleTypeAssembly;
 
         //计算 编辑区 背景 Pos
-        float[] areaEditPos = {
-                0.01704958975262581302525836774406f * bigBg.deltaX,
-                0.14244186046511627906976744186047f * bigBg.deltaY,
-                0.98295041024737418697474163225594f * bigBg.deltaX,
-                0.97520930232558139534883720930233f * bigBg.deltaY};
+        float[] areaEditPos = {0.01704958975262581302525836774406f * bigBg.deltaX, 0.14244186046511627906976744186047f * bigBg.deltaY, 0.98295041024737418697474163225594f * bigBg.deltaX, 0.97520930232558139534883720930233f * bigBg.deltaY};
 
         //初始化 编辑区背景 组件
         areaEdit = new BGAssembly(areaEditPos, mainGui, new Color(204, 204, 204, 60), BackGroundType.RoundRect, false, 10f);
@@ -93,10 +91,9 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.addAssembly(areaEdit);
 
         //计算 左边栏 窗口 Pos
-        float[] leftSideBarPos = {
-                0.02911877394636015325670498084291f * bigBg.deltaX,
+        float[] leftSideBarPos = {0.02911877394636015325670498084291f * bigBg.deltaX,
                 0.16424418604651162790697674418605f * bigBg.deltaY,
-                0.28888888888888888888888888888888f * bigBg.deltaX,
+                0.28588888888888888888888888888888f * bigBg.deltaX,
                 0.9273255813953488372093023255814f * bigBg.deltaY};
 
         //初始化 左边栏 窗口
@@ -140,16 +137,10 @@ public class SecilyUserInterface extends GuiScreen {
         float modulesBGHeight = modulesBGsStartPos[3] - modulesBGsStartPos[1];
 
         //遍历计算Modules Pos并且自动New 组件 Add
-        List<ModuleHeader> tempList=SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType);
-        for (int i = 0; i <tempList.size() ; i++) {
-            String mName=tempList.get(i).getModuleName();
-            leftSideBar.addAssembly(new StringAssembly(new float[]{
-                    modulesBGsStartPos[0],
-                    modulesBGsStartPos[1] + i * (modulesBGHeight + modulesUDMargin),
-                    modulesBGsStartPos[2],
-                    modulesBGsStartPos[3] + i * (modulesBGHeight + modulesUDMargin)},
-                    leftSideBar,mName,true,
-                    new Color(255, 255, 255, 25),new Color(-1),Main.fontLoader.EN24));
+        List<ModuleHeader> tempList = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType);
+        for (int i = 0; i < tempList.size(); i++) {
+            String mName = tempList.get(i).getModuleName();
+            leftSideBar.addAssembly(new StringAssembly(new float[]{modulesBGsStartPos[0], modulesBGsStartPos[1] + i * (modulesBGHeight + modulesUDMargin), modulesBGsStartPos[2], modulesBGsStartPos[3] + i * (modulesBGHeight + modulesUDMargin)}, leftSideBar, mName, false, new Color(255, 255, 255, 25), new Color(-1), Main.fontLoader.EN24));
         }
         super.initGui();
     }
@@ -161,28 +152,31 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        //拖动
         clickDag = mouseButton == 0 && mouseX > mainGui.calcAbsX() && mouseX < (mainGui.calcAbsX() + mainGui.deltaX) && mouseY > mainGui.calcAbsY() && mouseY < mainGui.calcAbsY() + mainGui.deltaY * 0.13255813953488372093023255813953f;
         if (clickDag) {
             posInClickX = mouseX - mainGui.calcAbsX();
             posInClickY = mouseY - mainGui.calcAbsY();
+        }
+        //组件点击判定
+        for (Assembly assembly : mainGui.getAssembliesClicked(mouseX, mouseY)) {
+            //组件点击处理
+            assembly.MouseClicked(mouseX, mouseY, mouseButton);
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        //拖动
         if (clickDag) {
             mainGui.pos[0] = mouseX - posInClickX;
             mainGui.pos[1] = mouseY - posInClickY;
             mainGui.pos[2] = mainGui.deltaX + mouseX - posInClickX;
             mainGui.pos[3] = mainGui.deltaY + mouseY - posInClickY;
         }
-        bigBg.draw();
-        Main.fontLoader.EN36.drawCenteredString(currentModuleType.name().toLowerCase(), (mainGui.calcAbsX()*2f + mainGui.deltaX) / 2f, mainGui.calcAbsY() - (Main.fontLoader.EN36.getHeight() - (mainGui.deltaY * 0.13255813953488372093023255813953f))/2f, -1);
-        areaEdit.draw();
-        leftSideBar.draw();
-
-
+        //绘制
+        mainGui.draw();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

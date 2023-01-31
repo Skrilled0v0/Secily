@@ -40,4 +40,9 @@ public class NumberAssembly extends Assembly {
         float absX = calcAbsX(), absY = calcAbsY();
         RenderUtil.drawNumberBar(absX,absY,deltaX,deltaY,(float) anim.getAnimationFactor(),bgColor.getRGB(),ugColor.getRGB(),buttonColor.getRGB());
     }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
 }

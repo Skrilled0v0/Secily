@@ -62,4 +62,9 @@ public class BGAssembly extends Assembly {
                 break;
         }
     }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
 }

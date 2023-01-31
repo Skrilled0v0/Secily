@@ -73,6 +73,11 @@ public class ColorAssembly extends Assembly {
         if (this.color_alpha_assembly != null) color_alpha_assembly.draw();
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public Color getColorClicked_hsb(int[] mouseABSPos) {
         for (ArrayList<ColorPoint> colorPoints : color_sb_assembly.colorPointLists) {
             if (mouseABSPos[0] == Math.floor(colorPoints.get(0).pos[0])) {

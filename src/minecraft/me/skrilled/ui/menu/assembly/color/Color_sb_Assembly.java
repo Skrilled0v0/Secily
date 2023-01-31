@@ -51,6 +51,11 @@ public class Color_sb_Assembly extends Assembly {
         this.cicleAssembly.draw();
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public void InitColorPointLists() {
         colorPointLists = new ArrayList<>();
         float s, b;

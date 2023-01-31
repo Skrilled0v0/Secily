@@ -37,4 +37,9 @@ public class CicleAssembly extends Assembly {
         if (filled) RenderUtil.drawCircle(absX, absY, r, color.getRGB());
         else RenderUtil.drawAngleCirque(absX, absY, r, 0, 360, 1, color.getRGB());
     }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
 }

@@ -41,4 +41,10 @@ public abstract class Assembly {
         return y;
     }
 
+    public float[] calcAbsPos(){
+        return new float[]{calcAbsX(),calcAbsY(),calcAbsX()+deltaX,calcAbsY()+deltaY};
+    }
+
+    public abstract void MouseClicked(int mouseX,int mouseY,int button);
+
 }

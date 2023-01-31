@@ -43,8 +43,12 @@ public class StringAssembly extends Assembly {
 
     @Override
     public void draw() {
-        float absX = calcAbsX(), absY = calcAbsY();
-        if (centered) RenderUtil.drawCenteredStringBox(font, value, absX, absY, bgColor.getRGB(), fontColor.getRGB());
-        else RenderUtil.drawStringBox(font, value, absX, absY, bgColor.getRGB(), fontColor.getRGB());
+        if (centered) RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
+        else RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
+    }
+
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
     }
 }

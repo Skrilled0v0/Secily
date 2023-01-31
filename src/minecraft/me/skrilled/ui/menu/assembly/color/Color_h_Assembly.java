@@ -36,6 +36,11 @@ public class Color_h_Assembly extends Assembly {
         circleAssembly.draw();
     }
 
+    @Override
+    public void MouseClicked(int mouseX,int mouseY,int button) {
+
+    }
+
     public void InitColorPoints() {
         colorPoints = new ArrayList<>();
         float absX, absY;
