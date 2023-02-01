@@ -45,8 +45,8 @@ public class StringAssembly extends Assembly {
 
     @Override
     public void draw() {
-        if (centered) RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(),radius);
-        else RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
+        if (centered) RenderUtil.drawCenteredStringBoxWith4Pos(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(),radius);
+        else RenderUtil.drawStringBoxWith4Pos(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
     }
 
     @Override
