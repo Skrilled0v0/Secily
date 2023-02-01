@@ -2,7 +2,7 @@ package net.minecraft.client.renderer.entity;
 
 import com.google.common.collect.Lists;
 import me.skrilled.SenseHeader;
-import me.skrilled.api.modules.module.render.ESP;
+import me.skrilled.api.modules.module.render.Chams;
 import me.skrilled.api.modules.module.render.Nametags;
 import me.skrilled.utils.IMC;
 import net.minecraft.client.Minecraft;
@@ -101,7 +101,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
     }
 
     public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        if (!Reflector.RenderLivingEvent_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Pre_Constructor, entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z))) {
+        if (!Reflector.RenderLivingEvent_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Pre_Constructor, entity, this, x, y, z)) {
             if (animateModelLiving) {
                 entity.limbSwingAmount = 1.0F;
             }
@@ -180,7 +180,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                     this.renderPartialTicks = partialTicks;
                 }
 
-                if (this.renderOutlines || ESP.espMode.getCurrentEnumType().equalsIgnoreCase("Outline")) {
+                if (this.renderOutlines) {
                     boolean flag1 = this.setScoreTeamColor(entity);
                     this.renderModel(entity, f6, f5, f8, f2, f7, 0.0625F);
 
@@ -248,7 +248,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
             }
 
             if (Reflector.RenderLivingEvent_Post_Constructor.exists()) {
-                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Post_Constructor, entity, this, Double.valueOf(x), Double.valueOf(y), Double.valueOf(z));
+                Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Post_Constructor, entity, this, x, y, z);
             }
         }
     }
@@ -290,12 +290,12 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float scaleFactor) {
+    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float p_77036_7_) {
         boolean flag = !entitylivingbaseIn.isInvisible();
         boolean flag1 = !flag && !entitylivingbaseIn.isInvisibleToPlayer(Minecraft.getMinecraft().thePlayer);
 
         if (flag || flag1) {
-            if (!this.bindEntityTexture(entitylivingbaseIn)) {
+            if (!bindEntityTexture(entitylivingbaseIn)) {
                 return;
             }
 
@@ -307,8 +307,38 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.blendFunc(770, 771);
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
+            if ((SenseHeader.getSense.getModuleManager().getModuleByClass(Chams.class)).isEnabled()) {
+                if ((Chams.colored.isOptionOpen())) {
+                    GL11.glPushMatrix();
+                    GL11.glPushAttrib(1048575);
+                    GL11.glDisable(2929);
+                    GL11.glDisable(3553);
+                    GL11.glEnable(3042);
+                    GL11.glBlendFunc(770, 771);
+                    GL11.glDisable(2896);
+                    GL11.glPolygonMode(1032, 6914);
+                    GL11.glColor4f(Chams.chamColor.getColorValue().getRed() / 255.0f, Chams.chamColor.getColorValue().getGreen() / 255.0f, Chams.chamColor.getColorValue().getBlue() / 255.0f, Chams.chamColor.getColorValue().getAlpha() / 255.0f);
+                    mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+                    GL11.glEnable(2896);
+                    GL11.glDisable(3042);
+                    GL11.glEnable(3553);
+                    GL11.glEnable(2929);
+                    GL11.glColor3d(1.0, 1.0, 1.0);
+                    GL11.glPopAttrib();
+                    GL11.glPopMatrix();
+                } else {
+                    GL11.glPushMatrix();
+                    GL11.glEnable(32823);
+                    GL11.glPolygonOffset(1.0f, -1100000.0f);
+                    mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+                    GL11.glDisable(32823);
+                    GL11.glPolygonOffset(1.0f, 1100000.0f);
+                    GL11.glPopMatrix();
+                }
+            } else {
 
-            this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, scaleFactor);
+                mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, p_77036_7_);
+            }
 
             if (flag1) {
                 GlStateManager.disableBlend();

@@ -22,6 +22,12 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 public class LoadingGui extends GuiScreen {
+    @Override
+    public void initGui() {
+        Notification.sendNotification("The client will load all modules in 6 seconds!",4000, Notification.Type.INFO);
+        super.initGui();
+    }
+
     ResourceLocation bg = new ResourceLocation("skrilled/bgNoBlur.png");
     ResourceLocation clientIcon = new ResourceLocation("skrilled/launcher.png");
     BoundedAnimation loading = new BoundedAnimation(RenderUtil.width() / 6f, RenderUtil.width() - RenderUtil.width() / 6f, 4000f, false, Easing.QUART_OUT);

@@ -54,7 +54,9 @@ public class ModuleManager {
         mList.add(new HUD());
         mList.add(new ESP());
         mList.add(new Nametags());
-        mList.add(new RenderModifications());
+        mList.add(new Chams());
+        mList.add(new RenderModifier());
+        mList.add(new WorldRenderEditor());
         //Move
         mList.add(new AutoSprint());
         mList.add(new AutoJump());

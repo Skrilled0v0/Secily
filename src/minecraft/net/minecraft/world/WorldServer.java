@@ -13,6 +13,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+
+import me.skrilled.SenseHeader;
+import me.skrilled.api.modules.module.render.WorldRenderEditor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
 import net.minecraft.block.material.Material;
@@ -193,6 +196,7 @@ public class WorldServer extends World implements IThreadListener
 
         if (this.getGameRules().getBoolean("doDaylightCycle"))
         {
+
             this.worldInfo.setWorldTime(this.worldInfo.getWorldTime() + 1L);
         }
 

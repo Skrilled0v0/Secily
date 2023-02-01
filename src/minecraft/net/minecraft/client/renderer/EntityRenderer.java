@@ -6,14 +6,18 @@ import com.google.gson.JsonSyntaxException;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.module.combat.Reach;
-import me.skrilled.api.modules.module.render.RenderModifications;
+import me.skrilled.api.modules.module.render.RenderModifier;
+import me.skrilled.api.modules.module.render.WorldRenderEditor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiDownloadTerrain;
+import net.minecraft.client.gui.MapItemRenderer;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.culling.ClippingHelper;
@@ -79,8 +83,6 @@ import org.lwjgl.util.glu.Project;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -302,6 +304,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         this.fogColor1 += (f4 - this.fogColor1) * 0.1F;
         ++this.rendererUpdateCount;
         this.itemRenderer.updateEquippedItem();
+
         this.addRainParticles();
         this.bossColorModifierPrev = this.bossColorModifier;
 
@@ -441,8 +444,8 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
     //  Fov
     private float getFOVModifier(float partialTicks, boolean useFOVSetting) {
-        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.fovEdit.isOptionOpen())
-            return (float) RenderModifications.fovDouble.getDoubleCurrentValue();
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifier.class).isEnabled() && RenderModifier.fovEdit.isOptionOpen())
+            return (float) RenderModifier.fovDouble.getDoubleCurrentValue();
         if (this.debugView) {
             return 90.0F;
         } else {
@@ -496,7 +499,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
     //   hurtCamera
     private void hurtCameraEffect(float partialTicks) {
-        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.noHurtCam.isOptionOpen())
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifier.class).isEnabled() && RenderModifier.noHurtCam.isOptionOpen())
             return;
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase) {
             EntityLivingBase entitylivingbase = (EntityLivingBase) this.mc.getRenderViewEntity();
@@ -522,7 +525,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
     //  Bobbing
     private void setupViewBobbing(float partialTicks) {
-        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.noBobbing.isOptionOpen())
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifier.class).isEnabled() && RenderModifier.noBobbing.isOptionOpen())
             return;
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) this.mc.getRenderViewEntity();
@@ -592,7 +595,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                     if (movingobjectposition != null) {
                         double d7 = movingobjectposition.hitVec.distanceTo(new Vec3(d0, d1, d2));
 
-                        if (d7 < d3 && !(SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.viewClip.isOptionOpen())) {
+                        if (d7 < d3 && !(SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifier.class).isEnabled() && RenderModifier.viewClip.isOptionOpen())) {
                             d3 = d7;
                         }
                     }
@@ -1548,6 +1551,8 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     }
 
     private void addRainParticles() {
+        if (SenseHeader.getSense.moduleManager.getModuleByClass(WorldRenderEditor.class).isEnabled() && WorldRenderEditor.weatherEditor.isOptionOpen() && WorldRenderEditor.weathers.getCurrentEnumType().equalsIgnoreCase("Snow"))
+            return;
         float f = this.mc.theWorld.getRainStrength(1.0F);
 
         if (!Config.isRainFancy()) {
@@ -1679,16 +1684,20 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                             l2 = j2;
                         }
 
-                        int i3 = j2;
 
-                        if (j2 < l) {
-                            i3 = l;
-                        }
+                        int i3 = Math.max(j2, l);
 
                         if (k2 != l2) {
                             this.random.setSeed((long) l1 * l1 * 3121 + l1 * 45238971L ^ (long) k1 * k1 * 418711 + k1 * 13761L);
                             blockpos$mutableblockpos.set(l1, k2, k1);
-                            float f1 = biomegenbase.getFloatTemperature(blockpos$mutableblockpos);
+                            float f1;
+                            float rain = BiomeGenBase.plains.getFloatTemperature(blockpos$mutableblockpos);
+                            float snow = BiomeGenBase.icePlains.getFloatTemperature(blockpos$mutableblockpos);
+                            if (SenseHeader.getSense.moduleManager.getModuleByClass(WorldRenderEditor.class).isEnabled() && WorldRenderEditor.weatherEditor.isOptionOpen() && WorldRenderEditor.weathers.getCurrentEnumType().equalsIgnoreCase("Snow"))
+                                f1 = snow;
+                            else if (SenseHeader.getSense.moduleManager.getModuleByClass(WorldRenderEditor.class).isEnabled() && WorldRenderEditor.weatherEditor.isOptionOpen() && WorldRenderEditor.weathers.getCurrentEnumType().equalsIgnoreCase("Rain"))
+                                f1 = rain;
+                            else f1 = biomegenbase.getFloatTemperature(blockpos$mutableblockpos);
 
                             if (world.getWorldChunkManager().getTemperatureAtHeight(f1, j2) >= 0.15F) {
                                 if (j1 != 0) {
@@ -1716,7 +1725,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                                 worldrenderer.pos((double) l1 - d3 + 0.5D, l2, (double) k1 - d4 + 0.5D).tex(0.0D, (double) l2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f3).lightmap(k3, l3).endVertex();
                             } else {
                                 if (j1 != 1) {
-                                    if (j1 >= 0) {
+                                    if (j1 == 0) {
                                         tessellator.draw();
                                     }
 

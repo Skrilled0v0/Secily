@@ -5,6 +5,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import me.skrilled.api.event.EventRender2D;
+import me.skrilled.api.modules.module.render.HUD;
+import me.skrilled.ui.Notification;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -281,7 +283,7 @@ public class GuiIngame extends Gui {
         } else {
             this.overlayPlayerList.updatePlayerList(false);
         }
-
+        if (HUD.not.isOptionOpen()) Notification.drawNotifications();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableLighting();
         GlStateManager.enableAlpha();

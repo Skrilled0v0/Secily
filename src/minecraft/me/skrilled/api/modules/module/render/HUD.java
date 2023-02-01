@@ -18,23 +18,19 @@ import me.skrilled.ui.Notification;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
-
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
-    public static ValueHeader fontReplace = new ValueHeader("fontReplace", true);
+    public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
+    public static ValueHeader not = new ValueHeader("Notifications", true);
     ArrayList<String> didis = new ArrayList<>();
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
-    ValueHeader not = new ValueHeader("Notifications", true);
-    ValueHeader didi = new ValueHeader("drawDIDI", true);
-    ValueHeader diType = new ValueHeader("didiType", "Red", didis);
+    ValueHeader didi = new ValueHeader("DrawDIDI", true);
+    ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
 
 /*    ColorAssembly cA = new ColorAssembly(new float[]{100, 100, 200, 220}, null, 164, 0.4f, 0.6f, 0.7f);
     TimerUtil timerUtil = new TimerUtil();*/
@@ -74,6 +70,5 @@ public class HUD extends ModuleHeader {
             font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
             font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
-        if (not.isOptionOpen()) Notification.drawNotifications();
     }
 }

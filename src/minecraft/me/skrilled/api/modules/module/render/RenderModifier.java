@@ -10,8 +10,8 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 
-@ModuleInitialize(name = "RenderModifications", type = ModuleType.RENDER)
-public class RenderModifications extends ModuleHeader {
+@ModuleInitialize(name = "RenderModifier", type = ModuleType.RENDER)
+public class RenderModifier extends ModuleHeader {
     public static double[] fov = {10.0f, 70.0f, 360.0f, 0.1f};
     public static ValueHeader noHurtCam = new ValueHeader("NoHurtCam", true);
     public static ValueHeader noBobbing = new ValueHeader("NoVisualWobble", true);

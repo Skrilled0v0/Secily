@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import me.ashyx.blur.util.Blur;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.ui.Notification;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
@@ -119,6 +120,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        Notification.drawNotifications();
         for (GuiButton guiButton : this.buttonList) {
             guiButton.drawButton(this.mc, mouseX, mouseY);
         }
