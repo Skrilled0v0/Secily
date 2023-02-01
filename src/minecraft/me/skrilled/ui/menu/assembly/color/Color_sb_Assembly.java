@@ -43,12 +43,13 @@ public class Color_sb_Assembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         if (!init) {
             InitColorPointLists();
         }
         RenderUtil.drawColorPointLists(colorPointLists);
         this.cicleAssembly.draw();
+        return deltaY;
     }
 
     @Override

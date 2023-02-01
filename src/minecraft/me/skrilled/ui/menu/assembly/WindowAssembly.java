@@ -1,12 +1,10 @@
 package me.skrilled.ui.menu.assembly;
 
-import me.skrilled.SenseHeader;
-
 import java.util.ArrayList;
 
 public class WindowAssembly extends Assembly {
     public BGAssembly bgAssembly;
-    public Assembly windowName;
+    public StringWithoutBGAssembly windowName;
     public ArrayList<IconAssembly> icons = new ArrayList<>();
     public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
     public ArrayList<Assembly> otherAssemblies = new ArrayList<>();
@@ -38,22 +36,24 @@ public class WindowAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
+        currentUsedHeight = 0f;
         if (bgAssembly != null) {
-            this.bgAssembly.draw();
+            currentUsedHeight += this.bgAssembly.draw();
         }
         if (windowName != null) {
-            this.windowName.draw();
+            currentUsedHeight += this.windowName.draw();
         }
         for (IconAssembly icon : this.icons) {
-            icon.draw();
+            currentUsedHeight += icon.draw();
         }
         for (Assembly otherAssembly : otherAssemblies) {
-            otherAssembly.draw();
+            currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
-            windowAssembly.draw();
+            currentUsedHeight += windowAssembly.draw();
         }
+        return currentUsedHeight > deltaY ? currentUsedHeight : deltaY;
     }
 
     @Override

@@ -29,10 +29,12 @@ public abstract class Assembly {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
+
     /**
      * 调用父窗口坐标和自己相对坐标绘制
+     * 返回用去的高度
      */
-    public abstract void draw();
+    public abstract float draw();
 
     public float calcAbsX() {
         float x = pos[0];

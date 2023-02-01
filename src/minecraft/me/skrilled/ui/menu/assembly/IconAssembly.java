@@ -22,10 +22,6 @@ public class IconAssembly extends Assembly {
     boolean isTransverse;
     float boxWidth;
 
-    private IconAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
     public IconAssembly(float[] pos, Assembly fatherWindow, FontDrawer font, char[] icons, char currentIcon, float spacing, Animation anim, Color iconColor, Color bgColor, Color currentColor, boolean isTransverse) {
         super(pos, fatherWindow);
         this.font = font;
@@ -63,12 +59,12 @@ public class IconAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        RenderUtil.drawTitleIcon(font, absX, absY, icons, boxWidth, spacing, (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor()), iconColor.getRGB(), bgColor.getRGB(), currentColor.getRGB(), isTransverse);
         if (anim.getAnimationFactor() == 1D) {
             currentPos = aimingPos;
         }
+        return RenderUtil.drawTitleIcon(font, absX, absY, icons, boxWidth, spacing, (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor()), iconColor.getRGB(), bgColor.getRGB(), currentColor.getRGB(), isTransverse);
     }
 
     @Override
@@ -84,15 +80,16 @@ public class IconAssembly extends Assembly {
                 try {
                     SecilyUserInterface.currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyUserInterface.currentModuleType).get(0);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 Window_Values_Assembly valuesWindow = (Window_Values_Assembly) SecilyUserInterface.getSecilyUserInterface().mainGui.getAssemblyByName("valuesWindow");
                 valuesWindow.setModule(SecilyUserInterface.currentModule);
                 if (anim.getAnimationFactor() < 1D) {
-                    currentPos += (aimingPos - currentPos) * anim.getAnimationFactor();
+                    float deltaPos = (aimingPos - currentPos);
+                    currentPos += deltaPos * anim.getAnimationFactor();
                 }
                 aimingPos = count;
-                Animation tempAnim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
-                anim = tempAnim;
+                anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
                 anim.setState(true);
             }
         }
@@ -101,13 +98,5 @@ public class IconAssembly extends Assembly {
     @Override
     public void reInit() {
 
-    }
-
-    public void setAimingIndex(int i) {
-        currentPos = (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor());
-        if (i < 1 || i > icons.length) throw new IndexOutOfBoundsException("最小1，最大icons的数目！");//设置值越界
-        aimingPos = i;
-        anim.resetToDefault();
-        anim.setState(true);
     }
 }

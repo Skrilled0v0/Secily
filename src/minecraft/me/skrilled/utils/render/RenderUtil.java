@@ -403,7 +403,7 @@ public class RenderUtil implements IMC {
     }
 
 
-    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor,float radius) {
+    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor, float radius) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
         float lrMargin = 1.5f * font.getCharWidth('A');
@@ -464,6 +464,37 @@ public class RenderUtil implements IMC {
         //画文字最后一行
         String s1 = str.substring(split.get(row - 1));
         font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        return boxHeight;
+    }
+
+    public static float drawLeftedString(float[] pos, FontDrawer font, String str, int fontColor) {
+        float fontHeight = font.getHeight();
+        float udMargin = fontHeight / 4f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
+        float lineSpacing = fontHeight * 0.6f;
+        float boxHeight;
+        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
+        //计算所需行数
+        int row = 1;
+        ArrayList<Integer> split = new ArrayList<>();
+        int strHead = 0;
+        split.add(strHead);
+        for (int i = 0; i < str.length(); i++) {
+            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
+                strHead = i;
+                split.add(i);
+                row++;
+            }
+        }
+        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
+        //画文字前row-1行
+        for (int i = 0; i < row - 1; i++) {
+            String s1 = str.substring(split.get(i), split.get(i + 1));
+            font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
+        }
+        //画文字最后一行
+        String s1 = str.substring(split.get(row - 1));
+        font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
     }
 

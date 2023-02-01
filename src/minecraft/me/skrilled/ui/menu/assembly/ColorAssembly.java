@@ -64,13 +64,15 @@ public class ColorAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         //待设计边框和背景，这两个先画
-        bgAssembly.draw();
+        float result0 = bgAssembly.draw();
+        float result1 = 0f;
         //color选区等
-        this.color_sb_assembly.draw();
-        this.color_h_assembly.draw();
-        if (this.color_alpha_assembly != null) color_alpha_assembly.draw();
+        result1 += this.color_sb_assembly.draw();
+        result1 += this.color_h_assembly.draw();
+        if (this.color_alpha_assembly != null) result1 += color_alpha_assembly.draw();
+        return result0 > result1 ? result0 : result1;
     }
 
     @Override
@@ -117,7 +119,8 @@ public class ColorAssembly extends Assembly {
         SenseHeader.getSense.printINFO("鼠标超出选区？？？//alpha");
         return null;
     }
-    public void SetH(float h){
+
+    public void SetH(float h) {
         color_sb_assembly.SetH(h);
         color_h_assembly.SetH(h);
         color_alpha_assembly.SetH(h);

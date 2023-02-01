@@ -41,9 +41,9 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         if (needInit) Init();
-        super.draw();
+        return super.draw();
     }
 
     public void Init() {

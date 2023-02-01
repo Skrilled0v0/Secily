@@ -32,9 +32,9 @@ public class BooleanAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        RenderUtil.drawBooleanButton(absX, absY, deltaX, deltaY, (float) animation.getAnimationFactor(), bgColor.getRGB(), tureColor.getRGB()
+        return RenderUtil.drawBooleanButton(absX, absY, deltaX, deltaY, (float) animation.getAnimationFactor(), bgColor.getRGB(), tureColor.getRGB()
                 , falseColor.getRGB());
     }
 

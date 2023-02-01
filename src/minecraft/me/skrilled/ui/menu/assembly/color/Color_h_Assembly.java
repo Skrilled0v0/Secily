@@ -29,11 +29,12 @@ public class Color_h_Assembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         if (!init) InitColorPoints();
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
 //        SenseHeader.getSense.printINFO("h: "+deltaY);
         circleAssembly.draw();
+        return deltaY;
     }
 
     @Override

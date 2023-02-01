@@ -37,7 +37,7 @@ public class Color_alpha_Assembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         if (!init) InitColorPoints();
         float absX, absY;
         absX = calcAbsX();
@@ -46,6 +46,7 @@ public class Color_alpha_Assembly extends Assembly {
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
 //        SenseHeader.getSense.printINFO("alpha: "+deltaY);
         cicleAssembly.draw();
+        return deltaY;
     }
 
     @Override

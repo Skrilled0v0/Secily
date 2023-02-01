@@ -31,11 +31,12 @@ public class CicleAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         float absX = calcAbsX();
         float absY = calcAbsY();
         if (filled) RenderUtil.drawCircle(absX, absY, r, color.getRGB());
         else RenderUtil.drawAngleCirque(absX, absY, r, 0, 360, 1, color.getRGB());
+        return r * 2;
     }
 
     @Override

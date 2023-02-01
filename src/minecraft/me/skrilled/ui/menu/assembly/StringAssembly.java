@@ -19,10 +19,6 @@ public class StringAssembly extends Assembly {
     FontDrawer font;
     float radius;
 
-    private StringAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
     public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font,float radius) {
         super(pos, fatherWindow);
         this.value = value;
@@ -44,9 +40,9 @@ public class StringAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
-        if (centered) RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(),radius);
-        else RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
+    public float draw() {
+        if (centered) return RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(),radius);
+        else return RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
     }
 
     @Override

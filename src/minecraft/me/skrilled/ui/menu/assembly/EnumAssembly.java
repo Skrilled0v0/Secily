@@ -40,9 +40,9 @@ public class EnumAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        RenderUtil.drawEnumTypeBox(font, currentValue, restChoice, absX, absY, (float) animation.getAnimationFactor(), bgColor.getRGB(), fontColor.getRGB());
+        return RenderUtil.drawEnumTypeBox(font, currentValue, restChoice, absX, absY, (float) animation.getAnimationFactor(), bgColor.getRGB(), fontColor.getRGB());
     }
 
     @Override

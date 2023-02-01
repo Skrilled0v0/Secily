@@ -12,11 +12,6 @@ public class BGAssembly extends Assembly {
     BackGroundType bgType;
     boolean canBlur=false;
     float radius=2.5f;
-
-    private BGAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
     /**
      * 默认圆角矩形
      */
@@ -48,19 +43,20 @@ public class BGAssembly extends Assembly {
     }
 
     @Override
-    public void draw() {
+    public float draw() {
         float absX = calcAbsX();
         float absY = calcAbsY();
         switch (bgType) {
             case Rect:
                 if (canBlur) BlurUtil.blurArea(absX, absY, absX + deltaX, absY + deltaY, 20);
                 RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY, color.getRGB());
-                break;
+                return 0f;
             case RoundRect:
                 if (canBlur) BlurUtil.blurAreaRounded(absX, absY, absX + deltaX, absY + deltaY, radius, 20);
                 RenderUtil.drawRoundRect(absX, absY, absX + deltaX, absY + deltaY, radius, color.getRGB());
-                break;
+                return 0f;
         }
+        return 0f;
     }
 
     @Override
