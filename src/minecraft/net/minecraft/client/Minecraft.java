@@ -377,7 +377,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.framebufferMc.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
         this.registerMetadataSerializers();
         this.mcResourcePackRepository = new ResourcePackRepository(this.fileResourcepacks, new File(this.mcDataDir, "server-resource-packs"), this.mcDefaultResourcePack, this.metadataSerializer_, this.gameSettings);
-
         this.mcResourceManager = new SimpleReloadableResourceManager(this.metadataSerializer_);
         this.mcLanguageManager = new LanguageManager(this.metadataSerializer_, this.gameSettings.language);
         this.mcResourceManager.registerReloadListener(this.mcLanguageManager);
@@ -421,8 +420,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.matrixMode(5889);
         GlStateManager.loadIdentity();
         GlStateManager.matrixMode(5888);
-        this.drawSplashScreen(0);
-
         if (!bginit) {
             for (int i = 1; ; i++) {
                 if (i == Main.BACKGROUNDMAXINDEX) break;
@@ -450,14 +447,13 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             }
             ldimginitred = true;
         }
-        this.drawSplashScreen(1);
+        this.drawSplashScreen(0);
         this.checkGLError("Startup");
         this.textureMapBlocks = new TextureMap("textures");
         this.textureMapBlocks.setMipmapLevels(this.gameSettings.mipmapLevels);
         this.renderEngine.loadTickableTexture(TextureMap.locationBlocksTexture, this.textureMapBlocks);
         this.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
         this.textureMapBlocks.setBlurMipmapDirect(false, this.gameSettings.mipmapLevels > 0);
-
         ModelManager modelManager = new ModelManager(this.textureMapBlocks);
         this.mcResourceManager.registerReloadListener(modelManager);
         this.renderItem = new RenderItem(this.renderEngine, modelManager);
@@ -469,6 +465,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         this.blockRenderDispatcher = new BlockRendererDispatcher(modelManager.getBlockModelShapes(), this.gameSettings);
         this.mcResourceManager.registerReloadListener(this.blockRenderDispatcher);
         this.renderGlobal = new RenderGlobal(this);
+        this.drawSplashScreen(1);
         this.mcResourceManager.registerReloadListener(this.renderGlobal);
         this.guiAchievement = new GuiAchievement(this);
         GlStateManager.viewport(0, 0, this.displayWidth, this.displayHeight);
@@ -514,8 +511,10 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
         GlStateManager.disableLighting();
         GlStateManager.disableFog();
         GlStateManager.disableDepth();
-        Main.fontLoader.EN72.drawCenteredString("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(),  -1);
-        Main.fontLoader.EN36.drawCenteredString((loadingCount + 1) + "/2", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), -1);
+        this.getTextureManager().bindTexture(new ResourceLocation("skrilled/bgNoBlur.png"));
+        Gui.drawModalRectWithCustomSizedTexture(0, 0, 0f, 0f, w, h, w, h);
+        Main.fontLoader.EN72.drawCenteredStringWithShadow("Client Initialize", w / 2f, h / 2f - Main.fontLoader.EN72.getHeight(), 1.2f, -1);
+        Main.fontLoader.EN36.drawCenteredStringWithShadow((loadingCount + 1) + "/3", w / 2f, h / 2f + Main.fontLoader.EN36.getHeight(), 1.2f, -1);
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
