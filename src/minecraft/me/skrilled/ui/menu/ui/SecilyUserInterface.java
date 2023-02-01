@@ -151,7 +151,6 @@ public class SecilyUserInterface extends GuiScreen {
         valuesWindow = new Window_Values_Assembly(valuesWindowPos, mainGui, currentModule);
         valuesWindow.assemblyName = "valuesWindow";
         mainGui.addWindow(valuesWindow);
-
         super.initGui();
     }
 
@@ -201,7 +200,7 @@ public class SecilyUserInterface extends GuiScreen {
         //滚轮处理
         int mouseWheel = Mouse.getDWheel();
         if (mouseWheel != 0) {
-            int mouseWheelDirection = mouseWheel / Math.abs(mouseWheel);
+            int mouseWheelDirection = mouseWheel / 16;
             ArrayList<Assembly> targetAssemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
             for (Assembly assembly : targetAssemblies) {
                 //Module列的滚轮处理

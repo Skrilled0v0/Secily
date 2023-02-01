@@ -52,7 +52,6 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawSikadi(float x, float y, boolean isRed) {
-        glColor4f(1, 1, 1, 1);
         if (isRed) {
 
             drawIcon(x, y, 280 / 2, 320 / 2, Main.redlimgs.get(redCount - 1));
@@ -79,14 +78,14 @@ public class RenderUtil implements IMC {
     }
 
     public static void quickDrawRect(final float x, final float y, final float x2, final float y2) {
+        glPushMatrix();
         glBegin(GL_QUADS);
-
         glVertex2d(x2, y);
         glVertex2d(x, y);
         glVertex2d(x, y2);
         glVertex2d(x2, y2);
-
         glEnd();
+        glPopMatrix();
     }
 
     /**
@@ -114,11 +113,11 @@ public class RenderUtil implements IMC {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
         float a = color.getAlpha() / 255f;
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(2848);
-        glPushMatrix();
 
         glBegin(GL_POLYGON);
         glColor4f(r, g, b, a);
@@ -144,12 +143,11 @@ public class RenderUtil implements IMC {
         }
 
         glEnd();
-        glPopMatrix();
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         GlStateManager.disableBlend();
-        glColor4f(1, 1, 1, 1);
+        glPopMatrix();
     }
 
     /**
@@ -174,6 +172,7 @@ public class RenderUtil implements IMC {
         double x2 = paramXEnd - radius;
         double y2 = paramYEnd - radius;
 
+        glPushMatrix();
         glEnable(GL_LINE_SMOOTH);
         glLineWidth(1);
 
@@ -190,6 +189,7 @@ public class RenderUtil implements IMC {
             glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
         glEnd();
         glDisable(GL_LINE_SMOOTH);
+        glPopMatrix();
     }
 
     /**
@@ -377,7 +377,6 @@ public class RenderUtil implements IMC {
         float lineSpacing = fontHeight * 0.6f;
         float boxHeight;
         float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        //计算所需行数
         int row = 1;
         ArrayList<Integer> split = new ArrayList<>();
         int strHead = 0;
@@ -390,13 +389,10 @@ public class RenderUtil implements IMC {
             }
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        //画背景
         RenderUtil.drawRoundRect(pos[0], pos[1], pos[2], pos[3], font.getHeight() / 2f, bgColor);
-        //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             font.drawString(str.substring(split.get(i), split.get(i + 1)), pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
         }
-        //画文字最后一行
         font.drawString(str.substring(split.get(row - 1)), pos[0] + lrMargin, (pos[1] + pos[3] - fontHeight) / 2 + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
     }
@@ -441,7 +437,6 @@ public class RenderUtil implements IMC {
         float lineSpacing = fontHeight * 0.6f;
         float boxHeight;
         float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        //计算所需行数
         int row = 1;
         ArrayList<Integer> split = new ArrayList<>();
         int strHead = 0;
@@ -454,12 +449,10 @@ public class RenderUtil implements IMC {
             }
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             String s1 = str.substring(split.get(i), split.get(i + 1));
             font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
         }
-        //画文字最后一行
         String s1 = str.substring(split.get(row - 1));
         font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
@@ -472,7 +465,6 @@ public class RenderUtil implements IMC {
         float lineSpacing = fontHeight * 0.6f;
         float boxHeight;
         float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        //计算所需行数
         int row = 1;
         ArrayList<Integer> split = new ArrayList<>();
         int strHead = 0;
@@ -485,12 +477,10 @@ public class RenderUtil implements IMC {
             }
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             String s1 = str.substring(split.get(i), split.get(i + 1));
             font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
         }
-        //画文字最后一行
         String s1 = str.substring(split.get(row - 1));
         font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
         return boxHeight;
@@ -525,13 +515,13 @@ public class RenderUtil implements IMC {
         float f6 = (col2 >> 8 & 0xFF) / 255.0F;
         float f7 = (col2 & 0xFF) / 255.0F;
 
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
         glEnable(2848);
         glShadeModel(7425);
 
-        glPushMatrix();
         glBegin(7);
         glColor4f(f1, f2, f3, f);
         glVertex2d(left, top);
@@ -541,12 +531,12 @@ public class RenderUtil implements IMC {
         glVertex2d(right, bottom);
         glVertex2d(right, top);
         glEnd();
-        glPopMatrix();
 
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         glShadeModel(7424);
+        glPopMatrix();
     }
 
     public static void drawMyTexturedModalRect(float x, float y, int textureX, int textureY, float width, float height, float factor) {
@@ -571,6 +561,7 @@ public class RenderUtil implements IMC {
         float r = (float) (color >> 16 & 255) / 255.0f;
         float g = (float) (color >> 8 & 255) / 255.0f;
         float b = (float) (color & 255) / 255.0f;
+        glPushMatrix();
         GL11.glEnable(3042);
         GL11.glLineWidth(lineWidth);
         GL11.glDisable(3553);
@@ -590,6 +581,7 @@ public class RenderUtil implements IMC {
         GL11.glEnable(3553);
         GL11.glDisable(3042);
         GL11.glScalef(2.0f, 2.0f, 2.0f);
+        glPopMatrix();
     }
 
     public static void drawCircle(float x, float y, float start, float end, float radius, int color) {
@@ -606,6 +598,7 @@ public class RenderUtil implements IMC {
         float red = (color >> 16 & 255) / 255.0f;
         float green = (color >> 8 & 255) / 255.0f;
         float blue = (color & 255) / 255.0f;
+        glPushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -640,6 +633,7 @@ public class RenderUtil implements IMC {
         glDisable(GL_LINE_SMOOTH);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        glPopMatrix();
     }
 
     public static void drawCircle(float x, float y, float radius, int color) {
@@ -673,6 +667,7 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawPlayerHead(String playerName, int x, int y, int width, int height) {
+        glPushMatrix();
         for (Entity ent : mc.theWorld.getLoadedEntityList()) {
             if (ent != null) {
                 EntityPlayer player = (EntityPlayer) ent;
@@ -695,9 +690,11 @@ public class RenderUtil implements IMC {
                 }
             }
         }
+        glPopMatrix();
     }
 
     public static void drawImageWithColor(ResourceLocation image, int x, int y, int width, int height, int color) {
+        glPushMatrix();
         glDisable(2929);
         glEnable(3042);
         glDepthMask(false);
@@ -712,9 +709,11 @@ public class RenderUtil implements IMC {
         glDepthMask(true);
         glDisable(3042);
         glEnable(2929);
+        glPopMatrix();
     }
 
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
+        glPushMatrix();
         glDisable(2929);
         glEnable(3042);
         glDepthMask(false);
@@ -724,9 +723,11 @@ public class RenderUtil implements IMC {
         glDepthMask(true);
         glDisable(3042);
         glEnable(2929);
+        glPopMatrix();
     }
 
     public static void drawEntityOnScreen(int p_147046_0_, int p_147046_1_, int Size, float Yaw, float pitch, EntityLivingBase e) {
+        glPushMatrix();
         GlStateManager.enableColorMaterial();
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) p_147046_0_, (float) p_147046_1_, 40.0f);
@@ -764,6 +765,7 @@ public class RenderUtil implements IMC {
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        glPopMatrix();
     }
 
     public static void drawOutlinedBoundingBox(AxisAlignedBB aa) {
@@ -865,6 +867,7 @@ public class RenderUtil implements IMC {
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
         AxisAlignedBB box = entity instanceof EntityLivingBase ? AxisAlignedBB.fromBounds(posX - entity.width + 0.2f, posY, posZ - entity.width + 0.2f, posX + entity.width - 0.2f, posY + entity.height + (entity.isSneaking() ? 0.02f : 0.2f), posZ + entity.width - 0.2f) : AxisAlignedBB.fromBounds(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + entity.height + 0.2f, posZ + entity.width);
+        glPushMatrix();
         glBlendFunc(770, 771);
         glEnable(3042);
         glEnable(2848);
@@ -887,6 +890,7 @@ public class RenderUtil implements IMC {
         glEnable(2929);
         glDepthMask(true);
         glDisable(3042);
+        glPopMatrix();
     }
 
     public static void drawBorderedRect(int x, int y, int width, int height, float borderWidth, int borderColor, int bgColor) {
@@ -895,6 +899,7 @@ public class RenderUtil implements IMC {
         float r = (borderColor >> 16 & 0xFF) / 255.0f;
         float g = (borderColor >> 8 & 0xFF) / 255.0f;
         float b = (borderColor & 0xFF) / 255.0f;
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
@@ -916,6 +921,7 @@ public class RenderUtil implements IMC {
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
+        glPopMatrix();
     }
 
     public static int width() {
@@ -932,11 +938,11 @@ public class RenderUtil implements IMC {
         float f3 = (float) (col1 >> 8 & 255) / 255.0f;
         float f4 = (float) (col1 & 255) / 255.0f;
         //
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
         glEnable(2848);
-        glPushMatrix();
         //
         glColor4f(f22, f3, f4, f2);
         glBegin(7);
@@ -946,11 +952,11 @@ public class RenderUtil implements IMC {
         glVertex2d(i, e);
         glEnd();
         //
-        glPopMatrix();
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         GlStateManager.disableBlend();
+        glPopMatrix();
     }
 
     /**
@@ -996,11 +1002,11 @@ public class RenderUtil implements IMC {
     }
 
     public static void drawColorPointLists(ArrayList<ArrayList<ColorPoint>> colorPointLists) {
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
         glEnable(2848);
-        glPushMatrix();
 
         Color color;
         float x, y;
@@ -1016,20 +1022,20 @@ public class RenderUtil implements IMC {
             }
         }
 
-        glPopMatrix();
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         GlStateManager.disableBlend();
-        glColor4f(1, 1, 1, 1);
+        glPopMatrix();
     }
 
     public static void drawColorPoints(ArrayList<ColorPoint> colorPoints) {
+
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(770, 771);
         glEnable(2848);
-        glPushMatrix();
 
         Color color;
         float x, y;
@@ -1043,20 +1049,19 @@ public class RenderUtil implements IMC {
             glEnd();
         }
 
-        glPopMatrix();
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         GlStateManager.disableBlend();
-        glColor4f(1, 1, 1, 1);
+        glPopMatrix();
     }
 
     public static void drawColorPointsWithYThickness(ArrayList<ColorPoint> colorPoints, float thickness) {
+        glPushMatrix();
         glEnable(3042);
         glDisable(3553);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(2848);
-        glPushMatrix();
 
         Color color;
         float x, y;
@@ -1073,12 +1078,11 @@ public class RenderUtil implements IMC {
         }
 
 
-        glPopMatrix();
         glEnable(3553);
         glDisable(3042);
         glDisable(2848);
         GlStateManager.disableBlend();
-        glColor4f(1, 1, 1, 1);
+        glPopMatrix();
     }
 
     public static void drawLine(float x, float y, float x1, float y1, float width) {
@@ -1104,6 +1108,7 @@ public class RenderUtil implements IMC {
     }
 
     public static void setupRender(boolean start) {
+        glPushMatrix();
         if (start) {
             GlStateManager.enableBlend();
             glEnable(2848);
@@ -1118,6 +1123,7 @@ public class RenderUtil implements IMC {
             GlStateManager.enableDepth();
         }
         GlStateManager.depthMask(!start);
+        glPopMatrix();
     }
 
     public static double[] getEntityRenderPos(Entity entity) {
@@ -1183,8 +1189,6 @@ public class RenderUtil implements IMC {
         int factor = scale.getScaleFactor();
         GL11.glScissor(x * factor, (scale.getScaledHeight() - height) * factor, (width + x) * factor, (height - y) * factor);
         GL11.glEnable(GL_SCISSOR_TEST);
-
-
     }
 
 }
