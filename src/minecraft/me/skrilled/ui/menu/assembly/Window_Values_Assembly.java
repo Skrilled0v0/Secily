@@ -136,12 +136,12 @@ public class Window_Values_Assembly extends WindowAssembly {
                     break;
                 case COLOR:
                     width = 0.24310979692033028341887971434948f * valuesEditZoneWindow.deltaX;
-                    height = 0.43623570800351802990325417766051f * valuesEditZoneWindow.deltaY;
+                    height = width * 1.2f;
                     rSpacing = 0.02506415978576210667261771925909f * valuesEditZoneWindow.deltaX;
                     pos[0] = -rSpacing - width + valuesEditZoneWindow.deltaX / (inLeftHalfZone ? 2f : 1f);
                     pos[1] = valuesEditZoneWindow.currentUsedHeight;
                     pos[2] = pos[0] + width;
-                    pos[3] = pos[0] + height;
+                    pos[3] = pos[1] + height;
                     Color color = valueHeader.getColorValue();
                     float[] hsbAlpha = new float[4];
                     Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);

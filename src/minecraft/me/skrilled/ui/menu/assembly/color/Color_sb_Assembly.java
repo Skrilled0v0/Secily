@@ -7,6 +7,7 @@ package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class Color_sb_Assembly extends Assembly {
     public Color_h_Assembly color_h_assembly;
-    public CicleAssembly cicleAssembly;
+    public CicleAssembly circleAssembly;
     public float h;
     public ArrayList<ArrayList<ColorPoint>> colorPointLists;
     private boolean init = false;
@@ -31,7 +32,7 @@ public class Color_sb_Assembly extends Assembly {
         float x = pos[0] + (pos[2] - pos[0]) * s;
         float y = pos[1] + (pos[3] - pos[1]) * b;
         float[] circlePos = new float[]{x, y, x, y};
-        this.cicleAssembly = new CicleAssembly(circlePos, fatherWindow, circleR, Color.WHITE, false);
+        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, circleR, Color.WHITE, false);
     }
 
     /**
@@ -44,11 +45,9 @@ public class Color_sb_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if (!init) {
-            InitColorPointLists();
-        }
+        if ((!init)|| SecilyUserInterface.clickDrag) initColorPointLists();
         RenderUtil.drawColorPointLists(colorPointLists);
-        this.cicleAssembly.draw();
+        this.circleAssembly.draw();
         return deltaY;
     }
 
@@ -62,7 +61,7 @@ public class Color_sb_Assembly extends Assembly {
 
     }
 
-    public void InitColorPointLists() {
+    public void initColorPointLists() {
         colorPointLists = new ArrayList<>();
         float s, b;
         float absX, absY;

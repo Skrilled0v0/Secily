@@ -2,6 +2,7 @@ package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -38,13 +39,12 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if (!init) InitColorPoints();
+        if ((!init)|| SecilyUserInterface.clickDrag) initColorPoints();
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
         RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY - 1, -1);
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
-//        SenseHeader.getSense.printINFO("alpha: "+deltaY);
         cicleAssembly.draw();
         return deltaY;
     }
@@ -59,7 +59,7 @@ public class Color_alpha_Assembly extends Assembly {
 
     }
 
-    public void InitColorPoints() {
+    public void initColorPoints() {
         colorPoints = new ArrayList<>();
         float absX, absY;
         absX = calcAbsX();

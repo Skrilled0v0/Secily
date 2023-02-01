@@ -15,12 +15,17 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
+import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+
+import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
+import static org.lwjgl.opengl.GL11.glDisable;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
@@ -70,5 +75,10 @@ public class HUD extends ModuleHeader {
             font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
             font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
+        if (not.isOptionOpen()) Notification.drawNotifications();
+
+        //draw someThing
+        float result = new ColorAssembly(new float[]{50, 50, 150, 170}, null, 1, 1, 1, 1).draw();
+
     }
 }

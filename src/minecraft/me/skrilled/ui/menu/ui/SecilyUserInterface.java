@@ -46,7 +46,7 @@ public class SecilyUserInterface extends GuiScreen {
     /**
      * 拖动布尔
      */
-    private boolean clickDrag = false;
+    public static boolean clickDrag = false;
     private Window_Values_Assembly valuesWindow;
 
     public SecilyUserInterface() {

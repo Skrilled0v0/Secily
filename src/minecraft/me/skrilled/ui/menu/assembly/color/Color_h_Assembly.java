@@ -2,6 +2,7 @@ package me.skrilled.ui.menu.assembly.color;
 
 import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -30,9 +31,8 @@ public class Color_h_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if (!init) InitColorPoints();
+        if ((!init)|| SecilyUserInterface.clickDrag) initColorPoints();
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
-//        SenseHeader.getSense.printINFO("h: "+deltaY);
         circleAssembly.draw();
         return deltaY;
     }
@@ -47,7 +47,7 @@ public class Color_h_Assembly extends Assembly {
 
     }
 
-    public void InitColorPoints() {
+    public void initColorPoints() {
         colorPoints = new ArrayList<>();
         float absX, absY;
         absX = calcAbsX();

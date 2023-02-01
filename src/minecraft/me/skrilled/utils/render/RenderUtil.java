@@ -561,12 +561,13 @@ public class RenderUtil implements IMC {
         float r = (float) (color >> 16 & 255) / 255.0f;
         float g = (float) (color >> 8 & 255) / 255.0f;
         float b = (float) (color & 255) / 255.0f;
-        glPushMatrix();
         GL11.glEnable(3042);
         GL11.glLineWidth(lineWidth);
         GL11.glDisable(3553);
         GL11.glEnable(2848);
         GL11.glBlendFunc(770, 771);
+        glPushMatrix();
+
         GL11.glColor4f(r, g, b, a);
         GL11.glBegin(3);
         float i = startAngle - angle;
@@ -577,11 +578,12 @@ public class RenderUtil implements IMC {
             ++i;
         }
         GL11.glEnd();
+
+        glPopMatrix();
         GL11.glDisable(2848);
         GL11.glEnable(3553);
         GL11.glDisable(3042);
         GL11.glScalef(2.0f, 2.0f, 2.0f);
-        glPopMatrix();
     }
 
     public static void drawCircle(float x, float y, float start, float end, float radius, int color) {
