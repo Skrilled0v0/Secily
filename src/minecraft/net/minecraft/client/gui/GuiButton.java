@@ -66,7 +66,6 @@ public class GuiButton extends Gui implements IMC {
     }
 
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
-        System.out.println(hovered);
 /*
              四周border逐渐补全绘制方法
             //up line
@@ -78,7 +77,7 @@ public class GuiButton extends Gui implements IMC {
             //left line
             RenderUtil.drawRect(this.xPosition, this.yPosition + height - height * motion.getAnimationFactor(), this.xPosition + lineWidth, this.yPosition + height, rectMotion.getColour().getRGB());
 */
-        FontDrawer font = Main.fontLoader.EN18;
+        FontDrawer font = Main.fontLoader.EN16;
         float xMotion = 0f;
         float yMotion = 0f;
         if (widthMotion != null) {
