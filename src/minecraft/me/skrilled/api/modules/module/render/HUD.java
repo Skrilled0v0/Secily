@@ -24,6 +24,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
+
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
     public static ValueHeader fontReplace = new ValueHeader("fontReplace", true);
@@ -66,7 +68,6 @@ public class HUD extends ModuleHeader {
         if ((Boolean) getValue(didi)) {
             RenderUtil.drawSikadi(w / 2f - 300, h / 2f, diType.getCurrentEnumType().equalsIgnoreCase("Red"));
         }
-
 
         //Information
         if ((Boolean) this.getValue(info)) {

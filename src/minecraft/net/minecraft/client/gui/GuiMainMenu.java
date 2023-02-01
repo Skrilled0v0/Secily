@@ -18,7 +18,7 @@ import java.io.IOException;
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 
     Animation animation = new Animation(1500f, false, Easing.CUBIC_OUT);
-
+    Animation newA=new Animation(1000f,false,Easing.CUBIC_OUT);
     ColourAnimation colourAnimation = new ColourAnimation(new Color(0, 0, 0, 30), new Color(0, 0, 0, 100), 1500f, false, Easing.LINEAR);
 
     public void initGui() {
@@ -50,17 +50,19 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         animation.setState(isHovering(mouseX, mouseY, 0, 0, width / 4f, height));
-        colourAnimation.setState(isHovering(mouseX, mouseY, 0, 0, width / 4f, height));
+        colourAnimation.setState(isHovering(mouseX, mouseY, 0, 0, width / 4f, height));        newA.setState(isHovering(mouseX, mouseY, 0, 0, width / 4f, height));
+
         this.drawBackground();
         int j = this.height / 2;
         FontDrawer font = Main.fontLoader.EN48;
 
         GlStateManager.pushMatrix();
+
+
         int interval = 30;
         int buttonWidth = 100;
         RenderUtil.drawRect(0, 0, (buttonWidth+interval*2) * animation.getAnimationFactor(), height*animation.getAnimationFactor(), colourAnimation.getColour().getRGB());
         font.drawRainbowString(SenseHeader.getSense.getClientName(), 30, j - 90);
-
         GlStateManager.popMatrix();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
