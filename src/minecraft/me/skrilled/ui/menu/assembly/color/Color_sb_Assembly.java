@@ -25,7 +25,7 @@ public class Color_sb_Assembly extends Assembly {
     public float h;
     public ArrayList<ArrayList<ColorPoint>> colorPointLists;
     ColorAssembly colorAssembly;
-    private boolean init = false;
+    public boolean init = false;
 
     public Color_sb_Assembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
@@ -45,7 +45,7 @@ public class Color_sb_Assembly extends Assembly {
     /**
      * 含有sb选框的颜色更新
      */
-    public void SetH(float h) {
+    public void setH(float h) {
         this.h = h;
         init = false;
     }
@@ -71,7 +71,7 @@ public class Color_sb_Assembly extends Assembly {
         processCircleAssembly(x / deltaX, y / deltaY);
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
-        float[] hsb = {};
+        float[] hsb = new float[4];
         Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
         color = Color.getHSBColor(hsb[0], x / deltaX, y / deltaY);
         valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));

@@ -78,7 +78,6 @@ public class HUD extends ModuleHeader {
         if (not.isOptionOpen()) Notification.drawNotifications();
 
         //draw someThing
-        float result = new ColorAssembly(new float[]{50, 50, 150, 170}, null, 1, 1, 1, 1).draw();
 
     }
 }

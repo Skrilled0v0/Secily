@@ -52,9 +52,11 @@ public class Color_h_Assembly extends Assembly {
         float x = mouseX - calcAbsX();
         x = x < 0 ? 0 : x > deltaX ? deltaX : x;
         processCircleAssembly(x / deltaX);
+        colorAssembly.color_alpha_assembly.setH(x/deltaX);
+        colorAssembly.color_sb_assembly.setH(x/deltaX);
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
-        float[] hsb = {};
+        float[] hsb = new float[4];
         Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
         color = Color.getHSBColor(x / deltaX, hsb[1], hsb[2]);
         valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));

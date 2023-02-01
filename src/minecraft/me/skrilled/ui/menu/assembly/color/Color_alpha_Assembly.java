@@ -79,8 +79,14 @@ public class Color_alpha_Assembly extends Assembly {
         init = true;
     }
 
-    public void SetH(float h) {
+    public void setH(float h) {
         this.h = h;
+        float[] hsb = new float[3];
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+        Color color1 = new Color(Color.HSBtoRGB(h, hsb[1], hsb[2]));
+        rgba[0] = color1.getRed();
+        rgba[1] = color1.getGreen();
+        rgba[2] = color1.getBlue();
         init = false;
     }
 }

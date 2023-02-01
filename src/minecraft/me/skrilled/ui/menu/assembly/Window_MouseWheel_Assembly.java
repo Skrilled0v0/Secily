@@ -1,6 +1,7 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
+import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
@@ -46,7 +47,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
             anim.setState(true);
         } else if (result >= (contents.size() - numOfContent2Render) * wheelsToNext && skipAim - delta >= 0) {
-            if ((contents.size() - numOfContent2Render) * wheelsToNext>0) {
+            if ((contents.size() - numOfContent2Render) * wheelsToNext > 0) {
                 currentSkip = getSkipFactor();
                 skipAim = ((contents.size() - numOfContent2Render) * wheelsToNext);
                 anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
@@ -120,7 +121,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             Color bgColor = new Color(65, 64, 68, 181);
             Color trueColor = new Color(126, 183, 247);
             Color falseColor = new Color(204, 204, 204);
-            BooleanAssembly booleanAssembly = new BooleanAssembly(booleanAssemblyPos, this, ((ModuleHeader) contents.get(i)).isEnabled(), anim, bgColor, trueColor, falseColor);
+            BooleanAssembly booleanAssembly = new BooleanAssembly(booleanAssemblyPos, this, ((ModuleHeader) contents.get(i)).isEnabled(), anim, bgColor, trueColor, falseColor, content);
             this.addAssembly(booleanAssembly);
             StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX, bgBoxHeight + yUsed}, this, content, false, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.ORANGE, font, font.getHeight() / 2f);
             stringAssembly.assemblyName = content;

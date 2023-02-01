@@ -74,7 +74,7 @@ public class ColorAssembly extends Assembly {
     public Color getColorClicked_h(int[] mouseABSPos) {
         for (ColorPoint colorPoint : color_h_assembly.colorPoints) {
             if (mouseABSPos[0] == Math.floor(colorPoint.pos[0])) {
-                color_sb_assembly.SetH(colorPoint.GetH());
+                color_sb_assembly.setH(colorPoint.GetH());
                 return colorPoint.color;
             }
         }
@@ -93,8 +93,8 @@ public class ColorAssembly extends Assembly {
     }
 
     public void SetH(float h) {
-        color_sb_assembly.SetH(h);
+        color_sb_assembly.setH(h);
         color_h_assembly.SetH(h);
-        color_alpha_assembly.SetH(h);
+        color_alpha_assembly.setH(h);
     }
 }

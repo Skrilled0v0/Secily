@@ -121,7 +121,8 @@ public class Window_Values_Assembly extends WindowAssembly {
                     Color bgColor = new Color(65, 64, 68, 181);
                     Color trueColor = new Color(126, 183, 247);
                     Color falseColor = new Color(204, 204, 204);
-                    BooleanAssembly booleanAssembly = new BooleanAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.isOptionOpen(), anim, bgColor, trueColor, falseColor);
+                    String valueInfo = module.toString() + "." + valueHeader.getValueName();
+                    BooleanAssembly booleanAssembly = new BooleanAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.isOptionOpen(), anim, bgColor, trueColor, falseColor, valueInfo);
                     valuesEditZoneWindow.addAssembly(booleanAssembly);
                     yUsedValueBox = 2 * uMargin + height;
                     break;
