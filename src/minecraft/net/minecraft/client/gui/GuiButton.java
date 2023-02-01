@@ -2,6 +2,8 @@ package net.minecraft.client.gui;
 
 
 import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
+import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
@@ -18,6 +20,11 @@ import java.awt.*;
 
 public class GuiButton extends Gui implements IMC {
     protected static final ResourceLocation buttonTextures = new ResourceLocation("textures/gui/widgets.png");
+    private final Animation motion = new Animation(1000f, false, Easing.LINEAR);
+    //    ColourAnimation upBgMotion = new ColourAnimation(new Color(255, 255, 255, 50), new Color(108, 108, 255, 75), 1000f, false, Easing.LINEAR);
+//    ColourAnimation downBgMotion = new ColourAnimation(new Color(108, 108, 255, 50), new Color(255, 255, 255, 75), 1000f, false, Easing.LINEAR);
+    private final ColourAnimation rectMotion = new ColourAnimation(new Color(10, 10, 10, 35), new Color(10, 10, 10, 100), 1000f, false, Easing.LINEAR);
+    private final ColourAnimation strMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 140, 0), 1000f, false, Easing.LINEAR);
     public int xPosition;
     public int yPosition;
     public String displayString;
@@ -26,12 +33,9 @@ public class GuiButton extends Gui implements IMC {
     public boolean visible;
     protected int width;
     protected int height;
-    protected boolean hovered;
-    Animation motion = new Animation(1000f, false, Easing.LINEAR);
-    //    ColourAnimation upBgMotion = new ColourAnimation(new Color(255, 255, 255, 50), new Color(108, 108, 255, 75), 1000f, false, Easing.LINEAR);
-//    ColourAnimation downBgMotion = new ColourAnimation(new Color(108, 108, 255, 50), new Color(255, 255, 255, 75), 1000f, false, Easing.LINEAR);
-    ColourAnimation rectMotion = new ColourAnimation(new Color(10, 10, 10, 35), new Color(10, 10, 10, 100), 1000f, false, Easing.LINEAR);
-    ColourAnimation strMotion = new ColourAnimation(new Color(255, 255, 255), new Color(255, 140, 0), 1000f, false, Easing.LINEAR);
+    public boolean hovered;
+    public Animation widthMotion;
+    public Animation heightMotion;
 
     public GuiButton(int buttonId, int x, int y, String buttonText) {
         this(buttonId, x, y, 200, 20, buttonText);
@@ -48,23 +52,21 @@ public class GuiButton extends Gui implements IMC {
         this.displayString = buttonText;
     }
 
-    public int getxPosition() {
-        return xPosition;
-    }
-
-    public void setxPosition(int xPosition) {
+    public GuiButton(int id,int xPosition, int yPosition,  int width, int height,String displayString,  Animation widthMotion, Animation heightMotion) {
+        this.enabled = true;
+        this.visible = true;
         this.xPosition = xPosition;
-    }
-
-    public int getyPosition() {
-        return yPosition;
-    }
-
-    public void setyPosition(int yPosition) {
         this.yPosition = yPosition;
+        this.displayString = displayString;
+        this.id = id;
+        this.width = width;
+        this.height = height;
+        this.widthMotion = widthMotion;
+        this.heightMotion = heightMotion;
     }
 
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+        System.out.println(hovered);
 /*
              四周border逐渐补全绘制方法
             //up line
@@ -76,23 +78,25 @@ public class GuiButton extends Gui implements IMC {
             //left line
             RenderUtil.drawRect(this.xPosition, this.yPosition + height - height * motion.getAnimationFactor(), this.xPosition + lineWidth, this.yPosition + height, rectMotion.getColour().getRGB());
 */
+        FontDrawer font = Main.fontLoader.EN18;
+        float xMotion = 0f;
+        float yMotion = 0f;
+        if (widthMotion != null) {
+            xMotion =(1-(float) widthMotion.getAnimationFactor())* -(float) (this.xPosition + width + 4f * motion.getAnimationFactor());
+        }
+        if (heightMotion != null) {
+            yMotion = (1 - (float) heightMotion.getAnimationFactor())*-(float) (this.yPosition + height + 2f * motion.getAnimationFactor());
+        }
+
         if (this.visible) {
+
             startMotion(hovered);
-            FontDrawer font = Main.fontLoader.EN18;
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-            RenderUtil.drawRoundRect(
-                    (float) (this.xPosition - 4f * motion.getAnimationFactor()),
-                    (float) (this.yPosition - 2f * motion.getAnimationFactor()),
-                    (float) (this.xPosition + width + 4f * motion.getAnimationFactor()),
-                    (float) (this.yPosition + height + 2f * motion.getAnimationFactor()), 5, rectMotion.getColour().getRGB());
-            BlurUtil.blurAreaRounded(
-                    (float) (this.xPosition - 4f * motion.getAnimationFactor()),
-                    (float) (this.yPosition - 2f * motion.getAnimationFactor()),
-                    (float) (this.xPosition + width + 4f * motion.getAnimationFactor()),
-                    (float) (this.yPosition + height + 2f * motion.getAnimationFactor()), 5, 10);
+            RenderUtil.drawRoundRect((float) (this.xPosition - 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition - 2f * motion.getAnimationFactor()) + yMotion, (float) (this.xPosition + width + 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition + height + 2f * motion.getAnimationFactor()) + yMotion, 5, rectMotion.getColour().getRGB());
+            BlurUtil.blurAreaRounded((float) (this.xPosition - 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition - 2f * motion.getAnimationFactor()) + yMotion, (float) (this.xPosition + width + 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition + height + 2f * motion.getAnimationFactor()) + yMotion, 5, 10);
 
             this.mouseDragged(mc, mouseX, mouseY);
-            font.drawCenteredString(this.displayString, this.xPosition + this.width / 2f, this.yPosition + (this.height - 8) / 2f, strMotion.getColour().getRGB());
+            font.drawCenteredString(this.displayString, this.xPosition + this.width / 2f + xMotion, this.yPosition + yMotion + (this.height - 8) / 2f, strMotion.getColour().getRGB());
         }
     }
 
