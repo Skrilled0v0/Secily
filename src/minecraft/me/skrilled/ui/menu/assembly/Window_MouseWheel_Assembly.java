@@ -23,7 +23,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     private float lastSkipFactor;
     private int numOfContent2Render;
 
-    public Window_MouseWheel_Assembly(float[] pos, Assembly fatherWindow, ArrayList<T> contents, int numOfContent2Render) {
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, int numOfContent2Render) {
         super(pos, fatherWindow);
         this.contents = contents;
         this.numOfContent2Render = numOfContent2Render;

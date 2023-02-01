@@ -25,7 +25,7 @@ public class Window_Values_Assembly extends WindowAssembly {
     int pages = 1;
 
 
-    public Window_Values_Assembly(float[] pos, Assembly fatherWindow, ModuleHeader module) {
+    public Window_Values_Assembly(float[] pos, WindowAssembly fatherWindow, ModuleHeader module) {
         super(pos, fatherWindow);
         this.module = module;
     }
@@ -147,6 +147,7 @@ public class Window_Values_Assembly extends WindowAssembly {
                     Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);
                     hsbAlpha[3] = color.getAlpha() / 255f;
                     ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
+                    colorAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
                     valuesEditZoneWindow.addAssembly(colorAssembly);
                     break;
             }

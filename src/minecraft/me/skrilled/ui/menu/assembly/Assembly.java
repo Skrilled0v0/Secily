@@ -2,10 +2,6 @@ package me.skrilled.ui.menu.assembly;
 
 public abstract class Assembly {
     public boolean autoPushPopMatrix = true;
-    /**
-     * 被选中后赋值true，自动绘制背景
-     */
-    public boolean onSelected = false;
 
     /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
@@ -19,13 +15,13 @@ public abstract class Assembly {
      * 这个（子）窗口中能用的最大高度（留出背景框上下左右边距）
      */
     public float maxHeight = 0;
-    public Assembly fatherWindow;
+    public WindowAssembly fatherWindow;
     public float deltaX;
     public float deltaY;
     public String assemblyName = "defaultName";
     public boolean canReInit = false;
 
-    public Assembly(float[] pos, Assembly fatherWindow) {
+    public Assembly(float[] pos, WindowAssembly fatherWindow) {
         this.pos = pos;
         deltaX = pos[2] - pos[0];
         deltaY = pos[3] - pos[1];
@@ -61,7 +57,6 @@ public abstract class Assembly {
 
     public abstract void mouseEventHandle(int mouseX, int mouseY, int button);
 
-    public abstract void reInit();
 
     public void drag(float mouseDeltaX, float mouseDeltaY) {
         this.pos[0] += mouseDeltaX;

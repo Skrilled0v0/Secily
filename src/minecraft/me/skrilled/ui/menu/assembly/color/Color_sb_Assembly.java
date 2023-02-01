@@ -5,8 +5,14 @@
  */
 package me.skrilled.ui.menu.assembly.color;
 
+import me.skrilled.SenseHeader;
+import me.skrilled.api.manager.ModuleManager;
+import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
+import me.skrilled.ui.menu.assembly.ColorAssembly;
+import me.skrilled.ui.menu.assembly.WindowAssembly;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
@@ -18,16 +24,17 @@ public class Color_sb_Assembly extends Assembly {
     public CicleAssembly circleAssembly;
     public float h;
     public ArrayList<ArrayList<ColorPoint>> colorPointLists;
+    ColorAssembly colorAssembly;
     private boolean init = false;
 
-
-    private Color_sb_Assembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
-    public Color_sb_Assembly(float[] pos, Assembly fatherWindow, float h, float s, float b) {
+    public Color_sb_Assembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
         this.h = h;
+        this.colorAssembly = colorAssembly;
+        processCircleAssembly(s, b);
+    }
+
+    public void processCircleAssembly(float s, float b) {
         float circleR = 3.2f;
         float x = pos[0] + (pos[2] - pos[0]) * s;
         float y = pos[1] + (pos[3] - pos[1]) * b;
@@ -45,7 +52,7 @@ public class Color_sb_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if ((!init)|| SecilyUserInterface.clickDrag) initColorPointLists();
+        if ((!init) || SecilyUserInterface.clickDrag) initColorPointLists();
         RenderUtil.drawColorPointLists(colorPointLists);
         this.circleAssembly.draw();
         return deltaY;
@@ -53,12 +60,21 @@ public class Color_sb_Assembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
-
+        String[] valueInfo = colorAssembly.assemblyName.split("\\.");
+        SenseHeader.getSense.getModuleManager();
+        ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
+        ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);
+        float x = mouseX - calcAbsX();
+        float y = mouseY - calcAbsY();
+        x = x < 0 ? 0 : x > deltaX ? deltaX : x;
+        y = y < 0 ? 0 : y > deltaY ? deltaY : y;
+        processCircleAssembly(x / deltaX, y / deltaY);
+        Color color = valueHeader.getColorValue();
+        int alpha = color.getAlpha();
+        float[] hsb = {};
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+        color = Color.getHSBColor(hsb[0], x / deltaX, y / deltaY);
+        valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
     }
 
     public void initColorPointLists() {

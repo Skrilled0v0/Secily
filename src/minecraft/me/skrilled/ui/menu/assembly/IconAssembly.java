@@ -22,7 +22,7 @@ public class IconAssembly extends Assembly {
     boolean isTransverse;
     float boxWidth;
 
-    public IconAssembly(float[] pos, Assembly fatherWindow, FontDrawer font, char[] icons, char currentIcon, float spacing, Animation anim, Color iconColor, Color bgColor, Color currentColor, boolean isTransverse) {
+    public IconAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, char[] icons, char currentIcon, float spacing, Animation anim, Color iconColor, Color bgColor, Color currentColor, boolean isTransverse) {
         super(pos, fatherWindow);
         this.font = font;
         this.icons = icons;
@@ -93,10 +93,5 @@ public class IconAssembly extends Assembly {
                 anim.setState(true);
             }
         }
-    }
-
-    @Override
-    public void reInit() {
-
     }
 }

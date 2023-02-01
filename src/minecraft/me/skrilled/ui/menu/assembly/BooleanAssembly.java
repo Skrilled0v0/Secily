@@ -18,11 +18,11 @@ public class BooleanAssembly extends Assembly {
     Color falseColor;
 
 
-    private BooleanAssembly(float[] pos, Assembly fatherWindow) {
+    private BooleanAssembly(float[] pos, WindowAssembly fatherWindow) {
         super(pos, fatherWindow);
     }
 
-    public BooleanAssembly(float[] pos, Assembly fatherWindow, boolean value, Animation animation, Color bgColor, Color tureColor, Color falseColor) {
+    public BooleanAssembly(float[] pos, WindowAssembly fatherWindow, boolean value, Animation animation, Color bgColor, Color tureColor, Color falseColor) {
         super(pos, fatherWindow);
         this.value = value;
         this.animation = animation;
@@ -40,11 +40,6 @@ public class BooleanAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 

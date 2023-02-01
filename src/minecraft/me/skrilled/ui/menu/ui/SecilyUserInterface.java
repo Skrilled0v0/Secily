@@ -27,6 +27,10 @@ public class SecilyUserInterface extends GuiScreen {
     public static boolean onModuleTypeSwitching = false;
     public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     /**
+     * 拖动布尔
+     */
+    public static boolean clickDrag = false;
+    /**
      * Window背景传参
      */
     static float[] windowsPos = SettingMenu.getGuiPos();
@@ -43,10 +47,6 @@ public class SecilyUserInterface extends GuiScreen {
      * 点击拖动定位y轴
      */
     float posInClickY;
-    /**
-     * 拖动布尔
-     */
-    public static boolean clickDrag = false;
     private Window_Values_Assembly valuesWindow;
 
     public SecilyUserInterface() {
@@ -183,7 +183,11 @@ public class SecilyUserInterface extends GuiScreen {
                 continue;
             }
             //通用的处理
-            assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
+            try {
+                assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);

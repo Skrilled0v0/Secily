@@ -9,11 +9,11 @@ public class WindowAssembly extends Assembly {
     public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
     public ArrayList<Assembly> otherAssemblies = new ArrayList<>();
 
-    public WindowAssembly(float[] pos, Assembly fatherWindow) {
+    public WindowAssembly(float[] pos, WindowAssembly fatherWindow) {
         super(pos, fatherWindow);
     }
 
-    public WindowAssembly(float[] pos, Assembly fatherWindow, ArrayList<WindowAssembly> subWindows) {
+    public WindowAssembly(float[] pos, WindowAssembly fatherWindow, ArrayList<WindowAssembly> subWindows) {
         super(pos, fatherWindow);
         this.subWindows = subWindows;
     }
@@ -60,32 +60,6 @@ public class WindowAssembly extends Assembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
 
     }
-
-    @Override
-    public void reInit() {
-        if (bgAssembly.canReInit) {
-            bgAssembly.reInit();
-        }
-        if (windowName.canReInit) {
-            windowName.reInit();
-        }
-        for (IconAssembly icon : icons) {
-            if (icon.canReInit) {
-                icon.reInit();
-            }
-        }
-        for (WindowAssembly subWindow : subWindows) {
-            if (subWindow.canReInit) {
-                subWindow.reInit();
-            }
-        }
-        for (Assembly assembly : otherAssemblies) {
-            if (assembly.canReInit) {
-                assembly.reInit();
-            }
-        }
-    }
-
     public void reset() {
         otherAssemblies = new ArrayList<>();
         subWindows = new ArrayList<>();

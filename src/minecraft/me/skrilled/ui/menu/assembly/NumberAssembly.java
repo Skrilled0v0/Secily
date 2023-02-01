@@ -20,13 +20,7 @@ public class NumberAssembly extends Assembly {
     Color ugColor;
     Color buttonColor;
 
-
-
-    private NumberAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
-    public NumberAssembly(float[] pos, Assembly fatherWindow, double[] doubles, Animation anim, Color bgColor, Color ugColor, Color buttonColor) {
+    public NumberAssembly(float[] pos, WindowAssembly fatherWindow, double[] doubles, Animation anim, Color bgColor, Color ugColor, Color buttonColor) {
         super(pos, fatherWindow);
         this.doubles = doubles;
         this.anim = anim;
@@ -43,11 +37,6 @@ public class NumberAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 }

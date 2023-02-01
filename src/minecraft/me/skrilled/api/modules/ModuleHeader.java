@@ -140,6 +140,13 @@ public class ModuleHeader implements IMC {
         return valueList;
     }
 
+    public ValueHeader getValueByName(String valueName) {
+        for (ValueHeader valueHeader : valueList) {
+            if (valueHeader.getValueName().equalsIgnoreCase(valueName)) return valueHeader;
+        }
+        return null;
+    }
+
     public void setKeyWidthGui() {
         //Key Binding提示
         if (isOnBinding()) {

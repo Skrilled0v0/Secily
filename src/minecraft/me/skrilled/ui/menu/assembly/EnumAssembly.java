@@ -23,11 +23,7 @@ public class EnumAssembly extends Assembly {
     String currentValue;
     Animation animation;
 
-    private EnumAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
-    public EnumAssembly(float[] pos, Assembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> allChoice, String currentValue, Animation animation) {
+    public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> allChoice, String currentValue, Animation animation) {
         super(pos, fatherWindow);
         this.font = font;
         this.bgColor = bgColor;
@@ -47,11 +43,6 @@ public class EnumAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 }

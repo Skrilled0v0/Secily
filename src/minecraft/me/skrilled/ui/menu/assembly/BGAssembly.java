@@ -15,26 +15,26 @@ public class BGAssembly extends Assembly {
     /**
      * 默认圆角矩形
      */
-    public BGAssembly(float[] pos, Assembly fatherWindow, Color color) {
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color) {
         super(pos, fatherWindow);
         this.color = color;
         bgType = BackGroundType.RoundRect;
     }
 
-    public BGAssembly(float[] pos, Assembly fatherWindow, Color color, BackGroundType bgType) {
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType) {
         super(pos, fatherWindow);
         this.color = color;
         this.bgType = bgType;
     }
 
-    public BGAssembly(float[] pos, Assembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur) {
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur) {
         super(pos, fatherWindow);
         this.color = color;
         this.bgType = bgType;
         this.canBlur = canBlur;
     }
 
-    public BGAssembly(float[] pos, Assembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur, float radius) {
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur, float radius) {
         super(pos, fatherWindow);
         this.color = color;
         this.bgType = bgType;
@@ -61,11 +61,6 @@ public class BGAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 }

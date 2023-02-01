@@ -20,19 +20,15 @@ public class ColorAssembly extends Assembly {
     boolean withAlpha = false;
     BGAssembly bgAssembly;
 
-
-    private ColorAssembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
     /**
      * 创建一个加载初始有默认选择点hsb,alpha值的颜色选区
      * 推荐长宽比5：6
      */
-    public ColorAssembly(float[] pos, Assembly fatherWindow, float h, float s, float b, float a) {
+    public ColorAssembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, float a) {
         super(pos, fatherWindow);
         withAlpha = true;
         windowAssembly = new WindowAssembly(pos, fatherWindow);
+        fatherWindow.addWindow(windowAssembly);
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
         float margin = 0.05f * deltaX;
         float[] bg_pos = new float[]{0, 0, deltaX, deltaY};
@@ -43,26 +39,21 @@ public class ColorAssembly extends Assembly {
         float[] alpha_pos = new float[]{margin, 1.1f * deltaX, deltaX - margin, 1.1f * deltaX + height};
         bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
         windowAssembly.addAssembly(bgAssembly);
-        color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h);
+        color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h, this);
         windowAssembly.addAssembly(color_h_assembly);
-        color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b);
+        color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b, this);
         windowAssembly.addAssembly(color_sb_assembly);
-        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, windowAssembly, h, s, b, a);
+        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, windowAssembly, h, s, b, a, this);
         windowAssembly.addAssembly(color_alpha_assembly);
     }
 
     @Override
     public float draw() {
-        return windowAssembly.draw();
+        return 0f;
     }
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 

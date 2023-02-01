@@ -1,7 +1,12 @@
 package me.skrilled.ui.menu.assembly.color;
 
+import me.skrilled.api.manager.ModuleManager;
+import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
+import me.skrilled.ui.menu.assembly.ColorAssembly;
+import me.skrilled.ui.menu.assembly.WindowAssembly;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
@@ -16,30 +21,31 @@ public class Color_alpha_Assembly extends Assembly {
     Color color;
     boolean init = false;
     CicleAssembly cicleAssembly;
+    ColorAssembly colorAssembly;
 
-
-    private Color_alpha_Assembly(float[] pos, Assembly fatherWindow) {
-        super(pos, fatherWindow);
-    }
-
-    public Color_alpha_Assembly(float[] pos, Assembly fatherWindow, float h, float s, float b, float a) {
+    public Color_alpha_Assembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, float a, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
         this.h = h;
         this.s = s;
         this.b = b;
         this.a = a;
+        this.colorAssembly = colorAssembly;
         color = Color.getHSBColor(h, s, b);
         rgba[0] = color.getRed();
         rgba[1] = color.getGreen();
         rgba[2] = color.getBlue();
         rgba[3] = a;
+        processCircleAssembly(a);
+    }
+
+    public void processCircleAssembly(float a) {
         float[] circlePos = new float[]{pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f, pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f};
         cicleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
     }
 
     @Override
     public float draw() {
-        if ((!init)|| SecilyUserInterface.clickDrag) initColorPoints();
+        if ((!init) || SecilyUserInterface.clickDrag) initColorPoints();
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
@@ -51,12 +57,14 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
-
+        String[] valueInfo = colorAssembly.assemblyName.split("\\.");
+        ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
+        ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);
+        float x = mouseX - calcAbsX();
+        x = x < 0 ? 0 : x > deltaX ? deltaX : x;
+        processCircleAssembly(x / deltaX);
+        Color color = valueHeader.getColorValue();
+        valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255 * x / deltaX)));
     }
 
     public void initColorPoints() {
@@ -70,7 +78,8 @@ public class Color_alpha_Assembly extends Assembly {
         }
         init = true;
     }
-    public void SetH(float h){
+
+    public void SetH(float h) {
         this.h = h;
         init = false;
     }

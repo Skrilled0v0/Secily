@@ -9,21 +9,21 @@ public class CicleAssembly extends Assembly {
     float r;
     boolean filled;
 
-    private CicleAssembly(float[] pos, Assembly fatherWindow) {
+    private CicleAssembly(float[] pos, WindowAssembly fatherWindow) {
         super(pos, fatherWindow);
     }
 
     /**
      * 默认实心
      */
-    public CicleAssembly(float[] pos, Assembly fatherWindow, float r, Color color) {
+    public CicleAssembly(float[] pos, WindowAssembly fatherWindow, float r, Color color) {
         super(pos, fatherWindow);
         this.color = color;
         this.r = r;
         filled = true;
     }
 
-    public CicleAssembly(float[] pos, Assembly fatherWindow, float r, Color color, boolean filled) {
+    public CicleAssembly(float[] pos, WindowAssembly fatherWindow, float r, Color color, boolean filled) {
         super(pos, fatherWindow);
         this.color = color;
         this.r = r;
@@ -41,11 +41,6 @@ public class CicleAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
 
     }
 }
