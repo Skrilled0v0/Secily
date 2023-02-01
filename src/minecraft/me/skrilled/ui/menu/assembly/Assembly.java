@@ -16,17 +16,12 @@ public abstract class Assembly {
     public Assembly fatherWindow;
     public float deltaX;
     public float deltaY;
-    public String assemblyName = "defaultName";
-    public boolean canReInit = false;
+
     public Assembly(float[] pos, Assembly fatherWindow) {
         this.pos = pos;
         deltaX = pos[2] - pos[0];
         deltaY = pos[3] - pos[1];
         this.fatherWindow = fatherWindow;
-    }
-
-    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
-        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
     /**
@@ -46,18 +41,13 @@ public abstract class Assembly {
         return y;
     }
 
-    public float[] calcAbsPos() {
-        return new float[]{calcAbsX(), calcAbsY(), calcAbsX() + deltaX, calcAbsY() + deltaY};
+    public float[] calcAbsPos(){
+        return new float[]{calcAbsX(),calcAbsY(),calcAbsX()+deltaX,calcAbsY()+deltaY};
     }
 
-    public abstract void mouseEventHandle(int mouseX, int mouseY, int button);
-
-    public abstract void reInit();
-    public void drag(float mouseDeltaX,float mouseDeltaY){
-        this.pos[0]+=mouseDeltaX;
-        this.pos[1]+=mouseDeltaY;
-        this.pos[2]+=mouseDeltaX;
-        this.pos[3]+=mouseDeltaY;
+    public abstract void mouseClicked(int mouseX, int mouseY, int button);
+    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
 }

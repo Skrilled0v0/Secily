@@ -16,7 +16,7 @@ public class FontLoader implements IMC {
     public FontDrawer EN12 = this.getFont("EN", 12);
     public FontDrawer EN16 = this.getFont("EN", 16);
     public FontDrawer EN18 = this.getFont("EN", 18);
-    public FontDrawer EN22 = this.getFont("EN", 22);
+    public FontDrawer EN20 = this.getFont("EN", 20);
     public FontDrawer EN36 = this.getFont("EN", 36);
     public FontDrawer EN48 = this.getFont("EN", 48);
     public FontDrawer EN64 = this.getFont("EN", 64);

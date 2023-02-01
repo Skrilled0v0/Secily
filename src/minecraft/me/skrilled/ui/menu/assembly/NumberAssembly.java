@@ -42,12 +42,7 @@ public class NumberAssembly extends Assembly {
     }
 
     @Override
-    public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
 
     }
 }

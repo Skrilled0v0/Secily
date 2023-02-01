@@ -38,19 +38,14 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
         GlStateManager.pushMatrix();
 
         RenderUtil.drawRect(0, 0, width * 0.16f * sideBarMotion.getAnimationFactor(), height, sideBarColor.getColour().getRGB());
-        float udMargin=height*0.2f;
+
         float onceHeight = height*0.8f/5f;
         float lMargin = width * 0.035f;
         float spacing = height * 0.065f;
         float boxWidth = width * 0.2f;
         for (int j = 0; j < aniList.size(); j++) {
             BlurUtil.blurAreaRounded((float) (lMargin * aniList.get(j).getAnimationFactor()), height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing, (float) (lMargin + boxWidth * aniList.get(j).getAnimationFactor()), height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing + onceHeight, Main.fontLoader.EN16.getHeight() / 2f, 10);
-            RenderUtil.drawCenteredStringBoxWith4PosWithOutAutoNextLine(new float[]{(float) (lMargin * aniList.get(j).getAnimationFactor()), height / 2f - onceHeight * 2.5f + spacing * 2 + j * (onceHeight + spacing) * j,
-
-                            (float) (lMargin + boxWidth * aniList.get(j).getAnimationFactor()),
-
-                            height / 2f - onceHeight * 2.5f + spacing * 2 + j * (onceHeight + spacing) * j + onceHeight},
-
+            RenderUtil.drawCenteredStringBoxWith4PosWithOutAutoNextLine(new float[]{},
                     Main.fontLoader.EN16, "aniList.get(j).toString()", new Color(0, 0, 0, 35).getRGB(), -1);
             if (isHovering(mouseX, mouseY, lMargin, height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing, lMargin + boxWidth, height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing + onceHeight)) {
                 System.out.println(aniList.get(j) + "   | T");

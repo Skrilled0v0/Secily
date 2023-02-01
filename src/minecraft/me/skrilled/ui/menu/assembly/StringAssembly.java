@@ -17,20 +17,18 @@ public class StringAssembly extends Assembly {
     Color fontColor;
     boolean border;
     FontDrawer font;
-    float radius;
 
     private StringAssembly(float[] pos, Assembly fatherWindow) {
         super(pos, fatherWindow);
     }
 
-    public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font,float radius) {
+    public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font) {
         super(pos, fatherWindow);
         this.value = value;
         this.centered = centered;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
         this.font = font;
-        this.radius = radius;
     }
 
     public StringAssembly(float[] pos, Assembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, boolean border, FontDrawer font) {
@@ -50,12 +48,7 @@ public class StringAssembly extends Assembly {
     }
 
     @Override
-    public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void reInit() {
+    public void mouseClicked(int mouseX, int mouseY, int button) {
 
     }
 }
