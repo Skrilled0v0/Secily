@@ -1,65 +1,86 @@
 package net.minecraft.client.gui;
 
 
-import me.fontloader.FontDrawer;
-import me.skrilled.SenseHeader;
-import me.skrilled.ui.alt.GuiAltLogin;
 import me.skrilled.utils.IMC;
-import me.skrilled.utils.math.TimerUtil;
+import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
-import net.minecraft.client.Minecraft;
+import me.surge.animation.Animation;
+import me.surge.animation.ColourAnimation;
+import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback, IMC {
-    private final Minecraft mc = IMC.mc;
 
-    int bAlpha = 75;
+    Animation sideBarMotion = new Animation(1200f, false, Easing.QUAD_OUT);
+    Animation singleplayer = new Animation(1200f, false, Easing.QUAD_OUT);
+    Animation multiplayer = new Animation(1200f, false, Easing.QUAD_OUT);
+    Animation alt = new Animation(1200f, false, Easing.QUAD_OUT);
+    Animation settings = new Animation(1200f, false, Easing.QUAD_OUT);
+    Animation exit = new Animation(1200f, false, Easing.QUAD_OUT);
+    ArrayList<Animation> aniList = new ArrayList<>();
 
+    ColourAnimation sideBarColor = new ColourAnimation(new Color(0, 0, 0, 30), new Color(0, 0, 0, 80), 1500f, false, Easing.LINEAR);
+
+    @Override
     public void initGui() {
-        int interval = 30;
-        int buttonWidth = 100;
-        int buttonHeight = 20;
-        int j = this.height / 2 - buttonHeight / 2;
-        this.buttonList.add(new GuiButton(1, interval, j + interval * 2, buttonWidth, buttonHeight, I18n.format("menu.quit")));
-        this.buttonList.add(new GuiButton(2, interval, j + interval, buttonWidth, buttonHeight, I18n.format("menu.options")));
-        this.buttonList.add(new GuiButton(3, interval, j, buttonWidth, buttonHeight, "Alt:" + mc.session.getUsername()));
-        this.buttonList.add(new GuiButton(4, interval, j - interval, buttonWidth, buttonHeight, I18n.format("menu.multiplayer")));
-        this.buttonList.add(new GuiButton(5, interval, j - interval * 2, buttonWidth, buttonHeight, I18n.format("menu.singleplayer")));
+        Collections.addAll(aniList, singleplayer, multiplayer, alt, settings, exit);
+        super.initGui();
     }
-
-
-    protected void actionPerformed(GuiButton button) throws IOException {
-
-        if (button.id == 5) mc.displayGuiScreen(new GuiSelectWorld(this));
-
-        if (button.id == 4) mc.displayGuiScreen(new GuiMultiplayer(this));
-
-        if (button.id == 3) mc.displayGuiScreen(new GuiAltLogin(this));
-
-        if (button.id == 2) mc.displayGuiScreen(new GuiOptions(this, mc.gameSettings));
-
-        if (button.id == 1) SenseHeader.getSense.stopClient();
-
-    }
-
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawBackground();
-        int j = this.height / 2;
-        int sideBarColor = new Color(10, 10, 10, bAlpha).getRGB();
-        FontDrawer font = Main.fontLoader.EN48;
-
         GlStateManager.pushMatrix();
-        RenderUtil.drawRect(0, 0, 160, height, sideBarColor);
-        font.drawRainbowString(SenseHeader.getSense.getClientName(), 30, j - 90);
-        GlStateManager.popMatrix();
 
+        RenderUtil.drawRect(0, 0, width * 0.16f * sideBarMotion.getAnimationFactor(), height, sideBarColor.getColour().getRGB());
+        float udMargin=height*0.2f;
+        float onceHeight = height*0.8f/5f;
+        float lMargin = width * 0.035f;
+        float spacing = height * 0.065f;
+        float boxWidth = width * 0.2f;
+        for (int j = 0; j < aniList.size(); j++) {
+            BlurUtil.blurAreaRounded((float) (lMargin * aniList.get(j).getAnimationFactor()), height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing, (float) (lMargin + boxWidth * aniList.get(j).getAnimationFactor()), height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing + onceHeight, Main.fontLoader.EN16.getHeight() / 2f, 10);
+            RenderUtil.drawCenteredStringBoxWith4PosWithOutAutoNextLine(new float[]{(float) (lMargin * aniList.get(j).getAnimationFactor()), height / 2f - onceHeight * 2.5f + spacing * 2 + j * (onceHeight + spacing) * j,
+
+                            (float) (lMargin + boxWidth * aniList.get(j).getAnimationFactor()),
+
+                            height / 2f - onceHeight * 2.5f + spacing * 2 + j * (onceHeight + spacing) * j + onceHeight},
+
+                    Main.fontLoader.EN16, "aniList.get(j).toString()", new Color(0, 0, 0, 35).getRGB(), -1);
+            if (isHovering(mouseX, mouseY, lMargin, height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing, lMargin + boxWidth, height / 2f - (2.5f - j) * onceHeight - (2 - j) * spacing + onceHeight)) {
+                System.out.println(aniList.get(j) + "   | T");
+                aniList.get(j).setState(true);
+
+            } else {
+//                System.out.println(aniList.get(j)+"   | F");
+                aniList.get(j).setState(false);
+            }
+
+        }
+        GlStateManager.popMatrix();
+        setMotion(isHovering(mouseX, mouseY, 0, 0, width / 6f, height));
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    private void setMotion(boolean flag) {
+        sideBarColor.setState(flag);
+        sideBarMotion.setState(flag);
+    }
+
+    private void setListMotion(int index, boolean flag) {
+        for (int z = 0; z < aniList.size(); z++) {
+            if (z == index) aniList.get(z).setState(flag);
+            else aniList.get(z).setState(!flag);
+        }
+    }
+
+    private boolean isHovering(int mouseX, int mouseY, float xLeft, float yUp, float xRight, float yBottom) {
+        return mouseX > xLeft && mouseX < xRight && mouseY > yUp && mouseY < yBottom;
     }
 
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {

@@ -161,6 +161,9 @@ public class SecilyUserInterface extends GuiScreen {
             assembly.mouseClicked(mouseX, mouseY, mouseButton);
 //            SenseHeader.getSense.printINFO("组件点击处理");
         }
+//        for (ModuleType value : ModuleType.values()) {
+//            if()
+//        }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 

@@ -48,6 +48,21 @@ public class GuiButton extends Gui implements IMC {
         this.displayString = buttonText;
     }
 
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
+    }
 
     public void drawButton(Minecraft mc, int mouseX, int mouseY) {
 /*

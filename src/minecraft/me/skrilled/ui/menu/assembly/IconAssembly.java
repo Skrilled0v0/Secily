@@ -43,7 +43,7 @@ public class IconAssembly extends Assembly {
     @Override
     public void draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        RenderUtil.drawTitleIcon(font, absX, absY, icons, boxWidth, spacing, (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor()), iconColor.getRGB(), bgColor.getRGB(), currentColor.getRGB(), isTransverse);
+        RenderUtil.drawTitleIcon(font, absX, absY, icons, spacing, (float) (currentPos + (aimingPos - currentPos) * anim.getAnimationFactor()), iconColor.getRGB(), bgColor.getRGB(), currentColor.getRGB(), isTransverse);
         if (anim.getAnimationFactor() == 1D) {
             currentPos = aimingPos;
         }
