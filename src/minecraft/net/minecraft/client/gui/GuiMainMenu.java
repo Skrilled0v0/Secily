@@ -56,7 +56,9 @@ public class GuiMainMenu extends GuiScreen implements GuiYesNoCallback {
         FontDrawer font = Main.fontLoader.EN48;
 
         GlStateManager.pushMatrix();
-        RenderUtil.drawRect(0, 0, width / 4f * animation.getAnimationFactor(), height*animation.getAnimationFactor(), colourAnimation.getColour().getRGB());
+        int interval = 30;
+        int buttonWidth = 100;
+        RenderUtil.drawRect(0, 0, (buttonWidth+interval*2) * animation.getAnimationFactor(), height*animation.getAnimationFactor(), colourAnimation.getColour().getRGB());
         font.drawRainbowString(SenseHeader.getSense.getClientName(), 30, j - 90);
 
         GlStateManager.popMatrix();
