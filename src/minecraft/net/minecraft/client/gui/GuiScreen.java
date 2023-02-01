@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import me.ashyx.blur.util.Blur;
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.math.TimerUtil;
@@ -13,7 +14,6 @@ import net.minecraft.client.gui.stream.GuiTwitchUserMode;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.EntityList;
 import net.minecraft.event.ClickEvent;
@@ -51,8 +51,6 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Set<String> PROTOCOLS = Sets.newHashSet("http", "https");
     private static final Splitter NEWLINE_SPLITTER = Splitter.on('\n');
-    TimerUtil timerUtil = new TimerUtil();
-    int i = 1;
     public int width;
     public int height;
     public boolean allowUserInput;
@@ -62,6 +60,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     protected List<GuiLabel> labelList = Lists.newArrayList();
     protected FontRenderer fontRendererObj;
     protected int eventButton;
+    TimerUtil timerUtil = new TimerUtil();
+    int i = 1;
     private GuiButton selectedButton;
     private long lastMouseEvent;
     private int touchValue;
@@ -474,7 +474,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
 
 
     public void drawBackground() {
-        if (this.mc.theWorld != null&&!(mc.currentScreen instanceof SecilyUserInterface)) {
+        if (this.mc.theWorld != null && !(mc.currentScreen instanceof SecilyUserInterface)) {
             Blur.renderBlur(5);
         } else {
             GlStateManager.disableLighting();

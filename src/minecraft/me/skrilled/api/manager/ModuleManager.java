@@ -46,7 +46,7 @@ public class ModuleManager {
                 return moduleHeader;
             }
         }
-        System.out.println("失败-返还->" + mName);
+//        System.out.println("失败-返还->" + mName);
         return null;
 
     }
@@ -56,7 +56,6 @@ public class ModuleManager {
         //Render
         mList.add(new HUD());
         mList.add(new ESP());
-
         mList.add(new Nametags());
         //Move
         mList.add(new AutoSprint());
@@ -66,6 +65,8 @@ public class ModuleManager {
         mList.add(new Aura());
         mList.add(new Reach());
         mList.add(new HitBox());
+
+
         mList.add(new SettingMenu());
         //Test
         Collections.addAll(mList, new TestModule001(), new TestModule002());
@@ -88,8 +89,9 @@ public class ModuleManager {
         return null;
     }
 
-    public List<ModuleHeader> getModuleListByModuleType(ModuleType moduleType) {
-        return mList.stream().filter(moduleHeader -> moduleHeader.getModuleType() == moduleType).collect(Collectors.toList());
+    public ArrayList<ModuleHeader> getModuleListByModuleType(ModuleType moduleType) {
+        List<ModuleHeader> list = mList.stream().filter(moduleHeader -> moduleHeader.getModuleType() == moduleType).collect(Collectors.toList());
+        return new ArrayList<>(list);
     }
 
     @EventTarget
