@@ -11,6 +11,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventKey;
+import me.skrilled.api.event.EventTick;
 import me.skrilled.ui.LoadingGui;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.block.Block;
@@ -1322,6 +1323,8 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
     }
 
     public void runTick() throws IOException {
+
+
         if (this.rightClickDelayTimer > 0) {
             --this.rightClickDelayTimer;
         }
@@ -1429,7 +1432,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                         if (!this.inGameHasFocus && Mouse.getEventButtonState()) {
                             this.setIngameFocus();
                         }
-                    } else if (this.currentScreen != null) {
+                    } else {
                         this.currentScreen.handleMouseInput();
                     }
                 }
@@ -1764,10 +1767,6 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
                 this.loadingScreen.displayLoadingString("");
             }
 
-            try {
-                Thread.sleep(200L);
-            } catch (InterruptedException var9) {
-            }
         }
 
         this.displayGuiScreen(null);

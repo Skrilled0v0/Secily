@@ -1,12 +1,12 @@
 package net.minecraft.client.renderer;
 
 import com.darkmagician6.eventapi.EventManager;
-import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.gson.JsonSyntaxException;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.module.combat.Reach;
+import me.skrilled.api.modules.module.render.RenderModifications;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.material.Material;
@@ -363,11 +363,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             this.pointedEntity = null;
             Vec3 vec33 = null;
             float f = 1.0F;
-            List<Entity> list = this.mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand(f, f, f), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-                public boolean apply(Entity p_apply_1_) {
-                    return p_apply_1_.canBeCollidedWith();
-                }
-            }));
+            List<Entity> list = this.mc.theWorld.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand(f, f, f), Predicates.and(EntitySelectors.NOT_SPECTATING, Entity::canBeCollidedWith));
             double d2 = d1;
 
             for (int j = 0; j < list.size(); ++j) {
@@ -443,7 +439,10 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
     }
 
+    //  Fov
     private float getFOVModifier(float partialTicks, boolean useFOVSetting) {
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.fovEdit.isOptionOpen())
+            return (float) RenderModifications.fovDouble.getDoubleCurrentValue();
         if (this.debugView) {
             return 90.0F;
         } else {
@@ -452,7 +451,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
 
             if (useFOVSetting) {
                 f = this.mc.gameSettings.fovSetting;
-
                 if (Config.isDynamicFov()) {
                     f *= this.fovModifierHandPrev + (this.fovModifierHand - this.fovModifierHandPrev) * partialTicks;
                 }
@@ -496,7 +494,10 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
     }
 
+    //   hurtCamera
     private void hurtCameraEffect(float partialTicks) {
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.noHurtCam.isOptionOpen())
+            return;
         if (this.mc.getRenderViewEntity() instanceof EntityLivingBase) {
             EntityLivingBase entitylivingbase = (EntityLivingBase) this.mc.getRenderViewEntity();
             float f = (float) entitylivingbase.hurtTime - partialTicks;
@@ -519,7 +520,10 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
     }
 
+    //  Bobbing
     private void setupViewBobbing(float partialTicks) {
+        if (SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.noBobbing.isOptionOpen())
+            return;
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer) {
             EntityPlayer entityplayer = (EntityPlayer) this.mc.getRenderViewEntity();
             float f = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
@@ -588,14 +592,14 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                     if (movingobjectposition != null) {
                         double d7 = movingobjectposition.hitVec.distanceTo(new Vec3(d0, d1, d2));
 
-                        if (d7 < d3) {
+                        if (d7 < d3 && !(SenseHeader.getSense.getModuleManager().getModuleByClass(RenderModifications.class).isEnabled() && RenderModifications.viewClip.isOptionOpen())) {
                             d3 = d7;
                         }
                     }
                 }
 
                 if (this.mc.gameSettings.thirdPersonView == 2) {
-                    GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+                    GlStateManager.rotate(180, 0f, 1F, 0.0F);
                 }
 
                 GlStateManager.rotate(entity.rotationPitch - f2, 1.0F, 0.0F, 0.0F);
@@ -737,7 +741,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             }
 
             boolean flag = false;
-
+            //手部渲染 hurtCam和bobbing
             if (p_renderHand_3_) {
                 GlStateManager.pushMatrix();
                 this.hurtCameraEffect(p_renderHand_1_);
@@ -755,6 +759,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                     if (Config.isShaders()) {
                         ShadersRender.renderItemFP(this.itemRenderer, p_renderHand_1_, p_renderHand_5_);
                     } else {
+                        //防砍动画调用
                         this.itemRenderer.renderItemInFirstPerson(p_renderHand_1_);
                     }
 
@@ -2150,11 +2155,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
                 this.mc.ingameGUI.getChatGUI().printChatMessage(chatcomponenttext1);
             }
         }
-
-        if (this.mc.currentScreen instanceof GuiMainMenu) {
-            this.updateMainMenu((GuiMainMenu) this.mc.currentScreen);
-        }
-
         if (this.updatedWorld != world) {
             RandomEntities.worldChanged(this.updatedWorld, world);
             Config.updateThreadPriorities();
@@ -2184,30 +2184,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
         }
     }
 
-    private void updateMainMenu(GuiMainMenu p_updateMainMenu_1_) {
-        try {
-            String s = null;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            int i = calendar.get(5);
-            int j = calendar.get(2) + 1;
-
-            if (i == 8 && j == 4) {
-                s = "Happy birthday, OptiFine!";
-            }
-
-            if (i == 14 && j == 8) {
-                s = "Happy birthday, sp614x!";
-            }
-
-            if (s == null) {
-                return;
-            }
-
-            Reflector.setFieldValue(p_updateMainMenu_1_, Reflector.GuiMainMenu_splashText, s);
-        } catch (Throwable var6) {
-        }
-    }
 
     public boolean setFxaaShader(int p_setFxaaShader_1_) {
         if (!OpenGlHelper.isFramebufferEnabled()) {

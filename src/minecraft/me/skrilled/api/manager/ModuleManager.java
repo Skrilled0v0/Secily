@@ -26,10 +26,7 @@ import me.skrilled.api.modules.module.misc.TestModule001;
 import me.skrilled.api.modules.module.misc.TestModule002;
 import me.skrilled.api.modules.module.move.AutoJump;
 import me.skrilled.api.modules.module.move.AutoSprint;
-import me.skrilled.api.modules.module.render.ESP;
-import me.skrilled.api.modules.module.render.HUD;
-import me.skrilled.api.modules.module.render.Nametags;
-import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.api.modules.module.render.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +54,7 @@ public class ModuleManager {
         mList.add(new HUD());
         mList.add(new ESP());
         mList.add(new Nametags());
+        mList.add(new RenderModifications());
         //Move
         mList.add(new AutoSprint());
         mList.add(new AutoJump());

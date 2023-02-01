@@ -192,7 +192,6 @@ public class RenderUtil implements IMC {
         glDisable(GL_LINE_SMOOTH);
     }
 
-
     /**
      * 绘制开关按钮
      *
@@ -402,7 +401,6 @@ public class RenderUtil implements IMC {
         return boxHeight;
     }
 
-
     public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor, float radius) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
@@ -516,7 +514,6 @@ public class RenderUtil implements IMC {
         glPopMatrix();
     }
 
-
     public static void drawGradientSideways(double left, double top, double right, double bottom, int col1, int col2) {
         float f = (col1 >> 24 & 0xFF) / 255.0F;
         float f1 = (col1 >> 16 & 0xFF) / 255.0F;
@@ -594,7 +591,6 @@ public class RenderUtil implements IMC {
         GL11.glDisable(3042);
         GL11.glScalef(2.0f, 2.0f, 2.0f);
     }
-
 
     public static void drawCircle(float x, float y, float start, float end, float radius, int color) {
         float ldy;
@@ -770,7 +766,6 @@ public class RenderUtil implements IMC {
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
     }
 
-
     public static void drawOutlinedBoundingBox(AxisAlignedBB aa) {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
@@ -931,7 +926,6 @@ public class RenderUtil implements IMC {
         return new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
     }
 
-
     public static void drawRect(double g, double d, double i, double e, int col1) {
         float f2 = (float) (col1 >> 24 & 255) / 255.0f;
         float f22 = (float) (col1 >> 16 & 255) / 255.0f;
@@ -958,7 +952,6 @@ public class RenderUtil implements IMC {
         glDisable(2848);
         GlStateManager.disableBlend();
     }
-
 
     /**
      * 标题枚举Box绘制
@@ -1088,7 +1081,6 @@ public class RenderUtil implements IMC {
         glColor4f(1, 1, 1, 1);
     }
 
-
     public static void drawLine(float x, float y, float x1, float y1, float width) {
         drawLine(x, y, 0.0f, x1, y1, 0.0f, width);
     }
@@ -1183,6 +1175,13 @@ public class RenderUtil implements IMC {
             GlStateManager.enableAlpha();
             GlStateManager.popMatrix();
         }
+
+    }
+
+    public void doScissor(int x, int y, int width, int height) {
+        ScaledResolution scale = new ScaledResolution(mc);
+        int factor = scale.getScaleFactor();
+        GL11.glScissor(x * factor, (scale.getScaledHeight() - height) * factor, (width + x) * factor, (height - y) * factor);
 
     }
 

@@ -398,7 +398,7 @@ public class CustomItems {
             mapPotionIds.put("fireresistance", getPotionIds(3));
             mapPotionIds.put("poison", getPotionIds(4));
             mapPotionIds.put("heal", getPotionIds(5));
-            mapPotionIds.put("nightvision", getPotionIds(6));
+            mapPotionIds.put("nightVision", getPotionIds(6));
             mapPotionIds.put("clear", getPotionId(7, 0));
             mapPotionIds.put("bungling", getPotionId(7, 1));
             mapPotionIds.put("charming", getPotionId(7, 2));
@@ -418,7 +418,7 @@ public class CustomItems {
             mapPotionIds.put("speed", mapPotionIds.get("movespeed"));
             mapPotionIds.put("fire_resistance", mapPotionIds.get("fireresistance"));
             mapPotionIds.put("instant_health", mapPotionIds.get("heal"));
-            mapPotionIds.put("night_vision", mapPotionIds.get("nightvision"));
+            mapPotionIds.put("night_vision", mapPotionIds.get("nightVision"));
             mapPotionIds.put("strength", mapPotionIds.get("damageboost"));
             mapPotionIds.put("slowness", mapPotionIds.get("moveslowdown"));
             mapPotionIds.put("instant_damage", mapPotionIds.get("harm"));

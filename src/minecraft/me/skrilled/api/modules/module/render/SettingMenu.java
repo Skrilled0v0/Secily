@@ -31,7 +31,7 @@ public class SettingMenu extends ModuleHeader {
     static double[] y1 = {0.0, 50, 199999, 0.5f};
     public static ValueHeader posY1 = new ValueHeader("Y1", y1);
     ArrayList<String> mode = new ArrayList<>();
-    ValueHeader sideMode = new ValueHeader("Mode", "Test", mode);
+    ValueHeader sideMode = new ValueHeader("Mode", "Eclipse", mode);
 
     public SettingMenu() {
         this.setCanView(false);

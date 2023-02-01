@@ -374,15 +374,6 @@ public abstract class Render<T extends Entity> implements IEntityRenderer
         return this.renderManager;
     }
 
-    public boolean isMultipass()
-    {
-        return false;
-    }
-
-    public void renderMultipass(T p_renderMultipass_1_, double p_renderMultipass_2_, double p_renderMultipass_4_, double p_renderMultipass_6_, float p_renderMultipass_8_, float p_renderMultipass_9_)
-    {
-    }
-
     public Class getEntityClass()
     {
         return this.entityClass;
