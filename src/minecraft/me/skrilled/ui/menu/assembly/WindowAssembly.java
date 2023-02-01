@@ -115,8 +115,11 @@ public class WindowAssembly extends Assembly {
         if (isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
         //本窗口组件
         for (Assembly assembly : otherAssemblies) {
+            if (assembly.pos[2] <= 0 || assembly.pos[3] <= 0) {
+                continue;
+            }
             absPos = assembly.calcAbsPos();
-            if (isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) {
+            if (isMouseInside(mouseX, mouseY, assembly.pos[0] < 0 ? assembly.fatherWindow.calcAbsX() : absPos[0], assembly.pos[1] < 0 ? assembly.fatherWindow.calcAbsY() : absPos[1], absPos[2], absPos[3])) {
                 result.add(assembly);
             }
         }

@@ -135,11 +135,23 @@ public class Window_Values_Assembly extends WindowAssembly {
 
                     break;
                 case COLOR:
-
+                    width = 0.24310979692033028341887971434948f * valuesEditZoneWindow.deltaX;
+                    height = 0.43623570800351802990325417766051f * valuesEditZoneWindow.deltaY;
+                    rSpacing = 0.02506415978576210667261771925909f * valuesEditZoneWindow.deltaX;
+                    pos[0] = -rSpacing - width + valuesEditZoneWindow.deltaX / (inLeftHalfZone ? 2f : 1f);
+                    pos[1] = valuesEditZoneWindow.currentUsedHeight;
+                    pos[2] = pos[0] + width;
+                    pos[3] = pos[0] + height;
+                    Color color = valueHeader.getColorValue();
+                    float[] hsbAlpha = new float[4];
+                    Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);
+                    hsbAlpha[3] = color.getAlpha() / 255f;
+                    ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
+                    valuesEditZoneWindow.addAssembly(colorAssembly);
                     break;
             }
             //valueName显示组件
-            StringWithoutBGAssembly valueNameAssembly = new StringWithoutBGAssembly(calcPosForValueName(width_default, height_default, valuesEditZoneWindow, lMargin, inLeftHalfZone), valuesEditZoneWindow, valueHeader.getValueName(), Main.fontLoader.EN22, Color.WHITE, new boolean[]{false, true});
+            StringWithoutBGAssembly valueNameAssembly = new StringWithoutBGAssembly(calcPosForValueName(width_default, height_default, valuesEditZoneWindow, lMargin, inLeftHalfZone), valuesEditZoneWindow, valueHeader.getValueName(), Main.fontLoader.EN22, Color.red, new boolean[]{false, true});
             yUsedValueName = valueNameAssembly.draw();
             valuesEditZoneWindow.addAssembly(valueNameAssembly);
             valuesEditZoneWindow.currentUsedHeight += yUsedValueName > yUsedValueBox ? yUsedValueName : yUsedValueBox;

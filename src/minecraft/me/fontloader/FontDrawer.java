@@ -244,9 +244,10 @@ public final class FontDrawer {
             color |= -16777216;
         }
 
-        final int rawColor = color;
+        int rawColor = color;
 
         preDraw();
+        GL11.glColor4f(1,1,1,1);
 
         x *= 2.0;
         y *= 2.0;

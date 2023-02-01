@@ -24,7 +24,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
+import static org.lwjgl.opengl.GL11.*;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
@@ -75,5 +75,14 @@ public class HUD extends ModuleHeader {
             font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
+        //Test GLScissor
+        GL11.glPushMatrix();
+        RenderUtil.doScissor(0,0, (int) (25*(0.7+0.3*Math.random())), (int) (h*(0.1+0.02*Math.random())));
+        //draw sm
+        RenderUtil.drawRect(0,0,10,50,Color.red.getRGB());
+        RenderUtil.drawRect(0,0,50,10,Color.orange.getRGB());
+
+        glDisable(GL_SCISSOR_TEST);
+        GL11.glPopMatrix();
     }
 }
