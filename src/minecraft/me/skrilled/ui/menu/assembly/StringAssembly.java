@@ -6,8 +6,12 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
+import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.Animation;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
@@ -193,6 +197,5 @@ public class StringAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
     }
 }

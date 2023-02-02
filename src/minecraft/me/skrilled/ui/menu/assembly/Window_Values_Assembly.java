@@ -100,8 +100,8 @@ public class Window_Values_Assembly extends WindowAssembly {
                     break;
                 }
                 case ENUM_TYPE: {
-                    float width = 0.09649073867440303503682213791564f * valuesEditZoneWindow.deltaX;
-                    float height = 0.06710124683118630037767085726111f * valuesEditZoneWindow.deltaY;
+                    float width = 0.13659060477571970542289667484936f * valuesEditZoneWindow.deltaX;
+                    float height = 0.2550313001189921879041854208702f * valuesEditZoneWindow.deltaY;
                     calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
                     if (pos[3] + dMargin > valuesEditZoneWindow.deltaY) {
                         valuesEditZoneWindow.currentUsedHeight = uMargin;
@@ -111,7 +111,16 @@ public class Window_Values_Assembly extends WindowAssembly {
                         }
                         calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
                     }
-
+                    FontDrawer font = Main.fontLoader.EN16;
+                    Color bgColor = new Color(82, 82, 89);
+                    Color fontColor = Color.white;
+                    ArrayList<String> enumValues = valueHeader.getEnumTypes();
+                    String currentValue = valueHeader.getCurrentEnumType();
+                    Animation animation = new Animation(500f, false, Easing.LINEAR);
+                    EnumAssembly enumAssembly = new EnumAssembly(pos.clone(), valuesEditZoneWindow, font, bgColor, fontColor, enumValues, currentValue, animation);
+                    enumAssembly.assemblyName = "enumAssembly." + module.toString() + "." + valueHeader.getValueName();
+                    valuesEditZoneWindow.addWindow(enumAssembly);
+                    yUsedValueBox = uMargin + height;
                     break;
                 }
                 case DOUBLE: {

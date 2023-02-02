@@ -432,30 +432,8 @@ public class RenderUtil implements IMC {
 
     public static float drawCenteredString(float[] pos, FontDrawer font, String str, int fontColor) {
         float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
-        float lineSpacing = fontHeight * 0.6f;
-        float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        for (int i = 0; i < row - 1; i++) {
-            String s1 = str.substring(split.get(i), split.get(i + 1));
-            font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        String s1 = str.substring(split.get(row - 1));
-        font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
-        return boxHeight;
+        font.drawString(str, (pos[2] + pos[0] - font.getStringWidth(str)) / 2f, pos[1], fontColor);
+        return fontHeight;
     }
 
     public static float drawLeftedString(float[] pos, FontDrawer font, String str, int fontColor) {
@@ -895,30 +873,29 @@ public class RenderUtil implements IMC {
         glPopMatrix();
     }
 
-    public static void drawEntityCircularESP(EntityLivingBase entity, Color bgLineColor,  boolean hpLine) {
+    public static void drawEntityCircularESP(EntityLivingBase entity, Color bgLineColor, boolean hpLine) {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
 
-        float health=entity.getHealth();
-        float maxHealth=entity.getMaxHealth();
-        float absorptionAmount =entity.getAbsorptionAmount();
-        float hpFloat=(health+absorptionAmount)/(maxHealth+absorptionAmount);
-        Color hpColor= Colors.getHealthColor(health+absorptionAmount,maxHealth+absorptionAmount);
+        float health = entity.getHealth();
+        float maxHealth = entity.getMaxHealth();
+        float absorptionAmount = entity.getAbsorptionAmount();
+        float hpFloat = (health + absorptionAmount) / (maxHealth + absorptionAmount);
+        Color hpColor = Colors.getHealthColor(health + absorptionAmount, maxHealth + absorptionAmount);
 
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         float scale = 0.05f;
-        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height *0.1f : 0.0f), posZ);
+        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
         GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-scale, -scale, -scale);
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
-        if(hpLine)
-            drawAngleCirque(0, 0, 15 * entity.height, 0, 360*hpFloat, 1.8f, hpColor.getRGB());
+        if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();

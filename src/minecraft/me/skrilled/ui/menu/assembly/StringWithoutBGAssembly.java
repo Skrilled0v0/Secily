@@ -6,7 +6,11 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
+import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.Animation;
 
 import java.awt.*;
 
@@ -46,6 +50,17 @@ public class StringWithoutBGAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-
+        if (fatherWindow != null) {
+            if (fatherWindow.assemblyName.equalsIgnoreCase("windowOfEnumAssembly")) {
+                if (this.value.equalsIgnoreCase("v") || this.value.equalsIgnoreCase("<")) {
+                    Animation anim = ((EnumAssembly) (fatherWindow.fatherWindow)).animation;
+                    anim.setState(!anim.getState());
+                } String s = fatherWindow.fatherWindow.assemblyName;
+                String[] valueInfo = s.split("\\.");
+                ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(valueInfo[1]);
+                ValueHeader value = module.getValueByName(valueInfo[2]);
+                value.setCurrentEnumType(this.value);
+            }
+        }
     }
 }

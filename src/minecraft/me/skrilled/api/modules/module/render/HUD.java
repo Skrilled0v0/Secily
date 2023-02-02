@@ -15,17 +15,16 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
-import me.skrilled.ui.menu.assembly.ColorAssembly;
+import me.skrilled.ui.menu.assembly.EnumAssembly;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.Animation;
+import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
-
-import static org.lwjgl.opengl.GL11.GL_SCISSOR_TEST;
-import static org.lwjgl.opengl.GL11.glDisable;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
@@ -78,6 +77,12 @@ public class HUD extends ModuleHeader {
         if (not.isOptionOpen()) Notification.drawNotifications();
 
         //draw someThing
-
+        ArrayList<String> strings = new ArrayList<>();
+        strings.add("11");
+        strings.add("21");
+        strings.add("31");
+        strings.add("41");
+//        EnumAssembly = new EnumAssembly(new float[]{50, 50, 100, 100}, null, Main.fontLoader.EN18, new Color(82, 82, 89), Color.white, strings, "11", new Animation(500f, false, Easing.LINEAR));
+//        enumAssembly.draw();
     }
 }

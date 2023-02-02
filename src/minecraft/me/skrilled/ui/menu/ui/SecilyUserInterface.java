@@ -173,14 +173,14 @@ public class SecilyUserInterface extends GuiScreen {
         //组件点击判定
         ArrayList<Assembly> assemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
         for (Assembly assembly : assemblies) {
-            //组件点击处理
+            //通用的处理
+            try {
+                assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //组件点击特殊处理
             if (!assembly.assemblyName.equalsIgnoreCase("defaultName")) {
-                //通用的处理
-                try {
-                    assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 //点到module的处理
                 ModuleHeader module = ModuleManager.getModuleByName(assembly.assemblyName);
                 if (module != null) {
@@ -189,15 +189,8 @@ public class SecilyUserInterface extends GuiScreen {
                         valuesWindow.setModule(module);
                     }
                 }
-//                valuesWindow
-                continue;
             }
-            //通用的处理
-            try {
-                assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
