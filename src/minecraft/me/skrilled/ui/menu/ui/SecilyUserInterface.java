@@ -34,11 +34,11 @@ public class SecilyUserInterface extends GuiScreen {
      * Window背景传参
      */
     static float[] windowsPos = SettingMenu.getGuiPos();
-    private static SecilyUserInterface secilyUserInterface;
     /**
      * 初始化 底层窗口
      */
-    public WindowAssembly mainGui = new WindowAssembly(windowsPos, null);
+    public static WindowAssembly mainGui = new WindowAssembly(windowsPos, null);
+    private static SecilyUserInterface secilyUserInterface;
     /**
      * 点击拖动定位x轴
      */
@@ -81,6 +81,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void initGui() {
+        mainGui = new WindowAssembly(mainGui.pos, null);
         //实例化 大背景
         BGAssembly bigBg = new BGAssembly(new float[]{0, 0, mainGui.deltaX, mainGui.deltaY}, mainGui, new Color(0, 0, 0, 125), BackGroundType.RoundRect, true, 10f);
 
@@ -131,6 +132,7 @@ public class SecilyUserInterface extends GuiScreen {
 
         //初始化 ModuleTypeICON 组件
         IconAssembly moduleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new char[]{'A', 'B', 'C', 'D', 'E'}, getIconCharByModuleType(currentModuleType), spacing, new Animation(100, false, Easing.CUBIC_OUT), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247, 166), true);
+        moduleTypeICONBar.assemblyName = "moduleTypeICONBar";
 
         //添加 ModuleTypeICON 组件 至 左边栏窗口
         leftSideBar.addAssembly(moduleTypeICONBar);

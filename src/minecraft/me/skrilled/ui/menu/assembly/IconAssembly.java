@@ -75,22 +75,28 @@ public class IconAssembly extends Assembly {
             float[] pos = new float[]{absX + (spacing + boxWidth) * count, absY, absX + boxWidth + (spacing + boxWidth) * count, absY + boxWidth};
             count++;
             if (isMouseInside(mouseX, mouseY, pos[0], pos[1], pos[2], pos[3])) {
-                SecilyUserInterface.currentModuleType = getModuleTypeByChar(icon);
-                SecilyUserInterface.onModuleTypeSwitching = true;
-                try {
-                    SecilyUserInterface.currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyUserInterface.currentModuleType).get(0);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (assemblyName.equalsIgnoreCase("moduleTypeICONBar")) {
+                    SecilyUserInterface.currentModuleType = getModuleTypeByChar(icon);
+                    SecilyUserInterface.onModuleTypeSwitching = true;
+                    try {
+                        SecilyUserInterface.currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyUserInterface.currentModuleType).get(0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Window_Values_Assembly valuesWindow = (Window_Values_Assembly) SecilyUserInterface.getSecilyUserInterface().mainGui.getAssemblyByName("valuesWindow");
+                    valuesWindow.setModule(SecilyUserInterface.currentModule);
+                    if (anim.getAnimationFactor() < 1D) {
+                        float deltaPos = (aimingPos - currentPos);
+                        currentPos += deltaPos * anim.getAnimationFactor();
+                    }
+                    aimingPos = count;
+                    anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
+                    anim.setState(true);
+                } else if (assemblyName.equalsIgnoreCase("pageBar")) {
+                    Assembly assembly = SecilyUserInterface.mainGui.getAssemblyByName("valuesWindow");
+                    Window_Values_Assembly windowValuesAssembly = (Window_Values_Assembly) assembly;
+                    windowValuesAssembly.page = Integer.valueOf(icon);
                 }
-                Window_Values_Assembly valuesWindow = (Window_Values_Assembly) SecilyUserInterface.getSecilyUserInterface().mainGui.getAssemblyByName("valuesWindow");
-                valuesWindow.setModule(SecilyUserInterface.currentModule);
-                if (anim.getAnimationFactor() < 1D) {
-                    float deltaPos = (aimingPos - currentPos);
-                    currentPos += deltaPos * anim.getAnimationFactor();
-                }
-                aimingPos = count;
-                anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
-                anim.setState(true);
             }
         }
     }

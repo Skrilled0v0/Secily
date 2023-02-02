@@ -24,8 +24,8 @@ public class Color_sb_Assembly extends Assembly {
     public CicleAssembly circleAssembly;
     public float h;
     public ArrayList<ArrayList<ColorPoint>> colorPointLists;
-    ColorAssembly colorAssembly;
     public boolean init = false;
+    ColorAssembly colorAssembly;
 
     public Color_sb_Assembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
@@ -69,6 +69,7 @@ public class Color_sb_Assembly extends Assembly {
         x = x < 0 ? 0 : x > deltaX ? deltaX : x;
         y = y < 0 ? 0 : y > deltaY ? deltaY : y;
         processCircleAssembly(x / deltaX, y / deltaY);
+        colorAssembly.color_alpha_assembly.setSB(new float[]{x / deltaX, y / deltaY});
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
         float[] hsb = new float[4];

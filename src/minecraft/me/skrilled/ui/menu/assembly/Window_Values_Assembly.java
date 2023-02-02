@@ -12,17 +12,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Window_Values_Assembly extends WindowAssembly {
-    public BGAssembly bgAssembly;
-    public StringWithoutBGAssembly windowName;
+    public IconAssembly pageBar;
     public ArrayList<IconAssembly> icons = new ArrayList<>();
     public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
-    public ArrayList<Assembly> otherAssemblies = new ArrayList<>();
     WindowAssembly valuesEditZoneWindow;
     ArrayList<WindowAssembly> valuesEditZoneWindows = new ArrayList<>();
     ModuleHeader module;
     boolean needInit = true;
-    BGAssembly pageBarBG;
-    StringWithoutBGAssembly pageBar;
     int page = 1;
     int lastEndIndexOfValues = 0;
 
@@ -164,8 +160,6 @@ public class Window_Values_Assembly extends WindowAssembly {
             init();
             return deltaY;
         }
-        if (valuesEditZoneWindows.size() == 0)
-            valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this));
         this.valuesEditZoneWindow = valuesEditZoneWindows.get(page - 1);
         if (!subWindows.contains(valuesEditZoneWindow)) {
             subWindows.clear();
@@ -190,6 +184,26 @@ public class Window_Values_Assembly extends WindowAssembly {
         while (lastEndIndexOfValues < values.size()) {
             valuesEditZoneWindows.add(initWindowForNextPage(values));
         }
+        if (valuesEditZoneWindows.size() == 0)
+            valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this));
+        FontDrawer font = Main.fontLoader.EN22;
+        float halfHeight = font.getHeight() * 1.4f;
+        float a = valuesEditZoneWindows.size() - 0.5f;
+        float[] pageBarPos = {deltaX / 2 - 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY - 2 * halfHeight, deltaX / 2 + 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY};
+        ArrayList<Character> pageNumberList = new ArrayList<>();
+        for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
+            pageNumberList.add(Integer.toString(i + 1).charAt(0));
+        }
+        char[] pageNumbers = new char[pageNumberList.size()];
+        for (int i = 0; i < pageNumbers.length; i++) {
+            pageNumbers[i] = pageNumberList.get(i);
+        }
+        Color bgColor = new Color(23, 23, 23, 59);
+        Color selectedColor = new Color(204, 204, 204);
+        Color fontColor = Color.white;
+        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page).charAt(0), 0f, new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
+        pageBar.assemblyName = "pageBar";
+        this.addAssembly(pageBar);
         needInit = false;
     }
 
@@ -210,6 +224,11 @@ public class Window_Values_Assembly extends WindowAssembly {
         reset();
         this.module = module;
         needInit = true;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
     }
 
     @Override

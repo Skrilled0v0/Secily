@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Color_alpha_Assembly extends Assembly {
     public float h, s, b, a;
 
-    public float[] rgba = new float[4];
+    public int[] rgba = new int[4];
     public ArrayList<ColorPoint> colorPoints;
     Color color;
     boolean init = false;
@@ -34,7 +34,7 @@ public class Color_alpha_Assembly extends Assembly {
         rgba[0] = color.getRed();
         rgba[1] = color.getGreen();
         rgba[2] = color.getBlue();
-        rgba[3] = a;
+        rgba[3] = (int) (a * 255);
         processCircleAssembly(a);
     }
 
@@ -49,7 +49,7 @@ public class Color_alpha_Assembly extends Assembly {
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
-        RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY - 1, -1);
+        RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY - 1, Color.black.getRGB());;
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
         cicleAssembly.draw();
         return deltaY;
@@ -82,8 +82,20 @@ public class Color_alpha_Assembly extends Assembly {
     public void setH(float h) {
         this.h = h;
         float[] hsb = new float[3];
-        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+        Color.RGBtoHSB(rgba[0], rgba[1], rgba[2], hsb);
         Color color1 = new Color(Color.HSBtoRGB(h, hsb[1], hsb[2]));
+        rgba[0] = color1.getRed();
+        rgba[1] = color1.getGreen();
+        rgba[2] = color1.getBlue();
+        init = false;
+    }
+
+    public void setSB(float[] sb) {
+        this.s = sb[0];
+        this.b = sb[1];
+        float[] hsb = new float[3];
+        Color.RGBtoHSB(rgba[0], rgba[1], rgba[2], hsb);
+        Color color1 = new Color(Color.HSBtoRGB(hsb[0], s, b));
         rgba[0] = color1.getRed();
         rgba[1] = color1.getGreen();
         rgba[2] = color1.getBlue();
