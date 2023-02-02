@@ -66,7 +66,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         currentSkip = 0;
         anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
         subWindows = new ArrayList<>();
-        otherAssemblies = new ArrayList<>();
+        assemblies = new ArrayList<>();
         needInit = true;
     }
 
@@ -79,7 +79,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         float latestSkipFactor = getSkipFactor();
         float deltaFactor = latestSkipFactor - lastSkipFactor;
         lastSkipFactor = latestSkipFactor;
-        for (Assembly assembly : otherAssemblies) {
+        for (Assembly assembly : assemblies) {
             assembly.pos[1] -= deltaFactor;
             assembly.pos[3] -= deltaFactor;
         }
@@ -96,7 +96,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         for (IconAssembly icon : this.icons) {
             currentUsedHeight += icon.draw();
         }
-        for (Assembly otherAssembly : otherAssemblies) {
+        for (Assembly otherAssembly : assemblies) {
             currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
@@ -108,7 +108,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     }
 
     public void init() {
-        this.otherAssemblies = new ArrayList<>();
+        this.assemblies = new ArrayList<>();
         float bgBoxHeight = this.deltaY / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
         float udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
         for (int i = 0; i < contents.size(); i++) {

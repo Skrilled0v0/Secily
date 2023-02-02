@@ -25,6 +25,7 @@ public class FontLoader implements IMC {
     public FontDrawer ICON64 = this.getFont("ICON", 64);
     public FontDrawer ICON128 = this.getFont("ICON", 128);
     public FontDrawer ICON32 = this.getFont("ICON", 32);
+    public FontDrawer ICON16 = this.getFont("ICON", 16);
     public FontDrawer ICON36 = this.getFont("ICON", 36);
     public FontDrawer ICON38 = this.getFont("ICON", 38);
     public FontDrawer ICON42 = this.getFont("ICON", 42);

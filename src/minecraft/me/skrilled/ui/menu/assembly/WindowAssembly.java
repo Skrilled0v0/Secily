@@ -7,7 +7,7 @@ public class WindowAssembly extends Assembly {
     public StringWithoutBGAssembly windowName;
     public ArrayList<IconAssembly> icons = new ArrayList<>();
     public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
-    public ArrayList<Assembly> otherAssemblies = new ArrayList<>();
+    public ArrayList<Assembly> assemblies = new ArrayList<>();
 
     public WindowAssembly(float[] pos, WindowAssembly fatherWindow) {
         super(pos, fatherWindow);
@@ -19,8 +19,8 @@ public class WindowAssembly extends Assembly {
     }
 
     public void addAssembly(Assembly assembly) {
-        if (otherAssemblies == null) otherAssemblies = new ArrayList<>();
-        otherAssemblies.add(assembly);
+        if (assemblies == null) assemblies = new ArrayList<>();
+        assemblies.add(assembly);
     }
 
     public void addWindow(WindowAssembly windowAssembly) {
@@ -28,7 +28,7 @@ public class WindowAssembly extends Assembly {
     }
 
     public void delAssembly(Assembly assembly) {
-        otherAssemblies.removeIf(a -> a.equals(assembly));
+        assemblies.removeIf(a -> a.equals(assembly));
     }
 
     public void delWindow(WindowAssembly windowAssembly) {
@@ -47,7 +47,7 @@ public class WindowAssembly extends Assembly {
         for (IconAssembly icon : this.icons) {
             currentUsedHeight += icon.draw();
         }
-        for (Assembly otherAssembly : otherAssemblies) {
+        for (Assembly otherAssembly : assemblies) {
             currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
@@ -60,8 +60,9 @@ public class WindowAssembly extends Assembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
 
     }
+
     public void reset() {
-        otherAssemblies = new ArrayList<>();
+        assemblies = new ArrayList<>();
         subWindows = new ArrayList<>();
     }
 
@@ -76,7 +77,7 @@ public class WindowAssembly extends Assembly {
             Assembly assembly = subWindow.getAssemblyByName(assemblyName);
             if (assembly != null) return assembly;
         }
-        for (Assembly assembly : otherAssemblies) {
+        for (Assembly assembly : assemblies) {
             if (assembly.assemblyName.equalsIgnoreCase(assemblyName)) return assembly;
         }
         return null;
@@ -88,8 +89,8 @@ public class WindowAssembly extends Assembly {
         //本窗口
         if (isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
         //本窗口组件
-        for (Assembly assembly : otherAssemblies) {
-            if (assembly.pos[2] <= 0 || assembly.pos[3] <= 0) {
+        for (Assembly assembly : assemblies) {
+            if (assembly.pos[2] <= 0 || assembly.pos[3] <= 0 || assembly.pos[0] >= deltaX || assembly.pos[1] >= deltaY) {
                 continue;
             }
             absPos = assembly.calcAbsPos();
