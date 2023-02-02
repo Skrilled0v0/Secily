@@ -1,7 +1,6 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
-import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
@@ -81,12 +80,12 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         float deltaFactor = latestSkipFactor - lastSkipFactor;
         lastSkipFactor = latestSkipFactor;
         for (Assembly assembly : otherAssemblies) {
-            assembly.pos[1] += deltaFactor;
-            assembly.pos[3] += deltaFactor;
+            assembly.pos[1] -= deltaFactor;
+            assembly.pos[3] -= deltaFactor;
         }
         for (WindowAssembly subWindow : subWindows) {
-            subWindow.pos[1] += deltaFactor;
-            subWindow.pos[3] += deltaFactor;
+            subWindow.pos[1] -= deltaFactor;
+            subWindow.pos[3] -= deltaFactor;
         }
         if (bgAssembly != null) {
             currentUsedHeight += this.bgAssembly.draw();

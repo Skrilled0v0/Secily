@@ -81,7 +81,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void initGui() {
-        mainGui = new WindowAssembly(mainGui.pos, null);
+        mainGui.reset();
         //实例化 大背景
         BGAssembly bigBg = new BGAssembly(new float[]{0, 0, mainGui.deltaX, mainGui.deltaY}, mainGui, new Color(0, 0, 0, 125), BackGroundType.RoundRect, true, 10f);
 
