@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SenseHeader implements IMC {
-    public static String[] clientInfo = {"DeadAngles", "230122", "Secily"};
+    public static String[] clientInfo = {"SecilyTeam", "230122", "Secily"};
     public static SenseHeader getSense = new SenseHeader();
     public final Path directory = Paths.get(mc.mcDataDir.getAbsolutePath(), getClientName());
     public ModuleManager moduleManager;
