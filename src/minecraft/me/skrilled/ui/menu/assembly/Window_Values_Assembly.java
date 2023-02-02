@@ -160,6 +160,7 @@ public class Window_Values_Assembly extends WindowAssembly {
             init();
             return deltaY;
         }
+        if (page > valuesEditZoneWindows.size() + 1) page = valuesEditZoneWindows.size() + 1;
         this.valuesEditZoneWindow = valuesEditZoneWindows.get(page - 1);
         if (!subWindows.contains(valuesEditZoneWindow)) {
             subWindows.clear();
@@ -186,22 +187,22 @@ public class Window_Values_Assembly extends WindowAssembly {
         }
         if (valuesEditZoneWindows.size() == 0)
             valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this));
-        FontDrawer font = Main.fontLoader.EN22;
-        float halfHeight = font.getHeight() * 1.4f;
+        FontDrawer font = Main.fontLoader.EN24;
+        float halfHeight = font.getHeight() * 0.5f;
         float a = valuesEditZoneWindows.size() - 0.5f;
         float[] pageBarPos = {deltaX / 2 - 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY - 2 * halfHeight, deltaX / 2 + 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY};
-        ArrayList<Character> pageNumberList = new ArrayList<>();
+        ArrayList<String> pageNumberList = new ArrayList<>();
         for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
-            pageNumberList.add(Integer.toString(i + 1).charAt(0));
+            pageNumberList.add(Integer.toString(i + 1));
         }
-        char[] pageNumbers = new char[pageNumberList.size()];
+        String[] pageNumbers = new String[pageNumberList.size()];
         for (int i = 0; i < pageNumbers.length; i++) {
             pageNumbers[i] = pageNumberList.get(i);
         }
         Color bgColor = new Color(23, 23, 23, 59);
         Color selectedColor = new Color(204, 204, 204);
         Color fontColor = Color.white;
-        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page).charAt(0), 0f, new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
+        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f, new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
         pageBar.assemblyName = "pageBar";
         this.addAssembly(pageBar);
         needInit = false;
@@ -223,6 +224,7 @@ public class Window_Values_Assembly extends WindowAssembly {
     public void setModule(ModuleHeader module) {
         reset();
         this.module = module;
+        page = 1;
         needInit = true;
     }
 

@@ -975,28 +975,28 @@ public class RenderUtil implements IMC {
      * @param currentColor
      * @return 高度
      */
-    public static float drawTitleIcon(FontDrawer font, float posX, float posY, char[] icons, float boxWidth, float spacing, float motion, int iconColor, int bgColor, int currentColor, boolean isTransverse) {
+    public static float drawTitleIcon(FontDrawer font, float posX, float posY, String[] icons, float boxWidth, float spacing, float motion, int iconColor, int bgColor, int currentColor, boolean isTransverse) {
         int count = 0;
         if (isTransverse) {
-            for (char icon : icons) {
+            for (String icon : icons) {
                 drawRoundRect(posX + (spacing + boxWidth) * count, posY, posX + boxWidth + (spacing + boxWidth) * count, posY + boxWidth, boxWidth / 8f, bgColor);
                 count++;
             }
             drawRoundRect(posX + (motion - 1) * (spacing + boxWidth), posY, posX + (motion - 1) * (spacing + boxWidth) + boxWidth, posY + boxWidth, boxWidth / 8f, currentColor);
             count = 0;
-            for (char icon : icons) {
-                font.drawCenteredString(String.valueOf(icon), posX + boxWidth / 2f + (spacing + boxWidth) * count, posY + (boxWidth - font.getHeight()) / 2f, iconColor);
+            for (String icon : icons) {
+                font.drawCenteredString(icon, posX + boxWidth / 2f + (spacing + boxWidth) * count, posY + (boxWidth - font.getHeight()) / 2f, iconColor);
                 count++;
             }
         } else {
-            for (char icon : icons) {
+            for (String icon : icons) {
                 drawRoundRect(posX, posY + spacing * count, posX + boxWidth, posY + boxWidth + spacing * count, boxWidth / 8f, bgColor);
                 count++;
             }
             drawRoundRect(posX, posY + (motion - 1) * spacing, posX + boxWidth, posY + (motion - 1) * spacing + boxWidth, boxWidth / 8f, currentColor);
             count = 0;
-            for (char icon : icons) {
-                font.drawCenteredString(String.valueOf(icon), posX + boxWidth / 2f, posY + (boxWidth - font.getHeight()) / 2f + spacing * count, iconColor);
+            for (String icon : icons) {
+                font.drawCenteredString(icon, posX + boxWidth / 2f, posY + (boxWidth - font.getHeight()) / 2f + spacing * count, iconColor);
                 count++;
             }
         }

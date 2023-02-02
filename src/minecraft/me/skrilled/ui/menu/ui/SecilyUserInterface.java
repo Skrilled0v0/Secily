@@ -53,20 +53,20 @@ public class SecilyUserInterface extends GuiScreen {
         secilyUserInterface = this;
     }
 
-    public static char getIconCharByModuleType(ModuleType moduleType) {
+    public static String getIconStringByModuleType(ModuleType moduleType) {
         switch (moduleType) {
             case COMBAT:
-                return 'A';
+                return "A";
             case MISC:
-                return 'B';
+                return "B";
             case MOVE:
-                return 'C';
+                return "C";
             case PLAYER:
-                return 'D';
+                return "D";
             case RENDER:
-                return 'E';
+                return "E";
         }
-        return '0';
+        return "0";
     }
 
     public static SecilyUserInterface getSecilyUserInterface() {
@@ -131,7 +131,7 @@ public class SecilyUserInterface extends GuiScreen {
         float spacing = 0.03421828908554572271386430678466f * leftSideBar.deltaX;
 
         //初始化 ModuleTypeICON 组件
-        IconAssembly moduleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new char[]{'A', 'B', 'C', 'D', 'E'}, getIconCharByModuleType(currentModuleType), spacing, new Animation(100, false, Easing.CUBIC_OUT), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247, 166), true);
+        IconAssembly moduleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new String[]{"A", "B", "C", "D", "E"}, getIconStringByModuleType(currentModuleType), spacing, new Animation(100, false, Easing.CUBIC_OUT), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247, 166), true);
         moduleTypeICONBar.assemblyName = "moduleTypeICONBar";
 
         //添加 ModuleTypeICON 组件 至 左边栏窗口

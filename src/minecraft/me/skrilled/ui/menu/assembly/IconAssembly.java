@@ -12,7 +12,7 @@ import java.awt.*;
 
 public class IconAssembly extends Assembly {
     FontDrawer font;
-    char[] icons;
+    String[] icons;
     float spacing;
     volatile Animation anim;
     volatile float aimingPos, currentPos;
@@ -22,7 +22,7 @@ public class IconAssembly extends Assembly {
     boolean isTransverse;
     float boxWidth;
 
-    public IconAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, char[] icons, char currentIcon, float spacing, Animation anim, Color iconColor, Color bgColor, Color currentColor, boolean isTransverse) {
+    public IconAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, String[] icons, String currentIcon, float spacing, Animation anim, Color iconColor, Color bgColor, Color currentColor, boolean isTransverse) {
         super(pos, fatherWindow);
         this.font = font;
         this.icons = icons;
@@ -33,26 +33,26 @@ public class IconAssembly extends Assembly {
         this.currentColor = currentColor;
         this.isTransverse = isTransverse;
         for (int i = 0; i < icons.length; i++) {
-            if (currentIcon == icons[i]) {
+            if (currentIcon.equalsIgnoreCase(icons[i])) {
                 currentPos = i + 1;
                 aimingPos = i + 1;
                 break;
             }
         }
-        boxWidth = font.getCharWidth(icons[0]) * 1.2f;
+        boxWidth = font.getHeight() * 1.0f;
     }
 
-    public static ModuleType getModuleTypeByChar(char c) {
+    public static ModuleType getModuleTypeByString(String c) {
         switch (c) {
-            case 'A':
+            case "A":
                 return ModuleType.COMBAT;
-            case 'B':
+            case "B":
                 return ModuleType.MISC;
-            case 'C':
+            case "C":
                 return ModuleType.MOVE;
-            case 'D':
+            case "D":
                 return ModuleType.PLAYER;
-            case 'E':
+            case "E":
                 return ModuleType.RENDER;
         }
         return null;
@@ -71,12 +71,12 @@ public class IconAssembly extends Assembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         float absX = calcAbsX(), absY = calcAbsY();
         int count = 0;
-        for (char icon : icons) {
+        for (String icon : icons) {
             float[] pos = new float[]{absX + (spacing + boxWidth) * count, absY, absX + boxWidth + (spacing + boxWidth) * count, absY + boxWidth};
             count++;
             if (isMouseInside(mouseX, mouseY, pos[0], pos[1], pos[2], pos[3])) {
                 if (assemblyName.equalsIgnoreCase("moduleTypeICONBar")) {
-                    SecilyUserInterface.currentModuleType = getModuleTypeByChar(icon);
+                    SecilyUserInterface.currentModuleType = getModuleTypeByString(icon);
                     SecilyUserInterface.onModuleTypeSwitching = true;
                     try {
                         SecilyUserInterface.currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(SecilyUserInterface.currentModuleType).get(0);
@@ -96,6 +96,13 @@ public class IconAssembly extends Assembly {
                     Assembly assembly = SecilyUserInterface.mainGui.getAssemblyByName("valuesWindow");
                     Window_Values_Assembly windowValuesAssembly = (Window_Values_Assembly) assembly;
                     windowValuesAssembly.page = Integer.valueOf(icon);
+                    if (anim.getAnimationFactor() < 1D) {
+                        float deltaPos = (aimingPos - currentPos);
+                        currentPos += deltaPos * anim.getAnimationFactor();
+                    }
+                    aimingPos = count;
+                    anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
+                    anim.setState(true);
                 }
             }
         }
