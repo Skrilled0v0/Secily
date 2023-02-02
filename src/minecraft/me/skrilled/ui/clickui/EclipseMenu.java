@@ -300,8 +300,7 @@ public class EclipseMenu extends GuiScreen {
                 RenderUtil.drawRect(35, k - 15 + j + sidey, 120, k + 15 + j + sidey, color);
 
             }
-            Main.fontLoader.EN24.drawCenteredString(iterator[i].toString(), xx + 40, k + 53 + l * i, new Color(255, 255, 255).getRGB());
-            RenderUtil.drawImageWithColor(new ResourceLocation("skrilled/MenuICON/" + iterator[i].toString() + ".png"), xx - 10, k + 48 + l * i, 25, 25, -1);
+            Main.fontLoader.EN24.drawCenteredString(iterator[i].toString(), xx + 35, k + 53 + l * i, new Color(255, 255, 255).getRGB());
             try {
                 if (this.isCategoryHovered(+15, +k - 10 + j + i * l, +120, +k + 20 + j + i * l, mouseX, mouseY) && Mouse.isButtonDown(0)) {
                     currentModuleType = iterator[i];
