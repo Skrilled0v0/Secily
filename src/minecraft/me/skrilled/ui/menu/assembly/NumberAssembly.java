@@ -32,7 +32,7 @@ public class NumberAssembly extends Assembly {
     @Override
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        return RenderUtil.drawNumberBar(absX,absY,deltaX,deltaY,(float) anim.getAnimationFactor(),bgColor.getRGB(),ugColor.getRGB(),buttonColor.getRGB());
+        return RenderUtil.drawNumberBar(absX,absY,deltaX(),deltaY(),(float) anim.getAnimationFactor(),bgColor.getRGB(),ugColor.getRGB(),buttonColor.getRGB());
     }
 
     @Override

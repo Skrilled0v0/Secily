@@ -37,9 +37,9 @@ public class EnumAssembly extends WindowAssembly {
         restChoice = (ArrayList<String>) allEnumValues.clone();
         restChoice.removeIf(s -> s.equalsIgnoreCase(currentValue));
 
-        this.addWindow(new WindowAssembly(new float[]{0, 0, deltaX, deltaY}, this));
+        this.addWindow(new WindowAssembly(new float[]{0, 0, deltaX(), deltaY()}, this));
         subWindows.get(0).assemblyName = "windowOfEnumAssembly";
-        subWindows.get(0).bgAssembly = new BGAssembly(new float[]{0, 0, deltaX, deltaY}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f);
+        subWindows.get(0).bgAssembly = new BGAssembly(new float[]{0, 0, deltaX(), deltaY()}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f);
 
 
         float fontHeight = font.getHeight();
@@ -49,11 +49,11 @@ public class EnumAssembly extends WindowAssembly {
             float[] enumValuePos = new float[4];
             enumValuePos[0] = 0f;
             enumValuePos[1] = udMargin / 2f;
-            enumValuePos[2] = 0.8f * deltaX;
+            enumValuePos[2] = 0.8f * deltaX();
             enumValuePos[3] = udMargin / 2f + (fontHeight + udMargin);
             float[] downArrowValuePos = enumValuePos.clone();
-            downArrowValuePos[0] = 0.8f * deltaX;
-            downArrowValuePos[2] = deltaX;
+            downArrowValuePos[0] = 0.8f * deltaX();
+            downArrowValuePos[2] = deltaX();
             StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), enumValue, font, Color.white, new boolean[]{true, true});
             StringWithoutBGAssembly downArrowAssembly = new StringWithoutBGAssembly(downArrowValuePos, subWindows.get(0), "H", Main.fontLoader.ICON16, new Color(200, 200, 200), new boolean[]{true, false});
             subWindows.get(0).addAssembly(enumValueAssembly);
@@ -64,7 +64,7 @@ public class EnumAssembly extends WindowAssembly {
             float[] enumValuePos = new float[4];
             enumValuePos[0] = 0f;
             enumValuePos[1] = udMargin / 2f + i * (fontHeight + udMargin);
-            enumValuePos[2] = 0.8f * deltaX;
+            enumValuePos[2] = 0.8f * deltaX();
             enumValuePos[3] = udMargin / 2f + (i + 1) * (fontHeight + udMargin);
             StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), enumValue, font, Color.white, new boolean[]{true, true});
             subWindows.get(0).addAssembly(enumValueAssembly);
@@ -75,9 +75,8 @@ public class EnumAssembly extends WindowAssembly {
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
         GL11.glPushMatrix();
-        RenderUtil.doScissor((int) absX, (int) absY, (int) (absX + deltaX), (int) (absY + (deltaY * (1 + 2 * animation.getAnimationFactor()) / 3f)));
-        subWindows.get(0).pos[3] = (float) (deltaY * (1 + 2 * animation.getAnimationFactor()) / 3f);
-        subWindows.get(0).deltaY = subWindows.get(0).pos[3] - subWindows.get(0).pos[1];
+        RenderUtil.doScissor((int) absX, (int) absY, (int) (absX + deltaX()), (int) (absY + (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f)));
+        subWindows.get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
 
         float result = 0f;
         result += super.draw();

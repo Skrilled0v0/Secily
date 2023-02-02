@@ -16,15 +16,11 @@ public abstract class Assembly {
      */
     public float maxHeight = 0;
     public WindowAssembly fatherWindow;
-    public float deltaX;
-    public float deltaY;
     public String assemblyName = "defaultName";
     public boolean canReInit = false;
 
     public Assembly(float[] pos, WindowAssembly fatherWindow) {
         this.pos = pos;
-        deltaX = pos[2] - pos[0];
-        deltaY = pos[3] - pos[1];
         this.fatherWindow = fatherWindow;
     }
 
@@ -32,6 +28,13 @@ public abstract class Assembly {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
+    public float deltaX() {
+        return pos[2] - pos[0];
+    }
+
+    public float deltaY() {
+        return pos[3] - pos[1];
+    }
 
     /**
      * 调用父窗口坐标和自己相对坐标绘制
@@ -52,7 +55,7 @@ public abstract class Assembly {
     }
 
     public float[] calcAbsPos() {
-        return new float[]{calcAbsX(), calcAbsY(), calcAbsX() + deltaX, calcAbsY() + deltaY};
+        return new float[]{calcAbsX(), calcAbsY(), calcAbsX() + deltaX(), calcAbsY() + deltaY()};
     }
 
     public abstract void mouseEventHandle(int mouseX, int mouseY, int button);

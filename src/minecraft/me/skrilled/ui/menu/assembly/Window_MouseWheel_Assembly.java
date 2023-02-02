@@ -74,7 +74,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     public float draw() {
         if (needInit) init();
         glPushMatrix();
-        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY(), (int) (calcAbsX() + deltaX), (int) (calcAbsY() + deltaY));
+        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY(), (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()));
         //更新滚动坐标
         float latestSkipFactor = getSkipFactor();
         float deltaFactor = latestSkipFactor - lastSkipFactor;
@@ -104,25 +104,25 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         }
         glDisable(GL_SCISSOR_TEST);
         glPopMatrix();
-        return deltaY;
+        return deltaY();
     }
 
     public void init() {
         this.assemblies = new ArrayList<>();
-        float bgBoxHeight = this.deltaY / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
+        float bgBoxHeight = this.deltaY() / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
         float udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
         for (int i = 0; i < contents.size(); i++) {
             FontDrawer font = Main.fontLoader.EN22;
             String content = contents.get(i).toString();
             float yUsed = (i - getSkipFactor() / wheelsToNext) * (bgBoxHeight + udMargin);
-            float[] booleanAssemblyPos = {0.67498152904338036097526650951694f * this.deltaX, yUsed + (bgBoxHeight - font.getHeight()) / 2f, 0.91559652394187805650353586883862f * this.deltaX, yUsed + (bgBoxHeight + font.getHeight()) / 2f};
+            float[] booleanAssemblyPos = {0.67498152904338036097526650951694f * this.deltaX(), yUsed + (bgBoxHeight - font.getHeight()) / 2f, 0.91559652394187805650353586883862f * this.deltaX(), yUsed + (bgBoxHeight + font.getHeight()) / 2f};
             Animation anim = new Animation(500, ((ModuleHeader) contents.get(i)).isEnabled(), Easing.LINEAR);
             Color bgColor = new Color(65, 64, 68, 181);
             Color trueColor = new Color(126, 183, 247);
             Color falseColor = new Color(204, 204, 204);
             BooleanAssembly booleanAssembly = new BooleanAssembly(booleanAssemblyPos, this, ((ModuleHeader) contents.get(i)).isEnabled(), anim, bgColor, trueColor, falseColor, content);
             this.addAssembly(booleanAssembly);
-            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX, bgBoxHeight + yUsed}, this, content, false, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.ORANGE, font, font.getHeight() / 2f);
+            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, content, false, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.ORANGE, font, font.getHeight() / 2f);
             stringAssembly.assemblyName = content;
             this.addAssembly(stringAssembly);
             needInit = false;

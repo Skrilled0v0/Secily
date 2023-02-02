@@ -32,16 +32,16 @@ public class Color_h_Assembly extends Assembly {
     }
 
     private void processCircleAssembly(float h) {
-        float[] circlePos = new float[]{pos[0] + deltaX * h, pos[1] + (deltaY - 1) / 2f, pos[0] + deltaX * (h / 360), pos[1] + (deltaY - 1) / 2f};
-        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
+        float[] circlePos = new float[]{pos[0] + deltaX() * h, pos[1] + (deltaY() - 1) / 2f, pos[0] + deltaX() * (h / 360), pos[1] + (deltaY() - 1) / 2f};
+        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY(), Color.WHITE, false);
     }
 
     @Override
     public float draw() {
         if ((!init) || SecilyUserInterface.clickDrag) initColorPoints();
-        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
+        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY());
         circleAssembly.draw();
-        return deltaY;
+        return deltaY();
     }
 
     @Override
@@ -50,15 +50,15 @@ public class Color_h_Assembly extends Assembly {
         ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
         ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);
         float x = mouseX - calcAbsX();
-        x = x < 0 ? 0 : x > deltaX ? deltaX : x;
-        processCircleAssembly(x / deltaX);
-        colorAssembly.color_alpha_assembly.setH(x/deltaX);
-        colorAssembly.color_sb_assembly.setH(x/deltaX);
+        x = x < 0 ? 0 : x > deltaX() ? deltaX() : x;
+        processCircleAssembly(x / deltaX());
+        colorAssembly.color_alpha_assembly.setH(x/deltaX());
+        colorAssembly.color_sb_assembly.setH(x/deltaX());
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
         float[] hsb = new float[4];
         Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
-        color = Color.getHSBColor(x / deltaX, hsb[1], hsb[2]);
+        color = Color.getHSBColor(x / deltaX(), hsb[1], hsb[2]);
         valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
     }
 
@@ -75,8 +75,8 @@ public class Color_h_Assembly extends Assembly {
 
     public void SetH(float h) {
         this.h = h;
-        float[] circlePos = new float[]{pos[0] + deltaX * h, pos[1] + (deltaY - 1) / 2f, pos[0] + deltaX * (h / 360), pos[1] + (deltaY - 1) / 2f};
-        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
+        float[] circlePos = new float[]{pos[0] + deltaX() * h, pos[1] + (deltaY() - 1) / 2f, pos[0] + deltaX() * (h / 360), pos[1] + (deltaY() - 1) / 2f};
+        this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY(), Color.WHITE, false);
         init = false;
     }
 }

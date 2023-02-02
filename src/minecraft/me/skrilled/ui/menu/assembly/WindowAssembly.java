@@ -39,6 +39,7 @@ public class WindowAssembly extends Assembly {
     public float draw() {
         currentUsedHeight = 0f;
         if (bgAssembly != null) {
+            bgAssembly.pos = new float[]{0, 0, deltaX(), deltaY()};
             currentUsedHeight += this.bgAssembly.draw();
         }
         if (windowName != null) {
@@ -53,7 +54,7 @@ public class WindowAssembly extends Assembly {
         for (WindowAssembly windowAssembly : subWindows) {
             currentUsedHeight += windowAssembly.draw();
         }
-        return currentUsedHeight > deltaY ? currentUsedHeight : deltaY;
+        return currentUsedHeight > deltaY() ? currentUsedHeight : deltaY();
     }
 
     @Override
@@ -83,6 +84,18 @@ public class WindowAssembly extends Assembly {
         return null;
     }
 
+    public boolean canBeSighted(Assembly assembly) {
+        for (Assembly assembly1 : this.assemblies) {
+            if (assembly == assembly1) {
+                return (assembly.pos[2] <= 0 || assembly.pos[3] <= 0 || assembly.pos[0] >= deltaX() || assembly.pos[1] >= deltaY());
+            }
+        }
+        for (WindowAssembly subWindow : subWindows) {
+            return subWindow.canBeSighted(assembly);
+        }
+        return false;
+    }
+
     public ArrayList<Assembly> getAssembliesByMousePos(int mouseX, int mouseY) {
         ArrayList<Assembly> result = new ArrayList<>();
         float[] absPos = this.calcAbsPos();
@@ -90,7 +103,7 @@ public class WindowAssembly extends Assembly {
         if (isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
         //本窗口组件
         for (Assembly assembly : assemblies) {
-            if (assembly.pos[2] <= 0 || assembly.pos[3] <= 0 || assembly.pos[0] >= deltaX || assembly.pos[1] >= deltaY) {
+            if (canBeSighted(assembly)) {
                 continue;
             }
             absPos = assembly.calcAbsPos();

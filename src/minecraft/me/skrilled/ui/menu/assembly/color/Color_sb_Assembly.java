@@ -55,7 +55,7 @@ public class Color_sb_Assembly extends Assembly {
         if ((!init) || SecilyUserInterface.clickDrag) initColorPointLists();
         RenderUtil.drawColorPointLists(colorPointLists);
         this.circleAssembly.draw();
-        return deltaY;
+        return deltaY();
     }
 
     @Override
@@ -66,15 +66,15 @@ public class Color_sb_Assembly extends Assembly {
         ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);
         float x = mouseX - calcAbsX();
         float y = mouseY - calcAbsY();
-        x = x < 0 ? 0 : x > deltaX ? deltaX : x;
-        y = y < 0 ? 0 : y > deltaY ? deltaY : y;
-        processCircleAssembly(x / deltaX, y / deltaY);
-        colorAssembly.color_alpha_assembly.setSB(new float[]{x / deltaX, y / deltaY});
+        x = x < 0 ? 0 : x > deltaX() ? deltaX() : x;
+        y = y < 0 ? 0 : y > deltaY() ? deltaY() : y;
+        processCircleAssembly(x / deltaX(), y / deltaY());
+        colorAssembly.color_alpha_assembly.setSB(new float[]{x / deltaX(), y / deltaY()});
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
         float[] hsb = new float[4];
         Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
-        color = Color.getHSBColor(hsb[0], x / deltaX, y / deltaY);
+        color = Color.getHSBColor(hsb[0], x / deltaX(), y / deltaY());
         valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha));
     }
 

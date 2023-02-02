@@ -30,13 +30,13 @@ public class ColorAssembly extends Assembly {
         windowAssembly = new WindowAssembly(pos, fatherWindow);
         fatherWindow.addWindow(windowAssembly);
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
-        float margin = 0.05f * deltaX;
-        float[] bg_pos = new float[]{0, 0, deltaX, deltaY};
-        float[] sb_pos = new float[]{margin, margin, deltaX - margin, deltaX - margin};
+        float margin = 0.05f * deltaX();
+        float[] bg_pos = new float[]{0, 0, deltaX(), deltaY()};
+        float[] sb_pos = new float[]{margin, margin, deltaX() - margin, deltaX() - margin};
         //y坐标计算：(dY-2*margin-0.9dX)/2
-        float height = 0.08f * deltaX;
-        float[] h_pos = new float[]{margin, deltaX, deltaX - margin, deltaX + height};
-        float[] alpha_pos = new float[]{margin, 1.1f * deltaX, deltaX - margin, 1.1f * deltaX + height};
+        float height = 0.08f * deltaX();
+        float[] h_pos = new float[]{margin, deltaX(), deltaX() - margin, deltaX() + height};
+        float[] alpha_pos = new float[]{margin, 1.1f * deltaX(), deltaX() - margin, 1.1f * deltaX() + height};
         bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
         windowAssembly.addAssembly(bgAssembly);
         color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h, this);

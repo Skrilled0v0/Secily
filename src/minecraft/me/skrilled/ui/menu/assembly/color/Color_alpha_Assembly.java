@@ -39,8 +39,8 @@ public class Color_alpha_Assembly extends Assembly {
     }
 
     public void processCircleAssembly(float a) {
-        float[] circlePos = new float[]{pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f, pos[0] + a * deltaX, pos[1] + (deltaY - 1) / 2f};
-        cicleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY, Color.WHITE, false);
+        float[] circlePos = new float[]{pos[0] + a * deltaX(), pos[1] + (deltaY() - 1) / 2f, pos[0] + a * deltaX(), pos[1] + (deltaY() - 1) / 2f};
+        cicleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY(), Color.WHITE, false);
     }
 
     @Override
@@ -49,10 +49,10 @@ public class Color_alpha_Assembly extends Assembly {
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
-        RenderUtil.drawRect(absX, absY, absX + deltaX, absY + deltaY - 1, Color.black.getRGB());;
-        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY);
+        RenderUtil.drawRect(absX, absY, absX + deltaX(), absY + deltaY() - 1, Color.black.getRGB());;
+        RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY());
         cicleAssembly.draw();
-        return deltaY;
+        return deltaY();
     }
 
     @Override
@@ -61,10 +61,10 @@ public class Color_alpha_Assembly extends Assembly {
         ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
         ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);
         float x = mouseX - calcAbsX();
-        x = x < 0 ? 0 : x > deltaX ? deltaX : x;
-        processCircleAssembly(x / deltaX);
+        x = x < 0 ? 0 : x > deltaX() ? deltaX() : x;
+        processCircleAssembly(x / deltaX());
         Color color = valueHeader.getColorValue();
-        valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255 * x / deltaX)));
+        valueHeader.setColorValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (255 * x / deltaX())));
     }
 
     public void initColorPoints() {
@@ -72,7 +72,7 @@ public class Color_alpha_Assembly extends Assembly {
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
-        for (int i = 0; i < 2f * deltaX; i++) {
+        for (int i = 0; i < 2f * deltaX(); i++) {
             Color tempColor = new Color(rgba[0] / 255f, rgba[1] / 255f, rgba[2] / 255f, i / (2f * (pos[2] - pos[0])));
             colorPoints.add(new ColorPoint(tempColor, new float[]{absX + (i / 2f), absY}));
         }

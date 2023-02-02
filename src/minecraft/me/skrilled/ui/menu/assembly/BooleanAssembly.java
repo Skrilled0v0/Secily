@@ -34,7 +34,7 @@ public class BooleanAssembly extends Assembly {
     @Override
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
-        return RenderUtil.drawBooleanButton(absX, absY, deltaX, deltaY, (float) animation.getAnimationFactor(), bgColor.getRGB(), tureColor.getRGB(), falseColor.getRGB());
+        return RenderUtil.drawBooleanButton(absX, absY, deltaX(), deltaY(), (float) animation.getAnimationFactor(), bgColor.getRGB(), tureColor.getRGB(), falseColor.getRGB());
     }
 
     @Override

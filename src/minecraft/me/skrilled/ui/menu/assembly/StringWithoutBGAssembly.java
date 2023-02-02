@@ -42,7 +42,7 @@ public class StringWithoutBGAssembly extends Assembly {
     @Override
     public float draw() {
         float[] absPos = calcAbsPos();
-        if (centered[1]) absPos[1] += (deltaY - font.getHeight()) / 2f + 1;
+        if (centered[1]) absPos[1] += (deltaY() - font.getHeight()) / 2f + 1;
         if (centered[0]) return RenderUtil.drawCenteredString(calcAbsPos(), font, value, fontColor.getRGB());
         else return RenderUtil.drawLeftedString(calcAbsPos(), font, value, fontColor.getRGB());
     }
