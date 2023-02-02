@@ -18,50 +18,52 @@ import java.util.ArrayList;
 public class EnumAssembly extends WindowAssembly {
 
 
-    public Animation animation;
     FontDrawer font;
     Color bgColor;
     Color fontColor;
-    ArrayList<String> allChoice;
     ArrayList<String> restChoice;
     String currentValue;
+    Animation animation;
 
-    public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> allEnumValues, String currentValue, Animation animation) {
+
+    public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> contents, String currentValue, Animation animation) {
         super(pos, fatherWindow);
         this.font = font;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
-        this.allChoice = allEnumValues;
         this.currentValue = currentValue;
         this.animation = animation;
-        restChoice = (ArrayList<String>) allEnumValues.clone();
+        restChoice = (ArrayList<String>) contents.clone();
         restChoice.removeIf(s -> s.equalsIgnoreCase(currentValue));
 
-        this.addWindow(new WindowAssembly(new float[]{0, 0, deltaX(), deltaY()}, this));
+        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, deltaX(), deltaY()}, this, contents, 3));
         subWindows.get(0).assemblyName = "windowOfEnumAssembly";
         subWindows.get(0).bgAssembly = new BGAssembly(new float[]{0, 0, deltaX(), deltaY()}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f);
 
 
         float fontHeight = font.getHeight();
         float udMargin = fontHeight * 0.9f;
-        if (allEnumValues.size() > 0) {
-            String enumValue = allEnumValues.get(0);
-            float[] enumValuePos = new float[4];
+        float[] enumValuePos = new float[4];
+        if (contents.size() > 0) {
+            String enumValue = contents.get(0);
             enumValuePos[0] = 0f;
             enumValuePos[1] = udMargin / 2f;
             enumValuePos[2] = 0.8f * deltaX();
             enumValuePos[3] = udMargin / 2f + (fontHeight + udMargin);
-            float[] downArrowValuePos = enumValuePos.clone();
-            downArrowValuePos[0] = 0.8f * deltaX();
-            downArrowValuePos[2] = deltaX();
+
             StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), enumValue, font, Color.white, new boolean[]{true, true});
-            StringWithoutBGAssembly downArrowAssembly = new StringWithoutBGAssembly(downArrowValuePos, subWindows.get(0), "H", Main.fontLoader.ICON16, new Color(200, 200, 200), new boolean[]{true, false});
             subWindows.get(0).addAssembly(enumValueAssembly);
-            subWindows.get(0).addAssembly(downArrowAssembly);
+
         }
-        for (int i = 1; i < allEnumValues.size(); i++) {
-            String enumValue = allEnumValues.get(i);
-            float[] enumValuePos = new float[4];
+        float[] downArrowValuePos = enumValuePos.clone();
+        downArrowValuePos[0] = 0.8f * deltaX();
+        downArrowValuePos[2] = deltaX();
+        StringWithoutBGAssembly downArrowAssembly = new StringWithoutBGAssembly(downArrowValuePos, subWindows.get(0), "H", Main.fontLoader.ICON16, new Color(200, 200, 200), new boolean[]{true, false});
+        subWindows.get(0).addAssembly(downArrowAssembly);
+
+        for (int i = 1; i < contents.size(); i++) {
+            String enumValue = contents.get(i);
+            enumValuePos = new float[4];
             enumValuePos[0] = 0f;
             enumValuePos[1] = udMargin / 2f + i * (fontHeight + udMargin);
             enumValuePos[2] = 0.8f * deltaX();
@@ -77,6 +79,7 @@ public class EnumAssembly extends WindowAssembly {
         GL11.glPushMatrix();
         RenderUtil.doScissor((int) absX, (int) absY, (int) (absX + deltaX()), (int) (absY + (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f)));
         subWindows.get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
+
 
         float result = 0f;
         result += super.draw();
@@ -103,4 +106,5 @@ public class EnumAssembly extends WindowAssembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
 
     }
+
 }

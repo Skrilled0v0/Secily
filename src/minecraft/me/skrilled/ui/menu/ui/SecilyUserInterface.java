@@ -142,7 +142,7 @@ public class SecilyUserInterface extends GuiScreen {
         //获取 当前moduleType 的 modules
         ArrayList<ModuleHeader> tempList = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType);
         //初始化 ModulesWindow
-        WindowAssembly modulesWindow = new Window_MouseWheel_Assembly<>(modulesWindowPos, leftSideBar, tempList, 6);
+        WindowAssembly modulesWindow = new Window_MouseWheel_SwitchContents_Assembly<>(modulesWindowPos, leftSideBar, tempList, 6);
         modulesWindow.assemblyName = "modulesWindow";
         //添加 modulesWindow 至 leftSideBar
         leftSideBar.addWindow(modulesWindow);
@@ -207,12 +207,16 @@ public class SecilyUserInterface extends GuiScreen {
         //滚轮处理
         int mouseWheel = Mouse.getDWheel();
         if (mouseWheel != 0) {
-            int mouseWheelDirection = mouseWheel / 16;
+            int mouseWheelFactor = mouseWheel / 16;
             ArrayList<Assembly> targetAssemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
             for (Assembly assembly : targetAssemblies) {
                 //Module列的滚轮处理
                 if (assembly.assemblyName.equalsIgnoreCase("modulesWindow")) {
-                    ((Window_MouseWheel_Assembly<ModuleHeader>) assembly).mouseWheel(mouseWheelDirection);
+                    ((Window_MouseWheel_SwitchContents_Assembly<ModuleHeader>) assembly).mouseWheel(mouseWheelFactor);
+                }
+                //枚举类型的滚轮处理
+                if (assembly.assemblyName.startsWith("enumAssembly")) {
+                    ((Window_MouseWheel_Assembly) ((EnumAssembly) assembly).subWindows.get(0)).mouseWheel(mouseWheelFactor);
                 }
             }
         }
@@ -220,8 +224,8 @@ public class SecilyUserInterface extends GuiScreen {
         if (onModuleTypeSwitching) {
             mainGui.windowName.value = upperHeadLowerOther(currentModuleType.name());
             Assembly assembly = mainGui.getAssemblyByName("modulesWindow");
-            if (assembly instanceof Window_MouseWheel_Assembly) {
-                Window_MouseWheel_Assembly<ModuleHeader> window = (Window_MouseWheel_Assembly<ModuleHeader>) assembly;
+            if (assembly instanceof Window_MouseWheel_SwitchContents_Assembly) {
+                Window_MouseWheel_SwitchContents_Assembly<ModuleHeader> window = (Window_MouseWheel_SwitchContents_Assembly<ModuleHeader>) assembly;
                 window.reset();
                 window.contents = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType);
                 onModuleTypeSwitching = false;
