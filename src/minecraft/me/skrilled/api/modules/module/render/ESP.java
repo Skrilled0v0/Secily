@@ -13,6 +13,7 @@ import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,23 +26,37 @@ import java.util.ArrayList;
 public class ESP extends ModuleHeader {
     static ArrayList<String> espModeList = new ArrayList<>();
     public static ValueHeader espMode = new ValueHeader("Mode", "3DBox", espModeList);
+    Color lineColors=new Color(-1);
+    Color boxColors=new Color(0,0,0,0);
     ValueHeader renderMobs = new ValueHeader("Mobs", true);
     ValueHeader renderAnimals = new ValueHeader("Animals", true);
     ValueHeader renderPlayers = new ValueHeader("Players", true);
 
+    ValueHeader blackoutline=new ValueHeader("BlackOutline",false);
+    ValueHeader lineColor=new ValueHeader("LineColor",lineColors);
+    ValueHeader boxColor=new ValueHeader("BoxColor",boxColors);
 
     public ESP() {
-        this.addEnumTypes(espModeList, "3DBox", "2DBox", "Outline");
+        this.addEnumTypes(espModeList, "3DBox", "2DBox", "Circular");
 
     }
 
     @EventTarget
     public void onEvent3D(EventRender3D eventRender3D) {
         this.setSuffix(espMode.getCurrentEnumType());
-        Color boxColor = new Color(255, 255, 255, 50);
-        Color lineColor = new Color(255, 255, 255, 255);
+        Color box = boxColor.getColorValue();
+        Color line = lineColor.getColorValue();
         for (Entity entity : mc.theWorld.loadedEntityList) {
-            if (canDrawESP(entity)) RenderUtil.drawEntityBoxESP(entity, boxColor, lineColor, true);
+            if (canDrawESP(entity)) {
+                switch (espMode.getCurrentEnumType()){
+                    case "3DBox":
+                    RenderUtil.drawEntityBoxESP(entity, box, line, blackoutline.isOptionOpen());break;
+                    case "Circular":
+                    RenderUtil.drawEntityCircularESP((EntityLivingBase) entity,line,true);break;
+
+                }
+
+            }
         }
     }
 

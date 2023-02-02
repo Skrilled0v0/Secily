@@ -26,6 +26,7 @@ import me.skrilled.api.modules.module.misc.TestModule001;
 import me.skrilled.api.modules.module.misc.TestModule002;
 import me.skrilled.api.modules.module.move.AutoJump;
 import me.skrilled.api.modules.module.move.AutoSprint;
+import me.skrilled.api.modules.module.player.TestModule003;
 import me.skrilled.api.modules.module.render.*;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class ModuleManager {
         mList.add(new Chams());
         mList.add(new RenderModifier());
         mList.add(new WorldRenderEditor());
+        mList.add(new MouseOverlyRender());
         //Move
         mList.add(new AutoSprint());
         mList.add(new AutoJump());
@@ -69,7 +71,7 @@ public class ModuleManager {
 
         mList.add(new SettingMenu());
         //Test
-        Collections.addAll(mList, new TestModule001(), new TestModule002());
+        Collections.addAll(mList, new TestModule001(), new TestModule002(),new TestModule003());
         for (ModuleHeader moduleHeader : mList) {
             moduleHeader.loadValueLists();
         }

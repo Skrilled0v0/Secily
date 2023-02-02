@@ -114,10 +114,10 @@ public class RenderUtil implements IMC {
         float b = color.getBlue() / 255f;
         float a = color.getAlpha() / 255f;
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(2848);
+        glEnable(GL_LINE_SMOOTH);
 
         glBegin(GL_POLYGON);
         glColor4f(r, g, b, a);
@@ -143,9 +143,9 @@ public class RenderUtil implements IMC {
         }
 
         glEnd();
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
@@ -488,19 +488,19 @@ public class RenderUtil implements IMC {
 
     public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
         glPushMatrix();
-        glEnable(3042);
-        glBlendFunc(770, 771);
-        glDisable(3553);
-        glEnable(2848);
-        glDisable(2929);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_LINE_SMOOTH);
+        glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         glColor4f(red, green, blue, alpha);
         drawBoundingBox(new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D));
-        glDisable(2848);
-        glEnable(3553);
-        glEnable(2929);
+        glDisable(GL_LINE_SMOOTH);
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
-        glDisable(3042);
+        glDisable(GL_BLEND);
         glPopMatrix();
     }
 
@@ -516,10 +516,10 @@ public class RenderUtil implements IMC {
         float f7 = (col2 & 0xFF) / 255.0F;
 
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
         glShadeModel(7425);
 
         glBegin(7);
@@ -532,9 +532,9 @@ public class RenderUtil implements IMC {
         glVertex2d(right, top);
         glEnd();
 
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         glShadeModel(7424);
         glPopMatrix();
     }
@@ -561,11 +561,11 @@ public class RenderUtil implements IMC {
         float r = (float) (color >> 16 & 255) / 255.0f;
         float g = (float) (color >> 8 & 255) / 255.0f;
         float b = (float) (color & 255) / 255.0f;
-        GL11.glEnable(3042);
+        GL11.glEnable(GL_BLEND);
         GL11.glLineWidth(lineWidth);
-        GL11.glDisable(3553);
-        GL11.glEnable(2848);
-        GL11.glBlendFunc(770, 771);
+        GL11.glDisable(GL_TEXTURE_2D);
+        GL11.glEnable(GL_LINE_SMOOTH);
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
 
         GL11.glColor4f(r, g, b, a);
@@ -580,9 +580,9 @@ public class RenderUtil implements IMC {
         GL11.glEnd();
 
         glPopMatrix();
-        GL11.glDisable(2848);
-        GL11.glEnable(3553);
-        GL11.glDisable(3042);
+        GL11.glDisable(GL_LINE_SMOOTH);
+        GL11.glEnable(GL_TEXTURE_2D);
+        GL11.glDisable(GL_BLEND);
         GL11.glScalef(2.0f, 2.0f, 2.0f);
     }
 
@@ -603,7 +603,7 @@ public class RenderUtil implements IMC {
         glPushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.tryBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GlStateManager.color(red, green, blue, alpha);
         if (alpha > 0.5f) {
             glEnable(GL_LINE_SMOOTH);
@@ -645,21 +645,21 @@ public class RenderUtil implements IMC {
     public static void drawIcon(float x, float y, int sizex, int sizey, ResourceLocation resourceLocation) {
         glPushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(resourceLocation);
-        glEnable(3042);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableAlpha();
         GlStateManager.alphaFunc(516, 0.1f);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(770, 771);
+        GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glTranslatef(x, y, 0.0f);
         RenderUtil.drawScaledRect(0, 0, 0.0f, 0.0f, sizex, sizey, sizex, sizey, sizex, sizey);
         GlStateManager.disableAlpha();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableLighting();
         GlStateManager.disableRescaleNormal();
-        glDisable(2848);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
@@ -676,10 +676,10 @@ public class RenderUtil implements IMC {
                 if (playerName.equalsIgnoreCase(player.getName())) {
                     GameProfile profile = new GameProfile(player.getUniqueID(), player.getName());
                     NetworkPlayerInfo networkplayerinfo = new NetworkPlayerInfo(profile);
-                    glDisable(2929);
-                    glEnable(3042);
+                    glDisable(GL_DEPTH_TEST);
+                    glEnable(GL_BLEND);
                     glDepthMask(false);
-                    OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+                    OpenGlHelper.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
                     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
                     mc.getTextureManager().bindTexture(networkplayerinfo.getLocationSkin());
                     Gui.drawScaledCustomSizeModalRect(x, y, 8.0F, 8.0F, 8, 8, width, height, 64.0F, 64.0F);
@@ -687,8 +687,8 @@ public class RenderUtil implements IMC {
                         Gui.drawScaledCustomSizeModalRect(x, y, 40.0F, 8.0F, 8, 8, width, height, 64.0F, 64.0F);
                     }
                     glDepthMask(true);
-                    glDisable(3042);
-                    glEnable(2929);
+                    glDisable(GL_BLEND);
+                    glEnable(GL_DEPTH_TEST);
                 }
             }
         }
@@ -697,10 +697,10 @@ public class RenderUtil implements IMC {
 
     public static void drawImageWithColor(ResourceLocation image, int x, int y, int width, int height, int color) {
         glPushMatrix();
-        glDisable(2929);
-        glEnable(3042);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
         glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        OpenGlHelper.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         float a = (color >> 24 & 0xFF) / 255.0F;
         float r = (color >> 16 & 0xFF) / 255.0F;
         float g = (color >> 8 & 0xFF) / 255.0F;
@@ -709,22 +709,22 @@ public class RenderUtil implements IMC {
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
         glDepthMask(true);
-        glDisable(3042);
-        glEnable(2929);
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
         glPopMatrix();
     }
 
     public static void drawImage(ResourceLocation image, int x, int y, int width, int height) {
         glPushMatrix();
-        glDisable(2929);
-        glEnable(3042);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
         glDepthMask(false);
-        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+        OpenGlHelper.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         Minecraft.getMinecraft().getTextureManager().bindTexture(image);
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0.0f, 0.0f, width, height, (float) width, (float) height);
         glDepthMask(true);
-        glDisable(3042);
-        glEnable(2929);
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
         glPopMatrix();
     }
 
@@ -870,12 +870,12 @@ public class RenderUtil implements IMC {
         double posZ = getEntityRenderPos(entity)[2];
         AxisAlignedBB box = entity instanceof EntityLivingBase ? AxisAlignedBB.fromBounds(posX - entity.width + 0.2f, posY, posZ - entity.width + 0.2f, posX + entity.width - 0.2f, posY + entity.height + (entity.isSneaking() ? 0.02f : 0.2f), posZ + entity.width - 0.2f) : AxisAlignedBB.fromBounds(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + entity.height + 0.2f, posZ + entity.width);
         glPushMatrix();
-        glBlendFunc(770, 771);
-        glEnable(3042);
-        glEnable(2848);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        glEnable(GL_LINE_SMOOTH);
         glLineWidth(2.0f);
-        glDisable(3553);
-        glDisable(2929);
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         glColor4f(boxColor.getRed() / 255.0f, boxColor.getGreen() / 255.0f, boxColor.getBlue() / 255.0f, boxColor.getAlpha() / 255.0f);
         drawBoundingBox(box);
@@ -887,12 +887,42 @@ public class RenderUtil implements IMC {
         glLineWidth(1.5f);
         glColor4f(lineColor.getRed() / 255.0f, lineColor.getGreen() / 255.0f, lineColor.getBlue() / 255.0f, 1f);
         drawOutlinedBoundingBox(box);
-        glDisable(2848);
-        glEnable(3553);
-        glEnable(2929);
+        glDisable(GL_LINE_SMOOTH);
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
-        glDisable(3042);
+        glDisable(GL_BLEND);
         glPopMatrix();
+    }
+
+    public static void drawEntityCircularESP(EntityLivingBase entity, Color bgLineColor,  boolean hpLine) {
+        double posX = getEntityRenderPos(entity)[0];
+        double posY = getEntityRenderPos(entity)[1];
+        double posZ = getEntityRenderPos(entity)[2];
+
+        float health=entity.getHealth();
+        float maxHealth=entity.getMaxHealth();
+        float absorptionAmount =entity.getAbsorptionAmount();
+        float hpFloat=(health+absorptionAmount)/(maxHealth+absorptionAmount);
+        Color hpColor= Colors.getHealthColor(health+absorptionAmount,maxHealth+absorptionAmount);
+
+        GL11.glPushMatrix();
+        GlStateManager.enableBlend();
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        float scale = 0.05f;
+        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height *0.1f : 0.0f), posZ);
+        GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(-scale, -scale, -scale);
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(false);
+        drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
+        if(hpLine)
+            drawAngleCirque(0, 0, 15 * entity.height, 0, 360*hpFloat, 1.8f, hpColor.getRGB());
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(true);
+        GlStateManager.disableBlend();
+        GL11.glPopMatrix();
     }
 
     public static void drawBorderedRect(int x, int y, int width, int height, float borderWidth, int borderColor, int bgColor) {
@@ -902,10 +932,10 @@ public class RenderUtil implements IMC {
         float g = (borderColor >> 8 & 0xFF) / 255.0f;
         float b = (borderColor & 0xFF) / 255.0f;
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
         glPushMatrix();
         glColor4f(r, g, b, a);
         glLineWidth(borderWidth);
@@ -920,9 +950,9 @@ public class RenderUtil implements IMC {
         glVertex2d(width, height);
         glEnd();
         glPopMatrix();
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         glPopMatrix();
     }
 
@@ -941,10 +971,10 @@ public class RenderUtil implements IMC {
         float f4 = (float) (col1 & 255) / 255.0f;
         //
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
         //
         glColor4f(f22, f3, f4, f2);
         glBegin(7);
@@ -954,9 +984,9 @@ public class RenderUtil implements IMC {
         glVertex2d(i, e);
         glEnd();
         //
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
@@ -1005,10 +1035,10 @@ public class RenderUtil implements IMC {
 
     public static void drawColorPointLists(ArrayList<ArrayList<ColorPoint>> colorPointLists) {
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
 
         Color color;
         float x, y;
@@ -1024,9 +1054,9 @@ public class RenderUtil implements IMC {
             }
         }
 
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
@@ -1034,10 +1064,10 @@ public class RenderUtil implements IMC {
     public static void drawColorPoints(ArrayList<ColorPoint> colorPoints) {
 
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
-        glBlendFunc(770, 771);
-        glEnable(2848);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
 
         Color color;
         float x, y;
@@ -1051,19 +1081,19 @@ public class RenderUtil implements IMC {
             glEnd();
         }
 
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
 
     public static void drawColorPointsWithYThickness(ArrayList<ColorPoint> colorPoints, float thickness) {
         glPushMatrix();
-        glEnable(3042);
-        glDisable(3553);
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(2848);
+        glEnable(GL_LINE_SMOOTH);
 
         Color color;
         float x, y;
@@ -1080,9 +1110,9 @@ public class RenderUtil implements IMC {
         }
 
 
-        glEnable(3553);
-        glDisable(3042);
-        glDisable(2848);
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
         GlStateManager.disableBlend();
         glPopMatrix();
     }
@@ -1113,15 +1143,15 @@ public class RenderUtil implements IMC {
         glPushMatrix();
         if (start) {
             GlStateManager.enableBlend();
-            glEnable(2848);
+            glEnable(GL_LINE_SMOOTH);
             GlStateManager.disableDepth();
             GlStateManager.disableTexture2D();
-            GlStateManager.blendFunc(770, 771);
+            GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glHint(3154, 4354);
         } else {
             GlStateManager.disableBlend();
             GlStateManager.enableTexture2D();
-            glDisable(2848);
+            glDisable(GL_LINE_SMOOTH);
             GlStateManager.enableDepth();
         }
         GlStateManager.depthMask(!start);

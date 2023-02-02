@@ -307,7 +307,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.blendFunc(770, 771);
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
-            if ((SenseHeader.getSense.getModuleManager().getModuleByClass(Chams.class)).isEnabled()) {
+            if ((SenseHeader.getSense.getModuleManager().getModuleByClass(Chams.class)).isEnabled()&&Chams.camChams(entitylivingbaseIn)) {
                 if ((Chams.colored.isOptionOpen())) {
                     GL11.glPushMatrix();
                     GL11.glPushAttrib(1048575);

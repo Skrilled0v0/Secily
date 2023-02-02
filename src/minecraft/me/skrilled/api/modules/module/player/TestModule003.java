@@ -13,7 +13,7 @@ import me.skrilled.api.value.ValueHeader;
 import java.awt.*;
 import java.util.ArrayList;
 
-@ModuleInitialize(name="TestModule003",type = ModuleType.RENDER)
+@ModuleInitialize(name="TestModule003",type = ModuleType.PLAYER)
 public class TestModule003 extends ModuleHeader {
     private final ValueHeader testBoolean = new ValueHeader("TestBoolean", true);
     private final ArrayList<String> typeList = new ArrayList<>();

@@ -16,7 +16,7 @@ import me.surge.animation.Easing;
 
 import java.util.ArrayList;
 
-@ModuleInitialize(name = "WorldRenderEditor", type = ModuleType.RENDER)
+@ModuleInitialize(name = "RenderEditor", type = ModuleType.RENDER)
 public class WorldRenderEditor extends ModuleHeader {
     public static ValueHeader weatherEditor = new ValueHeader("WeatherEditor", true);
     public static ValueHeader timeEditor = new ValueHeader("TimeModifier", true);
