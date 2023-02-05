@@ -58,7 +58,6 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-        System.out.println(onDrag);
         String[] valueInfo = colorAssembly.assemblyName.split("\\.");
         ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
         ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);

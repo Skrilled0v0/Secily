@@ -438,6 +438,12 @@ public class RenderUtil implements IMC {
         return fontHeight;
     }
 
+    public static float drawString(float[] pos, FontDrawer font, String str, int fontColor) {
+        float fontHeight = font.getHeight();
+        font.drawString(str, pos[0], pos[1], fontColor);
+        return fontHeight;
+    }
+
     public static float drawLeftedString(float[] pos, FontDrawer font, String str, int fontColor) {
         float fontHeight = font.getHeight();
         float udMargin = fontHeight / 4f;
