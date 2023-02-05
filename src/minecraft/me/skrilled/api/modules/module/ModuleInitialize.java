@@ -16,7 +16,7 @@ public @interface ModuleInitialize {
     //Module名字
     String name();
 
-    //Type
+    //infoType
     ModuleType type();
 
     //按键

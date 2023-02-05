@@ -145,7 +145,7 @@ of.options.ALTERNATE_BLOCKS.tooltip.2=Uses alternative block models for some blo
 of.options.ALTERNATE_BLOCKS.tooltip.3=Depends on the selected resource pack.
 
 of.options.FOG_FANCY=Fog
-of.options.FOG_FANCY.tooltip.1=Fog type
+of.options.FOG_FANCY.tooltip.1=Fog informationType
 of.options.FOG_FANCY.tooltip.2=  Fast - faster fog
 of.options.FOG_FANCY.tooltip.3=  Fancy - slower fog, looks better
 of.options.FOG_FANCY.tooltip.4=  OFF - no fog, fastest
@@ -396,7 +396,7 @@ of.options.NATURAL_TEXTURES.tooltip.1=Natural Textures
 of.options.NATURAL_TEXTURES.tooltip.2=  OFF - no natural textures (default)
 of.options.NATURAL_TEXTURES.tooltip.3=  ON - use natural textures
 of.options.NATURAL_TEXTURES.tooltip.4=Natural textures remove the gridlike pattern
-of.options.NATURAL_TEXTURES.tooltip.5=created by repeating blocks of the same type.
+of.options.NATURAL_TEXTURES.tooltip.5=created by repeating blocks of the same informationType.
 of.options.NATURAL_TEXTURES.tooltip.6=It uses rotated and flipped variants of the base
 of.options.NATURAL_TEXTURES.tooltip.7=block texture. The configuration for the natural
 of.options.NATURAL_TEXTURES.tooltip.8=textures is supplied by the current resource pack.

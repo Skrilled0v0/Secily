@@ -163,7 +163,7 @@ public class RecipeFireworks implements IRecipe
                 }
 
                 nbttagcompound2.setIntArray("Colors", aint1);
-                nbttagcompound2.setByte("Type", b0);
+                nbttagcompound2.setByte("infoType", b0);
                 nbttagcompound.setTag("Explosion", nbttagcompound2);
                 this.field_92102_a.setTagCompound(nbttagcompound);
                 return true;

@@ -28,26 +28,27 @@ public class Notification implements IMC {
     int boxHeight;//Notification Y坐标目标值
     int getBoxHeightAdd = 0;
     int stayTime;//停留时间
-    Type type;//类型
+    infoType informationType;//类型
+    posType positionType;
 
-    public Notification(String message, int stayTime, Type type) {
-        if (type.name().equals("INFO") || type.name().equals("SUCCESS")) ICON = 'G';
-        if (type.name().equals("WARNING") || type.name().equals("ERROR")) ICON = 'F';
-        if (type.name().equals("INFO")) ICONCOLOR = new Color(104, 169, 255);
-        if (type.name().equals("WARNING")) ICONCOLOR = new Color(255, 255, 120);
-        if (type.name().equals("ERROR")) ICONCOLOR = new Color(255, 104, 104);
-        if (type.name().equals("SUCCESS")) ICONCOLOR = new Color(0, 167, 0);
-
+    public Notification(String message, int stayTime, infoType informationType, posType positionType) {
+        if (informationType.name().equals("INFO") || informationType.name().equals("SUCCESS")) ICON = 'G';
+        if (informationType.name().equals("WARNING") || informationType.name().equals("ERROR")) ICON = 'F';
+        if (informationType.name().equals("INFO")) ICONCOLOR = new Color(104, 169, 255);
+        if (informationType.name().equals("WARNING")) ICONCOLOR = new Color(255, 255, 120);
+        if (informationType.name().equals("ERROR")) ICONCOLOR = new Color(255, 104, 104);
+        if (informationType.name().equals("SUCCESS")) ICONCOLOR = new Color(0, 167, 0);
+        this.positionType = positionType;
         this.message = message;
         this.stayTime = stayTime;
-        this.type = type;
+        this.informationType = informationType;
         timerAnim = new Animation(stayTime, false, Easing.LINEAR);
         motionBGColor = new ColourAnimation(new Color(30, 30, 30, 20), new Color(30, 30, 30, 125), stayTime, false, Easing.LINEAR);
         motionColor = new ColourAnimation(new Color(0, 255, 169, 255), new Color(255, 59, 59, 175), stayTime * 2, false, Easing.LINEAR);
     }
 
-    public static void sendNotification(String message, int stayTime, Type type) {
-        Notification not = new Notification(message, stayTime, type);
+    public static void sendNotification(String message, int stayTime, infoType infoType, posType positionType) {
+        Notification not = new Notification(message, stayTime, infoType, positionType);
         if (notifications.size() >= 1) {
             for (Notification notification : notifications) {
                 notification.getBoxHeightAdd += notification.height * 1.1f;
@@ -93,16 +94,20 @@ public class Notification implements IMC {
             timerAnim.setState(true);
 //            SenseHeader.getSense.printINFO(timerAnim.getAnimationFactor());
         }
-        //背景框
-        RenderUtil.drawRect(x, y, w, y + height, motionBGColor.getColour().getRGB());
-        BlurUtil.blurArea(x, y, w, y + height, 10);
-        //读条
-        RenderUtil.drawRect(x, y + this.height, w - width * timerAnim.getAnimationFactor(), y + height + 3, motionColor.getColour().getRGB());
-        //图标
-        ICONFont.drawChar(ICON, x + 5, y + this.height - ICONFont.getHeight() - 7, ICONCOLOR.getRGB());
-        messageFont.drawString(msg, x + 40, y + this.height - ifH - mfH - upMargin, -1);
-        //infoType
-        infoFont.drawString(info, x + 40, y + this.height - ifH - upMargin, -1);
+        if (positionType == posType.LEFT) {        //背景框
+            RenderUtil.drawRect(x, y, w, y + height, motionBGColor.getColour().getRGB());
+            BlurUtil.blurArea(x, y, w, y + height, 10);
+            //读条
+            RenderUtil.drawRect(x, y + this.height, w - width * timerAnim.getAnimationFactor(), y + height + 3, motionColor.getColour().getRGB());
+            //图标
+            ICONFont.drawChar(ICON, x + 5, y + this.height - ICONFont.getHeight() - 7, ICONCOLOR.getRGB());
+            messageFont.drawString(msg, x + 40, y + this.height - ifH - mfH - upMargin, -1);
+            //informationType
+            infoFont.drawString(info, x + 40, y + this.height - ifH - upMargin, -1);
+        } else if (positionType == posType.UP) {
+            RenderUtil.drawUpNotification(new String[]{message, informationType.name(), ICON.toString()}, new FontDrawer[]{infoFont, messageFont, ICONFont}, motionX, ICONCOLOR);
+
+        }
         if (timerAnim.getAnimationFactor() == 1) {
             setMotion(false);
             this.leave = true;
@@ -120,8 +125,13 @@ public class Notification implements IMC {
         motionColor.setState(set);
     }
 
-    public enum Type {
+    public enum infoType {
         SUCCESS, INFO, WARNING, ERROR
+
+    }
+
+    public enum posType {
+        UP, LEFT, MID
 
     }
 

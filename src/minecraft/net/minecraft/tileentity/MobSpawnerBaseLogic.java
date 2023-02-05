@@ -375,7 +375,7 @@ public abstract class MobSpawnerBaseLogic
 
         public WeightedRandomMinecart(NBTTagCompound tagCompound)
         {
-            this(tagCompound.getCompoundTag("Properties"), tagCompound.getString("Type"), tagCompound.getInteger("Weight"));
+            this(tagCompound.getCompoundTag("Properties"), tagCompound.getString("infoType"), tagCompound.getInteger("Weight"));
         }
 
         public WeightedRandomMinecart(NBTTagCompound tagCompound, String type)
@@ -391,7 +391,7 @@ public abstract class MobSpawnerBaseLogic
             {
                 if (tagCompound != null)
                 {
-                    type = EntityMinecart.EnumMinecartType.byNetworkID(tagCompound.getInteger("Type")).getName();
+                    type = EntityMinecart.EnumMinecartType.byNetworkID(tagCompound.getInteger("infoType")).getName();
                 }
                 else
                 {
@@ -407,7 +407,7 @@ public abstract class MobSpawnerBaseLogic
         {
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             nbttagcompound.setTag("Properties", this.nbtData);
-            nbttagcompound.setString("Type", this.entityType);
+            nbttagcompound.setString("infoType", this.entityType);
             nbttagcompound.setInteger("Weight", this.itemWeight);
             return nbttagcompound;
         }

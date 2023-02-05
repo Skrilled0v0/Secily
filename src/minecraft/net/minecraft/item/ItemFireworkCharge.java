@@ -66,7 +66,7 @@ public class ItemFireworkCharge extends Item {
     }
 
     public static void addExplosionInfo(NBTTagCompound nbt, List<String> tooltip) {
-        byte b0 = nbt.getByte("Type");
+        byte b0 = nbt.getByte("infoType");
 
         if (b0 >= 0 && b0 <= 4) {
             tooltip.add(StatCollector.translateToLocal("item.fireworksCharge.type." + b0).trim());

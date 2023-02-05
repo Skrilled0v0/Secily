@@ -1713,7 +1713,7 @@ public abstract class Entity implements ICommandSender {
     }
 
     public void addEntityCrashInfo(CrashReportCategory category) {
-        category.addCrashSectionCallable("Entity Type", new Callable<String>() {
+        category.addCrashSectionCallable("Entity infoType", new Callable<String>() {
             public String call() throws Exception {
                 return EntityList.getEntityString(Entity.this) + " (" + Entity.this.getClass().getCanonicalName() + ")";
             }

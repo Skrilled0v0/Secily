@@ -6,6 +6,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.modules.module.render.HUD;
+import me.skrilled.api.modules.module.render.RenderModifier;
 import me.skrilled.ui.Notification;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -41,6 +42,7 @@ import net.optifine.CustomColors;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GuiIngame extends Gui {
     private static final ResourceLocation vignetteTexPath = new ResourceLocation("textures/misc/vignette.png");
@@ -409,20 +411,6 @@ public class GuiIngame extends Gui {
         this.mc.mcProfiler.endSection();
     }
 
-    public void renderDemo(ScaledResolution scaledRes) {
-        this.mc.mcProfiler.startSection("demo");
-        String s = "";
-
-        if (this.mc.theWorld.getTotalWorldTime() >= 120500L) {
-            s = I18n.format("demo.demoExpired");
-        } else {
-            s = I18n.format("demo.remainingTime", StringUtils.ticksToElapsedTime((int) (120500L - this.mc.theWorld.getTotalWorldTime())));
-        }
-
-        int i = this.getFontRenderer().getStringWidth(s);
-        this.getFontRenderer().drawStringWithShadow(s, (float) (scaledRes.getScaledWidth() - i - 10), 5.0F, 16777215);
-        this.mc.mcProfiler.endSection();
-    }
 
     protected boolean showCrosshair() {
         if (this.mc.gameSettings.showDebugInfo && !this.mc.thePlayer.hasReducedDebug() && !this.mc.gameSettings.reducedDebugInfo) {
@@ -451,11 +439,7 @@ public class GuiIngame extends Gui {
     private void renderScoreboard(ScoreObjective objective, ScaledResolution scaledRes) {
         Scoreboard scoreboard = objective.getScoreboard();
         Collection<Score> collection = scoreboard.getSortedScores(objective);
-        List<Score> list = Lists.newArrayList(Iterables.filter(collection, new Predicate<Score>() {
-            public boolean apply(Score p_apply_1_) {
-                return p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#");
-            }
-        }));
+        List<Score> list = Lists.newArrayList(collection.stream().filter(p_apply_1_ -> p_apply_1_.getPlayerName() != null && !p_apply_1_.getPlayerName().startsWith("#")).collect(Collectors.toList()));
 
         if (list.size() > 15) {
             collection = Lists.newArrayList(Iterables.skip(list, collection.size() - 15));
@@ -479,8 +463,8 @@ public class GuiIngame extends Gui {
 
         for (Score score1 : collection) {
             ++j;
-            ScorePlayerTeam scoreplayerteam1 = scoreboard.getPlayersTeam(score1.getPlayerName());
-            String s1 = ScorePlayerTeam.formatPlayerName(scoreplayerteam1, score1.getPlayerName());
+            ScorePlayerTeam scorePlayerTeam = scoreboard.getPlayersTeam(score1.getPlayerName());
+            String s1 = ScorePlayerTeam.formatPlayerName(scorePlayerTeam, score1.getPlayerName());
             String s2 = EnumChatFormatting.RED + "" + score1.getScorePoints();
             int k = j1 - j * this.getFontRenderer().FONT_HEIGHT;
             int l = scaledRes.getScaledWidth() - k1 + 2;
@@ -757,6 +741,7 @@ public class GuiIngame extends Gui {
     }
 
     private void renderPumpkinOverlay(ScaledResolution scaledRes) {
+        if (RenderModifier.noPumpkinblur.isOptionOpen()) return;
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);

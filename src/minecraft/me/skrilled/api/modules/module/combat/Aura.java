@@ -51,9 +51,6 @@ public class Aura extends ModuleHeader implements IMC {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-//        SenseHeader.getSense.printINFO(1222);
-
-
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (canAddTarget(entity)) {
                 SenseHeader.getSense.printINFO("Add:" + entity.getName());
@@ -65,9 +62,14 @@ public class Aura extends ModuleHeader implements IMC {
 
             }
             if (switchDelay.hasReached((int) (switchTick.getDoubleCurrentValue() * 1000)) && targets.size() != 0) {
-                SenseHeader.getSense.printINFO("Targets:" + targets.size());
-//                SenseHeader.getSense.printINFO("SWED-TO-" + curTarget.getName());
+                curTarget = targets.get(swIndex);
+                if(swIndex+1<= targets.size())
+                    swIndex++;
+                else
+                    swIndex=0;
                 switchDelay.reset();
+                SenseHeader.getSense.printINFO("Targets:" + targets.size());
+                SenseHeader.getSense.printINFO("SWED-TO-" + curTarget.getName());
             }
 
         }
@@ -75,10 +77,11 @@ public class Aura extends ModuleHeader implements IMC {
 
     public boolean canAddTarget(Entity entity) {
         if (entity.getDistanceToEntity(mc.thePlayer) <= reach.getDoubleCurrentValue() && entity != mc.thePlayer) {
-            if (targets.contains(entity)) return false;
+
             if (atkPlayers.isOptionOpen()) return (entity instanceof EntityPlayer);
             if (atkMobs.isOptionOpen()) return (entity instanceof EntityMob || entity instanceof EntitySlime);
             if (atkAnimals.isOptionOpen()) return (entity instanceof EntityAnimal);
+
         }
         return false;
     }

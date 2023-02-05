@@ -115,7 +115,7 @@ public class ModuleHeader implements IMC {
         if (isEnabled) this.onEnabled();
         else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
-            Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Open!" : " Was not Open!"), 1500, (this.Enabled ? Notification.Type.SUCCESS : Notification.Type.WARNING));
+            Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), Notification.posType.UP);
         }
     }
 

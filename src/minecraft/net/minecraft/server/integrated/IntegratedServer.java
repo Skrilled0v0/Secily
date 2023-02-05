@@ -356,7 +356,7 @@ public class IntegratedServer extends MinecraftServer
     public CrashReport addServerInfoToCrashReport(CrashReport report)
     {
         report = super.addServerInfoToCrashReport(report);
-        report.getCategory().addCrashSectionCallable("Type", new Callable<String>()
+        report.getCategory().addCrashSectionCallable("infoType", new Callable<String>()
         {
             public String call() throws Exception
             {

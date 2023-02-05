@@ -24,7 +24,7 @@ import java.awt.*;
 public class LoadingGui extends GuiScreen {
     @Override
     public void initGui() {
-        Notification.sendNotification("The client will load all modules in 6 seconds!",4000, Notification.Type.INFO);
+        Notification.sendNotification("The client will load all modules in 6 seconds!",4000, Notification.infoType.INFO, Notification.posType.UP);
         super.initGui();
     }
 

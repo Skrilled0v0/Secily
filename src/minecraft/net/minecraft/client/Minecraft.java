@@ -2022,7 +2022,7 @@ public class Minecraft implements IThreadListener, IPlayerUsage {
             String s = ClientBrandRetriever.getClientModName();
             return !s.equals("vanilla") ? "Definitely; Client brand changed to '" + s + "'" : (Minecraft.class.getSigners() == null ? "Very likely; Jar signature invalidated" : "Probably not. Jar signature remains and client brand is untouched.");
         });
-        theCrash.getCategory().addCrashSectionCallable("Type", () -> "Client (map_client.txt)");
+        theCrash.getCategory().addCrashSectionCallable("infoType", () -> "Client (map_client.txt)");
         theCrash.getCategory().addCrashSectionCallable("Resource Packs", () -> {
             StringBuilder stringbuilder = new StringBuilder();
 

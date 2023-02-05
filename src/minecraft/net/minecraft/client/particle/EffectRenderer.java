@@ -236,7 +236,7 @@ public class EffectRenderer {
                     return particle.toString();
                 }
             });
-            crashreportcategory.addCrashSectionCallable("Particle Type", new Callable<String>()
+            crashreportcategory.addCrashSectionCallable("Particle infoType", new Callable<String>()
             {
                 public String call() throws Exception
                 {
@@ -319,7 +319,7 @@ public class EffectRenderer {
                                     return entityfx.toString();
                                 }
                             });
-                            crashreportcategory.addCrashSectionCallable("Particle Type", new Callable<String>()
+                            crashreportcategory.addCrashSectionCallable("Particle infoType", new Callable<String>()
                             {
                                 public String call() throws Exception
                                 {

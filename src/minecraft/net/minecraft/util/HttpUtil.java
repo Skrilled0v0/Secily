@@ -90,7 +90,7 @@ public class HttpUtil
 
             HttpURLConnection httpurlconnection = (HttpURLConnection)url.openConnection(proxy);
             httpurlconnection.setRequestMethod("POST");
-            httpurlconnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            httpurlconnection.setRequestProperty("Content-infoType", "application/x-www-form-urlencoded");
             httpurlconnection.setRequestProperty("Content-Length", "" + content.getBytes().length);
             httpurlconnection.setRequestProperty("Content-Language", "en-US");
             httpurlconnection.setUseCaches(false);

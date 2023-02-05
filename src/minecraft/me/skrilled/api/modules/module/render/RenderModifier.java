@@ -17,6 +17,7 @@ public class RenderModifier extends ModuleHeader {
     public static ValueHeader noBobbing = new ValueHeader("NoVisualWobble", true);
     public static ValueHeader viewClip = new ValueHeader("ViewClip", true);
     public static ValueHeader fovEdit = new ValueHeader("FovEditor", false);
+    public static ValueHeader noPumpkinblur = new ValueHeader("AntiPumpkin-blur", false);
     public static ValueHeader fovDouble = new ValueHeader("Fov", fov);
     private final float old = mc.gameSettings.gammaSetting;
     ValueHeader highlight = new ValueHeader("NightVision", false);

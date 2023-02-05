@@ -499,7 +499,7 @@ public class RenderItem implements IResourceManagerReloadListener
             {
                 CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering item");
                 CrashReportCategory crashreportcategory = crashreport.makeCategory("Item being rendered");
-                crashreportcategory.addCrashSectionCallable("Item Type", new Callable<String>()
+                crashreportcategory.addCrashSectionCallable("Item infoType", new Callable<String>()
                 {
                     public String call() throws Exception
                     {

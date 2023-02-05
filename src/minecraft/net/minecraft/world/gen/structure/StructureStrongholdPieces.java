@@ -1031,13 +1031,13 @@ public class StructureStrongholdPieces
         protected void writeStructureToNBT(NBTTagCompound tagCompound)
         {
             super.writeStructureToNBT(tagCompound);
-            tagCompound.setInteger("Type", this.roomType);
+            tagCompound.setInteger("infoType", this.roomType);
         }
 
         protected void readStructureFromNBT(NBTTagCompound tagCompound)
         {
             super.readStructureFromNBT(tagCompound);
-            this.roomType = tagCompound.getInteger("Type");
+            this.roomType = tagCompound.getInteger("infoType");
         }
 
         public void buildComponent(StructureComponent componentIn, List<StructureComponent> listIn, Random rand)

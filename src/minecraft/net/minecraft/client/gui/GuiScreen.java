@@ -258,7 +258,7 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
 
                             if (nbttagcompound.hasKey("type", 8)) {
                                 String s = nbttagcompound.getString("type");
-                                list1.add("Type: " + s + " (" + EntityList.getIDFromString(s) + ")");
+                                list1.add("infoType: " + s + " (" + EntityList.getIDFromString(s) + ")");
                             }
 
                             list1.add(nbttagcompound.getString("id"));

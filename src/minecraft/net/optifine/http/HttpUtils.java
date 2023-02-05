@@ -77,7 +77,7 @@ public class HttpUtils {
                 }
             }
 
-            httpurlconnection.setRequestProperty("Content-Type", "text/plain");
+            httpurlconnection.setRequestProperty("Content-infoType", "text/plain");
             httpurlconnection.setRequestProperty("Content-Length", "" + content.length);
             httpurlconnection.setRequestProperty("Content-Language", "en-US");
             httpurlconnection.setUseCaches(false);

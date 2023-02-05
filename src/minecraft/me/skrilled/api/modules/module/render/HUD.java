@@ -16,6 +16,7 @@ import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.ui.menu.assembly.EnumAssembly;
+import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
@@ -39,6 +40,7 @@ public class HUD extends ModuleHeader {
 /*    ColorAssembly cA = new ColorAssembly(new float[]{100, 100, 200, 220}, null, 164, 0.4f, 0.6f, 0.7f);
     TimerUtil timerUtil = new TimerUtil();*/
 
+    Animation  animation =new Animation(1000f,false,Easing.LINEAR);
 
     public HUD() {
         addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
@@ -46,7 +48,6 @@ public class HUD extends ModuleHeader {
 
     @EventTarget
     public void onEvent2D(EventRender2D render2D) {
-
         int w = RenderUtil.width();
         int h = RenderUtil.height();
         double[] pos = SenseHeader.getSense.getPlayerPos();
@@ -77,11 +78,11 @@ public class HUD extends ModuleHeader {
         if (not.isOptionOpen()) Notification.drawNotifications();
 
         //draw someThing
-        ArrayList<String> strings = new ArrayList<>();
-        strings.add("11");
-        strings.add("21");
-        strings.add("31");
-        strings.add("41");
+//        RenderUtil.drawUpNotification(new String[]{"message aaaa aaaa aaaa aaaa aaa", "Warnning","F",}, new FontDrawer[]{font, arrayFont,Main.fontLoader.ICON36, }, animation);
+        SenseHeader.getSense.printINFO(animation.getAnimationFactor());
+        animation.setState(true);
+
+
 //        EnumAssembly = new EnumAssembly(new float[]{50, 50, 100, 100}, null, Main.fontLoader.EN18, new Color(82, 82, 89), Color.white, strings, "11", new Animation(500f, false, Easing.LINEAR));
 //        enumAssembly.draw();
     }

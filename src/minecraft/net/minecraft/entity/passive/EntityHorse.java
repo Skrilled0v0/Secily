@@ -1271,7 +1271,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
         tagCompound.setBoolean("ChestedHorse", this.isChested());
         tagCompound.setBoolean("HasReproduced", this.getHasReproduced());
         tagCompound.setBoolean("Bred", this.isBreeding());
-        tagCompound.setInteger("Type", this.getHorseType());
+        tagCompound.setInteger("infoType", this.getHorseType());
         tagCompound.setInteger("Variant", this.getHorseVariant());
         tagCompound.setInteger("Temper", this.getTemper());
         tagCompound.setBoolean("Tame", this.isTame());
@@ -1315,7 +1315,7 @@ public class EntityHorse extends EntityAnimal implements IInvBasic
         this.setBreeding(tagCompund.getBoolean("Bred"));
         this.setChested(tagCompund.getBoolean("ChestedHorse"));
         this.setHasReproduced(tagCompund.getBoolean("HasReproduced"));
-        this.setHorseType(tagCompund.getInteger("Type"));
+        this.setHorseType(tagCompund.getInteger("infoType"));
         this.setHorseVariant(tagCompund.getInteger("Variant"));
         this.setTemper(tagCompund.getInteger("Temper"));
         this.setHorseTamed(tagCompund.getBoolean("Tame"));
