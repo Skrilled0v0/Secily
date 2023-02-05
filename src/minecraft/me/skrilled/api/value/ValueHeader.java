@@ -121,6 +121,7 @@ public class ValueHeader {
 
     public void setDoubles(double[] doubles) {
         this.doubles = doubles;
+        setDoubleCurrentValue(doubles[1]);
     }
 
     public ArrayList<String> getEnumTypes() {
@@ -140,7 +141,7 @@ public class ValueHeader {
     }
 
     public void setConfigColorValue(int colorValue) {
-        this.colorValue = new Color(colorValue,true);
+        this.colorValue = new Color(colorValue, true);
     }
 
     public String getStrValue() {

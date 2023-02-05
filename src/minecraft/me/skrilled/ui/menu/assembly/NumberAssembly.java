@@ -7,8 +7,6 @@ package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
 import me.skrilled.SenseHeader;
-import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
@@ -66,14 +64,8 @@ public class NumberAssembly extends Assembly {
 
     public void setDouble(double value) {
         doubles[1] = value;
-        try {
-            String[] valueInfo = assemblyName.split("\\.");
-            ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(valueInfo[0]);
-            ValueHeader valueHeader = module.getValueByName(valueInfo[1]);
-            valueHeader.setDoubles(doubles.clone());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String[] valueInfo = assemblyName.split("\\.");
+        SenseHeader.getSense.getModuleManager().getModuleByName(valueInfo[0]).getValueByName(valueInfo[1]).setDoubles(doubles);
         lastAnimValue = getAnimValue();
         anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
         anim.setState(true);
