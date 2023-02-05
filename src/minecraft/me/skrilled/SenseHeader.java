@@ -8,6 +8,8 @@ package me.skrilled;
 import me.skrilled.api.manager.CommandManager;
 import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.utils.IMC;
+import me.skrilled.utils.config.ConfigManager;
+import me.skrilled.utils.friend.FriendManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import org.lwjgl.opengl.Display;
@@ -20,6 +22,8 @@ public class SenseHeader implements IMC {
     public static SenseHeader getSense = new SenseHeader();
     public final Path directory = Paths.get(mc.mcDataDir.getAbsolutePath(), getClientName());
     public ModuleManager moduleManager;
+    public FriendManager friendManager;
+    public ConfigManager configManager;
 
     public String getClientUpdate() {
         return clientInfo[1];
@@ -34,11 +38,21 @@ public class SenseHeader implements IMC {
     }
 
     public void clientStart() {
+        configManager = new ConfigManager();
+        friendManager = new FriendManager();
         moduleManager = new ModuleManager();
         moduleManager.load();
-
+        configManager.loadAll();
         Display.setTitle(getClientName());
         CommandManager.loadCommands();
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return friendManager;
     }
 
     public String getPlayerName() {
@@ -84,6 +98,7 @@ public class SenseHeader implements IMC {
 
 
     public void stopClient() {
+        configManager.saveAll();
         mc.shutdown();
     }
 

@@ -131,7 +131,7 @@ public class Notification implements IMC {
     }
 
     public enum posType {
-        UP, LEFT, MID
+        UP, LEFT, NONE
 
     }
 

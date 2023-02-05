@@ -5,6 +5,7 @@
  */
 package me.skrilled.api.modules.module.render;
 
+import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class SettingMenu extends ModuleHeader {
     public static SecilyMenu menu = new SecilyMenu();
     static ArrayList<String> cmode = new ArrayList<>();
-    public static ValueHeader colorMode = new ValueHeader("ColorMode", "Dark", cmode);
+    public static ValueHeader colorMode = new ValueHeader("EclipseColorMode", "Dark", cmode);
     static double[] x2 = {0.0, 659.5, 199999, 0.5f};
     public static ValueHeader posX2 = new ValueHeader("X2", x2);
     static double[] y2 = {0.0, 344, 199999, 0.5f};
@@ -31,12 +32,12 @@ public class SettingMenu extends ModuleHeader {
     static double[] y1 = {0.0, 50, 199999, 0.5f};
     public static ValueHeader posY1 = new ValueHeader("Y1", y1);
     ArrayList<String> mode = new ArrayList<>();
-    ValueHeader sideMode = new ValueHeader("Mode", "Eclipse", mode);
+    ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
 
     public SettingMenu() {
         this.setCanView(false);
         this.addEnumTypes(cmode, "Dark", "White");
-        this.addEnumTypes(mode, "Secily", "Eclipse", "Test");
+        this.addEnumTypes(mode, "AbandonedSecily", "Eclipse", "Secily");
     }
 
     public static float[] getGuiPos() {
@@ -45,6 +46,7 @@ public class SettingMenu extends ModuleHeader {
 
     @Override
     public void onEnabled() {
+        SenseHeader.getSense.configManager.saveAll();
         if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) {
             mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
@@ -60,6 +62,7 @@ public class SettingMenu extends ModuleHeader {
 
     @Override
     public void onDisabled() {
+        SenseHeader.getSense.configManager.saveAll();
         if (!sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) MenuMotion.setMenuMotion();
         super.onDisabled();
     }

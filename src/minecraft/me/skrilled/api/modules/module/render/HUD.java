@@ -24,8 +24,12 @@ import java.util.Comparator;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
+    static ArrayList<String> notType = new ArrayList<>();
+    static ArrayList<String> soundType = new ArrayList<>();
     public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
     public static ValueHeader not = new ValueHeader("Notifications", true);
+    public static ValueHeader moduleNotType = new ValueHeader("ModuleSwitchPrompt", "LEFT",notType);
+    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSwitchSound", "Basic",notType);
     ArrayList<String> didis = new ArrayList<>();
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
@@ -34,6 +38,8 @@ public class HUD extends ModuleHeader {
 
     public HUD() {
         addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
+        addEnumTypes(notType, "LEFT", "UP", "None");
+        addEnumTypes(soundType, "Basic", "Ding", "New","None");
     }
 
     @EventTarget

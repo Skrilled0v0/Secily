@@ -9,6 +9,7 @@ package me.skrilled.api.modules;
 import com.darkmagician6.eventapi.EventManager;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.ModuleInitialize;
+import me.skrilled.api.modules.module.render.HUD;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
@@ -16,8 +17,11 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
 import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.main.Main;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -110,12 +114,19 @@ public class ModuleHeader implements IMC {
     }
 
     public void setEnabled(boolean isEnabled) {
+        Notification.posType posType = Notification.posType.NONE;
+        if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("UP")) {
+            posType = Notification.posType.UP;
+        } else if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("LEFT")) {
+            posType = Notification.posType.LEFT;
+        }
+
         this.Enabled = isEnabled;
         arrayWidth.setState(isEnabled);
         if (isEnabled) this.onEnabled();
         else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
-            Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), Notification.posType.UP);
+            Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), posType);
         }
     }
 
@@ -146,7 +157,9 @@ public class ModuleHeader implements IMC {
         }
         return null;
     }
-
+    public ValueHeader getValues(String name) {
+        return valueList.stream().filter(option -> option.getValueName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
     public void setKeyWidthGui() {
         //Key Binding提示
         if (isOnBinding()) {

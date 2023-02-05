@@ -287,6 +287,8 @@ public class ValueHeader {
 
     public void setColorValue(Color colorValue) {
         this.colorValue = colorValue;
+    }    public void setConfigColorValue(int colorValue) {
+        this.colorValue = new Color(colorValue);
     }
 
     public String getStrValue() {
