@@ -225,10 +225,10 @@ public class Window_Values_Assembly extends WindowAssembly {
         //初始化背景，标题
         BGAssembly thisBG = new BGAssembly(new float[]{0, 0, this.deltaX(), this.deltaY()}, this, new Color(204, 204, 204, 82), BackGroundType.RoundRect, false, 8.23f);
         this.addAssembly(thisBG);
-        StringAssembly valuesTitleAssembly = new StringAssembly(new float[]{0, 0, this.deltaX(), this.deltaY() * 0.09516098897677025596313134458492f}, this, this.module.toString(), true, new Color(255, 255, 255, 61), Color.white, Main.fontLoader.EN22, 8.28f);
+        StringAssembly valuesTitleAssembly = new StringAssembly(new float[]{0, 0, this.deltaX(), 0.1125573477818604554607543957983f * this.deltaY()}, this, this.module.toString(), true, new Color(255, 255, 255, 61), Color.white, Main.fontLoader.EN22, 8.28f);
         this.addAssembly(valuesTitleAssembly);
         //初始化绑定键位组件
-        StringAssembly bindAssembly = new StringAssembly(new float[]{0.02051676604475219593511572738347f * deltaX(), 0.02491125365884038114218098025783f * deltaY(), 0.1965009700943333110323141767579f * this.deltaX(), 0.07473376097652114342654294077349f * this.deltaY()}, this, "Bind:" + (module.getKey() == 0 ? "N/A" : Keyboard.getKeyName(module.getKey())), true, new Color(200, 200, 200,160), Color.black, Main.fontLoader.EN12, 5f);
+        StringAssembly bindAssembly = new StringAssembly(new float[]{0.44473680836058216323651984355966f * deltaX(), 0.06273484046417969317639243528264f * deltaY(), 0.55526319163941783676348015644034f * this.deltaX(), 0.1125573477818604554607543957983f * this.deltaY()}, this, "Bind:" + (module.getKey() == 0 ? "N/A" : Keyboard.getKeyName(module.getKey())), true, new Color(200, 200, 200, 160), Color.black, Main.fontLoader.EN12, 5f);
         bindAssembly.assemblyName = "bindAssembly" + "." + module.toString();
         this.addAssembly(bindAssembly);
         ArrayList<ValueHeader> values = module.getValueList();
