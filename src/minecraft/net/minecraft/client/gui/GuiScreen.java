@@ -131,9 +131,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1 && (mc.currentScreen != SettingMenu.menu)) {
+        if (keyCode == 1&&mc.currentScreen!=SettingMenu.secilyUI) {
             this.mc.displayGuiScreen(null);
-
             if (this.mc.currentScreen == null) {
                 this.mc.setIngameFocus();
             }
