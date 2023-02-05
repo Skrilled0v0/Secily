@@ -93,6 +93,7 @@ public class RenderUtil implements IMC {
      * 这个方法绘制的圆角矩形可以使用透明度
      */
     public static void drawRoundRect(float startX, float startY, float width, float height, float radius, int rgba) {
+        if ((width - startX) < 2 * radius) return;
         float z;
         if (startX > width) {
             z = startX;
@@ -905,27 +906,28 @@ public class RenderUtil implements IMC {
 
     /**
      * 绘制上方Notification
-     * @param infos [0]:信息 [1]:标题 [2]:图标
-     * @param fonts [0]:信息 [1]:标题 [2]:图标
+     *
+     * @param infos  [0]:信息 [1]:标题 [2]:图标
+     * @param fonts  [0]:信息 [1]:标题 [2]:图标
      * @param motion 动量
      */
-    public static void drawUpNotification(String[] infos, FontDrawer[] fonts, Animation motion,Color iconColor) {
+    public static void drawUpNotification(String[] infos, FontDrawer[] fonts, Animation motion, Color iconColor) {
         FontDrawer icon = fonts[2];
         FontDrawer title = fonts[1];
         FontDrawer msg = fonts[0];
         float margin = title.getHeight() / 2f;
         float msgWidth = msg.getStringWidth(infos[0]);
-        float titleTextWidth = (title.getStringWidth(infos[1])+icon.getStringWidth(infos[2]))/2f;
-        float scale= (float) motion.getAnimationFactor();
-        float[] pos = {width() / 2f - margin - msgWidth / 2f*scale, height() * 0.08f*scale, width() / 2f + margin + msgWidth / 2f*scale, height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight()*scale};
+        float titleTextWidth = (title.getStringWidth(infos[1]) + icon.getStringWidth(infos[2])) / 2f;
+        float scale = (float) motion.getAnimationFactor();
+        float[] pos = {width() / 2f - margin - msgWidth / 2f * scale, height() * 0.08f * scale, width() / 2f + margin + msgWidth / 2f * scale, height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight() * scale};
         drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
         BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
         glPushMatrix();
-        glScalef(1,scale,scale);
-        icon.drawString(infos[2], width() / 2f - titleTextWidth, height() * 0.08 + margin*scale, iconColor.getRGB());
-        title.drawString(infos[1], width() / 2f - titleTextWidth+icon.getStringWidth(infos[2])+margin/4f, height() * 0.08 + margin+icon.getHeight()/2f-margin/2f*scale, iconColor.getRGB());
+        glScalef(1, scale, scale);
+        icon.drawString(infos[2], width() / 2f - titleTextWidth, height() * 0.08 + margin * scale, iconColor.getRGB());
+        title.drawString(infos[1], width() / 2f - titleTextWidth + icon.getStringWidth(infos[2]) + margin / 4f, height() * 0.08 + margin + icon.getHeight() / 2f - margin / 2f * scale, iconColor.getRGB());
         glPopMatrix();
-        msg.drawCenteredString(infos[0], width() / 2f, height() * 0.08 + margin * 2 + icon.getHeight()*scale, -1);
+        msg.drawCenteredString(infos[0], width() / 2f, height() * 0.08 + margin * 2 + icon.getHeight() * scale, -1);
 
     }
 

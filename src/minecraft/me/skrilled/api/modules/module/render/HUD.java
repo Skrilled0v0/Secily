@@ -15,15 +15,10 @@ import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
-import me.skrilled.ui.menu.assembly.EnumAssembly;
-import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
-import me.surge.animation.Animation;
-import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -36,11 +31,6 @@ public class HUD extends ModuleHeader {
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader didi = new ValueHeader("DrawDIDI", true);
     ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
-
-/*    ColorAssembly cA = new ColorAssembly(new float[]{100, 100, 200, 220}, null, 164, 0.4f, 0.6f, 0.7f);
-    TimerUtil timerUtil = new TimerUtil();*/
-
-    Animation  animation =new Animation(1000f,false,Easing.LINEAR);
 
     public HUD() {
         addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
@@ -76,11 +66,6 @@ public class HUD extends ModuleHeader {
             font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
-
-        //draw someThing
-//        RenderUtil.drawUpNotification(new String[]{"message aaaa aaaa aaaa aaaa aaa", "Warnning","F",}, new FontDrawer[]{font, arrayFont,Main.fontLoader.ICON36, }, animation);
-        SenseHeader.getSense.printINFO(animation.getAnimationFactor());
-        animation.setState(true);
 
 
 //        EnumAssembly = new EnumAssembly(new float[]{50, 50, 100, 100}, null, Main.fontLoader.EN18, new Color(82, 82, 89), Color.white, strings, "11", new Animation(500f, false, Easing.LINEAR));

@@ -57,6 +57,7 @@ public class StringWithoutBGAssembly extends Assembly {
                     } else {
                         //Enum文字的点击判定
                         enumAssembly.setCurrentValue(this.value);
+                        enumAssembly.setDropDown(false);
                     }
                 }
             }

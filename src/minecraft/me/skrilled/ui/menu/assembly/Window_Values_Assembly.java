@@ -154,7 +154,7 @@ public class Window_Values_Assembly extends WindowAssembly {
                 }
             }
             //valueName显示组件
-            StringWithoutBGAssembly valueNameAssembly = new StringWithoutBGAssembly(calcPosForValueName(width_default, height_default, valuesEditZoneWindow, lMargin, inLeftHalfZone), valuesEditZoneWindow, valueHeader.getValueName(), valueNameFont, Color.red, new boolean[]{false, true});
+            StringWithoutBGAssembly valueNameAssembly = new StringWithoutBGAssembly(calcPosForValueName(width_default, height_default, valuesEditZoneWindow, lMargin, inLeftHalfZone), valuesEditZoneWindow, valueHeader.getValueName(), valueNameFont, Color.white, new boolean[]{false, true});
             yUsedValueName = valueNameAssembly.draw();
             valuesEditZoneWindow.addAssembly(valueNameAssembly);
             valuesEditZoneWindow.currentUsedHeight += Math.max(yUsedValueName, yUsedValueBox);
