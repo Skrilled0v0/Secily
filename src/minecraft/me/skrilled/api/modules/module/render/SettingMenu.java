@@ -37,7 +37,7 @@ public class SettingMenu extends ModuleHeader {
     public SettingMenu() {
         this.setCanView(false);
         this.addEnumTypes(cmode, "Dark", "White");
-        this.addEnumTypes(mode, "AbandonedSecily", "Eclipse", "Secily");
+        this.addEnumTypes(mode, "Abandoned", "Eclipse", "Secily");
     }
 
     public static float[] getGuiPos() {
@@ -51,7 +51,7 @@ public class SettingMenu extends ModuleHeader {
             mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
         }
-        if (sideMode.getCurrentEnumType().equalsIgnoreCase("Test")) {
+        if (sideMode.getCurrentEnumType().equalsIgnoreCase("Secily")) {
             mc.displayGuiScreen(new SecilyUserInterface());
             this.toggle();
         }
