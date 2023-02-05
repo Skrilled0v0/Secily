@@ -15,13 +15,9 @@ import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
-import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.main.Main;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -154,9 +150,11 @@ public class ModuleHeader implements IMC {
         }
         return null;
     }
+
     public ValueHeader getValues(String name) {
         return valueList.stream().filter(option -> option.getValueName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
+
     public void setKeyWidthGui() {
         //Key Binding提示
         if (isOnBinding()) {
@@ -164,31 +162,6 @@ public class ModuleHeader implements IMC {
             String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
             RenderUtil.drawRect(0, 0, RenderUtil.width(), RenderUtil.height(), bgColor);
             Main.fontLoader.EN36.drawCenteredString(editingStr, RenderUtil.width() / 2f, RenderUtil.height() / 2f, -1);
-            new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                        SenseHeader.getSense.printINFO("DEL|e.getKeyCode()=" + e.getKeyCode());
-                        setKey(0);
-                        setOnBinding(false);
-                    } else {
-                        SenseHeader.getSense.printINFO("BIND|e.getKeyCode()=" + e.getKeyCode());
-                        setKey(e.getKeyCode());
-                        setOnBinding(false);
-                    }
-
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-
-                }
-
-                @Override
-                public void keyReleased(KeyEvent e) {
-
-                }
-            };
 
         }
     }

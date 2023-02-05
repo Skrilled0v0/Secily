@@ -8,10 +8,7 @@ package me.skrilled.ui.menu.assembly;
 import me.fontloader.FontDrawer;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
-import me.surge.animation.Animation;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
@@ -181,8 +178,12 @@ public class StringAssembly extends Assembly {
 
     @Override
     public float draw() {
-        if (this.assemblyName.equalsIgnoreCase(SecilyUserInterface.currentModule.toString())) {
-
+        if (this.assemblyName.startsWith("bindAssembly")) {
+            String moduleName = assemblyName.split("\\.")[1];
+            ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(moduleName);
+            if (module.isOnBinding()) {
+                module.setKeyWidthGui();
+            }
         }
         if (autoPushPopMatrix) {
             if (centered)
@@ -197,5 +198,10 @@ public class StringAssembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
+        if (assemblyName.startsWith("bindAssembly")) {
+            String moduleName = assemblyName.split("\\.")[1];
+            ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(moduleName);
+            module.setOnBinding(true);
+        }
     }
 }

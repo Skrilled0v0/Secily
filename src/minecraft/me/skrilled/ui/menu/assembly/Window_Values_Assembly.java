@@ -7,6 +7,7 @@ import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -226,6 +227,10 @@ public class Window_Values_Assembly extends WindowAssembly {
         this.addAssembly(thisBG);
         StringAssembly valuesTitleAssembly = new StringAssembly(new float[]{0, 0, this.deltaX(), this.deltaY() * 0.09516098897677025596313134458492f}, this, this.module.toString(), true, new Color(255, 255, 255, 61), Color.white, Main.fontLoader.EN22, 8.28f);
         this.addAssembly(valuesTitleAssembly);
+        //初始化绑定键位组件
+        StringAssembly bindAssembly = new StringAssembly(new float[]{0.02051676604475219593511572738347f * deltaX(), 0.02491125365884038114218098025783f * deltaY(), 0.08965009700943333110323141767579f * this.deltaX(), 0.07473376097652114342654294077349f * this.deltaY()}, this, "Bind:" + (module.getKey() == 0 ? "N/A" : Keyboard.getKeyName(module.getKey())), false, new Color(204, 204, 204, 255), Color.white, Main.fontLoader.EN10, 5f);
+        bindAssembly.assemblyName = "bindAssembly" + "." + module.toString();
+        this.addAssembly(bindAssembly);
         ArrayList<ValueHeader> values = module.getValueList();
         valuesEditZoneWindows = new ArrayList<>();
 
