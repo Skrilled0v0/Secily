@@ -7,7 +7,10 @@ package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
 import me.skrilled.SenseHeader;
+import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
+import me.skrilled.ui.menu.ui.KeyBindingGui;
+import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class StringAssembly extends Assembly {
+public class StringAssembly extends Assembly implements IMC {
     String value;
     boolean centered;
     Color bgColor;
@@ -178,13 +181,7 @@ public class StringAssembly extends Assembly {
 
     @Override
     public float draw() {
-        if (this.assemblyName.startsWith("bindAssembly")) {
-            String moduleName = assemblyName.split("\\.")[1];
-            ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(moduleName);
-            if (module.isOnBinding()) {
-                module.setKeyWidthGui();
-            }
-        }
+
         if (autoPushPopMatrix) {
             if (centered)
                 return RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius);
@@ -200,8 +197,8 @@ public class StringAssembly extends Assembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (assemblyName.startsWith("bindAssembly")) {
             String moduleName = assemblyName.split("\\.")[1];
-            ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(moduleName);
-            module.setOnBinding(true);
+            ModuleHeader module = ModuleManager.getModuleByName(moduleName);
+            mc.displayGuiScreen(new KeyBindingGui(module));
         }
     }
 }

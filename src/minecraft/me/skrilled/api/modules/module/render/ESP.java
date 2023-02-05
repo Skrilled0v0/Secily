@@ -35,6 +35,7 @@ public class ESP extends ModuleHeader {
     ValueHeader renderPlayers = new ValueHeader("Players", true);
 
     ValueHeader blackoutline = new ValueHeader("BlackOutline", false);
+    ValueHeader renderHP = new ValueHeader("HealthRender", true);
     ValueHeader lineColor = new ValueHeader("LineColor", lineColors);
     ValueHeader boxColor = new ValueHeader("BoxColor", boxColors);
     Animation anim = new Animation(1000f, false, Easing.LINEAR);
@@ -52,10 +53,10 @@ public class ESP extends ModuleHeader {
             if (canDrawESP(entity)) {
                 switch (espMode.getCurrentEnumType()) {
                     case "3DBox":
-                        RenderUtil.drawEntityBoxESP(entity, box, line, blackoutline.isOptionOpen());
+                        RenderUtil.drawEntityBoxESP(entity, box, line,renderHP.isOptionOpen(), blackoutline.isOptionOpen());
                         break;
                     case "Circular":
-                        RenderUtil.drawEntityCircularESP((EntityLivingBase) entity, line, true);
+                        RenderUtil.drawEntityCircularESP((EntityLivingBase) entity, line, renderHP.isOptionOpen(),blackoutline.isOptionOpen());
                         break;
                 }
 

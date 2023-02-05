@@ -93,6 +93,6 @@ public class Aura extends ModuleHeader implements IMC {
     @EventTarget
     public void onScreen3D(EventRender3D eventRender3D) {
         if (curTarget != null)
-            RenderUtil.drawEntityBoxESP(curTarget, new Color(255, 0, 0, 100), new Color(74, 38, 255, 175), false);
+            RenderUtil.drawEntityBoxESP(curTarget, new Color(255, 0, 0, 100), new Color(74, 38, 255, 175), false,false);
     }
 }

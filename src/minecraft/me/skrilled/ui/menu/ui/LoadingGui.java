@@ -3,10 +3,11 @@
  *Code by SkrilledSense
  *20230118
  */
-package me.skrilled.ui;
+package me.skrilled.ui.menu.ui;
 
 
 import me.fontloader.FontDrawer;
+import me.skrilled.ui.Notification;
 import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;

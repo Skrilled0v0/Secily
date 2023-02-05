@@ -21,12 +21,13 @@ public class AutoClicker extends ModuleHeader {
     double[] ap = {1.0, 6.0, 20.0, 1.0};
     ValueHeader ma_cps = new ValueHeader("MaxCPS", ap);
     ValueHeader mi_cps = new ValueHeader("MinCPS", ip);
+    ValueHeader bhit = new ValueHeader("BlockingHit", false);
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
         double cps = (double) this.getValue(mi_cps) + Math.random() * ((double) this.getValue(ma_cps) - (double) this.getValue(mi_cps));
         if (timerUtil.hasReached((int) (1000L / cps)) && mc.gameSettings.keyBindAttack.pressed) {
-            mc.clickMouse();
+            if (!mc.thePlayer.isBlocking() || bhit.isOptionOpen()) mc.clickMouse();
             timerUtil.reset();
         }
     }

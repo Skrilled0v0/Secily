@@ -15,9 +15,14 @@ import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.Animation;
+import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.main.Main;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -150,21 +155,10 @@ public class ModuleHeader implements IMC {
         }
         return null;
     }
-
     public ValueHeader getValues(String name) {
         return valueList.stream().filter(option -> option.getValueName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public void setKeyWidthGui() {
-        //Key Binding提示
-        if (isOnBinding()) {
-            int bgColor = new Color(25, 25, 25, 200).getRGB();
-            String editingStr = "Press a key to set the shortcut, or use delete to delete the shortcut";
-            RenderUtil.drawRect(0, 0, RenderUtil.width(), RenderUtil.height(), bgColor);
-            Main.fontLoader.EN36.drawCenteredString(editingStr, RenderUtil.width() / 2f, RenderUtil.height() / 2f, -1);
-
-        }
-    }
 
     public int getKey() {
         return key;

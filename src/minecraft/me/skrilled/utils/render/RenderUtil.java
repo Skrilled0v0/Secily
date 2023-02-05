@@ -868,11 +868,36 @@ public class RenderUtil implements IMC {
         tessellator.draw();
     }
 
-    public static void drawEntityBoxESP(Entity entity, Color boxColor, Color lineColor, boolean outline) {
+    public static void drawEntityBoxESP(Entity entity, Color boxColor, Color lineColor, boolean hp, boolean outline) {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
+
+
         AxisAlignedBB box = entity instanceof EntityLivingBase ? AxisAlignedBB.fromBounds(posX - entity.width + 0.2f, posY, posZ - entity.width + 0.2f, posX + entity.width - 0.2f, posY + entity.height + (entity.isSneaking() ? 0.02f : 0.2f), posZ + entity.width - 0.2f) : AxisAlignedBB.fromBounds(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + entity.height + 0.2f, posZ + entity.width);
+        EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+        float health = entityLivingBase.getHealth() + entityLivingBase.getAbsorptionAmount();
+        float animHealth = health;
+        float maxHealth = entityLivingBase.getMaxHealth() + entityLivingBase.getAbsorptionAmount();
+        if (entityLivingBase.lastHealth == -1f) {
+            //初始化
+            entityLivingBase.lastHealth = health;
+            entityLivingBase.aimHealth = health;
+            entityLivingBase.healthESPAnim.setState(true);
+        } else {
+            //动画中
+            if (health != entityLivingBase.aimHealth) {
+                //目标变化的处理
+                entityLivingBase.lastHealth = (float) (entityLivingBase.lastHealth + (entityLivingBase.aimHealth - entityLivingBase.lastHealth) * entityLivingBase.healthESPAnim.getAnimationFactor());
+                entityLivingBase.aimHealth = health;
+                entityLivingBase.healthESPAnim = new Animation(entityLivingBase.healthESPAnim.length, entityLivingBase.healthESPAnim.initialState, Easing.LINEAR);
+                entityLivingBase.healthESPAnim.setState(true);
+            }
+            //计算血条显示值
+            animHealth = (float) (entityLivingBase.lastHealth + (entityLivingBase.aimHealth - entityLivingBase.lastHealth) * entityLivingBase.healthESPAnim.getAnimationFactor());
+        }
+        float hpFloat = animHealth / maxHealth;
+        Color hpColor = Colors.getHealthColor(animHealth, maxHealth);
         glPushMatrix();
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
@@ -891,6 +916,10 @@ public class RenderUtil implements IMC {
         glLineWidth(1.5f);
         glColor4f(lineColor.getRed() / 255.0f, lineColor.getGreen() / 255.0f, lineColor.getBlue() / 255.0f, 1f);
         drawOutlinedBoundingBox(box);
+        if (hp) {
+            glColor4f(hpColor.getRed() / 255.0f, hpColor.getGreen() / 255.0f, hpColor.getBlue() / 255.0f, 1f);
+            drawOutlinedBoundingBox(new AxisAlignedBB(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + (entity.height*1.2f) * hpFloat, posZ + entity.width));
+        }
         glDisable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_DEPTH_TEST);
@@ -899,7 +928,7 @@ public class RenderUtil implements IMC {
         glPopMatrix();
     }
 
-    public static void drawEntityCircularESP(EntityLivingBase entity, Color bgLineColor, boolean hpLine) {
+    public static void drawEntityCircularESP(EntityLivingBase entity, Color bgLineColor, boolean hpLine, boolean bkbg) {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
@@ -939,6 +968,9 @@ public class RenderUtil implements IMC {
         GL11.glScalef(-scale, -scale, -scale);
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
+        if (bkbg) {
+            drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 5f, new Color(0, 0, 0).getRGB());
+        }
         drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
         if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
         glEnable(GL_DEPTH_TEST);

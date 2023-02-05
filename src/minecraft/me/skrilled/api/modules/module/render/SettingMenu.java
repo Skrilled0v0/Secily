@@ -10,7 +10,7 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.menu.EclipseMenu;
+import me.skrilled.ui.menu.ui.EclipseMenu;
 import me.skrilled.ui.menu.MenuMotion;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import org.lwjgl.input.Keyboard;
