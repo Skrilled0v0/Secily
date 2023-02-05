@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     public Animation animation = new Animation(200, false, Easing.LINEAR);
     public ArrayList<T> contents;
-    float skipAim = 0f;
+    float skipAim;
     float wheelsToNext = 33f;
     float numOfContent2Render;
     float currentSkip = 0f;
@@ -26,27 +26,40 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     @Override
     public void reset() {
         super.reset();
-        skipAim = 0;
+//        skipAim = 0;
         currentSkip = 0;
         animation = new Animation(animation.length, animation.initialState, Easing.LINEAR);
     }
 
     @Override
     public float draw() {
-        glPushMatrix();
-        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY(), (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()));
-        //更新滚动坐标
         float latestSkipFactor = getSkipFactor();
         float deltaFactor = latestSkipFactor - lastSkipFactor;
-        lastSkipFactor = latestSkipFactor;
-        for (Assembly assembly : assemblies) {
-            assembly.pos[1] -= deltaFactor;
-            assembly.pos[3] -= deltaFactor;
+        //当父窗口为ENUM组件时，如果为展开，执行滚动更新
+        if (fatherWindow instanceof EnumAssembly) {
+            //更新滚动坐标
+            lastSkipFactor = latestSkipFactor;
+            for (Assembly assembly : assemblies) {
+                //如果是展开按钮，则不更新
+                if (((StringWithoutBGAssembly) assembly).value.equals("H") || ((StringWithoutBGAssembly) assembly).value.equals("I"))
+                    continue;
+                //更新
+                assembly.pos[1] -= deltaFactor;
+                assembly.pos[3] -= deltaFactor;
+            }
+        } else {
+            lastSkipFactor = latestSkipFactor;
+            for (Assembly assembly : assemblies) {
+                assembly.pos[1] -= deltaFactor;
+                assembly.pos[3] -= deltaFactor;
+            }
+            for (WindowAssembly subWindow : subWindows) {
+                subWindow.pos[1] -= deltaFactor;
+                subWindow.pos[3] -= deltaFactor;
+            }
         }
-        for (WindowAssembly subWindow : subWindows) {
-            subWindow.pos[1] -= deltaFactor;
-            subWindow.pos[3] -= deltaFactor;
-        }
+        glPushMatrix();
+        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY(), (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()));
         float result = super.draw();
         glDisable(GL_SCISSOR_TEST);
         glPopMatrix();
@@ -62,6 +75,13 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     }
 
     public void mouseWheel(int delta) {
+        //判定ENUM 框是否展开
+        if (fatherWindow instanceof EnumAssembly) {
+            if (!((EnumAssembly) fatherWindow).dropped()) {
+                return;
+            }
+        }
+        //滚动
         float result = skipAim - delta;
         if (result < (contents.size() - numOfContent2Render) * wheelsToNext && skipAim - delta >= 0) {
             currentSkip = getSkipFactor();

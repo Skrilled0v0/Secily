@@ -6,9 +6,6 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
-import me.skrilled.SenseHeader;
-import me.skrilled.api.modules.ModuleHeader;
-import me.skrilled.api.value.ValueHeader;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -50,16 +47,17 @@ public class StringWithoutBGAssembly extends Assembly {
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (fatherWindow != null) {
-            if (fatherWindow.assemblyName.equalsIgnoreCase("windowOfEnumAssembly")) {
-                if (this.value.equals("H") || this.value.equals("I")) {
+            //Enum组件下的点击
+            if (fatherWindow.fatherWindow != null) {
+                if (fatherWindow.fatherWindow instanceof EnumAssembly) {
+                    //展开的点击判定
                     EnumAssembly enumAssembly = ((EnumAssembly) (fatherWindow.fatherWindow));
-                    enumAssembly.setDropDown(this.value.equals("H"));
-                } else if (fatherWindow.fatherWindow.assemblyName.startsWith("enumAssembly")) {
-                    String s = fatherWindow.fatherWindow.assemblyName;
-                    String[] valueInfo = s.split("\\.");
-                    ModuleHeader module = SenseHeader.getSense.getModuleManager().getModuleByName(valueInfo[1]);
-                    ValueHeader value = module.getValueByName(valueInfo[2]);
-                    value.setCurrentEnumType(this.value);
+                    if (this.value.equals("H") || this.value.equals("I")) {
+                        enumAssembly.setDropDown(this.value.equals("H"));
+                    } else {
+                        //Enum文字的点击判定
+                        enumAssembly.setCurrentValue(this.value);
+                    }
                 }
             }
         }
