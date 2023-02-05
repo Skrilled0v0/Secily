@@ -1033,7 +1033,7 @@ public class RenderUtil implements IMC {
             drawRoundRect(posX + (motion - 1) * (spacing + boxWidth), posY, posX + (motion - 1) * (spacing + boxWidth) + boxWidth, posY + boxWidth, boxWidth / 8f, currentColor);
             count = 0;
             for (String icon : icons) {
-                font.drawCenteredString(icon, posX + boxWidth / 2f + (spacing + boxWidth) * count, posY + (boxWidth - font.getHeight()) / 2f, iconColor);
+                font.drawCenteredString(icon, posX + boxWidth / 2f + (spacing + boxWidth) * count, posY - (font.getHeight()) / 12f, iconColor);
                 count++;
             }
         } else {
