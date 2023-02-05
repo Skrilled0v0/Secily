@@ -2,6 +2,8 @@ package net.minecraft.entity;
 
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.combat.HitBox;
+import me.surge.animation.Animation;
+import me.surge.animation.Easing;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

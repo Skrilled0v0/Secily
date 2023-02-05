@@ -103,7 +103,7 @@ public class MouseOverlyRender extends ModuleHeader {
             BlurUtil.blurAreaRounded(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 3, 5);
             font.drawString(overlyName, w / 2 + 5, h / 2 + 5, -1);
             if (mouseEnt != null) {
-                RenderUtil.drawAngleCirque(rectPos[2] + 5, rectPos[1], 10, 0, 360 * ((float) (lastEntityHealth + (currentHP - lastEntityHealth) * healthMotion.getAnimationFactor()) / maxHP), 2, Color.magenta.getRGB());
+                RenderUtil.drawAngleCirque(rectPos[2] + 5, rectPos[1], 10, 0, 360 * ((float) (lastEntityHealth + (currentHP - lastEntityHealth) * healthMotion.getAnimationFactor()) / maxHP), 2, -1);
                 RenderUtil.drawAngleCirque(rectPos[2] + 5, rectPos[1], 10, 0, 360 * currentHP / maxHP, 2, hpColor.getRGB());
             }
         }
