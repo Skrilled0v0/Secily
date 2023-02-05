@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.module.combat.Reach;
+import me.skrilled.api.modules.module.render.MouseOverlyRender;
 import me.skrilled.api.modules.module.render.RenderModifier;
 import me.skrilled.api.modules.module.render.WorldRenderEditor;
 import net.minecraft.block.Block;
@@ -1371,7 +1372,6 @@ public class EntityRenderer implements IResourceManagerReloadListener {
             GlStateManager.matrixMode(5888);
             GlStateManager.popMatrix();
             GlStateManager.pushMatrix();
-
             if (this.mc.objectMouseOver != null && entity.isInsideOfMaterial(Material.water) && flag1) {
                 EntityPlayer entityplayer = (EntityPlayer) entity;
                 GlStateManager.disableAlpha();

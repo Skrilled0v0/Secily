@@ -472,21 +472,38 @@ public class RenderUtil implements IMC {
         return boxHeight;
     }
 
-    public static void drawSolidBlockESP(double x, double y, double z, float red, float green, float blue, float alpha) {
+    public static void drawBlockESP(double x, double y, double z, int bgrgba, int linergba, boolean perspective) {
         glPushMatrix();
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glDisable(GL_TEXTURE_2D);
         glEnable(GL_LINE_SMOOTH);
-        glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
-        glColor4f(red, green, blue, alpha);
-        drawBoundingBox(new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D));
+        if (perspective) {
+            glDisable(GL_DEPTH_TEST);
+        }
+        Color bg = new Color(bgrgba, true);
+        float bgr = bg.getRed() / 255f;
+        float bgg = bg.getGreen() / 255f;
+        float bgb = bg.getBlue() / 255f;
+        float bga = bg.getAlpha() / 255f;
+        Color line = new Color(linergba, true);
+        float liner = line.getRed() / 255f;
+        float lineg = line.getGreen() / 255f;
+        float lineb = line.getBlue() / 255f;
+        float linea = line.getAlpha() / 255f;
+        glColor4f(bgr, bgg, bgb, bga);
+        drawBoundingBox(new AxisAlignedBB(x - 0.01, y - 0.01, z - 0.01, x + 1.01D, y + 1.01D, z + 1.01D));
+        glColor4f(liner, lineg, lineb, linea);
+        drawOutlinedBoundingBox(new AxisAlignedBB(x - 0.01, y - 0.01, z - 0.01, x + 1.01D, y + 1.01D, z + 1.01D));
         glDisable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(true);
         glDisable(GL_BLEND);
+        if (perspective) {
+            glEnable(GL_DEPTH_TEST);
+        }
+        glDepthMask(true);
+
         glPopMatrix();
     }
 
@@ -925,7 +942,7 @@ public class RenderUtil implements IMC {
         float msgWidth = msg.getStringWidth(infos[0]);
         float titleTextWidth = (title.getStringWidth(infos[1]) + icon.getStringWidth(infos[2])) / 2f;
         float scale = (float) motion.getAnimationFactor();
-        float[] pos = {width() / 2f - margin - msgWidth / 2f , height() * 0.08f, width() / 2f + margin + msgWidth / 2f ,(height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight())* scale};
+        float[] pos = {width() / 2f - margin - msgWidth / 2f, height() * 0.08f, width() / 2f + margin + msgWidth / 2f, (height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight()) * scale};
         drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
         BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
         glPushMatrix();
