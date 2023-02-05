@@ -7,7 +7,6 @@ package me.skrilled.api.modules.module.render;
 
 import com.darkmagician6.eventapi.EventTarget;
 import me.fontloader.FontDrawer;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender2D;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.event.EventUpdate;
@@ -19,7 +18,7 @@ import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.Colors;
 import me.skrilled.utils.render.RenderUtil;
-import me.surge.animation.BoundedAnimation;
+import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
 import net.minecraft.entity.Entity;
@@ -41,12 +40,13 @@ public class MouseOverlyRender extends ModuleHeader {
     Color boxColor = new Color(0, 0, 0, 200);
     ValueHeader blkboxColor = new ValueHeader("OverlyBoxColor", boxColor);
     Entity mouseEnt;
+    Entity lastMouseEnt;
     BlockPos mouseBlockPos;
     //记录最后的生命值
     float lastEntityHealth = 0;
     float currentHP = 0;
     float maxHP = 0;
-    BoundedAnimation healthMotion = new BoundedAnimation(0, lastEntityHealth - currentHP, 1000f, false, Easing.LINEAR);
+    Animation healthMotion = new Animation(1000f, false, Easing.LINEAR);
     Color hpColor;
     float hp = 0;
 
@@ -69,20 +69,28 @@ public class MouseOverlyRender extends ModuleHeader {
         String overlyName = "Wait For Searching";
 
         if (mouseEnt != null) {
-            currentHP = ((EntityLivingBase) mouseEnt).getHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount();
-            maxHP = ((EntityLivingBase) mouseEnt).getMaxHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount();
-            hpColor = Colors.getHealthColor(currentHP, maxHP);
-            //赋值给最后的生命值
-
-            //每0.5s更新检查最后的生命值与当前的生命值并且计算出差值
-                SenseHeader.getSense.printINFO((lastEntityHealth > currentHP)+" |Last:"+lastEntityHealth+" |current:"+currentHP);
-                //如果检测到生命减少则开始 new Motion
-                if (lastEntityHealth > currentHP) {
-                    healthMotion = new BoundedAnimation(0, lastEntityHealth - currentHP, 1000f, false, Easing.LINEAR);
-                    healthMotion.setState(true);
+            if (lastMouseEnt == mouseEnt) {
+                if (((EntityLivingBase) mouseEnt).getHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount() == currentHP) {
+                    if (healthMotion.getAnimationFactor() == 1D) {
+                        lastEntityHealth = currentHP;
+                        healthMotion = new Animation(1000, false, Easing.LINEAR);
+                    }
+                } else {
+                    lastEntityHealth = (float) (lastEntityHealth + (currentHP - lastEntityHealth) * healthMotion.getAnimationFactor());
+                    currentHP = ((EntityLivingBase) mouseEnt).getHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount();
+                    healthMotion = new Animation(1000, true, Easing.LINEAR);
                 }
+                hpColor = Colors.getHealthColor(currentHP, maxHP);
+            } else {
+                currentHP = ((EntityLivingBase) mouseEnt).getHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount();
+                lastEntityHealth = currentHP;
+                maxHP = ((EntityLivingBase) mouseEnt).getMaxHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount();
+                healthMotion = new Animation(1000, false, Easing.LINEAR);
+            }
+
 
             overlyName = mouseEnt.getName() + " HP:" + Math.round(((EntityLivingBase) mouseEnt).getHealth() + ((EntityLivingBase) mouseEnt).getAbsorptionAmount());
+            lastMouseEnt = mouseEnt;
         }
 
 
@@ -95,8 +103,7 @@ public class MouseOverlyRender extends ModuleHeader {
             BlurUtil.blurAreaRounded(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 3, 5);
             font.drawString(overlyName, w / 2 + 5, h / 2 + 5, -1);
             if (mouseEnt != null) {
-                RenderUtil.drawAngleCirque(rectPos[2] + 5, rectPos[1], 10, 0,360 * ((float) (lastEntityHealth - healthMotion.getAnimationValue()) / maxHP),  2, hpColor.getRGB());
-                lastEntityHealth = currentHP;
+                RenderUtil.drawAngleCirque(rectPos[2] + 5, rectPos[1], 10, 0, 360 * ((float) (lastEntityHealth + (currentHP - lastEntityHealth) * healthMotion.getAnimationFactor()) / maxHP), 2, hpColor.getRGB());
             }
         }
 
