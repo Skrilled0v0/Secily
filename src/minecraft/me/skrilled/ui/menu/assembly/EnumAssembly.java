@@ -44,6 +44,13 @@ public class EnumAssembly extends WindowAssembly {
         initSubWindow(font);
     }
 
+    private static void setWindow_Wheel_AssemblySkipAim(float skipAimOnFolding, Window_MouseWheel_Assembly window) {
+        window.currentSkip = window.getSkipFactor();
+        window.skipAim = skipAimOnFolding;
+        window.animation = new Animation(window.animation.length, window.animation.initialState, Easing.LINEAR);
+        window.animation.setState(true);
+    }
+
     private ArrayList<String> getRestContents(ArrayList<String> contents, String currentValue) {
         ArrayList<String> restChoice = (ArrayList<String>) contents.clone();
         restChoice.removeIf(s -> s.equalsIgnoreCase(currentValue));
@@ -117,13 +124,12 @@ public class EnumAssembly extends WindowAssembly {
                 }
             }
         }
+        Window_MouseWheel_Assembly window = ((Window_MouseWheel_Assembly) (subWindows.get(0)));
         if (!flag) {
-            Window_MouseWheel_Assembly window = ((Window_MouseWheel_Assembly) (subWindows.get(0)));
             float skipAimOnFolding = getSkipAimOnFolding();
-            window.currentSkip = window.getSkipFactor();
-            window.skipAim = skipAimOnFolding;
-            window.animation = new Animation(window.animation.length, window.animation.initialState, Easing.LINEAR);
-            window.animation.setState(true);
+            setWindow_Wheel_AssemblySkipAim(skipAimOnFolding, window);
+        } else {
+            setWindow_Wheel_AssemblySkipAim(0f, window);
         }
         this.animation.setState(flag);
     }

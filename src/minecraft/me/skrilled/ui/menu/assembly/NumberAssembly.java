@@ -27,7 +27,6 @@ public class NumberAssembly extends Assembly {
     Color buttonColor;
     double lastAnimValue;
     float barLRMargin;
-    float absX;
 
     public NumberAssembly(float[] pos, WindowAssembly fatherWindow, double[] doubles, Animation anim, Color bgColor, Color ugColor, Color buttonColor) {
         super(pos, fatherWindow);
@@ -39,8 +38,6 @@ public class NumberAssembly extends Assembly {
         this.lastAnimValue = doubles[1] / (doubles[2] - doubles[0]);
         this.canDrag = true;
         barLRMargin = deltaX() / 20;
-        absX = calcAbsX();
-
     }
 
     @Override
@@ -85,7 +82,8 @@ public class NumberAssembly extends Assembly {
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (button != 0) return;
-        float x = Math.max(0, mouseX - absX - barLRMargin);
+        mouseX += ((deltaX() - 2 * barLRMargin) / ((doubles[2] - doubles[0]) / doubles[3])) / 2;
+        float x = Math.max(0, mouseX - calcAbsX() - barLRMargin);
         x = Math.min(x, deltaX() - 2 * barLRMargin);
         x = x / (deltaX() - 2 * barLRMargin);
         setDouble(doubles[0] + doubles[3] * Math.floor(x * (doubles[2] - doubles[0]) / doubles[3]));

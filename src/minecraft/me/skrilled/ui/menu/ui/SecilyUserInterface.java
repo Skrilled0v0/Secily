@@ -90,7 +90,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.bgAssembly = bigBg;
 
         //实例化 currentModuleType string
-        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, 0, mainGui.deltaX(), ((mainGui.deltaY() * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
+        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, Main.fontLoader.EN36.getHeight() / 2f, mainGui.deltaX(), ((mainGui.deltaY() * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
 
         //计算 编辑区 背景 Pos
         float[] areaEditPos = {0.01704958975262581302525836774406f * bigBg.deltaX(), 0.14244186046511627906976744186047f * bigBg.deltaY(), 0.98295041024737418697474163225594f * bigBg.deltaX(), 0.97520930232558139534883720930233f * bigBg.deltaY()};
@@ -126,13 +126,13 @@ public class SecilyUserInterface extends GuiScreen {
         leftSideBar.addAssembly(leftModuleTypeICONBarBg);
 
         //计算 ModuleTypeICON 组件 Pos
-        float[] moduleTypeICONPos = {0.08714631268436578171091445427729f * leftSideBar.deltaX(), 0.04280152671755725190839694656489f * leftSideBar.deltaY(), 0.96166134185303514376996805111821f * leftSideBar.deltaX(), 0.14031180400890868596881959910913f * leftSideBar.deltaY()};
+        float[] moduleTypeICONPos = {0.09914631268436578171091445427729f * leftSideBar.deltaX(), 0.04280152671755725190839694656489f * leftSideBar.deltaY(), 0.96166134185303514376996805111821f * leftSideBar.deltaX(), 0.14031180400890868596881959910913f * leftSideBar.deltaY()};
 
         //计算 ModuleTypeICON 组件 Spacing
         float spacing = 0.03421828908554572271386430678466f * leftSideBar.deltaX();
 
         //初始化 ModuleTypeICON 组件
-        IconAssembly moduleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON47, new String[]{"A", "B", "C", "D", "E"}, getIconStringByModuleType(currentModuleType), spacing, new Animation(100, false, Easing.CUBIC_OUT), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247, 166), true);
+        IconAssembly moduleTypeICONBar = new IconAssembly(moduleTypeICONPos, leftSideBar, Main.fontLoader.ICON42, new String[]{"A", "B", "C", "D", "E"}, getIconStringByModuleType(currentModuleType), spacing, new Animation(100, false, Easing.CUBIC_OUT), new Color(196, 196, 196), new Color(144, 144, 144), new Color(126, 183, 247, 166), true);
         moduleTypeICONBar.assemblyName = "moduleTypeICONBar";
 
         //添加 ModuleTypeICON 组件 至 左边栏窗口
