@@ -70,7 +70,7 @@ public class EnumAssembly extends WindowAssembly {
         float fontHeight = font.getHeight();
         udMargin = fontHeight * 0.9f;
         float[] enumValuePos = new float[4];
-        enumValuePos[0] = 0f;
+        enumValuePos[0] = 0;
         enumValuePos[1] = udMargin / 2f;
         enumValuePos[2] = 0.8f * deltaX();
         enumValuePos[3] = udMargin / 2f + (fontHeight + udMargin);
@@ -93,7 +93,7 @@ public class EnumAssembly extends WindowAssembly {
             enumValuePos[1] = udMargin / 2f + (i + 1) * (fontHeight + udMargin);
             enumValuePos[2] = 0.8f * deltaX();
             enumValuePos[3] = udMargin / 2f + (i + 2) * (fontHeight + udMargin);
-            StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), enumValue, font, Color.white, new boolean[]{true, true});
+            StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), enumValue, font, Color.white, new boolean[]{true, false});
             subWindows.get(0).addAssembly(enumValueAssembly);
         }
     }
