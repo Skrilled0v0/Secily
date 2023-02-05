@@ -8,6 +8,7 @@ import me.skrilled.utils.math.TimerUtil;
 import me.skrilled.utils.render.gl.GLClientState;
 import me.skrilled.utils.render.tessellate.Tessellation;
 import me.surge.animation.Animation;
+import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -903,11 +904,30 @@ public class RenderUtil implements IMC {
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
 
-        float health = entity.getHealth();
-        float maxHealth = entity.getMaxHealth();
-        float absorptionAmount = entity.getAbsorptionAmount();
-        float hpFloat = (health + absorptionAmount) / (maxHealth + absorptionAmount);
-        Color hpColor = Colors.getHealthColor(health + absorptionAmount, maxHealth + absorptionAmount);
+        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float animHealth = health;
+        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        if (entity.lastHealth == -1f) {
+            //初始化
+            entity.lastHealth = health;
+            entity.aimHealth = health;
+            entity.healthESPAnim.setState(true);
+        } else {
+            //动画中
+            if (health != entity.aimHealth) {
+                //目标变化的处理
+                entity.lastHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+                entity.aimHealth = health;
+                entity.healthESPAnim = new Animation(entity.healthESPAnim.length, entity.healthESPAnim.initialState, Easing.LINEAR);
+                entity.healthESPAnim.setState(true);
+            }
+            //计算血条显示值
+            animHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+        }
+
+
+        float hpFloat = animHealth / maxHealth;
+        Color hpColor = Colors.getHealthColor(animHealth, maxHealth);
 
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
