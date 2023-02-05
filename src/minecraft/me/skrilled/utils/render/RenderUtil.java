@@ -275,10 +275,10 @@ public class RenderUtil implements IMC {
      * @param buttonColor 拉条颜色
      * @return 所占高度
      */
-    public static float drawNumberBar(float posX, float posY, float barWidth, float barHeight, float motion, int bgColor, int ugColor, int buttonColor) {
+    public static float drawNumberBar(float posX, float posY, float barWidth, float barHeight, double motion, int bgColor, int ugColor, int buttonColor) {
         float barLRMargin = barWidth / 20;
         float barUDMargin = barHeight / 4;
-        float buttonPos = posX + barLRMargin + (barWidth - barLRMargin * 2) * motion;
+        float buttonPos = (float) (posX + barLRMargin + (barWidth - barLRMargin * 2) * motion);
         drawRoundRect(posX, posY, posX + barWidth, posY + barHeight, barHeight / 2f, bgColor);
         drawRoundRect(posX + barLRMargin, posY + barUDMargin, posX + barWidth - barLRMargin, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, ugColor);
         drawRoundRect(posX + barLRMargin, posY + barUDMargin, buttonPos, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, buttonColor);

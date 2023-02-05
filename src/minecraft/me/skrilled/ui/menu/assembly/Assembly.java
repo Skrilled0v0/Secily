@@ -17,7 +17,8 @@ public abstract class Assembly {
     public float maxHeight = 0;
     public WindowAssembly fatherWindow;
     public String assemblyName = "defaultName";
-    public boolean canReInit = false;
+    public boolean onDrag = false;
+    public boolean canDrag = false;
 
     public Assembly(float[] pos, WindowAssembly fatherWindow) {
         this.pos = pos;
@@ -61,7 +62,7 @@ public abstract class Assembly {
     public abstract void mouseEventHandle(int mouseX, int mouseY, int button);
 
 
-    public void drag(float mouseDeltaX, float mouseDeltaY) {
+    public void onDrag(float mouseDeltaX, float mouseDeltaY) {
         this.pos[0] += mouseDeltaX;
         this.pos[1] += mouseDeltaY;
         this.pos[2] += mouseDeltaX;

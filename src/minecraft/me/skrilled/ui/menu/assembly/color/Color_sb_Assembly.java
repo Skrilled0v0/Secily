@@ -31,6 +31,7 @@ public class Color_sb_Assembly extends Assembly {
         super(pos, fatherWindow);
         this.h = h;
         this.colorAssembly = colorAssembly;
+        this.canDrag = true;
         processCircleAssembly(s, b);
     }
 
@@ -52,7 +53,7 @@ public class Color_sb_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if ((!init) || SecilyUserInterface.clickDrag) initColorPointLists();
+        if ((!init) || SecilyUserInterface.mainGUIClickDrag) initColorPointLists();
         RenderUtil.drawColorPointLists(colorPointLists);
         this.circleAssembly.draw();
         return deltaY();

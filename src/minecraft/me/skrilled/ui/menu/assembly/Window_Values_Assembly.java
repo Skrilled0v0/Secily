@@ -76,7 +76,7 @@ public class Window_Values_Assembly extends WindowAssembly {
             float uSpacing = 0.02077189714936106368668839567489f * valuesEditZoneWindow.deltaY();
             switch (valueHeader.getValueType()) {
                 case BOOLEAN: {
-                    //以下大家一样
+                    //以下大家一样(除了宽高计算系数)
                     float width = 0.09649073867440303503682213791564f * valuesEditZoneWindow.deltaX();
                     float height = 0.06710124683118630037767085726111f * valuesEditZoneWindow.deltaY();
                     calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
@@ -124,6 +124,26 @@ public class Window_Values_Assembly extends WindowAssembly {
                     break;
                 }
                 case DOUBLE: {
+                    float width = 0.20942925686230752064271367998215f * valuesEditZoneWindow.deltaX();
+                    float height = 0.04027626881887319571628123544932f * valuesEditZoneWindow.deltaY();
+                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, (uSpacing * 1.5f));
+                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
+                        valuesEditZoneWindow.currentUsedHeight = uMargin;
+                        inLeftHalfZone = !inLeftHalfZone;
+                        if (inLeftHalfZone) {
+                            return valuesEditZoneWindow;
+                        }
+                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, (uSpacing * 2f));
+                    }
+                    double[] doubles = valueHeader.getDoubles();
+                    Animation animation = new Animation(100, false, Easing.LINEAR);
+                    Color bgColor = new Color(255, 255, 255, 61);
+                    Color ugColor = new Color(204, 204, 204, 255);
+                    Color buttonColor = new Color(126, 183, 247, 255);
+                    NumberAssembly numberAssembly = new NumberAssembly(pos.clone(), valuesEditZoneWindow, doubles.clone(), animation, bgColor, ugColor, buttonColor);
+                    numberAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                    valuesEditZoneWindow.addAssembly(numberAssembly);
+                    yUsedValueBox = uMargin + height;
                     break;
                 }
                 case STRING: {
@@ -249,6 +269,25 @@ public class Window_Values_Assembly extends WindowAssembly {
             if (!result.contains(assemblyByMousePos)) {
                 result.add(assemblyByMousePos);
             }
+        }
+        return result;
+    }
+
+    @Override
+    public ArrayList<Assembly> getAssembliesCanDrag() {
+        ArrayList<Assembly> result = new ArrayList<>();
+        if (valuesEditZoneWindows.size() > 0) {
+            for (Assembly assembly : this.valuesEditZoneWindows.get(page - 1).assemblies) {
+                if (assembly.canDrag) result.add(assembly);
+            }
+            for (WindowAssembly windowAssembly : this.valuesEditZoneWindows.get(page - 1).subWindows) {
+                for (Assembly assembly : windowAssembly.getAssembliesCanDrag()) {
+                    result.add(assembly);
+                }
+            }
+        }
+        for (Assembly assembly : super.getAssembliesCanDrag()) {
+            result.add(assembly);
         }
         return result;
     }

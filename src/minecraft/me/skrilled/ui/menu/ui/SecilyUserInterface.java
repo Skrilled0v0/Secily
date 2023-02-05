@@ -29,7 +29,7 @@ public class SecilyUserInterface extends GuiScreen {
     /**
      * 拖动布尔
      */
-    public static boolean clickDrag = false;
+    public static boolean mainGUIClickDrag = false;
     /**
      * Window背景传参
      */
@@ -47,6 +47,7 @@ public class SecilyUserInterface extends GuiScreen {
      * 点击拖动定位y轴
      */
     float posInClickY;
+    ArrayList<Assembly> assembliesClicked;
     private Window_Values_Assembly valuesWindow;
 
     public SecilyUserInterface() {
@@ -89,7 +90,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.bgAssembly = bigBg;
 
         //实例化 currentModuleType string
-        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, 0, mainGui.deltaX(), ((mainGui.deltaY() * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white);
+        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, 0, mainGui.deltaX(), ((mainGui.deltaY() * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
 
         //计算 编辑区 背景 Pos
         float[] areaEditPos = {0.01704958975262581302525836774406f * bigBg.deltaX(), 0.14244186046511627906976744186047f * bigBg.deltaY(), 0.98295041024737418697474163225594f * bigBg.deltaX(), 0.97520930232558139534883720930233f * bigBg.deltaY()};
@@ -146,7 +147,6 @@ public class SecilyUserInterface extends GuiScreen {
         modulesWindow.assemblyName = "modulesWindow";
         //添加 modulesWindow 至 leftSideBar
         leftSideBar.addWindow(modulesWindow);
-
         //计算 valuesWindow pos
         float[] valuesWindowPos = {0.31461039502426172650114221873906f * mainGui.deltaX(), 0.16415950900836773754725636280232f * mainGui.deltaY(), 0.96479965316569675343082489870104f * mainGui.deltaX(), 0.92612980274917350796437779781395f * mainGui.deltaY()};
         //初始化valuesWindow
@@ -163,16 +163,18 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        //拖动
-        clickDrag = mouseButton == 0 && mouseX > mainGui.calcAbsX() && mouseX < (mainGui.calcAbsX() + mainGui.deltaX()) && mouseY > mainGui.calcAbsY() && mouseY < mainGui.calcAbsY() + mainGui.deltaY() * 0.13255813953488372093023255813953f;
-        if (clickDrag) {
+        //mainGUI拖动
+        mainGUIClickDrag = mouseButton == 0 && mouseX > mainGui.calcAbsX() && mouseX < (mainGui.calcAbsX() + mainGui.deltaX()) && mouseY > mainGui.calcAbsY() && mouseY < mainGui.calcAbsY() + mainGui.deltaY() * 0.13255813953488372093023255813953f;
+        if (mainGUIClickDrag) {
             posInClickX = mouseX;
             posInClickY = mouseY;
         }
         //组件点击判定
-        //组件点击判定
         ArrayList<Assembly> assemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
         for (Assembly assembly : assemblies) {
+        ArrayList<Assembly> assemblyList = mainGui.getAssembliesCanDrag();
+
+            if (assembly.canDrag) assembly.onDrag = true;
             //通用的处理
             try {
                 assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
@@ -198,11 +200,18 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        //拖动
-        if (clickDrag) {
-            mainGui.drag(mouseX - posInClickX, mouseY - posInClickY);
+        //mainGui拖动
+        if (mainGUIClickDrag) {
+            mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
             posInClickX = mouseX;
             posInClickY = mouseY;
+        }
+        //其他组件拖动
+        ArrayList<Assembly> assembliesCanDrag = mainGui.getAssembliesCanDrag();
+        for (Assembly assembly : assembliesCanDrag) {
+            if (assembly.onDrag) {
+                assembly.mouseEventHandle(mouseX, mouseY, 0);
+            }
         }
         //滚轮处理
         int mouseWheel = Mouse.getDWheel();
@@ -238,7 +247,10 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        clickDrag = false;
+        mainGUIClickDrag = false;
+        for (Assembly assembly : mainGui.getAssembliesCanDrag()) {
+            assembly.onDrag = false;
+        }
         super.mouseReleased(mouseX, mouseY, state);
     }
 

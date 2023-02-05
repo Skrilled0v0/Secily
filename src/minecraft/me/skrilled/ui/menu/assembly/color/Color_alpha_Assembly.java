@@ -30,6 +30,7 @@ public class Color_alpha_Assembly extends Assembly {
         this.b = b;
         this.a = a;
         this.colorAssembly = colorAssembly;
+        this.canDrag = true;
         color = Color.getHSBColor(h, s, b);
         rgba[0] = color.getRed();
         rgba[1] = color.getGreen();
@@ -45,7 +46,7 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if ((!init) || SecilyUserInterface.clickDrag) initColorPoints();
+        if ((!init) || SecilyUserInterface.mainGUIClickDrag) initColorPoints();
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
@@ -57,6 +58,7 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
+        System.out.println(onDrag);
         String[] valueInfo = colorAssembly.assemblyName.split("\\.");
         ModuleHeader moduleHeader = ModuleManager.getModuleByName(valueInfo[0]);
         ValueHeader valueHeader = moduleHeader.getValueByName(valueInfo[1]);

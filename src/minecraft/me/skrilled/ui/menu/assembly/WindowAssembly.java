@@ -119,4 +119,21 @@ public class WindowAssembly extends Assembly {
         }
         return result;
     }
+
+    public ArrayList<Assembly> getAssembliesCanDrag() {
+        ArrayList<Assembly> result = new ArrayList<>();
+        //mainGui不采用这里的拖动方案
+        if (this.fatherWindow != null) {
+            if (this.canDrag) result.add(this);
+        }
+        for (Assembly assembly : assemblies) {
+            if (assembly.canDrag) result.add(assembly);
+        }
+        for (WindowAssembly subWindow : subWindows) {
+            for (Assembly assembly : subWindow.getAssembliesCanDrag()) {
+                result.add(assembly);
+            }
+        }
+        return result;
+    }
 }
