@@ -10,9 +10,8 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.clickui.EclipseMenu;
-import me.skrilled.ui.clickui.MenuMotion;
-import me.skrilled.ui.clickui.SecilyMenu;
+import me.skrilled.ui.menu.EclipseMenu;
+import me.skrilled.ui.menu.MenuMotion;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import org.lwjgl.input.Keyboard;
 
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 
 @ModuleInitialize(name = "SettingMenu", type = ModuleType.RENDER, key = Keyboard.KEY_RSHIFT)
 public class SettingMenu extends ModuleHeader {
-    public static SecilyMenu menu = new SecilyMenu();
     static ArrayList<String> cmode = new ArrayList<>();
     public static ValueHeader colorMode = new ValueHeader("EclipseColorMode", "Dark", cmode);
     static double[] x2 = {0.0, 659.5, 199999, 0.5f};
@@ -33,11 +31,12 @@ public class SettingMenu extends ModuleHeader {
     public static ValueHeader posY1 = new ValueHeader("Y1", y1);
     ArrayList<String> mode = new ArrayList<>();
     ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
+    public static SecilyUserInterface secilyUI = new SecilyUserInterface();
 
     public SettingMenu() {
         this.setCanView(false);
         this.addEnumTypes(cmode, "Dark", "White");
-        this.addEnumTypes(mode, "Abandoned", "Eclipse", "Secily");
+        this.addEnumTypes(mode, "Eclipse", "Secily");
     }
 
     public static float[] getGuiPos() {
@@ -47,23 +46,19 @@ public class SettingMenu extends ModuleHeader {
     @Override
     public void onEnabled() {
         SenseHeader.getSense.configManager.saveAll();
-        if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) {
+        if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse") && mc.theWorld != null) {
             mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
-        }
-        if (sideMode.getCurrentEnumType().equalsIgnoreCase("Secily")) {
-            mc.displayGuiScreen(new SecilyUserInterface());
-            this.toggle();
-        }
-        MenuMotion.setMenuMotion();
+        } else MenuMotion.setMenuMotion();
         super.onEnabled();
     }
 
 
     @Override
     public void onDisabled() {
+        if (!sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse") && mc.theWorld != null)
+            MenuMotion.setMenuMotion();
         SenseHeader.getSense.configManager.saveAll();
-        if (!sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse")) MenuMotion.setMenuMotion();
         super.onDisabled();
     }
 }

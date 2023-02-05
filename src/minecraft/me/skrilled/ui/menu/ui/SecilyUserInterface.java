@@ -10,13 +10,17 @@ import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.ui.menu.MenuMotion;
 import me.skrilled.ui.menu.assembly.*;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
+import me.skrilled.utils.IMC;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.main.Main;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
@@ -25,6 +29,7 @@ import java.util.ArrayList;
 public class SecilyUserInterface extends GuiScreen {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
     public static boolean onModuleTypeSwitching = false;
+    boolean closed;
     public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     /**
      * 拖动布尔
@@ -49,6 +54,7 @@ public class SecilyUserInterface extends GuiScreen {
      */
     float posInClickY;
     private Window_Values_Assembly valuesWindow;
+    public static Animation uiAnimation=new Animation(800f,false,Easing.BACK_OUT);
 
     public SecilyUserInterface() {
         secilyUserInterface = this;
@@ -158,6 +164,10 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == 1) {
+             closed = true;
+            SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
+        }
         if (keyTypeStringAssembly != null) keyTypeStringAssembly.keyTyped(typedChar, keyCode);
         super.keyTyped(typedChar, keyCode);
     }
@@ -197,6 +207,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+
         //mainGui拖动
         if (mainGUIClickDrag) {
             mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
@@ -238,8 +249,15 @@ public class SecilyUserInterface extends GuiScreen {
             }
         }
         //绘制
+        GL11.glPushMatrix();
+        float motion= (float) MenuMotion.getMenuMotion().getAnimationFactor();
+        GlStateManager.scale(motion,motion,motion);
         mainGui.draw();
+        GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
+        if (closed) {
+            if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) mc.displayGuiScreen(null);
+        }
     }
 
     @Override
@@ -253,6 +271,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+
         super.onGuiClosed();
     }
 }

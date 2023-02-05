@@ -33,10 +33,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ModuleHeader implements IMC {
-    public float[] modulePosInfo = new float[]{0, 0, 0, 0};
-    public ColourAnimation moduleMotionColor = new ColourAnimation(new Color(74, 74, 74, 150), new Color(0, 255, 169, 150), 1000f, false, Easing.LINEAR);
-    public boolean menuFlag;
-    public int key, anim, clickAnim, valueWheelY = 0;
+    public int key, anim, clickAnim;
     public String moduleName;
     public boolean Enabled;
     public Animation arrayWidth = new Animation(1000f, false, Easing.BACK_OUT);

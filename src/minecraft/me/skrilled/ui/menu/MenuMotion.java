@@ -3,7 +3,7 @@
  *Code by SkrilledSense
  *20230116
  */
-package me.skrilled.ui.clickui;
+package me.skrilled.ui.menu;
 
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.SettingMenu;
@@ -19,8 +19,9 @@ public class MenuMotion implements IMC {
     }
 
     public static void setMenuMotion() {
+        if(mc.theWorld==null)return;
         if (SenseHeader.getSense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled()) {
-            mc.displayGuiScreen(SettingMenu.menu);
+            mc.displayGuiScreen(SettingMenu.secilyUI);
             MenuMotion.setState(true);
         }
         if (!SenseHeader.getSense.moduleManager.getModuleByClass(SettingMenu.class).isEnabled())

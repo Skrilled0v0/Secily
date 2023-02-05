@@ -1,4 +1,4 @@
-package me.skrilled.ui.clickui;
+package me.skrilled.ui.menu;
 
 import me.ashyx.blur.util.Blur;
 import me.fontloader.FontDrawer;
