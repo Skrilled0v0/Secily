@@ -147,7 +147,25 @@ public class Window_Values_Assembly extends WindowAssembly {
                     break;
                 }
                 case STRING: {
-                    float width = 0;
+                    float width = 0.24942925686230752064271367998215f * valuesEditZoneWindow.deltaX();
+                    float height = 0.0569093072585234621553106730819f * valuesEditZoneWindow.deltaY();
+                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
+                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
+                        valuesEditZoneWindow.currentUsedHeight = uMargin;
+                        inLeftHalfZone = !inLeftHalfZone;
+                        if (inLeftHalfZone) {
+                            return valuesEditZoneWindow;
+                        }
+                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
+                    }
+                    Color bgColorOut = new Color(0, 0, 0, 64);
+                    Color bgColorIn = new Color(0, 0, 0, 128);
+                    Color fontColor = new Color(255, 189, 189, 254);
+                    FontDrawer font = Main.fontLoader.EN16;
+                    KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), true, bgColorOut, bgColorIn, fontColor, false, font);
+                    keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                    valuesEditZoneWindow.addAssembly(keyTypeStringAssembly);
+                    yUsedValueBox = uMargin + height;
                     break;
                 }
                 case COLOR: {

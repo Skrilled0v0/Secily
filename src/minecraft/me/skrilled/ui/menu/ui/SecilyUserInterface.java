@@ -30,6 +30,7 @@ public class SecilyUserInterface extends GuiScreen {
      * 拖动布尔
      */
     public static boolean mainGUIClickDrag = false;
+    public static KeyTypeStringAssembly keyTypeStringAssembly;
     /**
      * Window背景传参
      */
@@ -47,7 +48,6 @@ public class SecilyUserInterface extends GuiScreen {
      * 点击拖动定位y轴
      */
     float posInClickY;
-    ArrayList<Assembly> assembliesClicked;
     private Window_Values_Assembly valuesWindow;
 
     public SecilyUserInterface() {
@@ -158,6 +158,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyTypeStringAssembly != null) keyTypeStringAssembly.keyTyped(typedChar, keyCode);
         super.keyTyped(typedChar, keyCode);
     }
 
@@ -171,16 +172,12 @@ public class SecilyUserInterface extends GuiScreen {
         }
         //组件点击判定
         ArrayList<Assembly> assemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
+        keyTypeStringAssembly = null;//重置可输入类型组件的值
         for (Assembly assembly : assemblies) {
-        ArrayList<Assembly> assemblyList = mainGui.getAssembliesCanDrag();
 
             if (assembly.canDrag) assembly.onDrag = true;
             //通用的处理
-            try {
-                assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
             //组件点击特殊处理
             if (!assembly.assemblyName.equalsIgnoreCase("defaultName")) {
                 //点到module的处理

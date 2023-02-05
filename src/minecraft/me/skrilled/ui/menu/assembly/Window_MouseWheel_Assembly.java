@@ -26,7 +26,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     @Override
     public void reset() {
         super.reset();
-//        skipAim = 0;
+        skipAim = 0;
         currentSkip = 0;
         animation = new Animation(animation.length, animation.initialState, Easing.LINEAR);
     }
