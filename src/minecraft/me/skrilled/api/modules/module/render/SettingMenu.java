@@ -45,7 +45,6 @@ public class SettingMenu extends ModuleHeader {
 
     @Override
     public void onEnabled() {
-        SenseHeader.getSense.configManager.saveAll();
         if (sideMode.getCurrentEnumType().equalsIgnoreCase("Eclipse") && mc.theWorld != null) {
             mc.displayGuiScreen(new EclipseMenu());
             this.toggle();
