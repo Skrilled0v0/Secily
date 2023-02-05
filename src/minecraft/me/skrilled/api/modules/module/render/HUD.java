@@ -16,30 +16,43 @@ import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.render.RenderUtil;
+import me.surge.animation.BoundedAnimation;
+import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
-    static ArrayList<String> notType = new ArrayList<>();
-    static ArrayList<String> soundType = new ArrayList<>();
     public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
     public static ValueHeader not = new ValueHeader("Notifications", true);
-    public static ValueHeader moduleNotType = new ValueHeader("ModuleSwitchPrompt", "LEFT",notType);
-    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSwitchSound", "Basic",notType);
+    static ArrayList<String> notType = new ArrayList<>();
+    public static ValueHeader moduleNotType = new ValueHeader("ModuleSwitchPrompt", "LEFT", notType);
+    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSwitchSound", "Basic", notType);
+    static ArrayList<String> soundType = new ArrayList<>();
+    ArrayList<String> markType = new ArrayList<>();
+    double[] size = {32, 128, 512, 0.1};
+    String markStr = SenseHeader.getSense.getClientName();
     ArrayList<String> didis = new ArrayList<>();
+    ValueHeader clientMark = new ValueHeader("ClientMark", "SecilyFlower", markType);
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader didi = new ValueHeader("DrawDIDI", true);
     ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
+    ValueHeader markText = new ValueHeader("MarkText", markStr);
+    ValueHeader iconSize = new ValueHeader("FlowerSize", size);
+    BoundedAnimation angle=new BoundedAnimation(0,360,5000f,false, Easing.LINEAR);
 
     public HUD() {
         addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
         addEnumTypes(notType, "LEFT", "UP", "None");
-        addEnumTypes(soundType, "Basic", "Ding", "New","None");
+        addEnumTypes(soundType, "Basic", "Ding", "New", "None");
+        addEnumTypes(markType, "Text", "SecilyFlower", "Info", "None");
     }
 
     @EventTarget
@@ -49,6 +62,24 @@ public class HUD extends ModuleHeader {
         double[] pos = SenseHeader.getSense.getPlayerPos();
         FontDrawer font = Main.fontLoader.EN16;
         FontDrawer arrayFont = Main.fontLoader.EN24;
+        FontDrawer markFont = Main.fontLoader.EN36;
+        float icon = (float) iconSize.getDoubleCurrentValue();
+        //Mark
+        if (!clientMark.getCurrentEnumType().equalsIgnoreCase("None")) {
+            switch (clientMark.getCurrentEnumType()) {
+                case "SecilyFlower":
+                    if (angle.getAnimationValue() == 0) angle.setState(true);
+                    if (angle.getAnimationValue() == 360) angle.setState(false);
+                    GL11.glPushMatrix();
+                    GlStateManager.rotate((float) angle.getAnimationValue(),0,0,1);
+                    RenderUtil.drawIcon(0, 0 ,(int) icon, (int) icon, new ResourceLocation("skrilled/launcher.png"));
+                    GL11.glPopMatrix();
+                    break;
+                case "Text":
+                    markFont.drawStringWithShadow(markText.getStrValue(), 5, 5, 0.2f, -1);
+                    break;
+            }
+        }
         //ArrayList
         if ((Boolean) this.getValue(malist)) {
             ArrayList<ModuleHeader> sortedList = new ArrayList<>();
@@ -68,8 +99,8 @@ public class HUD extends ModuleHeader {
 
         //Information
         if ((Boolean) this.getValue(info)) {
-            font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 0, h - font.getHeight(), -1);
-            font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 0, h - font.getHeight() * 2, -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 5, h - font.getHeight()-5, -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 5, h - font.getHeight() * 2-5, -1);
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
