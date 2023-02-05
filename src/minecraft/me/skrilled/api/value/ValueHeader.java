@@ -140,7 +140,7 @@ public class ValueHeader {
     }
 
     public void setConfigColorValue(int colorValue) {
-        this.colorValue = new Color(colorValue);
+        this.colorValue = new Color(colorValue,true);
     }
 
     public String getStrValue() {
