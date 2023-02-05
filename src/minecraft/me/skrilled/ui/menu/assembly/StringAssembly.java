@@ -6,7 +6,6 @@
 package me.skrilled.ui.menu.assembly;
 
 import me.fontloader.FontDrawer;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.manager.ModuleManager;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.ui.menu.ui.KeyBindingGui;
@@ -15,13 +14,12 @@ import me.skrilled.utils.render.RenderUtil;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class StringAssembly extends Assembly implements IMC {
     String value;
-    boolean centered;
+    boolean[] centered;
     Color bgColor;
     Color onSelectedBGColor;
     Color fontColor;
@@ -29,7 +27,7 @@ public class StringAssembly extends Assembly implements IMC {
     FontDrawer font;
     float radius;
 
-    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, FontDrawer font, float radius) {
+    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColor, Color fontColor, FontDrawer font, float radius) {
         super(pos, fatherWindow);
         this.value = value;
         this.centered = centered;
@@ -39,7 +37,7 @@ public class StringAssembly extends Assembly implements IMC {
         this.radius = radius;
     }
 
-    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean centered, Color bgColor, Color onSelectedBGColor, Color fontColor, FontDrawer font, float radius) {
+    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColor, Color onSelectedBGColor, Color fontColor, FontDrawer font, float radius) {
         super(pos, fatherWindow);
         this.value = value;
         this.centered = centered;
@@ -50,7 +48,7 @@ public class StringAssembly extends Assembly implements IMC {
         this.radius = radius;
     }
 
-    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean centered, Color bgColor, Color fontColor, boolean border, FontDrawer font) {
+    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColor, Color fontColor, boolean border, FontDrawer font) {
         super(pos, fatherWindow);
         this.value = value;
         this.centered = centered;
@@ -58,66 +56,6 @@ public class StringAssembly extends Assembly implements IMC {
         this.fontColor = fontColor;
         this.border = border;
         this.font = font;
-    }
-
-    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor, float radius) {
-        float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
-        float lineSpacing = fontHeight * 0.6f;
-        float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor);
-        for (int i = 0; i < row - 1; i++) {
-            String s1 = str.substring(split.get(i), split.get(i + 1));
-            font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        String s1 = str.substring(split.get(row - 1));
-        font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
-        return boxHeight;
-    }
-
-    public static float drawStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
-        float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
-        float lineSpacing = fontHeight * 0.6f;
-        float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        //计算所需行数
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        //画背景
-        drawRoundRect(pos[0], pos[1], pos[2], pos[3], font.getHeight() / 2f, bgColor);
-        //画文字前row-1行
-        for (int i = 0; i < row - 1; i++) {
-            font.drawString(str.substring(split.get(i), split.get(i + 1)), pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        //画文字最后一行
-        font.drawString(str.substring(split.get(row - 1)), pos[0] + lrMargin, (pos[1] + pos[3] - fontHeight) / 2 + (row - 1) * (fontHeight + lineSpacing), fontColor);
-        return boxHeight;
     }
 
     public static void drawRoundRect(float startX, float startY, float width, float height, float radius, int rgba) {
@@ -181,16 +119,7 @@ public class StringAssembly extends Assembly implements IMC {
 
     @Override
     public float draw() {
-
-        if (autoPushPopMatrix) {
-            if (centered)
-                return RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius);
-            else return RenderUtil.drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
-        } else {
-            if (centered)
-                return drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius);
-            else return drawStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB());
-        }
+        return RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius, centered);
     }
 
     @Override
@@ -199,6 +128,15 @@ public class StringAssembly extends Assembly implements IMC {
             String moduleName = assemblyName.split("\\.")[1];
             ModuleHeader module = ModuleManager.getModuleByName(moduleName);
             mc.displayGuiScreen(new KeyBindingGui(module));
+        } else if (assemblyName.startsWith("renderedInArrayListAssembly")) {
+            String moduleName = assemblyName.split("\\.")[1];
+            ModuleHeader module = ModuleManager.getModuleByName(moduleName);
+            module.setCanView(this.value.equals("K"));
+            if (this.value.equals("K")) {
+                value = "J";
+            } else {
+                value = "K";
+            }
         }
     }
 }

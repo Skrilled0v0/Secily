@@ -373,63 +373,28 @@ public class RenderUtil implements IMC {
         return boxHeight;
     }
 
-    public static float drawStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor) {
+    public static float drawCenteredString_P(float[] pos, FontDrawer font, String str, int fontColor, boolean[] centered) {
         float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
         float lineSpacing = fontHeight * 0.6f;
+        float udMargin = fontHeight * 0.01f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
         float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2], pos[3], font.getHeight() / 2f, bgColor);
-        for (int i = 0; i < row - 1; i++) {
-            font.drawString(str.substring(split.get(i), split.get(i + 1)), pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        font.drawString(str.substring(split.get(row - 1)), pos[0] + lrMargin, (pos[1] + pos[3] - fontHeight) / 2 + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        float maxStringWidth = pos[2] - pos[0];
+        boxHeight = (fontHeight + lineSpacing) - lineSpacing;
+        font.drawString(str, pos[0] + ((centered[0]) ? ((maxStringWidth - font.getStringWidth(str)) / 2f) : lrMargin), pos[1] + (centered[1] ? ((pos[3] - pos[1] - fontHeight) / 2f) : udMargin), fontColor);
         return boxHeight;
     }
 
-    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor, float radius) {
+    public static float drawCenteredStringBox_P(float[] pos, FontDrawer font, String str, int bgColor, int fontColor, float radius, boolean[] centered) {
         float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
         float lineSpacing = fontHeight * 0.6f;
+        float udMargin = 0f;
+        float lrMargin = 1.5f * font.getCharWidth('A');
         float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        //计算所需行数
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        //画背景
-        RenderUtil.drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor);
-        //画文字前row-1行
-        for (int i = 0; i < row - 1; i++) {
-            String s1 = str.substring(split.get(i), split.get(i + 1));
-            font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        //画文字最后一行
-        String s1 = str.substring(split.get(row - 1));
-        font.drawString(s1, pos[0] + lrMargin + (maxStringWidth - font.getStringWidth(s1)) / 2f, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
+        float maxStringWidth = pos[2] - pos[0];
+        boxHeight = (fontHeight + lineSpacing) - lineSpacing;
+        drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor);
+        font.drawString(str, pos[0] + ((centered[0]) ? ((maxStringWidth - font.getStringWidth(str)) / 2f) : lrMargin), pos[1] + (centered[1] ? ((pos[3] - pos[1] - fontHeight) / 2f) : udMargin), fontColor);
         return boxHeight;
     }
 
@@ -443,34 +408,6 @@ public class RenderUtil implements IMC {
         float fontHeight = font.getHeight();
         font.drawString(str, pos[0], pos[1], fontColor);
         return fontHeight;
-    }
-
-    public static float drawLeftedString(float[] pos, FontDrawer font, String str, int fontColor) {
-        float fontHeight = font.getHeight();
-        float udMargin = fontHeight / 4f;
-        float lrMargin = 1.5f * font.getCharWidth('A');
-        float lineSpacing = fontHeight * 0.6f;
-        float boxHeight;
-        float maxStringWidth = pos[2] - pos[0] - 2f * lrMargin;
-        int row = 1;
-        ArrayList<Integer> split = new ArrayList<>();
-        int strHead = 0;
-        split.add(strHead);
-        for (int i = 0; i < str.length(); i++) {
-            if (font.getStringWidth(str.substring(strHead, i)) > maxStringWidth) {
-                strHead = i;
-                split.add(i);
-                row++;
-            }
-        }
-        boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
-        for (int i = 0; i < row - 1; i++) {
-            String s1 = str.substring(split.get(i), split.get(i + 1));
-            font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + i * (fontHeight + lineSpacing), fontColor);
-        }
-        String s1 = str.substring(split.get(row - 1));
-        font.drawString(s1, pos[0] + lrMargin, pos[1] + udMargin + (row - 1) * (fontHeight + lineSpacing), fontColor);
-        return boxHeight;
     }
 
     public static void drawBlockESP(double x, double y, double z, int bgrgba, int linergba, boolean perspective) {
@@ -918,7 +855,7 @@ public class RenderUtil implements IMC {
         drawOutlinedBoundingBox(box);
         if (hp) {
             glColor4f(hpColor.getRed() / 255.0f, hpColor.getGreen() / 255.0f, hpColor.getBlue() / 255.0f, 1f);
-            drawOutlinedBoundingBox(new AxisAlignedBB(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + (entity.height*1.2f) * hpFloat, posZ + entity.width));
+            drawOutlinedBoundingBox(new AxisAlignedBB(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + (entity.height * 1.2f) * hpFloat, posZ + entity.width));
         }
         glDisable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);

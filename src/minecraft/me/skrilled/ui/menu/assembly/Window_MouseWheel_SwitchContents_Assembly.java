@@ -51,7 +51,7 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
             this.addAssembly(currentBG);
             BooleanAssembly booleanAssembly = new BooleanAssembly(booleanAssemblyPos, this, ((ModuleHeader) contents.get(i)).isEnabled(), anim, bgColor, trueColor, falseColor, content);
             this.addAssembly(booleanAssembly);
-            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, content, false, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.white, font, font.getHeight() / 2f);
+            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, content, new boolean[]{false,true}, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.white, font, font.getHeight() / 2f);
             stringAssembly.assemblyName = content;
             this.addAssembly(stringAssembly);
             needInit = false;

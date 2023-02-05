@@ -10,7 +10,7 @@ public class KeyTypeStringAssembly extends StringAssembly {
     Color bgColorIn;
     Color bgColorOut;
 
-    public KeyTypeStringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean centered, Color bgColorOut, Color bgColorIn, Color fontColor, boolean border, FontDrawer font) {
+    public KeyTypeStringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColorOut, Color bgColorIn, Color fontColor, boolean border, FontDrawer font) {
         super(pos, fatherWindow, value, centered, bgColorOut, fontColor, border, font);
         this.bgColorIn = bgColorIn;
         this.bgColorOut = bgColorOut;

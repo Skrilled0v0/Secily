@@ -13,7 +13,6 @@ import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.ui.menu.MenuMotion;
 import me.skrilled.ui.menu.assembly.*;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
-import me.skrilled.utils.IMC;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,13 +28,13 @@ import java.util.ArrayList;
 public class SecilyUserInterface extends GuiScreen {
     public static ModuleType currentModuleType = ModuleType.COMBAT;
     public static boolean onModuleTypeSwitching = false;
-    boolean closed;
     public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
     /**
      * 拖动布尔
      */
     public static boolean mainGUIClickDrag = false;
     public static KeyTypeStringAssembly keyTypeStringAssembly;
+    public static Animation uiAnimation = new Animation(800f, false, Easing.BACK_OUT);
     /**
      * Window背景传参
      */
@@ -45,6 +44,7 @@ public class SecilyUserInterface extends GuiScreen {
      */
     public static WindowAssembly mainGui = new WindowAssembly(windowsPos, null);
     private static SecilyUserInterface secilyUserInterface;
+    boolean closed;
     /**
      * 点击拖动定位x轴
      */
@@ -54,7 +54,6 @@ public class SecilyUserInterface extends GuiScreen {
      */
     float posInClickY;
     private Window_Values_Assembly valuesWindow;
-    public static Animation uiAnimation=new Animation(800f,false,Easing.BACK_OUT);
 
     public SecilyUserInterface() {
         secilyUserInterface = this;
@@ -96,7 +95,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.bgAssembly = bigBg;
 
         //实例化 currentModuleType string
-        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, Main.fontLoader.EN36.getHeight() / 2f, mainGui.deltaX(), ((mainGui.deltaY() * 0.13255813953488372093023255813953f) - Main.fontLoader.EN36.getHeight()) / 2f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
+        mainGui.windowName = new StringWithoutBGAssembly(new float[]{0, 0, mainGui.deltaX(), mainGui.deltaY() * 0.12455626829420190571090490128916f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
 
         //计算 编辑区 背景 Pos
         float[] areaEditPos = {0.01704958975262581302525836774406f * bigBg.deltaX(), 0.14244186046511627906976744186047f * bigBg.deltaY(), 0.98295041024737418697474163225594f * bigBg.deltaX(), 0.97520930232558139534883720930233f * bigBg.deltaY()};
@@ -165,7 +164,7 @@ public class SecilyUserInterface extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) {
-             closed = true;
+            closed = true;
             SenseHeader.getSense.getModuleManager().getModuleByClass(SettingMenu.class).toggle();
         }
         if (keyTypeStringAssembly != null) keyTypeStringAssembly.keyTyped(typedChar, keyCode);
@@ -250,8 +249,8 @@ public class SecilyUserInterface extends GuiScreen {
         }
         //绘制
         GL11.glPushMatrix();
-        float motion= (float) MenuMotion.getMenuMotion().getAnimationFactor();
-        GlStateManager.scale(motion,motion,motion);
+        float motion = (float) MenuMotion.getMenuMotion().getAnimationFactor();
+        GlStateManager.scale(motion, motion, motion);
         mainGui.draw();
         GL11.glPopMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);

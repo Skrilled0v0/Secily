@@ -76,7 +76,7 @@ public class EnumAssembly extends WindowAssembly {
         enumValuePos[3] = udMargin / 2f + (fontHeight + udMargin);
 
         if (contents.size() > 0) {
-            StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), currentValue, font, Color.white, new boolean[]{true, true});
+            StringWithoutBGAssembly enumValueAssembly = new StringWithoutBGAssembly(enumValuePos, subWindows.get(0), currentValue, font, Color.white, new boolean[]{true, false});
             subWindows.get(0).addAssembly(enumValueAssembly);
         }
 
