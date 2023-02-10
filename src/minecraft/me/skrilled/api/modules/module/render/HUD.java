@@ -39,7 +39,7 @@ public class HUD extends ModuleHeader {
     double[] size = {32, 128, 512, 0.1};
     String markStr = SenseHeader.getSense.getClientName();
     ArrayList<String> didis = new ArrayList<>();
-    ValueHeader clientMark = new ValueHeader("ClientMark", "SecilyFlower", markType);
+    ValueHeader clientMark = new ValueHeader("ClientMark", "Flower", markType);
     ValueHeader info = new ValueHeader("information", true);
     ValueHeader malist = new ValueHeader("ArrayList", true);
     ValueHeader didi = new ValueHeader("DrawDIDI", true);
@@ -52,7 +52,7 @@ public class HUD extends ModuleHeader {
         addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
         addEnumTypes(notType, "LEFT", "UP", "None");
         addEnumTypes(soundType, "Basic", "Ding", "New", "None");
-        addEnumTypes(markType, "Text", "SecilyFlower", "Info", "None");
+        addEnumTypes(markType, "Text", "Flower", "Info", "None");
     }
 
     @EventTarget
@@ -67,11 +67,11 @@ public class HUD extends ModuleHeader {
         //Mark
         if (!clientMark.getCurrentEnumType().equalsIgnoreCase("None")) {
             switch (clientMark.getCurrentEnumType()) {
-                case "SecilyFlower":
+                case "Flower":
                     if (angle.getAnimationValue() == 0) angle.setState(true);
                     if (angle.getAnimationValue() == 360) angle.setState(false);
                     GL11.glPushMatrix();
-                    GlStateManager.rotate((float) angle.getAnimationValue(),0,0,1);
+//                    GlStateManager.rotate((float) angle.getAnimationValue(),0,0,1);
                     RenderUtil.drawIcon(0, 0 ,(int) icon, (int) icon, new ResourceLocation("skrilled/launcher.png"));
                     GL11.glPopMatrix();
                     break;
