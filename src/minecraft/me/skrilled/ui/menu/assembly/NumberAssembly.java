@@ -33,7 +33,7 @@ public class NumberAssembly extends Assembly {
         this.bgColor = bgColor;
         this.ugColor = ugColor;
         this.buttonColor = buttonColor;
-        this.lastAnimValue = doubles[1] / (doubles[2] - doubles[0]);
+        this.lastAnimValue = (doubles[1] - doubles[0]) / (doubles[2] - doubles[0]);
         this.canDrag = true;
         barLRMargin = deltaX() / 20;
     }
