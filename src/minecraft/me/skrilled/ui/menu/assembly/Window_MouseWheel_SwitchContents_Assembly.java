@@ -11,10 +11,15 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWheel_Assembly {
+    float bgBoxHeight;
+    float udMargin;
     private boolean needInit = true;
 
     public Window_MouseWheel_SwitchContents_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, int numOfContent2Render) {
-        super(pos, fatherWindow, contents, numOfContent2Render);
+        super(pos, fatherWindow, contents, numOfContent2Render, 0);
+        bgBoxHeight = this.deltaY() / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
+        udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
+        this.wheelsToNext = bgBoxHeight + udMargin;
     }
 
 
@@ -31,11 +36,7 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
     }
 
     public void init() {
-
         this.assemblies = new ArrayList<>();
-        float bgBoxHeight = this.deltaY() / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
-        float udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
-
 
         for (int i = 0; i < contents.size(); i++) {
             FontDrawer font = Main.fontLoader.EN22;
@@ -47,12 +48,12 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
             Color trueColor = new Color(126, 183, 247);
             Color falseColor = new Color(204, 204, 204);
 
-            BGAssembly currentBG = new BGAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, new Color(255, 255, 255, 80), BackGroundType.RoundRect,false, font.getHeight() / 2f);
+            BGAssembly currentBG = new BGAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, new Color(255, 255, 255, 80), BackGroundType.RoundRect, false, font.getHeight() / 2f);
             currentBG.currentBgMotion = new Animation(1800f, false, Easing.CUBIC_OUT);
             this.addAssembly(currentBG);
             BooleanAssembly booleanAssembly = new BooleanAssembly(booleanAssemblyPos, this, ((ModuleHeader) contents.get(i)).isEnabled(), anim, bgColor, trueColor, falseColor, content);
             this.addAssembly(booleanAssembly);
-            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, content, new boolean[]{false,true}, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.white, font, font.getHeight() / 2f);
+            StringAssembly stringAssembly = new StringAssembly(new float[]{0, yUsed, deltaX(), bgBoxHeight + yUsed}, this, content, new boolean[]{false, true}, new Color(255, 255, 255, 25), new Color(255, 255, 255, 74), Color.white, font, font.getHeight() / 2f);
             stringAssembly.assemblyName = content;
             this.addAssembly(stringAssembly);
             needInit = false;

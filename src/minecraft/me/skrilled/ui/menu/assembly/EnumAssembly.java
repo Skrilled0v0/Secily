@@ -41,6 +41,9 @@ public class EnumAssembly extends WindowAssembly {
         this.allChoice = contents;
         this.animation = animation;
         restChoice = getRestContents(contents, currentValue);
+
+
+        udMargin = font.getHeight() * 0.9f;
         initSubWindow(font);
     }
 
@@ -64,11 +67,10 @@ public class EnumAssembly extends WindowAssembly {
         for (String s : restChoice) {
             contents.add(s);
         }
-        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, deltaX(), deltaY()}, this, contents, 3));
+        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, deltaX(), deltaY()}, this, contents, 3, font.getHeight() + udMargin));
         subWindows.get(0).assemblyName = "windowOfEnumAssembly";
         subWindows.get(0).bgAssembly = new BGAssembly(new float[]{0, 0, deltaX(), deltaY()}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f);
         float fontHeight = font.getHeight();
-        udMargin = fontHeight * 0.9f;
         float[] enumValuePos = new float[4];
         enumValuePos[0] = 0;
         enumValuePos[1] = udMargin / 2f;

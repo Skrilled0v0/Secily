@@ -17,10 +17,11 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     float currentSkip = 0f;
     private float lastSkipFactor = 0f;
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render) {
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render,float wheelsToNext) {
         super(pos, fatherWindow);
         this.contents = contents;
         this.numOfContent2Render = numOfContent2Render;
+        this.wheelsToNext = wheelsToNext;
     }
 
     @Override
@@ -60,7 +61,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             }
         }
         glPushMatrix();
-        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY(), (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()));
+        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY() + 1, (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()) + 1);
         float result = super.draw();
         glDisable(GL_SCISSOR_TEST);
         glPopMatrix();
