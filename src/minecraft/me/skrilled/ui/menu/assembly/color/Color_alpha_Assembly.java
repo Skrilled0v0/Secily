@@ -19,12 +19,13 @@ public class Color_alpha_Assembly extends Assembly {
     public int[] rgba = new int[4];
     public ArrayList<ColorPoint> colorPoints;
     Color color;
-    boolean init = false;
+    public boolean init = false;
     CicleAssembly cicleAssembly;
     ColorAssembly colorAssembly;
 
     public Color_alpha_Assembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, float a, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
+        this.assemblyName = String.valueOf(this.getClass());
         this.h = h;
         this.s = s;
         this.b = b;
@@ -46,7 +47,7 @@ public class Color_alpha_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if ((!init) || SecilyUserInterface.mainGUIClickDrag) initColorPoints();
+        if (!init) initColorPoints();
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();

@@ -9,14 +9,13 @@ import me.skrilled.ui.menu.assembly.color.Color_sb_Assembly;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ColorAssembly extends Assembly {
+public class ColorAssembly extends WindowAssembly {
     public Color_h_Assembly color_h_assembly;
     public Color_sb_Assembly color_sb_assembly;
     public Color_alpha_Assembly color_alpha_assembly;
     public ArrayList<ColorPoint> h_colors;
     public ArrayList<ColorPoint> sb_colors;
     public ArrayList<ColorPoint> alpha_colors;
-    WindowAssembly windowAssembly;
     boolean withAlpha = false;
     BGAssembly bgAssembly;
 
@@ -27,8 +26,7 @@ public class ColorAssembly extends Assembly {
     public ColorAssembly(float[] pos, WindowAssembly fatherWindow, float h, float s, float b, float a) {
         super(pos, fatherWindow);
         withAlpha = true;
-        windowAssembly = new WindowAssembly(pos, fatherWindow);
-        fatherWindow.addWindow(windowAssembly);
+        fatherWindow.addWindow(this);
         //构建sb明度饱和度选框,h拖动条,alpha拖动条,pos待设计（注意留出勾勒边框的位置）
         float margin = 0.05f * deltaX();
         float[] bg_pos = new float[]{0, 0, deltaX(), deltaY()};
@@ -37,19 +35,19 @@ public class ColorAssembly extends Assembly {
         float height = 0.08f * deltaX();
         float[] h_pos = new float[]{margin, deltaX(), deltaX() - margin, deltaX() + height};
         float[] alpha_pos = new float[]{margin, 1.1f * deltaX(), deltaX() - margin, 1.1f * deltaX() + height};
-        bgAssembly = new BGAssembly(bg_pos, windowAssembly, Color.darkGray);
-        windowAssembly.addAssembly(bgAssembly);
-        color_h_assembly = new Color_h_Assembly(h_pos, windowAssembly, h, this);
-        windowAssembly.addAssembly(color_h_assembly);
-        color_sb_assembly = new Color_sb_Assembly(sb_pos, windowAssembly, h, s, b, this);
-        windowAssembly.addAssembly(color_sb_assembly);
-        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, windowAssembly, h, s, b, a, this);
-        windowAssembly.addAssembly(color_alpha_assembly);
+        bgAssembly = new BGAssembly(bg_pos, this, Color.darkGray);
+        this.addAssembly(bgAssembly);
+        color_h_assembly = new Color_h_Assembly(h_pos, this, h, this);
+        this.addAssembly(color_h_assembly);
+        color_sb_assembly = new Color_sb_Assembly(sb_pos, this, h, s, b, this);
+        this.addAssembly(color_sb_assembly);
+        color_alpha_assembly = new Color_alpha_Assembly(alpha_pos, this, h, s, b, a, this);
+        this.addAssembly(color_alpha_assembly);
     }
 
     @Override
     public float draw() {
-        return 0f;
+        return super.draw();
     }
 
     @Override
@@ -96,5 +94,10 @@ public class ColorAssembly extends Assembly {
         color_sb_assembly.setH(h);
         color_h_assembly.SetH(h);
         color_alpha_assembly.setH(h);
+    }
+
+    @Override
+    public void onDrag(float mouseDeltaX, float mouseDeltaY) {
+        super.onDrag(mouseDeltaX, mouseDeltaY);
     }
 }

@@ -19,13 +19,14 @@ public class Color_h_Assembly extends Assembly {
     public ArrayList<ColorPoint> colorPoints;
     CicleAssembly circleAssembly;
     ColorAssembly colorAssembly;
-    private boolean init;
+    public boolean init;
 
     /**
      * 色相的选择的颜色的明度，饱和度默认全1.0f
      */
     public Color_h_Assembly(float[] pos, WindowAssembly fatherWindow, float h, ColorAssembly colorAssembly) {
         super(pos, fatherWindow);
+        this.assemblyName = String.valueOf(this.getClass());
         this.h = h;
         this.canDrag = true;
         this.colorAssembly = colorAssembly;
@@ -39,7 +40,7 @@ public class Color_h_Assembly extends Assembly {
 
     @Override
     public float draw() {
-        if ((!init) || SecilyUserInterface.mainGUIClickDrag) initColorPoints();
+        if (!init) initColorPoints();
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY());
         circleAssembly.draw();
         return deltaY();

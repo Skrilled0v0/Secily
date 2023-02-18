@@ -23,6 +23,7 @@ public abstract class Assembly {
     public Assembly(float[] pos, WindowAssembly fatherWindow) {
         this.pos = pos;
         this.fatherWindow = fatherWindow;
+        this.assemblyName = this.getClass().getSimpleName();
     }
 
     public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
@@ -69,4 +70,8 @@ public abstract class Assembly {
         this.pos[3] += mouseDeltaY;
     }
 
+    @Override
+    public String toString() {
+        return "Assembly{" + ", assemblyName='" + assemblyName + '\'' + '}';
+    }
 }

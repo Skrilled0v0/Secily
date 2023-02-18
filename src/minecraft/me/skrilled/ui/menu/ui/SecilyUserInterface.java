@@ -13,6 +13,9 @@ import me.skrilled.api.modules.module.render.SettingMenu;
 import me.skrilled.ui.menu.MenuMotion;
 import me.skrilled.ui.menu.assembly.*;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
+import me.skrilled.ui.menu.assembly.color.Color_alpha_Assembly;
+import me.skrilled.ui.menu.assembly.color.Color_h_Assembly;
+import me.skrilled.ui.menu.assembly.color.Color_sb_Assembly;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.gui.GuiScreen;
@@ -210,6 +213,16 @@ public class SecilyUserInterface extends GuiScreen {
         //mainGui拖动
         if (mainGUIClickDrag) {
             mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
+            ArrayList<Assembly> assemblies1 = mainGui.getAssembliesByClass(ColorAssembly.class);
+            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
+                ((Color_h_Assembly) assembliesByClass).init = false;
+            }
+            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_sb_Assembly.class)) {
+                ((Color_sb_Assembly) assembliesByClass).init = false;
+            }
+            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_alpha_Assembly.class)) {
+                ((Color_alpha_Assembly) assembliesByClass).init = false;
+            }
             posInClickX = mouseX;
             posInClickY = mouseY;
         }

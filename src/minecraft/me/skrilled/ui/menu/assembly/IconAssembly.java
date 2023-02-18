@@ -96,6 +96,7 @@ public class IconAssembly extends Assembly {
                     Assembly assembly = SecilyUserInterface.mainGui.getAssemblyByName("valuesWindow");
                     Window_Values_Assembly windowValuesAssembly = (Window_Values_Assembly) assembly;
                     windowValuesAssembly.page = Integer.valueOf(icon);
+
                     if (anim.getAnimationFactor() < 1D) {
                         float deltaPos = (aimingPos - currentPos);
                         currentPos += deltaPos * anim.getAnimationFactor();

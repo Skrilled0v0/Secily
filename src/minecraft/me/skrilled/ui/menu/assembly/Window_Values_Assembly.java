@@ -187,7 +187,7 @@ public class Window_Values_Assembly extends WindowAssembly {
                     hsbAlpha[3] = color.getAlpha() / 255f;
                     ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
                     colorAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
-                    valuesEditZoneWindow.addAssembly(colorAssembly);
+                    valuesEditZoneWindow.addWindow(colorAssembly);
                     yUsedValueBox = colorAssembly.deltaY() + uMargin;
                     break;
                 }
@@ -316,6 +316,20 @@ public class Window_Values_Assembly extends WindowAssembly {
         }
         for (Assembly assembly : super.getAssembliesCanDrag()) {
             result.add(assembly);
+        }
+        return result;
+    }
+
+    @Override
+    public ArrayList<Assembly> getAssembliesByClass(Class<? extends Assembly> T) {
+        ArrayList<Assembly> result = new ArrayList<>();
+        for (Assembly assembly : this.assemblies) {
+            if (assembly.getClass().getName().equals(T.getName())) result.add(assembly);
+        }
+        for (WindowAssembly editZoneWindow : this.valuesEditZoneWindows) {
+            for (Assembly assembliesByClass : editZoneWindow.getAssembliesByClass(T)) {
+                result.add(assembliesByClass);
+            }
         }
         return result;
     }
