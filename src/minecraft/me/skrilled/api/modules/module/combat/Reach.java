@@ -11,6 +11,9 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
+import me.skrilled.ui.menu.assembly.NumberAssembly;
+
+import java.math.BigDecimal;
 
 @ModuleInitialize(name = "Reach", type = ModuleType.COMBAT)
 public class Reach extends ModuleHeader {
@@ -21,6 +24,8 @@ public class Reach extends ModuleHeader {
 
     @EventTarget
     public void onUpdate(EventUpdate eventUpdate) {
-        this.setSuffix("C:" + Math.round(combat.getDoubleCurrentValue()) + " B:" + Math.round(build.getDoubleCurrentValue()));
+        BigDecimal combatValue = new BigDecimal(combat.getDoubleCurrentValue());
+        BigDecimal buildValue = new BigDecimal(build.getDoubleCurrentValue());
+        this.setSuffix("C:" + combatValue.setScale(NumberAssembly.scaleNum, NumberAssembly.roundingMode) + " B:" + buildValue.setScale(NumberAssembly.scaleNum, NumberAssembly.roundingMode));
     }
 }

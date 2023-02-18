@@ -29,6 +29,8 @@ public class BooleanAssembly extends Assembly {
         this.tureColor = tureColor;
         this.falseColor = falseColor;
         this.assemblyName = valueInfo;
+
+        animation.lastMillis = animation.initialState ? -(long) (double) animation.length.get() : 0;
     }
 
     @Override

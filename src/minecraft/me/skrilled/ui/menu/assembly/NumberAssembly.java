@@ -13,8 +13,12 @@ import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
 
 import java.awt.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class NumberAssembly extends Assembly {
+    public static final RoundingMode roundingMode = RoundingMode.HALF_UP;
+    public static final int scaleNum = 1;
     /**
      * 0：最小值；1：现在值；2：最大值；3：间隔
      */
@@ -42,7 +46,7 @@ public class NumberAssembly extends Assembly {
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
         FontDrawer valueRenderFont = Main.fontLoader.EN18;
-        String str = Double.toString(Math.floor(doubles[1] * 100) / 100);
+        String str = (new BigDecimal(doubles[1]).setScale(scaleNum,roundingMode)).toString();
         float halfStrWidth = valueRenderFont.getStringWidth(str) / 2f;
         float[] valueRenderPos = new float[]{(float) (pos[0] + barLRMargin + (deltaX() - 2 * barLRMargin) * (doubles[1] - doubles[0]) / (doubles[2] - doubles[0])), pos[1] - valueRenderFont.getHeight(), pos[2], pos[3]};
         valueRenderPos[0] += fatherWindow.calcAbsX() - halfStrWidth;
@@ -75,9 +79,10 @@ public class NumberAssembly extends Assembly {
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (button != 0) return;
         mouseX += ((deltaX() - 2 * barLRMargin) / ((doubles[2] - doubles[0]) / doubles[3])) / 2;
+        //将mouseX处理成相对拉条左端的值
         float x = Math.max(0, mouseX - calcAbsX() - barLRMargin);
         x = Math.min(x, deltaX() - 2 * barLRMargin);
-        x = x / (deltaX() - 2 * barLRMargin);
-        setDouble(doubles[0] + doubles[3] * Math.floor(x * (doubles[2] - doubles[0]) / doubles[3]));
+        float f = x / (deltaX() - 2 * barLRMargin);
+        setDouble(doubles[0] + doubles[3] * Math.floor(f * (doubles[2] - doubles[0]) / doubles[3]));
     }
 }
