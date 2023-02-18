@@ -31,6 +31,7 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
     }
 
     public void init() {
+
         this.assemblies = new ArrayList<>();
         float bgBoxHeight = this.deltaY() / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
         float udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
