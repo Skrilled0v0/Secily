@@ -64,8 +64,8 @@ public abstract class GuiScreen extends Gui implements GuiYesNoCallback {
     TimerUtil timerUtil = new TimerUtil();
     int i = 1;
     private GuiButton selectedButton;
-    private long lastMouseEvent;
-    private int touchValue;
+    public long lastMouseEvent;
+    public int touchValue;
     private URI clickedLinkURI;
 
     public static String getClipboardString() {

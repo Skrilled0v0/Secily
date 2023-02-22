@@ -18,6 +18,7 @@ import me.skrilled.ui.menu.assembly.color.Color_h_Assembly;
 import me.skrilled.ui.menu.assembly.color.Color_sb_Assembly;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.main.Main;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,7 +36,8 @@ public class SecilyUserInterface extends GuiScreen {
     /**
      * 拖动布尔
      */
-    public static boolean mainGUIClickDrag = false;
+    public static boolean mainGuiDrag = false;
+    public static boolean mainGUIScale = false;
     public static KeyTypeStringAssembly keyTypeStringAssembly;
     public static Animation uiAnimation = new Animation(800f, false, Easing.BACK_OUT);
     /**
@@ -86,6 +88,16 @@ public class SecilyUserInterface extends GuiScreen {
         String s1 = s.substring(0, 1);
         String s2 = s.substring(1);
         return s1.toUpperCase() + s2.toLowerCase();
+    }
+
+    public static boolean isMouseOnEdgeOfTheWindow(float mouseX, float mouseY, float[] pos) {
+        int count = 0;
+        if (Math.min(mouseX, pos[0] - 1) == pos[0] - 1 && Math.max(mouseX, pos[0] + 1) == pos[0] + 1) count++;
+        if (Math.min(mouseY, pos[1] - 1) == pos[1] - 1 && Math.max(mouseX, pos[1] + 1) == pos[1] + 1) count++;
+        if (Math.min(mouseX, pos[2] - 1) == pos[2] - 1 && Math.max(mouseX, pos[2] + 1) == pos[2] + 1) count++;
+        if (Math.min(mouseY, pos[3] - 1) == pos[3] - 1 && Math.max(mouseX, pos[3] + 1) == pos[3] + 1) count++;
+
+        return count >= 2;
     }
 
     @Override
@@ -177,8 +189,8 @@ public class SecilyUserInterface extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         //mainGUI拖动
-        mainGUIClickDrag = mouseButton == 0 && mouseX > mainGui.calcAbsX() && mouseX < (mainGui.calcAbsX() + mainGui.deltaX()) && mouseY > mainGui.calcAbsY() && mouseY < mainGui.calcAbsY() + mainGui.deltaY() * 0.13255813953488372093023255813953f;
-        if (mainGUIClickDrag) {
+        mainGuiDrag = mouseButton == 0 && mouseX > mainGui.calcAbsX() && mouseX < (mainGui.calcAbsX() + mainGui.deltaX()) && mouseY > mainGui.calcAbsY() && mouseY < mainGui.calcAbsY() + mainGui.deltaY() * 0.13255813953488372093023255813953f;
+        if (mainGuiDrag) {
             posInClickX = mouseX;
             posInClickY = mouseY;
         }
@@ -208,10 +220,48 @@ public class SecilyUserInterface extends GuiScreen {
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        //父类中内容
+        int i = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int j = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        int k = Mouse.getEventButton();
+
+        if (Mouse.getEventButtonState()) {
+            if (this.mc.gameSettings.touchscreen && this.touchValue++ > 0) {
+                return;
+            }
+
+            this.eventButton = k;
+            this.lastMouseEvent = Minecraft.getSystemTime();
+            this.mouseClicked(i, j, this.eventButton);
+        } else if (k != -1) {
+            if (this.mc.gameSettings.touchscreen && --this.touchValue > 0) {
+                return;
+            }
+
+            this.eventButton = -1;
+            this.mouseReleased(i, j, k);
+        } else if (this.eventButton != -1 && this.lastMouseEvent > 0L) {
+            long l = Minecraft.getSystemTime() - this.lastMouseEvent;
+            this.mouseClickMove(i, j, this.eventButton, l);
+        }
+
+
+
+        //判定鼠标是否处于拖动gui大小的位置
+        float[] guiPos = mainGui.calcAbsPos();
+        if (isMouseOnEdgeOfTheWindow(i, j, guiPos)) {
+            
+            mainGuiDrag = false;
+            mainGUIScale = true;
+        }
+    }
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 
         //mainGui拖动
-        if (mainGUIClickDrag) {
+        if (mainGuiDrag) {
             mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
             ArrayList<Assembly> assemblies1 = mainGui.getAssembliesByClass(ColorAssembly.class);
             for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
@@ -274,7 +324,7 @@ public class SecilyUserInterface extends GuiScreen {
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        mainGUIClickDrag = false;
+        mainGuiDrag = false;
         for (Assembly assembly : mainGui.getAssembliesCanDrag()) {
             assembly.onDrag = false;
         }
