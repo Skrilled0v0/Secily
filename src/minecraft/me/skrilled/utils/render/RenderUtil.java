@@ -977,9 +977,9 @@ public class RenderUtil implements IMC {
         FontDrawer font=Main.fontLoader.EN48;
         String name=entity.getDisplayName().getUnformattedText();
         float[] rectPos={-font.getStringWidth(name)*0.7f, (float) (posY+(entity.height)-font.getHeight()*0.7f),font.getStringWidth(name)*0.7f, (float) (posY+entity.height+font.getHeight()*0.7f)};
-        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float health = entity.getHealth();
         float animHealth = health;
-        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth();
         float scale = mc.thePlayer.getDistanceToEntity(entity) / 100f;
         if(scale<=0.06)scale=0.06f;
         if(scale>=0.3)scale=0.3f;
