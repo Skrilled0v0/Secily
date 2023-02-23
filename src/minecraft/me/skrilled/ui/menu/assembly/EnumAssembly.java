@@ -69,7 +69,7 @@ public class EnumAssembly extends WindowAssembly {
         }
         this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, deltaX(), deltaY()}, this, contents, 3, font.getHeight() + udMargin));
         subWindows.get(0).assemblyName = "windowOfEnumAssembly";
-        subWindows.get(0).bgAssembly = new BGAssembly(new float[]{0, 0, deltaX(), deltaY()}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f);
+        subWindows.get(0).addAssembly(new BGAssembly(new float[]{0, 0, deltaX(), deltaY()}, subWindows.get(0), new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f));
         float fontHeight = font.getHeight();
         float[] enumValuePos = new float[4];
         enumValuePos[0] = 0;

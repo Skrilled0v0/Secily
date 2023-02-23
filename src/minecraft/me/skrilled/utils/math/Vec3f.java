@@ -25,6 +25,12 @@ public final class Vec3f {
         this.z = z;
     }
 
+    public Vec3f(double x, double y) {
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+    }
+
     public double getX() {
         return this.x;
     }
@@ -88,6 +94,20 @@ public final class Vec3f {
         double dy = this.y - vec.y;
         double dz = this.z - vec.z;
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    public Vec3f cross(Vec3f vec3f) {
+        double x2 = vec3f.x;
+        double y2 = vec3f.y;
+        double z2 = vec3f.z;
+        return new Vec3f(y * z2 - z * y2, z * x2 - x * z2, x * y2 - y * x2);
+    }
+
+    public double dot(Vec3f vec3f) {
+        double x2 = vec3f.x;
+        double y2 = vec3f.y;
+        double z2 = vec3f.z;
+        return x * x2 + y * y2 + z * z2;
     }
 
     public Vec2f rotationsTo(Vec3f vec) {

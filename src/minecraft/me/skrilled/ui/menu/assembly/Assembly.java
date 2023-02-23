@@ -1,8 +1,11 @@
 package me.skrilled.ui.menu.assembly;
 
 public abstract class Assembly {
-    public boolean autoPushPopMatrix = true;
 
+    /**
+     * 拖动时重新计算坐标的比值(相对fatherWindow的deltaPos
+     */
+    final float[] positionArgs;
     /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
@@ -16,17 +19,25 @@ public abstract class Assembly {
      */
     public float maxHeight = 0;
     public WindowAssembly fatherWindow;
-    public String assemblyName = "defaultName";
+    public String assemblyName;
     public boolean onDrag = false;
     public boolean canDrag = false;
 
     public Assembly(float[] pos, WindowAssembly fatherWindow) {
-        this.pos = pos;
         this.fatherWindow = fatherWindow;
-        this.assemblyName = this.getClass().getSimpleName();
+        if (fatherWindow == null) {
+            this.pos = pos;
+            this.positionArgs = null;
+        } else {
+            this.positionArgs = pos;
+            float dX = fatherWindow.deltaX();
+            float dY = fatherWindow.deltaY();
+            this.pos = new float[]{dX * pos[0], dY * pos[1], dX * pos[2], dY * pos[3]};
+        }
+        this.assemblyName = this.getClass().getSimpleName() + (fatherWindow == null ? "" : " father: " + fatherWindow.assemblyName);
     }
 
-    public static boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+    public boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
@@ -73,5 +84,19 @@ public abstract class Assembly {
     @Override
     public String toString() {
         return "Assembly{" + ", assemblyName='" + assemblyName + '\'' + '}';
+    }
+
+    public void updateRenderPos() {
+        if (fatherWindow == null) return;
+        float dX = fatherWindow.deltaX();
+        float dY = fatherWindow.deltaY();
+        this.pos = new float[]{dX * positionArgs[0], dY * positionArgs[1], dX * positionArgs[2], dY * positionArgs[3]};
+    }
+
+    public WindowAssembly getOldestFatherWindow() {
+        if (fatherWindow != null) return fatherWindow.getOldestFatherWindow();
+        else {
+            return (WindowAssembly) this;
+        }
     }
 }

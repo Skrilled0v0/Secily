@@ -3,14 +3,12 @@ package me.skrilled.ui.menu.assembly;
 import java.util.ArrayList;
 
 public class WindowAssembly extends Assembly {
-    public BGAssembly bgAssembly;
-    public StringWithoutBGAssembly windowName;
     public ArrayList<IconAssembly> icons = new ArrayList<>();
-    public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
+    public ArrayList<WindowAssembly> subWindows;
     public ArrayList<Assembly> assemblies = new ArrayList<>();
 
     public WindowAssembly(float[] pos, WindowAssembly fatherWindow) {
-        super(pos, fatherWindow);
+        this(pos, fatherWindow, new ArrayList<>());
     }
 
     public WindowAssembly(float[] pos, WindowAssembly fatherWindow, ArrayList<WindowAssembly> subWindows) {
@@ -21,6 +19,20 @@ public class WindowAssembly extends Assembly {
     public void addAssembly(Assembly assembly) {
         if (assemblies == null) assemblies = new ArrayList<>();
         assemblies.add(assembly);
+    }
+
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        for (Assembly assembly : assemblies) {
+            assembly.updateRenderPos();
+        }
+        for (IconAssembly icon : icons) {
+            icon.updateRenderPos();
+        }
+        for (WindowAssembly subWindow : subWindows) {
+            subWindow.updateRenderPos();
+        }
     }
 
     public void addWindow(WindowAssembly windowAssembly) {
@@ -38,13 +50,6 @@ public class WindowAssembly extends Assembly {
     @Override
     public float draw() {
         currentUsedHeight = 0f;
-        if (bgAssembly != null) {
-            bgAssembly.pos = new float[]{0, 0, deltaX(), deltaY()};
-            currentUsedHeight += this.bgAssembly.draw();
-        }
-        if (windowName != null) {
-            currentUsedHeight += this.windowName.draw();
-        }
         for (IconAssembly icon : this.icons) {
             currentUsedHeight += icon.draw();
         }
@@ -68,8 +73,6 @@ public class WindowAssembly extends Assembly {
     }
 
     public Assembly getAssemblyByName(String assemblyName) {
-        if (bgAssembly != null) if (bgAssembly.assemblyName.equalsIgnoreCase(assemblyName)) return bgAssembly;
-        if (windowName != null) if (windowName.assemblyName.equalsIgnoreCase(assemblyName)) return windowName;
         for (IconAssembly icon : icons) {
             if (icon.assemblyName.equalsIgnoreCase(assemblyName)) return icon;
         }
@@ -84,14 +87,14 @@ public class WindowAssembly extends Assembly {
         return null;
     }
 
-    public boolean canBeSighted(Assembly assembly) {
+    public boolean cantBeSighted(Assembly assembly) {
         for (Assembly assembly1 : this.assemblies) {
             if (assembly == assembly1) {
-                return (assembly.pos[2] <= 0 || assembly.pos[3] <= 0 || assembly.pos[0] >= deltaX() || assembly.pos[1] >= deltaY());
+                return (assembly.pos[2] < 0 || assembly.pos[3] < 0 || assembly.pos[0] > deltaX() || assembly.pos[1] > deltaY());
             }
         }
         for (WindowAssembly subWindow : subWindows) {
-            return subWindow.canBeSighted(assembly);
+            return subWindow.cantBeSighted(assembly);
         }
         return false;
     }
@@ -100,14 +103,14 @@ public class WindowAssembly extends Assembly {
         ArrayList<Assembly> result = new ArrayList<>();
         float[] absPos = this.calcAbsPos();
         //本窗口
-        if (isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
+        if (this.isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
         //本窗口组件
         for (Assembly assembly : assemblies) {
-            if (canBeSighted(assembly)) {
+            if (cantBeSighted(assembly)) {
                 continue;
             }
             absPos = assembly.calcAbsPos();
-            if (isMouseInside(mouseX, mouseY, assembly.pos[0] < 0 ? assembly.fatherWindow.calcAbsX() : absPos[0], assembly.pos[1] < 0 ? assembly.fatherWindow.calcAbsY() : absPos[1], absPos[2], absPos[3])) {
+            if (assembly.isMouseInside(mouseX, mouseY, assembly.pos[0] < 0 ? assembly.fatherWindow.calcAbsX() : absPos[0], assembly.pos[1] < 0 ? assembly.fatherWindow.calcAbsY() : absPos[1], absPos[2], absPos[3])) {
                 result.add(assembly);
             }
         }
@@ -149,5 +152,12 @@ public class WindowAssembly extends Assembly {
             }
         }
         return result;
+    }
+
+    public void posUpdateByDelta(float[] deltaPos) {
+        this.pos[0] += deltaPos[0];
+        this.pos[1] += deltaPos[1];
+        this.pos[2] += deltaPos[2];
+        this.pos[3] += deltaPos[3];
     }
 }

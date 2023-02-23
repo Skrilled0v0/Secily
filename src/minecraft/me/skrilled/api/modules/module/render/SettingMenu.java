@@ -10,8 +10,8 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
-import me.skrilled.ui.menu.ui.EclipseMenu;
 import me.skrilled.ui.menu.MenuMotion;
+import me.skrilled.ui.menu.ui.EclipseMenu;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import org.lwjgl.input.Keyboard;
 
@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 @ModuleInitialize(name = "SettingMenu", type = ModuleType.RENDER, key = Keyboard.KEY_RSHIFT)
 public class SettingMenu extends ModuleHeader {
+    public static SecilyUserInterface secilyUI = new SecilyUserInterface();
     static ArrayList<String> cmode = new ArrayList<>();
     public static ValueHeader colorMode = new ValueHeader("EclipseColorMode", "Dark", cmode);
     static double[] x2 = {0.0, 659.5, 199999, 0.5f};
@@ -31,7 +32,6 @@ public class SettingMenu extends ModuleHeader {
     public static ValueHeader posY1 = new ValueHeader("Y1", y1);
     ArrayList<String> mode = new ArrayList<>();
     ValueHeader sideMode = new ValueHeader("Mode", "Secily", mode);
-    public static SecilyUserInterface secilyUI = new SecilyUserInterface();
 
     public SettingMenu() {
         this.setCanView(false);
@@ -41,6 +41,13 @@ public class SettingMenu extends ModuleHeader {
 
     public static float[] getGuiPos() {
         return new float[]{(float) posX1.getDoubleCurrentValue(), (float) posY1.getDoubleCurrentValue(), (float) posX2.getDoubleCurrentValue(), (float) posY2.getDoubleCurrentValue()};
+    }
+
+    public static void setGuiPos(float[] pos) {
+        posX1.setDoubleCurrentValue(pos[0]);
+        posY1.setDoubleCurrentValue(pos[1]);
+        posX2.setDoubleCurrentValue(pos[2]);
+        posY2.setDoubleCurrentValue(pos[3]);
     }
 
     @Override

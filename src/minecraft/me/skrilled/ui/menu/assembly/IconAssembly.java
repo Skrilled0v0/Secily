@@ -11,6 +11,7 @@ import me.surge.animation.Easing;
 import java.awt.*;
 
 public class IconAssembly extends Assembly {
+    final float spacingRate;
     FontDrawer font;
     String[] icons;
     float spacing;
@@ -26,7 +27,7 @@ public class IconAssembly extends Assembly {
         super(pos, fatherWindow);
         this.font = font;
         this.icons = icons;
-        this.spacing = spacing;
+        this.spacingRate = spacing;
         this.anim = anim;
         this.iconColor = iconColor;
         this.bgColor = bgColor;
@@ -59,6 +60,12 @@ public class IconAssembly extends Assembly {
     }
 
     @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        this.spacing = spacingRate * (isTransverse ? fatherWindow.deltaX() : fatherWindow.deltaY());
+    }
+
+    @Override
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
         if (anim.getAnimationFactor() == 1D) {
@@ -74,7 +81,7 @@ public class IconAssembly extends Assembly {
         for (String icon : icons) {
             float[] pos = new float[]{absX + (spacing + boxWidth) * count, absY, absX + boxWidth + (spacing + boxWidth) * count, absY + boxWidth};
             count++;
-            if (isMouseInside(mouseX, mouseY, pos[0], pos[1], pos[2], pos[3])) {
+            if (mouseX > pos[0] && mouseY > pos[1] && mouseX < pos[2] && mouseY < pos[3]) {
                 if (assemblyName.equalsIgnoreCase("moduleTypeICONBar")) {
                     SecilyUserInterface.currentModuleType = getModuleTypeByString(icon);
                     SecilyUserInterface.onModuleTypeSwitching = true;
