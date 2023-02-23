@@ -17,7 +17,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     float currentSkip = 0f;
     private float lastSkipFactor = 0f;
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render,float wheelsToNext) {
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render, float wheelsToNext) {
         super(pos, fatherWindow);
         this.contents = contents;
         this.numOfContent2Render = numOfContent2Render;
@@ -43,8 +43,11 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             lastSkipFactor = latestSkipFactor;
             for (Assembly assembly : assemblies) {
                 //如果是展开按钮，则不更新
-                if (((StringWithoutBGAssembly) assembly).value.equals("H") || ((StringWithoutBGAssembly) assembly).value.equals("I"))
-                    continue;
+                if (assembly instanceof StringWithoutBGAssembly) {
+                    if (((StringWithoutBGAssembly) assembly).value.equals("H") || ((StringWithoutBGAssembly) assembly).value.equals("I"))
+                        continue;
+                }
+
                 //更新
                 assembly.pos[1] -= deltaFactor;
                 assembly.pos[3] -= deltaFactor;

@@ -28,6 +28,7 @@ public class IconAssembly extends Assembly {
         this.font = font;
         this.icons = icons;
         this.spacingRate = spacing;
+        this.spacing = spacingRate * (isTransverse ? fatherWindow.deltaX() : fatherWindow.deltaY());
         this.anim = anim;
         this.iconColor = iconColor;
         this.bgColor = bgColor;
