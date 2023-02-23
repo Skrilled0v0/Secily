@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @ModuleInitialize(name = "SettingMenu", type = ModuleType.RENDER, key = Keyboard.KEY_RSHIFT)
 public class SettingMenu extends ModuleHeader {
-    public static SecilyUserInterface secilyUI = new SecilyUserInterface();
+    public static SecilyUserInterface secilyUI;
     static ArrayList<String> cmode = new ArrayList<>();
     public static ValueHeader colorMode = new ValueHeader("EclipseColorMode", "Dark", cmode);
     static double[] x2 = {0.0, 659.5, 199999, 0.5f};

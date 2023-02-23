@@ -7,6 +7,8 @@ package me.skrilled;
 
 import me.skrilled.api.manager.CommandManager;
 import me.skrilled.api.manager.ModuleManager;
+import me.skrilled.api.modules.module.render.SettingMenu;
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.config.ConfigManager;
 import me.skrilled.utils.friend.FriendManager;
@@ -43,6 +45,7 @@ public class SenseHeader implements IMC {
         moduleManager = new ModuleManager();
         moduleManager.load();
         configManager.loadAll();
+        SettingMenu.secilyUI = new SecilyUserInterface();
         Display.setTitle(getClientName());
         CommandManager.loadCommands();
     }
