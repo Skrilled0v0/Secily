@@ -249,7 +249,7 @@ public class Window_Values_Assembly extends WindowAssembly {
         FontDrawer font = Main.fontLoader.EN24;
         float halfHeight = font.getHeight() * 0.5f/deltaY();
         float a = valuesEditZoneWindows.size() - 0.5f;
-        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.99746735587801789458387826700712f,1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
+        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.91746735587801789458387826700712f,1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
         ArrayList<String> pageNumberList = new ArrayList<>();
         for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
             pageNumberList.add(Integer.toString(i + 1));
