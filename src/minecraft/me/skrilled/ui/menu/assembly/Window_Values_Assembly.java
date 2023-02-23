@@ -39,9 +39,6 @@ public class Window_Values_Assembly extends WindowAssembly {
     }
 
     public WindowAssembly initWindowForNextPage(ArrayList<ValueHeader> values) {
-        //先更新一次位置方便后面计算
-        // TODO:是否必要待测试
-//        this.getOldestFatherWindow().updateRenderPos();
 
         //计算并添加编辑区窗口
         float[] valuesEditZoneWindowPos = {0.04032185676732705007373212797333f, 0.14363413672126383093562516866995f, 0.95967814323267294992626787202667f, 0.94615017334080670943098544767599f};
@@ -149,28 +146,28 @@ public class Window_Values_Assembly extends WindowAssembly {
                     yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
                     break;
                 }
-//                case STRING: {
-//                    float width = 0.24942925686230752064271367998215f;
-//                    float height = 0.0569093072585234621553106730819f;
-//                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
-//                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
-//                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
-//                        inLeftHalfZone = !inLeftHalfZone;
-//                        if (inLeftHalfZone) {
-//                            return valuesEditZoneWindow;
-//                        }
-//                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
-//                    }
-//                    Color bgColorOut = new Color(0, 0, 0, 64);
-//                    Color bgColorIn = new Color(0, 0, 0, 128);
-//                    Color fontColor = new Color(255, 189, 189, 254);
-//                    FontDrawer font = Main.fontLoader.EN16;
-//                    KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), new boolean[]{true, true}, bgColorOut, bgColorIn, fontColor, false, font);
-//                    keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
-//                    valuesEditZoneWindow.addAssembly(keyTypeStringAssembly);
-//                    yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
-//                    break;
-//                }
+                case STRING: {
+                    float width = 0.24942925686230752064271367998215f;
+                    float height = 0.0569093072585234621553106730819f;
+                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
+                    if (pos[3] + dMargin > 1) {
+                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
+                        inLeftHalfZone = !inLeftHalfZone;
+                        if (inLeftHalfZone) {
+                            return valuesEditZoneWindow;
+                        }
+                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
+                    }
+                    Color bgColorOut = new Color(0, 0, 0, 64);
+                    Color bgColorIn = new Color(0, 0, 0, 128);
+                    Color fontColor = new Color(255, 189, 189, 254);
+                    FontDrawer font = Main.fontLoader.EN16;
+                    KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), new boolean[]{true, true}, bgColorOut, bgColorIn, fontColor, false, font);
+                    keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                    valuesEditZoneWindow.addAssembly(keyTypeStringAssembly);
+                    yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
+                    break;
+                }
 //                case COLOR: {
 //                    float width = 0.24310979692033028341887971434948f;
 //                    float height = width * valuesEditZoneWindow.deltaX() * 1.2f / valuesEditZoneWindow.deltaY();
