@@ -66,7 +66,7 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             }
         }
         glPushMatrix();
-        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY() + 1, (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()) + 1);
+        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY() - 1, (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()) + 1);
         float result = super.draw();
         glDisable(GL_SCISSOR_TEST);
         glPopMatrix();

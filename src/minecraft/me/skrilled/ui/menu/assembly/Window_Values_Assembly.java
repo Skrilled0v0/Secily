@@ -219,6 +219,7 @@ public class Window_Values_Assembly extends WindowAssembly {
     }
 
     public void init() {
+        this.reset();
         currentUsedHeight = 0f;
         lastEndIndexOfValues = 0;
         //初始化背景，标题
@@ -247,9 +248,9 @@ public class Window_Values_Assembly extends WindowAssembly {
         if (valuesEditZoneWindows.size() == 0)
             valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this));
         FontDrawer font = Main.fontLoader.EN24;
-        float halfHeight = font.getHeight() * 0.5f/deltaY();
+        float halfHeight = font.getHeight() * 0.5f / deltaY();
         float a = valuesEditZoneWindows.size() - 0.5f;
-        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.91746735587801789458387826700712f,1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
+        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.95046735587801789458387826700712f, 1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
         ArrayList<String> pageNumberList = new ArrayList<>();
         for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
             pageNumberList.add(Integer.toString(i + 1));
@@ -261,10 +262,16 @@ public class Window_Values_Assembly extends WindowAssembly {
         Color bgColor = new Color(23, 23, 23, 59);
         Color selectedColor = new Color(204, 204, 204);
         Color fontColor = Color.white;
-        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f/deltaY(), new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
+        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f / deltaY(), new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
         pageBar.assemblyName = "pageBar";
         this.addAssembly(pageBar);
         needInit = false;
+    }
+
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        init();
     }
 
     private void calcPos(float[] pos, WindowAssembly fatherWindow, boolean inLeftHalfZone, float width, float height, float rSpacing, float uSpacing) {
