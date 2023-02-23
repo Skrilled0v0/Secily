@@ -2,6 +2,7 @@ package me.skrilled.utils.render;
 
 import com.mojang.authlib.GameProfile;
 import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
 import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.math.TimerUtil;
@@ -397,6 +398,7 @@ public class RenderUtil implements IMC {
         font.drawString(str, pos[0] + ((centered[0]) ? ((maxStringWidth - font.getStringWidth(str)) / 2f) : lrMargin), pos[1] + (centered[1] ? ((pos[3] - pos[1] - fontHeight) / 2f) : udMargin), fontColor);
         return boxHeight;
     }
+
 
     public static float drawCenteredString(float[] pos, FontDrawer font, String str, int fontColor) {
         float fontHeight = font.getHeight();
@@ -910,6 +912,109 @@ public class RenderUtil implements IMC {
         }
         drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
         if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(true);
+        GlStateManager.disableBlend();
+        GL11.glPopMatrix();
+    }
+
+    public static void drawEntity2DESP(EntityLivingBase entity, Color bgLineColor, boolean hpLine, boolean bkbg) {
+        double posX = getEntityRenderPos(entity)[0];
+        double posY = getEntityRenderPos(entity)[1];
+        double posZ = getEntityRenderPos(entity)[2];
+
+        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float animHealth = health;
+        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        if (entity.lastHealth == -1f) {
+            //初始化
+            entity.lastHealth = health;
+            entity.aimHealth = health;
+            entity.healthESPAnim.setState(true);
+        } else {
+            //动画中
+            if (health != entity.aimHealth) {
+                //目标变化的处理
+                entity.lastHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+                entity.aimHealth = health;
+                entity.healthESPAnim = new Animation(entity.healthESPAnim.length, entity.healthESPAnim.initialState, Easing.LINEAR);
+                entity.healthESPAnim.setState(true);
+            }
+            //计算血条显示值
+            animHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+        }
+
+
+        float hpFloat = animHealth / maxHealth;
+        Color hpColor = Colors.getHealthColor(animHealth, maxHealth);
+
+        GL11.glPushMatrix();
+        GlStateManager.enableBlend();
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        float scale = 0.05f;
+        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
+        GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(-scale, -scale, -scale);
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(false);
+        if (bkbg) {
+            drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 5f, new Color(0, 0, 0).getRGB());
+        }
+        drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
+        if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(true);
+        GlStateManager.disableBlend();
+        GL11.glPopMatrix();
+    }
+
+    public static void drawEntityNameTag(EntityLivingBase entity, Color bgColor, boolean itemStats, boolean hp) {
+        double posX = getEntityRenderPos(entity)[0];
+        double posY = getEntityRenderPos(entity)[1];
+        double posZ = getEntityRenderPos(entity)[2];
+        FontDrawer font=Main.fontLoader.EN16;
+        String name=entity.getName();
+        float[] rectPos={-font.getStringWidth(name)/2f, (float) (posY+entity.height),font.getStringWidth(name)/2f, (float) (posY+entity.height+font.getHeight())};
+        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float animHealth = health;
+        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        float dis = mc.thePlayer.getDistanceToEntity(entity) / 100f;
+        float scale = dis/3;
+        if(scale<=0.06)scale=0.06f;
+        if(scale>=0.5)scale=0.5f;
+        SenseHeader.getSense.printINFO(dis);
+        if (entity.lastHealth == -1f) {
+            //初始化
+            entity.lastHealth = health;
+            entity.aimHealth = health;
+            entity.healthESPAnim.setState(true);
+        } else {
+            //动画中
+            if (health != entity.aimHealth) {
+                //目标变化的处理
+                entity.lastHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+                entity.aimHealth = health;
+                entity.healthESPAnim = new Animation(entity.healthESPAnim.length, entity.healthESPAnim.initialState, Easing.LINEAR);
+                entity.healthESPAnim.setState(true);
+            }
+            //计算血条显示值
+            animHealth = (float) (entity.lastHealth + (entity.aimHealth - entity.lastHealth) * entity.healthESPAnim.getAnimationFactor());
+        }
+
+
+        float hpFloat = animHealth / maxHealth;
+        Color hpColor = Colors.getHealthColor(animHealth, maxHealth);
+
+        GL11.glPushMatrix();
+        GlStateManager.enableBlend();
+        GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
+        GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
+        GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GL11.glScalef(-scale, -scale, 1);
+        glDisable(GL_DEPTH_TEST);
+        drawCenteredStringBox_P(rectPos,font,name,bgColor.getRGB(),-1,5,new boolean[]{true,true});
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();

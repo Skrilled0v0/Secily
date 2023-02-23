@@ -53,8 +53,7 @@ public class ModuleManager {
         EventManager.register(this);
         //Render
         mList.add(new HUD());
-        mList.add(new ESP());
-        mList.add(new Nametags());
+        mList.add(new PerspectiveModifier());
         mList.add(new Chams());
         mList.add(new RenderModifier());
         mList.add(new WorldRenderEditor());

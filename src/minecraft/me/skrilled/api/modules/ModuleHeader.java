@@ -7,26 +7,16 @@
 package me.skrilled.api.modules;
 
 import com.darkmagician6.eventapi.EventManager;
-import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.modules.module.render.HUD;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.Notification;
 import me.skrilled.utils.IMC;
-import me.skrilled.utils.render.RenderUtil;
+import me.skrilled.utils.SoundPlayer;
 import me.surge.animation.Animation;
-import me.surge.animation.ColourAnimation;
 import me.surge.animation.Easing;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.main.Main;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +31,9 @@ public class ModuleHeader implements IMC {
     String suffix = "";
     boolean canView = true;
     boolean onBinding = false;
+    String toggle = "/assets/minecraft/skrilled/music/toggle/boo.wav";
+    SoundPlayer toggleSound;
+
     ArrayList<ValueHeader> valueList;
     ModuleType moduleType;
 
@@ -112,6 +105,19 @@ public class ModuleHeader implements IMC {
     }
 
     public void setEnabled(boolean isEnabled) {
+        switch (HUD.moduleSoundType.getCurrentEnumType()) {
+            case "Boo":
+                toggle = "/assets/minecraft/skrilled/music/toggle/boo.wav";
+                break;
+            case "BiBu":
+                toggle = "/assets/minecraft/skrilled/music/toggle/bibu.wav";
+                break;
+            case "Ding":
+                toggle = "/assets/minecraft/skrilled/music/toggle/ding.wav";
+                break;
+        }
+        toggleSound = new SoundPlayer(toggle);
+        if (!HUD.moduleSoundType.getCurrentEnumType().equalsIgnoreCase("None")) toggleSound.play();
         Notification.posType posType = Notification.posType.NONE;
         if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("UP")) {
             posType = Notification.posType.UP;
@@ -124,6 +130,7 @@ public class ModuleHeader implements IMC {
         if (isEnabled) this.onEnabled();
         else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
+            if (!HUD.moduleSoundType.getCurrentEnumType().equalsIgnoreCase("None")) toggleSound.play();
             Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), posType);
         }
     }
@@ -155,6 +162,7 @@ public class ModuleHeader implements IMC {
         }
         return null;
     }
+
     public ValueHeader getValues(String name) {
         return valueList.stream().filter(option -> option.getValueName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }

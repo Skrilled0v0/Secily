@@ -3,7 +3,7 @@ package net.minecraft.client.renderer.entity;
 import com.google.common.collect.Lists;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.modules.module.render.Chams;
-import me.skrilled.api.modules.module.render.Nametags;
+import me.skrilled.api.modules.module.render.PerspectiveModifier;
 import me.skrilled.utils.IMC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -307,7 +307,7 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
                 GlStateManager.blendFunc(770, 771);
                 GlStateManager.alphaFunc(516, 0.003921569F);
             }
-            if ((SenseHeader.getSense.getModuleManager().getModuleByClass(Chams.class)).isEnabled()&&Chams.camChams(entitylivingbaseIn)) {
+            if ((SenseHeader.getSense.getModuleManager().getModuleByClass(Chams.class)).isEnabled() && Chams.camChams(entitylivingbaseIn)) {
                 if ((Chams.colored.isOptionOpen())) {
                     GL11.glPushMatrix();
                     GL11.glPushAttrib(1048575);
@@ -561,7 +561,8 @@ public abstract class RendererLivingEntity<T extends EntityLivingBase> extends R
 
     public void renderName(T entity, double x, double y, double z) {
         if (!Reflector.RenderLivingEvent_Specials_Pre_Constructor.exists() || !Reflector.postForgeBusEvent(Reflector.RenderLivingEvent_Specials_Pre_Constructor, entity, this, x, y, z)) {
-            if (this.canRenderName(entity) && !SenseHeader.getSense.getModuleManager().getModuleByClass(Nametags.class).isEnabled()) {
+            if (this.canRenderName(entity) && !(SenseHeader.getSense.getModuleManager().getModuleByClass(PerspectiveModifier.class).isEnabled() && PerspectiveModifier.nameTag.isOptionOpen())) {
+
                 double d0 = entity.getDistanceSqToEntity(this.renderManager.livingPlayer);
                 float f = entity.isSneaking() ? NAME_TAG_RANGE_SNEAK : NAME_TAG_RANGE;
 

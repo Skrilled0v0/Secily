@@ -19,7 +19,6 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -32,9 +31,9 @@ public class HUD extends ModuleHeader {
     public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
     public static ValueHeader not = new ValueHeader("Notifications", true);
     static ArrayList<String> notType = new ArrayList<>();
-    public static ValueHeader moduleNotType = new ValueHeader("ModuleSwitchPrompt", "LEFT", notType);
-    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSwitchSound", "Basic", notType);
     static ArrayList<String> soundType = new ArrayList<>();
+    public static ValueHeader moduleNotType = new ValueHeader("ModulePrompt", "LEFT", notType);
+    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSound", "Ding", soundType);
     ArrayList<String> markType = new ArrayList<>();
     double[] size = {32, 128, 512, 0.1};
     String markStr = SenseHeader.getSense.getClientName();
@@ -46,12 +45,12 @@ public class HUD extends ModuleHeader {
     ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
     ValueHeader markText = new ValueHeader("MarkText", markStr);
     ValueHeader iconSize = new ValueHeader("FlowerSize", size);
-    BoundedAnimation angle=new BoundedAnimation(0,360,5000f,false, Easing.LINEAR);
+    BoundedAnimation angle = new BoundedAnimation(0, 360, 5000f, false, Easing.LINEAR);
 
     public HUD() {
-        addEnumTypes(didis, "Red", "Blue", "Green", "Tellow", "GRAY", "ORANGE", ")V)");
+        addEnumTypes(didis, "Red", "Blue");
         addEnumTypes(notType, "LEFT", "UP", "None");
-        addEnumTypes(soundType, "Basic", "Ding", "New", "None");
+        addEnumTypes(soundType, "None", "Ding", "Boo", "BiBu");
         addEnumTypes(markType, "Text", "Flower", "Info", "None");
     }
 
@@ -72,7 +71,7 @@ public class HUD extends ModuleHeader {
                     if (angle.getAnimationValue() == 360) angle.setState(false);
                     GL11.glPushMatrix();
 //                    GlStateManager.rotate((float) angle.getAnimationValue(),0,0,1);
-                    RenderUtil.drawIcon(0, 0 ,(int) icon, (int) icon, new ResourceLocation("skrilled/launcher.png"));
+                    RenderUtil.drawIcon(0, 0, (int) icon, (int) icon, new ResourceLocation("skrilled/launcher.png"));
                     GL11.glPopMatrix();
                     break;
                 case "Text":
@@ -99,8 +98,8 @@ public class HUD extends ModuleHeader {
 
         //Information
         if ((Boolean) this.getValue(info)) {
-            font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 5, h - font.getHeight()-5, -1);
-            font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 5, h - font.getHeight() * 2-5, -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getClientName() + " LastUpdate:" + SenseHeader.getSense.getClientUpdate(), 5, h - font.getHeight() - 5, -1);
+            font.drawStringWithOutline(SenseHeader.getSense.getPlayerName() + " X:" + (int) pos[0] + " Y:" + (int) pos[1] + " Z:" + (int) pos[2] + " FPS:" + SenseHeader.getSense.getClientFPS(), 5, h - font.getHeight() * 2 - 5, -1);
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
