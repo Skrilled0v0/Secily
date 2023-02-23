@@ -118,7 +118,7 @@ public class MouseOverlyRender extends ModuleHeader {
             float y = (float) (mouseBlockPos.getY() - RenderManager.renderPosY);
             float z = (float) (mouseBlockPos.getZ() - RenderManager.renderPosZ);
             RenderUtil.drawBlockESP(x, y, z, blkboxColor.getColorValue().getRGB(), blklineColor.getColorValue().getRGB(), perspective.isOptionOpen());
-            GL11.glColor4f(1,1,1,1);
+            RenderUtil.reColor();
         }
     }
 
