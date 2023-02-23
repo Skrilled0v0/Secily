@@ -29,7 +29,7 @@ public class Window_Values_Assembly extends WindowAssembly {
     }
 
     public static float[] calcPosForValueName(float width, float height, WindowAssembly fatherWindow, float lMargin, boolean inLeftHalfZone) {
-        return new float[]{(inLeftHalfZone ? 0 : fatherWindow.deltaX() / 2f) + lMargin, fatherWindow.currentUsedHeight, lMargin + width + (inLeftHalfZone ? 0 : fatherWindow.deltaX() / 2f), fatherWindow.currentUsedHeight + height};
+        return new float[]{(inLeftHalfZone ? 0 : 0.5f) + lMargin, fatherWindow.currentUsedHeight / fatherWindow.deltaY(), lMargin + width + (inLeftHalfZone ? 0 : 0.5f), fatherWindow.currentUsedHeight / fatherWindow.deltaY() + height};
     }
 
     public static float[] processYUsed(float yUsed, float[] pos) {
@@ -130,7 +130,7 @@ public class Window_Values_Assembly extends WindowAssembly {
                     float width = 0.20942925686230752064271367998215f;
                     float height = 0.04027626881887319571628123544932f;
                     calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, (uSpacing * 1.5f));
-                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
+                    if (pos[3] + dMargin > 1) {
                         valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
                         inLeftHalfZone = !inLeftHalfZone;
                         if (inLeftHalfZone) {
@@ -149,54 +149,54 @@ public class Window_Values_Assembly extends WindowAssembly {
                     yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
                     break;
                 }
-                case STRING: {
-                    float width = 0.24942925686230752064271367998215f;
-                    float height = 0.0569093072585234621553106730819f;
-                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
-                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
-                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
-                        inLeftHalfZone = !inLeftHalfZone;
-                        if (inLeftHalfZone) {
-                            return valuesEditZoneWindow;
-                        }
-                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
-                    }
-                    Color bgColorOut = new Color(0, 0, 0, 64);
-                    Color bgColorIn = new Color(0, 0, 0, 128);
-                    Color fontColor = new Color(255, 189, 189, 254);
-                    FontDrawer font = Main.fontLoader.EN16;
-                    KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), new boolean[]{true, true}, bgColorOut, bgColorIn, fontColor, false, font);
-                    keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
-                    valuesEditZoneWindow.addAssembly(keyTypeStringAssembly);
-                    yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
-                    break;
-                }
-                case COLOR: {
-                    float width = 0.24310979692033028341887971434948f;
-                    float height = width * valuesEditZoneWindow.deltaX() * 1.2f / valuesEditZoneWindow.deltaY();
-                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
-                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
-                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
-                        inLeftHalfZone = !inLeftHalfZone;
-                        if (inLeftHalfZone) {
-                            return valuesEditZoneWindow;
-                        }
-                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
-                    }
-                    Color color = valueHeader.getColorValue();
-                    float[] hsbAlpha = new float[4];
-                    Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);
-                    hsbAlpha[3] = color.getAlpha() / 255f;
-                    ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
-                    colorAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
-                    valuesEditZoneWindow.addWindow(colorAssembly);
-                    yUsedValueBox = (colorAssembly.deltaY() + uMargin) * valuesEditZoneWindow.deltaY();
-                    break;
-                }
+//                case STRING: {
+//                    float width = 0.24942925686230752064271367998215f;
+//                    float height = 0.0569093072585234621553106730819f;
+//                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
+//                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
+//                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
+//                        inLeftHalfZone = !inLeftHalfZone;
+//                        if (inLeftHalfZone) {
+//                            return valuesEditZoneWindow;
+//                        }
+//                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
+//                    }
+//                    Color bgColorOut = new Color(0, 0, 0, 64);
+//                    Color bgColorIn = new Color(0, 0, 0, 128);
+//                    Color fontColor = new Color(255, 189, 189, 254);
+//                    FontDrawer font = Main.fontLoader.EN16;
+//                    KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), new boolean[]{true, true}, bgColorOut, bgColorIn, fontColor, false, font);
+//                    keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+//                    valuesEditZoneWindow.addAssembly(keyTypeStringAssembly);
+//                    yUsedValueBox = (uMargin + height) * valuesEditZoneWindow.deltaY();
+//                    break;
+//                }
+//                case COLOR: {
+//                    float width = 0.24310979692033028341887971434948f;
+//                    float height = width * valuesEditZoneWindow.deltaX() * 1.2f / valuesEditZoneWindow.deltaY();
+//                    calcPos(pos, valuesEditZoneWindow, inLeftHalfZone, width, height, rSpacing, uSpacing);
+//                    if (pos[3] + dMargin > valuesEditZoneWindow.deltaY()) {
+//                        valuesEditZoneWindow.currentUsedHeight = uMargin * valuesEditZoneWindow.deltaY();
+//                        inLeftHalfZone = !inLeftHalfZone;
+//                        if (inLeftHalfZone) {
+//                            return valuesEditZoneWindow;
+//                        }
+//                        calcPos(pos, valuesEditZoneWindow, false, width, height, rSpacing, uSpacing);
+//                    }
+//                    Color color = valueHeader.getColorValue();
+//                    float[] hsbAlpha = new float[4];
+//                    Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);
+//                    hsbAlpha[3] = color.getAlpha() / 255f;
+//                    ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
+//                    colorAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+//                    valuesEditZoneWindow.addWindow(colorAssembly);
+//                    yUsedValueBox = (colorAssembly.deltaY() + uMargin) * valuesEditZoneWindow.deltaY();
+//                    break;
+//                }
             }
             //valueName显示组件
             StringWithoutBGAssembly valueNameAssembly = new StringWithoutBGAssembly(calcPosForValueName(width_default, height_default, valuesEditZoneWindow, lMargin, inLeftHalfZone), valuesEditZoneWindow, valueHeader.getValueName(), valueNameFont, Color.white, new boolean[]{false, true});
-            yUsedValueName = height_default * valuesEditZoneWindow.deltaY();
+            yUsedValueName = valueNameAssembly.draw();
             valuesEditZoneWindow.addAssembly(valueNameAssembly);
             valuesEditZoneWindow.currentUsedHeight += Math.max(yUsedValueName, yUsedValueBox);
             lastEndIndexOfValues++;
@@ -250,9 +250,9 @@ public class Window_Values_Assembly extends WindowAssembly {
         if (valuesEditZoneWindows.size() == 0)
             valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this));
         FontDrawer font = Main.fontLoader.EN24;
-        float halfHeight = font.getHeight() * 0.5f;
+        float halfHeight = font.getHeight() * 0.5f/deltaY();
         float a = valuesEditZoneWindows.size() - 0.5f;
-        float[] pageBarPos = {deltaX() / 2 - 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY() - 2 * halfHeight, deltaX() / 2 + 2 * a * halfHeight, 0.99746735587801789458387826700712f * deltaY()};
+        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.99746735587801789458387826700712f,1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
         ArrayList<String> pageNumberList = new ArrayList<>();
         for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
             pageNumberList.add(Integer.toString(i + 1));
@@ -264,7 +264,7 @@ public class Window_Values_Assembly extends WindowAssembly {
         Color bgColor = new Color(23, 23, 23, 59);
         Color selectedColor = new Color(204, 204, 204);
         Color fontColor = Color.white;
-        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f, new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
+        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f/deltaY(), new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
         pageBar.assemblyName = "pageBar";
         this.addAssembly(pageBar);
         needInit = false;
@@ -326,7 +326,7 @@ public class Window_Values_Assembly extends WindowAssembly {
     }
 
     @Override
-    public ArrayList<Assembly> getAssembliesByClass(Class<? extends Assembly> T) {
+    public ArrayList<Assembly> getAssembliesByClass(Class T) {
         ArrayList<Assembly> result = new ArrayList<>();
         for (Assembly assembly : this.assemblies) {
             if (assembly.getClass().getName().equals(T.getName())) result.add(assembly);

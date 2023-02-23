@@ -42,6 +42,8 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             //更新滚动坐标
             lastSkipFactor = latestSkipFactor;
             for (Assembly assembly : assemblies) {
+                //如果是背景，不更新
+                if (assembly instanceof BGAssembly) continue;
                 //如果是展开按钮，则不更新
                 if (assembly instanceof StringWithoutBGAssembly) {
                     if (((StringWithoutBGAssembly) assembly).value.equals("H") || ((StringWithoutBGAssembly) assembly).value.equals("I"))

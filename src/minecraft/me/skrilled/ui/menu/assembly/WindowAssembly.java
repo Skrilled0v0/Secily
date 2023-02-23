@@ -140,7 +140,7 @@ public class WindowAssembly extends Assembly {
         return result;
     }
 
-    public ArrayList<Assembly> getAssembliesByClass(Class<? extends Assembly> T) {
+    public ArrayList<Assembly>  getAssembliesByClass(Class T) {
         ArrayList<Assembly> result = new ArrayList<>();
         if (this.getClass().getName().equals(T.getName())) result.add(this);
         for (Assembly assembly : this.assemblies) {
