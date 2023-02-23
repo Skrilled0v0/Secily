@@ -970,16 +970,16 @@ public class RenderUtil implements IMC {
         GL11.glPopMatrix();
     }
 
-    public static void drawEntityNameTag(EntityLivingBase entity, Color bgColor, boolean itemStats, boolean hp) {
+    public static void drawEntityNameTag(EntityLivingBase entity, Color bgColor, boolean hp) {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
         FontDrawer font=Main.fontLoader.EN48;
         String name=entity.getDisplayName().getUnformattedText();
         float[] rectPos={-font.getStringWidth(name)*0.7f, (float) (posY+(entity.height)-font.getHeight()*0.7f),font.getStringWidth(name)*0.7f, (float) (posY+entity.height+font.getHeight()*0.7f)};
-        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float health = entity.getHealth();
         float animHealth = health;
-        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth();
         float scale = mc.thePlayer.getDistanceToEntity(entity) / 100f;
         if(scale<=0.06)scale=0.06f;
         if(scale>=0.3)scale=0.3f;
@@ -1014,10 +1014,12 @@ public class RenderUtil implements IMC {
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-scale*0.2f, -scale*0.2f, -scale*0.2f);
         glDisable(GL_DEPTH_TEST);
-        drawRect(rectPos[0],rectPos[1],rectPos[2],rectPos[3],new Color(0,0,0,60).getRGB());
-        drawRect(rectPos[0],rectPos[3]-2,rectPos[0]+((rectPos[2]-rectPos[0])),rectPos[3],Colors.BLACK.c);
-        drawRect(rectPos[0],rectPos[3]-2,rectPos[0]+((rectPos[2]-rectPos[0])*hpFloat),rectPos[3],hpColor.getRGB());
-        font.drawStringWithShadow(name,-(rectPos[2]-rectPos[0])*0.5f+font.getStringWidth(name)*0.2f,rectPos[1], 0.5f,-1);
+        drawRect(rectPos[0],rectPos[1],rectPos[2],rectPos[3], bgColor.getRGB());
+        if(hp){
+            drawRect(rectPos[0], rectPos[3] - 2, rectPos[0] + ((rectPos[2] - rectPos[0])), rectPos[3], Colors.BLACK.c);
+            drawRect(rectPos[0], rectPos[3] - 2, rectPos[0] + ((rectPos[2] - rectPos[0]) * hpFloat), rectPos[3], hpColor.getRGB());
+            font.drawStringWithShadow(name, -(rectPos[2] - rectPos[0]) * 0.5f + font.getStringWidth(name) * 0.2f, rectPos[1], 0.5f, -1);
+        }
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();

@@ -55,7 +55,7 @@ public class PerspectiveModifier extends ModuleHeader {
         for (Entity entity : mc.theWorld.loadedEntityList) {
             if (canDraw(entity)) {
                 if (nameTag.isOptionOpen())
-                    RenderUtil.drawEntityNameTag((EntityLivingBase) entity, tagBgColor.getColorValue(), arr.isOptionOpen(), tagHP.isOptionOpen());
+                    RenderUtil.drawEntityNameTag((EntityLivingBase) entity, tagBgColor.getColorValue(), tagHP.isOptionOpen());
                 switch (espMode.getCurrentEnumType()) {
                     case "3DBox":
                         RenderUtil.drawEntityBoxESP(entity, box, line, espHP.isOptionOpen(), blackoutline.isOptionOpen());
