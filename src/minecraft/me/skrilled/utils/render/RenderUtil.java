@@ -445,6 +445,7 @@ public class RenderUtil implements IMC {
         glDepthMask(true);
 
         glPopMatrix();
+
     }
 
     public static void drawGradientSideways(double left, double top, double right, double bottom, int col1, int col2) {
@@ -973,17 +974,16 @@ public class RenderUtil implements IMC {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
-        FontDrawer font=Main.fontLoader.EN16;
-        String name=entity.getName();
-        float[] rectPos={-font.getStringWidth(name)/2f, (float) (posY+entity.height),font.getStringWidth(name)/2f, (float) (posY+entity.height+font.getHeight())};
+        FontDrawer font=Main.fontLoader.EN48;
+        String name=entity.getDisplayName().getUnformattedText();
+        float[] rectPos={-font.getStringWidth(name)*0.7f, (float) (posY+(entity.height)-font.getHeight()*0.7f),font.getStringWidth(name)*0.7f, (float) (posY+entity.height+font.getHeight()*0.7f)};
         float health = entity.getHealth() + entity.getAbsorptionAmount();
         float animHealth = health;
         float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
-        float dis = mc.thePlayer.getDistanceToEntity(entity) / 100f;
-        float scale = dis/3;
+        float scale = mc.thePlayer.getDistanceToEntity(entity) / 100f;
         if(scale<=0.06)scale=0.06f;
-        if(scale>=0.5)scale=0.5f;
-        SenseHeader.getSense.printINFO(dis);
+        if(scale>=0.3)scale=0.3f;
+//        SenseHeader.getSense.printINFO(dis);
         if (entity.lastHealth == -1f) {
             //初始化
             entity.lastHealth = health;
@@ -1009,12 +1009,15 @@ public class RenderUtil implements IMC {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.translate(posX, posY + entity.height * 0.5f - (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
+        GlStateManager.translate(posX, posY + entity.height*1.5f- (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
         GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(-scale, -scale, 1);
+        GL11.glScalef(-scale*0.2f, -scale*0.2f, -scale*0.2f);
         glDisable(GL_DEPTH_TEST);
-        drawCenteredStringBox_P(rectPos,font,name,bgColor.getRGB(),-1,5,new boolean[]{true,true});
+        drawRect(rectPos[0],rectPos[1],rectPos[2],rectPos[3],new Color(0,0,0,60).getRGB());
+        drawRect(rectPos[0],rectPos[3]-2,rectPos[0]+((rectPos[2]-rectPos[0])),rectPos[3],Colors.BLACK.c);
+        drawRect(rectPos[0],rectPos[3]-2,rectPos[0]+((rectPos[2]-rectPos[0])*hpFloat),rectPos[3],hpColor.getRGB());
+        font.drawStringWithShadow(name,-(rectPos[2]-rectPos[0])*0.5f+font.getStringWidth(name)*0.2f,rectPos[1], 0.5f,-1);
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();
@@ -1029,6 +1032,7 @@ public class RenderUtil implements IMC {
      * @param motion 动量
      */
     public static void drawUpNotification(String[] infos, FontDrawer[] fonts, Animation motion, Color iconColor) {
+        if(motion.getAnimationFactor()<=0.2)return;
         FontDrawer icon = fonts[2];
         FontDrawer title = fonts[1];
         FontDrawer msg = fonts[0];
