@@ -53,7 +53,9 @@ public class RenderUtil implements IMC {
         ENABLE_CLIENT_STATE = GL11::glEnableClientState;
         DISABLE_CLIENT_STATE = GL11::glEnableClientState;
     }
-
+    public static void reColor(){
+        GL11.glColor4f(1,1,1,1);
+    }
     public static void drawSikadi(float x, float y, boolean isRed) {
         if (isRed) {
 

@@ -70,7 +70,7 @@ public class PerspectiveModifier extends ModuleHeader {
 
             }
         }
-        GL11.glColor4f(1,1,1,1);
+        RenderUtil.reColor();
     }
 
     private boolean canDraw(Entity entity) {
