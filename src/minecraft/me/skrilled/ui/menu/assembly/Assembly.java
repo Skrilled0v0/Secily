@@ -37,7 +37,10 @@ public abstract class Assembly {
         this.assemblyName = this.getClass().getSimpleName() + (fatherWindow == null ? "" : " father: " + fatherWindow.assemblyName);
     }
 
-    public boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+    public boolean isMouseInside(Assembly assembly, int Mx, int My, float x1, float y1, float x2, float y2) {
+        if (assembly instanceof IconAssembly){
+            System.out.println();
+        }
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
@@ -83,7 +86,7 @@ public abstract class Assembly {
 
     @Override
     public String toString() {
-        return "Assembly{" + ", assemblyName='" + assemblyName + '\'' + '}';
+        return "Assembly{" + "assemblyName='" + assemblyName + '\'' + '}';
     }
 
     public void updateRenderPos() {

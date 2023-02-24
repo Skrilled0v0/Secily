@@ -7,13 +7,14 @@ public class WindowAssembly extends Assembly {
     public ArrayList<WindowAssembly> subWindows;
     public ArrayList<Assembly> assemblies = new ArrayList<>();
 
-    public WindowAssembly(float[] pos, WindowAssembly fatherWindow) {
-        this(pos, fatherWindow, new ArrayList<>());
+    public WindowAssembly(float[] pos, WindowAssembly fatherWindow, String assemblyName) {
+        this(pos, fatherWindow, new ArrayList<>(), assemblyName);
     }
 
-    public WindowAssembly(float[] pos, WindowAssembly fatherWindow, ArrayList<WindowAssembly> subWindows) {
+    public WindowAssembly(float[] pos, WindowAssembly fatherWindow, ArrayList<WindowAssembly> subWindows, String assemblyName) {
         super(pos, fatherWindow);
         this.subWindows = subWindows;
+        this.assemblyName = assemblyName;
     }
 
     public void addAssembly(Assembly assembly) {
@@ -90,27 +91,32 @@ public class WindowAssembly extends Assembly {
     public boolean cantBeSighted(Assembly assembly) {
         for (Assembly assembly1 : this.assemblies) {
             if (assembly == assembly1) {
-                return (assembly.pos[2] < 0 || assembly.pos[3] < 0 || assembly.pos[0] > deltaX() || assembly.pos[1] > deltaY());
+                float deltaX = deltaX();
+                float deltaY = deltaY();
+                if (assembly instanceof IconAssembly) {
+                    System.out.println("97");
+                }
+                return (assembly.pos[2] < 0 || assembly.pos[3] < 0 || assembly.pos[0] > deltaX || assembly.pos[1] > deltaY);
             }
         }
         for (WindowAssembly subWindow : subWindows) {
             return subWindow.cantBeSighted(assembly);
         }
-        return false;
+        return true;
     }
 
     public ArrayList<Assembly> getAssembliesByMousePos(int mouseX, int mouseY) {
         ArrayList<Assembly> result = new ArrayList<>();
         float[] absPos = this.calcAbsPos();
         //本窗口
-        if (this.isMouseInside(mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
+        if (this.isMouseInside(this, mouseX, mouseY, absPos[0], absPos[1], absPos[2], absPos[3])) result.add(this);
         //本窗口组件
         for (Assembly assembly : assemblies) {
             if (cantBeSighted(assembly)) {
                 continue;
             }
             absPos = assembly.calcAbsPos();
-            if (assembly.isMouseInside(mouseX, mouseY, assembly.pos[0] < 0 ? assembly.fatherWindow.calcAbsX() : absPos[0], assembly.pos[1] < 0 ? assembly.fatherWindow.calcAbsY() : absPos[1], absPos[2], absPos[3])) {
+            if (assembly.isMouseInside(assembly, mouseX, mouseY, assembly.pos[0] < 0 ? assembly.fatherWindow.calcAbsX() : absPos[0], assembly.pos[1] < 0 ? assembly.fatherWindow.calcAbsY() : absPos[1], Math.min(absPos[2], assembly.fatherWindow.deltaX() + assembly.fatherWindow.calcAbsX()), Math.min(absPos[3], assembly.fatherWindow.deltaY() + assembly.fatherWindow.calcAbsY()))) {
                 result.add(assembly);
             }
         }
@@ -140,7 +146,7 @@ public class WindowAssembly extends Assembly {
         return result;
     }
 
-    public ArrayList<Assembly>  getAssembliesByClass(Class T) {
+    public ArrayList<Assembly> getAssembliesByClass(Class T) {
         ArrayList<Assembly> result = new ArrayList<>();
         if (this.getClass().getName().equals(T.getName())) result.add(this);
         for (Assembly assembly : this.assemblies) {

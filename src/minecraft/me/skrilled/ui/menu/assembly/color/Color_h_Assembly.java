@@ -7,7 +7,6 @@ import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
 import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.ui.menu.assembly.WindowAssembly;
-import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -17,9 +16,9 @@ public class Color_h_Assembly extends Assembly {
     public Color_sb_Assembly color_sb_assembly;
     public float h;
     public ArrayList<ColorPoint> colorPoints;
+    public boolean init;
     CicleAssembly circleAssembly;
     ColorAssembly colorAssembly;
-    public boolean init;
 
     /**
      * 色相的选择的颜色的明度，饱和度默认全1.0f
@@ -33,8 +32,14 @@ public class Color_h_Assembly extends Assembly {
         processCircleAssembly(h);
     }
 
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        initColorPoints();
+    }
+
     private void processCircleAssembly(float h) {
-        float[] circlePos = new float[]{pos[0] + deltaX() * h, pos[1] + (deltaY() - 1) / 2f, pos[0] + deltaX() * (h / 360), pos[1] + (deltaY() - 1) / 2f};
+        float[] circlePos = new float[]{(pos[0] + deltaX() * h)/ fatherWindow.deltaX(), (pos[1] + (deltaY() - 1) / 2f)/ fatherWindow.deltaY(), (pos[0] + deltaX() * (h / 360))/ fatherWindow.deltaX(), (pos[1] + (deltaY() - 1) / 2f)/ fatherWindow.deltaY()};
         this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY(), Color.WHITE, false);
     }
 
@@ -54,8 +59,8 @@ public class Color_h_Assembly extends Assembly {
         float x = mouseX - calcAbsX();
         x = x < 0 ? 0 : x > deltaX() ? deltaX() : x;
         processCircleAssembly(x / deltaX());
-        colorAssembly.color_alpha_assembly.setH(x/deltaX());
-        colorAssembly.color_sb_assembly.setH(x/deltaX());
+        colorAssembly.color_alpha_assembly.setH(x / deltaX());
+        colorAssembly.color_sb_assembly.setH(x / deltaX());
         Color color = valueHeader.getColorValue();
         int alpha = color.getAlpha();
         float[] hsb = new float[4];

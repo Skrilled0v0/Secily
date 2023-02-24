@@ -15,8 +15,8 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
     float udMargin;
     private boolean needInit = true;
 
-    public Window_MouseWheel_SwitchContents_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, int numOfContent2Render) {
-        super(pos, fatherWindow, contents, numOfContent2Render, 0);
+    public Window_MouseWheel_SwitchContents_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, int numOfContent2Render, String assemblyName) {
+        super(pos, fatherWindow, contents, numOfContent2Render, 0, assemblyName);
         bgBoxHeight = 1 / (numOfContent2Render + (numOfContent2Render - 1) * 0.21337989340194817129204190406175f);
         udMargin = 0.21337989340194817129204190406175f * bgBoxHeight;
         this.wheelsToNext = bgBoxHeight + udMargin;
@@ -42,7 +42,7 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
             FontDrawer font = Main.fontLoader.EN22;
             String content = contents.get(i).toString();
             float yUsed = (i - getSkipFactor() / wheelsToNext) * (bgBoxHeight + udMargin);
-            float[] booleanAssemblyPos = {0.67498152904338036097526650951694f, yUsed + (bgBoxHeight - (font.getHeight()/deltaY())) / 2f, 0.91559652394187805650353586883862f, yUsed + (bgBoxHeight + (font.getHeight()/deltaY())) / 2f};
+            float[] booleanAssemblyPos = {0.67498152904338036097526650951694f, yUsed + (bgBoxHeight - (font.getHeight() / deltaY())) / 2f, 0.91559652394187805650353586883862f, yUsed + (bgBoxHeight + (font.getHeight() / deltaY())) / 2f};
             Animation anim = new Animation(500, ((ModuleHeader) contents.get(i)).isEnabled(), Easing.LINEAR);
             Color bgColor = new Color(65, 64, 68, 181);
             Color trueColor = new Color(126, 183, 247);

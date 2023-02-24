@@ -33,7 +33,7 @@ public class EnumAssembly extends WindowAssembly {
 
 
     public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> contents, String currentValue, Animation animation) {
-        super(pos, fatherWindow);
+        super(pos, fatherWindow,"enumAssembly");
         this.font = font;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
@@ -66,9 +66,8 @@ public class EnumAssembly extends WindowAssembly {
         for (String s : restChoice) {
             contents.add(s);
         }
-        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, 1, 1}, this, contents, 3, font.getHeight() + udMargin));
+        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, 1, 1}, this, contents, 3, font.getHeight() + udMargin,"enumWindow"));
         Window_MouseWheel_Assembly enumWindow = (Window_MouseWheel_Assembly) subWindows.get(0);
-        enumWindow.assemblyName = "windowOfEnumAssembly";
         enumWindow.addAssembly(new BGAssembly(new float[]{0, 0, 1, 1}, enumWindow, new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f));
         float fontHeight = font.getHeight() / enumWindow.deltaY();
         float[] enumValuePos = new float[4];

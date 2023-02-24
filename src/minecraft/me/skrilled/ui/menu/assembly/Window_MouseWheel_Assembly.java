@@ -17,8 +17,8 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     float currentSkip = 0f;
     private float lastSkipFactor = 0f;
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render, float wheelsToNext) {
-        super(pos, fatherWindow);
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render, float wheelsToNext,String assemblyName) {
+        super(pos, fatherWindow,assemblyName);
         this.contents = contents;
         this.numOfContent2Render = numOfContent2Render;
         this.wheelsToNext = wheelsToNext;

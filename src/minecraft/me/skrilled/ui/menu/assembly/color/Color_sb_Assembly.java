@@ -13,7 +13,6 @@ import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
 import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.ui.menu.assembly.WindowAssembly;
-import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -36,10 +35,16 @@ public class Color_sb_Assembly extends Assembly {
         processCircleAssembly(s, b);
     }
 
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        initColorPointLists();
+    }
+
     public void processCircleAssembly(float s, float b) {
         float circleR = 3.2f;
-        float x = pos[0] + (pos[2] - pos[0]) * s;
-        float y = pos[1] + (pos[3] - pos[1]) * b;
+        float x = (pos[0] + (pos[2] - pos[0]) * s) / fatherWindow.deltaX();
+        float y = (pos[1] + (pos[3] - pos[1]) * b) / fatherWindow.deltaY();
         float[] circlePos = new float[]{x, y, x, y};
         this.circleAssembly = new CicleAssembly(circlePos, fatherWindow, circleR, Color.WHITE, false);
     }

@@ -45,7 +45,7 @@ public class LineAssembly extends Assembly {
      * @return true if the mouse is inside the zone of this line (with width
      */
     @Override
-    public boolean isMouseInside(int Mx, int My, float x1, float y1, float x2, float y2) {
+    public boolean isMouseInside(Assembly assembly, int Mx, int My, float x1, float y1, float x2, float y2) {
         Vec3f mouse = new Vec3f(Mx, My);
         Vec3f[] points = mode.calcPoints(this);
 

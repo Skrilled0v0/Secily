@@ -7,7 +7,6 @@ import me.skrilled.ui.menu.assembly.Assembly;
 import me.skrilled.ui.menu.assembly.CicleAssembly;
 import me.skrilled.ui.menu.assembly.ColorAssembly;
 import me.skrilled.ui.menu.assembly.WindowAssembly;
-import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.RenderUtil;
 
 import java.awt.*;
@@ -18,8 +17,8 @@ public class Color_alpha_Assembly extends Assembly {
 
     public int[] rgba = new int[4];
     public ArrayList<ColorPoint> colorPoints;
-    Color color;
     public boolean init = false;
+    Color color;
     CicleAssembly cicleAssembly;
     ColorAssembly colorAssembly;
 
@@ -41,8 +40,14 @@ public class Color_alpha_Assembly extends Assembly {
     }
 
     public void processCircleAssembly(float a) {
-        float[] circlePos = new float[]{pos[0] + a * deltaX(), pos[1] + (deltaY() - 1) / 2f, pos[0] + a * deltaX(), pos[1] + (deltaY() - 1) / 2f};
+        float[] circlePos = new float[]{(pos[0] + a * deltaX()) / fatherWindow.deltaX(), (pos[1] + (deltaY() - 1) / 2f) / fatherWindow.deltaY(), (pos[0] + a * deltaX()) / fatherWindow.deltaX(), (pos[1] + (deltaY() - 1) / 2f) / fatherWindow.deltaY()};
         cicleAssembly = new CicleAssembly(circlePos, fatherWindow, 0.4f * deltaY(), Color.WHITE, false);
+    }
+
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        initColorPoints();
     }
 
     @Override
@@ -51,7 +56,8 @@ public class Color_alpha_Assembly extends Assembly {
         float absX, absY;
         absX = calcAbsX();
         absY = calcAbsY();
-        RenderUtil.drawRect(absX, absY, absX + deltaX(), absY + deltaY() - 1, Color.black.getRGB());;
+        RenderUtil.drawRect(absX, absY, absX + deltaX(), absY + deltaY() - 1, Color.black.getRGB());
+        ;
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY());
         cicleAssembly.draw();
         return deltaY();
