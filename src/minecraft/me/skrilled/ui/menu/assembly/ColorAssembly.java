@@ -13,9 +13,6 @@ public class ColorAssembly extends WindowAssembly {
     public Color_h_Assembly color_h_assembly;
     public Color_sb_Assembly color_sb_assembly;
     public Color_alpha_Assembly color_alpha_assembly;
-    public ArrayList<ColorPoint> h_colors;
-    public ArrayList<ColorPoint> sb_colors;
-    public ArrayList<ColorPoint> alpha_colors;
     boolean withAlpha = false;
     BGAssembly bgAssembly;
 

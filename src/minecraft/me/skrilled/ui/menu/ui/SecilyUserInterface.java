@@ -102,7 +102,7 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.addAssembly(bigBg);
 
         //实例化边线(用于拖动缩放mainGui
-        Color edgeLineColorForMainGui = new Color(50, 50, 50, 188);
+        Color edgeLineColorForMainGui = new Color(255, 255, 233, 198);
         LineAssembly lineDownForMainGui = new LineAssembly(new float[]{0.018f, 1, 0.982f, 1}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.SIMPLE, SideOfBoundedWindow.DOWN);
         lineDownForMainGui.canDrag = true;
         mainGui.addAssembly(lineDownForMainGui);
@@ -171,6 +171,8 @@ public class SecilyUserInterface extends GuiScreen {
         //初始化valuesWindow
         valuesWindow = new Window_Values_Assembly(valuesWindowPos, mainGui, currentModule, "valuesWindow");
         mainGui.addWindow(valuesWindow);
+
+        mainGui.updateRenderPos();
         super.initGui();
     }
 

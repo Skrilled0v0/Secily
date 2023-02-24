@@ -194,6 +194,8 @@ public class Window_Values_Assembly extends WindowAssembly {
         return super.draw();
     }
 
+
+
     public void init() {
         this.reset();
         currentUsedHeight = 0f;

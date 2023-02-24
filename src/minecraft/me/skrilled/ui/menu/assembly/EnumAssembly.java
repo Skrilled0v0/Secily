@@ -46,7 +46,7 @@ public class EnumAssembly extends WindowAssembly {
         this.animation = animation;
         restChoice = getRestContents(contents, currentValue);
 
-        udMargin = font.getHeight() * 0.93f / deltaY();
+        udMargin = (0.3333f - font.getHeight() * 0.3333f / deltaY())/2;
         initSubWindow(font);
     }
 
@@ -55,6 +55,13 @@ public class EnumAssembly extends WindowAssembly {
         window.skipAim = skipAimOnFolding;
         window.animation = new Animation(window.animation.length, window.animation.initialState, Easing.LINEAR);
         window.animation.setState(true);
+    }
+
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        Window_MouseWheel_Assembly enumWindow = (Window_MouseWheel_Assembly) subWindows.get(0);
+        enumWindow.heightOfOnePage = font.getHeight() + udMargin * deltaY();
     }
 
     private ArrayList<String> getRestContents(ArrayList<String> contents, String currentValue) {

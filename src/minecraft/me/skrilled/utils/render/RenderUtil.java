@@ -2,7 +2,6 @@ package me.skrilled.utils.render;
 
 import com.mojang.authlib.GameProfile;
 import me.fontloader.FontDrawer;
-import me.skrilled.SenseHeader;
 import me.skrilled.ui.menu.assembly.color.ColorPoint;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.math.TimerUtil;
@@ -28,9 +27,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -41,6 +41,7 @@ public class RenderUtil implements IMC {
     private static final Consumer<Integer> DISABLE_CLIENT_STATE;
     private static final Map<Integer, Boolean> glCapMap = new HashMap<>();
     public static Tessellation tessellator;
+    public volatile static ArrayList<ScissorPos> scissors = new ArrayList<>();
     static TimerUtil redT = new TimerUtil();
     static TimerUtil blueT = new TimerUtil();
     static int blueCount = 1;
@@ -52,9 +53,11 @@ public class RenderUtil implements IMC {
         ENABLE_CLIENT_STATE = GL11::glEnableClientState;
         DISABLE_CLIENT_STATE = GL11::glEnableClientState;
     }
-    public static void reColor(){
-        GL11.glColor4f(1,1,1,1);
+
+    public static void reColor() {
+        GL11.glColor4f(1, 1, 1, 1);
     }
+
     public static void drawSikadi(float x, float y, boolean isRed) {
         if (isRed) {
 
@@ -399,7 +402,6 @@ public class RenderUtil implements IMC {
         font.drawString(str, pos[0] + ((centered[0]) ? ((maxStringWidth - font.getStringWidth(str)) / 2f) : lrMargin), pos[1] + (centered[1] ? ((pos[3] - pos[1] - fontHeight) / 2f) : udMargin), fontColor);
         return boxHeight;
     }
-
 
     public static float drawCenteredString(float[] pos, FontDrawer font, String str, int fontColor) {
         float fontHeight = font.getHeight();
@@ -961,15 +963,12 @@ public class RenderUtil implements IMC {
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         if (bkbg) {
-            drawBorder(-(int)(entity.width*21), -(int)entity.height*22, (int)(entity.width*21) , (int)entity.height*20,6, Colors.BLACK.c);
+            drawBorder(-(int) (entity.width * 21), -(int) entity.height * 22, (int) (entity.width * 21), (int) entity.height * 20, 6, Colors.BLACK.c);
         }
-        drawBorder(-(int)(entity.width*20), -(int)entity.height*22, (int)(entity.width*20) , (int)entity.height*20,2 , bgLineColor.getRGB());
+        drawBorder(-(int) (entity.width * 20), -(int) entity.height * 22, (int) (entity.width * 20), (int) entity.height * 20, 2, bgLineColor.getRGB());
         if (hpLine) {
-           drawRect( (int)(entity.width*21)+2.7f,-(int)entity.height*22-0.3f,(int)(entity.width*21)+4.3f,(int)entity.height*20+0.3f,Colors.BLACK.c);
-           drawRect( (int)(entity.width*21)+3f,
-                   (int)entity.height*20-((int)entity.height*20+(int)entity.height*22)*hpFloat,
-                   (int)(entity.width*21)+4f,
-                   (int)entity.height*20,hpColor.getRGB());
+            drawRect((int) (entity.width * 21) + 2.7f, -(int) entity.height * 22 - 0.3f, (int) (entity.width * 21) + 4.3f, (int) entity.height * 20 + 0.3f, Colors.BLACK.c);
+            drawRect((int) (entity.width * 21) + 3f, (int) entity.height * 20 - ((int) entity.height * 20 + (int) entity.height * 22) * hpFloat, (int) (entity.width * 21) + 4f, (int) entity.height * 20, hpColor.getRGB());
         }
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
@@ -981,15 +980,15 @@ public class RenderUtil implements IMC {
         double posX = getEntityRenderPos(entity)[0];
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
-        FontDrawer font=Main.fontLoader.EN48;
-        String name=entity.getDisplayName().getUnformattedText();
-        float[] rectPos={-font.getStringWidth(name)*0.7f, (float) (posY+(entity.height)-font.getHeight()*0.7f),font.getStringWidth(name)*0.7f, (float) (posY+entity.height+font.getHeight()*0.7f)};
+        FontDrawer font = Main.fontLoader.EN48;
+        String name = entity.getDisplayName().getUnformattedText();
+        float[] rectPos = {-font.getStringWidth(name) * 0.7f, (float) (posY + (entity.height) - font.getHeight() * 0.7f), font.getStringWidth(name) * 0.7f, (float) (posY + entity.height + font.getHeight() * 0.7f)};
         float health = entity.getHealth();
         float animHealth = health;
         float maxHealth = entity.getMaxHealth();
         float scale = mc.thePlayer.getDistanceToEntity(entity) / 100f;
-        if(scale<=0.06)scale=0.06f;
-        if(scale>=0.3)scale=0.3f;
+        if (scale <= 0.06) scale = 0.06f;
+        if (scale >= 0.3) scale = 0.3f;
 //        SenseHeader.getSense.printINFO(dis);
         if (entity.lastHealth == -1f) {
             //初始化
@@ -1016,13 +1015,13 @@ public class RenderUtil implements IMC {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.translate(posX, posY + entity.height*1.35f- (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
+        GlStateManager.translate(posX, posY + entity.height * 1.35f - (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
         GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-        GL11.glScalef(-scale*0.2f, -scale*0.2f, -scale*0.2f);
+        GL11.glScalef(-scale * 0.2f, -scale * 0.2f, -scale * 0.2f);
         glDisable(GL_DEPTH_TEST);
-        drawRect(rectPos[0],rectPos[1],rectPos[2],rectPos[3], bgColor.getRGB());
-        if(hp){
+        drawRect(rectPos[0], rectPos[1], rectPos[2], rectPos[3], bgColor.getRGB());
+        if (hp) {
             drawRect(rectPos[0], rectPos[3] - 2, rectPos[0] + ((rectPos[2] - rectPos[0])), rectPos[3], Colors.BLACK.c);
             drawRect(rectPos[0], rectPos[3] - 2, rectPos[0] + ((rectPos[2] - rectPos[0]) * hpFloat), rectPos[3], hpColor.getRGB());
             font.drawStringWithShadow(name, -(rectPos[2] - rectPos[0]) * 0.5f + font.getStringWidth(name) * 0.2f, rectPos[1], 0.5f, -1);
@@ -1050,7 +1049,7 @@ public class RenderUtil implements IMC {
         float titleTextWidth = (title.getStringWidth(infos[1]) + icon.getStringWidth(infos[2])) / 2f;
         float scale = (float) motion.getAnimationFactor();
         float[] pos = {width() / 2f - margin - msgWidth / 2f, height() * 0.08f, width() / 2f + margin + msgWidth / 2f, (height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight()) * scale};
-        if(motion.getAnimationFactor()>0.6f) {
+        if (motion.getAnimationFactor() > 0.6f) {
             drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
             BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
             glPushMatrix();
@@ -1093,7 +1092,9 @@ public class RenderUtil implements IMC {
         glDisable(GL_BLEND);
         glDisable(GL_LINE_SMOOTH);
         glPopMatrix();
-    }public static void drawBorder(int x, int y, int width, int height, float borderWidth, int borderColor) {
+    }
+
+    public static void drawBorder(int x, int y, int width, int height, float borderWidth, int borderColor) {
         float a = (borderColor >> 24 & 0xFF) / 255.0f;
         float r = (borderColor >> 16 & 0xFF) / 255.0f;
         float g = (borderColor >> 8 & 0xFF) / 255.0f;
@@ -1209,17 +1210,17 @@ public class RenderUtil implements IMC {
 
         Color color;
         float x, y;
+        glBegin(GL_POINTS);
         for (ArrayList<ColorPoint> colorPointList : colorPointLists) {
             for (ColorPoint colorPoint : colorPointList) {
                 color = colorPoint.color;
                 x = colorPoint.pos[0];
                 y = colorPoint.pos[1];
                 glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-                glBegin(GL_POINTS);
                 glVertex2d(x, y);
-                glEnd();
             }
         }
+        glEnd();
 
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);
@@ -1383,15 +1384,14 @@ public class RenderUtil implements IMC {
 
     }
 
-    public volatile static ArrayList<ScissorPos> scissors = new ArrayList<>();
-
     public static void doScissor(int x, int y, int x1, int y1) {
         ScaledResolution scale = new ScaledResolution(mc);
         int factor = scale.getScaleFactor();
         GL11.glEnable(GL_SCISSOR_TEST);
         GL11.glScissor(x * factor, (scale.getScaledHeight() - y1) * factor, (x1 - x) * factor, (y1 - y) * factor);
-        scissors.add(new ScissorPos(x,y,x1,y1));
+        scissors.add(new ScissorPos(x, y, x1, y1));
     }
+
     public static void reScissor(int x, int y, int x1, int y1) {
         ScaledResolution scale = new ScaledResolution(mc);
         int factor = scale.getScaleFactor();
@@ -1401,11 +1401,11 @@ public class RenderUtil implements IMC {
 
     public static void deScissor() {
         glDisable(GL_SCISSOR_TEST);
-        scissors.remove(scissors.size()-1);
-        if (scissors.size()>0) {
+        scissors.remove(scissors.size() - 1);
+        if (scissors.size() > 0) {
             int i = scissors.size() - 1;
             ScissorPos p = scissors.get(i);
-            reScissor(p.x,p.y,p.x1,p.y1);
+            reScissor(p.x, p.y, p.x1, p.y1);
         }
     }
 
