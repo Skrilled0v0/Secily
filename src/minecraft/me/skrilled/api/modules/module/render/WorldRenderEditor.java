@@ -18,13 +18,13 @@ import java.util.ArrayList;
 
 @ModuleInitialize(name = "RenderEditor", type = ModuleType.RENDER)
 public class WorldRenderEditor extends ModuleHeader {
-    public static ValueHeader weatherEditor = new ValueHeader("WeatherEditor", true);
-    public static ValueHeader timeEditor = new ValueHeader("TimeModifier", true);
+    public static ValueHeader weatherEditor = new ValueHeader("Weather", true);
+    public static ValueHeader timeEditor = new ValueHeader("Timer", true);
     static double[] times = {0.0f, 0.0f, 18000.0f, 1.0f};
     public static ValueHeader time = new ValueHeader("Time", times);
     static ArrayList<String> weather = new ArrayList<>();
-    public static ValueHeader weathers = new ValueHeader("Weather", "Snow", weather);
-    ValueHeader doDaylightCycle = new ValueHeader("FastDoDaylightCycle", false);
+    public static ValueHeader weathers = new ValueHeader("WeatherType", "Snow", weather);
+    ValueHeader doDaylightCycle = new ValueHeader("Alternation", false);
     BoundedAnimation timeChange = new BoundedAnimation(0, 18000, 20000, false, Easing.LINEAR);
 
     public WorldRenderEditor() {

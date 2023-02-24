@@ -105,32 +105,19 @@ public class ModuleHeader implements IMC {
     }
 
     public void setEnabled(boolean isEnabled) {
-        switch (HUD.moduleSoundType.getCurrentEnumType()) {
-            case "Boo":
-                toggle = "/assets/minecraft/skrilled/music/toggle/boo.wav";
-                break;
-            case "BiBu":
-                toggle = "/assets/minecraft/skrilled/music/toggle/bibu.wav";
-                break;
-            case "Ding":
-                toggle = "/assets/minecraft/skrilled/music/toggle/ding.wav";
-                break;
-        }
-        toggleSound = new SoundPlayer(toggle);
-        if (!HUD.moduleSoundType.getCurrentEnumType().equalsIgnoreCase("None")) toggleSound.play();
         Notification.posType posType = Notification.posType.NONE;
         if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("UP")) {
             posType = Notification.posType.UP;
         } else if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("LEFT")) {
             posType = Notification.posType.LEFT;
         }
-
+        if(HUD.togSound.isOptionOpen())
+            mc.thePlayer.playSound("random.click", 1.0F, isEnabled ? 0.9F : 0.4F);
         this.Enabled = isEnabled;
         arrayWidth.setState(isEnabled);
         if (isEnabled) this.onEnabled();
         else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
-            if (!HUD.moduleSoundType.getCurrentEnumType().equalsIgnoreCase("None")) toggleSound.play();
             Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), posType);
         }
     }

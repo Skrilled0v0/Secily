@@ -1,6 +1,7 @@
 package me.skrilled.ui;
 
 import me.fontloader.FontDrawer;
+import me.skrilled.SenseHeader;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
@@ -105,7 +106,9 @@ public class Notification implements IMC {
             //informationType
             infoFont.drawString(info, x + 40, y + this.height - ifH - upMargin, -1);
         } else if (positionType == posType.UP) {
-            RenderUtil.drawUpNotification(new String[]{message, informationType.name(), ICON.toString()}, new FontDrawer[]{infoFont, messageFont, ICONFont}, motionX, ICONCOLOR);
+
+                RenderUtil.drawUpNotification(new String[]{message, informationType.name(), ICON.toString()}, new FontDrawer[]{infoFont, messageFont, ICONFont}, motionX, ICONCOLOR);
+
 
         }
         if (timerAnim.getAnimationFactor() == 1) {
