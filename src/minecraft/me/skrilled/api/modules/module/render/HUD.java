@@ -105,26 +105,6 @@ public class HUD extends ModuleHeader {
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
-        GL11.glPushMatrix();
-        glEnable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_LINE_SMOOTH);
 
-        glBegin(GL_POLYGON);
-        GL11.glColor4f(0,0,0,1);
-        GL11.glVertex2d(100,140);
-        GL11.glColor4f(1,1,1,1);
-        GL11.glVertex2d(100,160);
-        GL11.glColor4f(1,0,0,1);
-        GL11.glVertex2d(120,160);
-        GL11.glColor4f(0,0,0,1);
-        GL11.glVertex2d(120,140);
-        GL11.glEnd();
-        glEnable(GL_TEXTURE_2D);
-        glDisable(GL_BLEND);
-        glDisable(GL_LINE_SMOOTH);
-        GlStateManager.disableBlend();
-        GL11.glPopMatrix();
     }
 }
