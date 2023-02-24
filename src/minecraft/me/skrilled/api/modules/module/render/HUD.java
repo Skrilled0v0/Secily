@@ -31,9 +31,7 @@ public class HUD extends ModuleHeader {
     public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
     public static ValueHeader not = new ValueHeader("Notifications", true);
     static ArrayList<String> notType = new ArrayList<>();
-    static ArrayList<String> soundType = new ArrayList<>();
-    public static ValueHeader moduleNotType = new ValueHeader("ModulePrompt", "LEFT", notType);
-    public static ValueHeader moduleSoundType = new ValueHeader("ModuleSound", "Ding", soundType);
+    public static ValueHeader moduleNotType = new ValueHeader("Prompt", "LEFT", notType);
     ArrayList<String> markType = new ArrayList<>();
     double[] size = {32, 128, 512, 0.1};
     String markStr = SenseHeader.getSense.getClientName();
@@ -45,12 +43,12 @@ public class HUD extends ModuleHeader {
     ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
     ValueHeader markText = new ValueHeader("MarkText", markStr);
     ValueHeader iconSize = new ValueHeader("FlowerSize", size);
+  public static   ValueHeader togSound=new ValueHeader("toggleSound",true);
     BoundedAnimation angle = new BoundedAnimation(0, 360, 5000f, false, Easing.LINEAR);
 
     public HUD() {
         addEnumTypes(didis, "Red", "Blue");
         addEnumTypes(notType, "LEFT", "UP", "None");
-        addEnumTypes(soundType, "None", "Ding", "Boo", "BiBu");
         addEnumTypes(markType, "Text", "Flower", "Info", "None");
     }
 

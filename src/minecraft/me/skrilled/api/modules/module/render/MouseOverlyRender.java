@@ -31,14 +31,14 @@ import java.awt.*;
 
 @ModuleInitialize(name = "OverlyRender", type = ModuleType.RENDER)
 public class MouseOverlyRender extends ModuleHeader {
-    public static ValueHeader blkEdit = new ValueHeader("BlockOverlyEdit", true);
-    ValueHeader perspective = new ValueHeader("OverlyPerspective", true);
+    public static ValueHeader blkEdit = new ValueHeader("OverlyEdit", true);
+    ValueHeader perspective = new ValueHeader("Perspective", true);
     double[] lineW = {0.5f, 1.0f, 5.0f, 0.1f};
     Color lineColor = new Color(-1);
-    ValueHeader blklineWidth = new ValueHeader("OverlyLineWidth", lineW);
-    ValueHeader blklineColor = new ValueHeader("OverlyLineColor", lineColor);
+    ValueHeader blklineWidth = new ValueHeader("LineWidth", lineW);
+    ValueHeader blklineColor = new ValueHeader("LineColor", lineColor);
     Color boxColor = new Color(0, 0, 0, 200);
-    ValueHeader blkboxColor = new ValueHeader("OverlyBoxColor", boxColor);
+    ValueHeader blkboxColor = new ValueHeader("BoxColor", boxColor);
     Entity mouseEnt;
     Entity lastMouseEnt;
     BlockPos mouseBlockPos;

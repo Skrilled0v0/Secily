@@ -860,7 +860,7 @@ public class RenderUtil implements IMC {
         drawOutlinedBoundingBox(box);
         if (hp) {
             glColor4f(hpColor.getRed() / 255.0f, hpColor.getGreen() / 255.0f, hpColor.getBlue() / 255.0f, 1f);
-            drawOutlinedBoundingBox(new AxisAlignedBB(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + (entity.height * 1.2f) * hpFloat, posZ + entity.width));
+            drawOutlinedBoundingBox(new AxisAlignedBB(posX - entity.width, posY, posZ - entity.width, posX + entity.width, posY + (entity.height * 1.12f) * hpFloat, posZ + entity.width));
         }
         glDisable(GL_LINE_SMOOTH);
         glEnable(GL_TEXTURE_2D);
@@ -875,9 +875,9 @@ public class RenderUtil implements IMC {
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
 
-        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float health = entity.getHealth();
         float animHealth = health;
-        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth();
         if (entity.lastHealth == -1f) {
             //初始化
             entity.lastHealth = health;
@@ -911,10 +911,10 @@ public class RenderUtil implements IMC {
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         if (bkbg) {
-            drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 5f, new Color(0, 0, 0).getRGB());
+            drawAngleCirque(0, 0, 10 * entity.height, 0, 360, 5f, new Color(0, 0, 0).getRGB());
         }
-        drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
-        if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
+        drawAngleCirque(0, 0, 10 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
+        if (hpLine) drawAngleCirque(0, 0, 10 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();
@@ -926,9 +926,9 @@ public class RenderUtil implements IMC {
         double posY = getEntityRenderPos(entity)[1];
         double posZ = getEntityRenderPos(entity)[2];
 
-        float health = entity.getHealth() + entity.getAbsorptionAmount();
+        float health = entity.getHealth();
         float animHealth = health;
-        float maxHealth = entity.getMaxHealth() + entity.getAbsorptionAmount();
+        float maxHealth = entity.getMaxHealth();
         if (entity.lastHealth == -1f) {
             //初始化
             entity.lastHealth = health;
@@ -962,10 +962,16 @@ public class RenderUtil implements IMC {
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         if (bkbg) {
-            drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 5f, new Color(0, 0, 0).getRGB());
+            drawBorder(-(int)(entity.width*21), -(int)entity.height*22, (int)(entity.width*21) , (int)entity.height*20,6, Colors.BLACK.c);
         }
-        drawAngleCirque(0, 0, 15 * entity.height, 0, 360, 2f, bgLineColor.getRGB());
-        if (hpLine) drawAngleCirque(0, 0, 15 * entity.height, 0, 360 * hpFloat, 1.8f, hpColor.getRGB());
+        drawBorder(-(int)(entity.width*20), -(int)entity.height*22, (int)(entity.width*20) , (int)entity.height*20,2 , bgLineColor.getRGB());
+        if (hpLine) {
+           drawRect( (int)(entity.width*21)+2.7f,-(int)entity.height*22-0.3f,(int)(entity.width*21)+4.3f,(int)entity.height*20+0.3f,Colors.BLACK.c);
+           drawRect( (int)(entity.width*21)+3f,
+                   (int)entity.height*20-((int)entity.height*20+(int)entity.height*22)*hpFloat,
+                   (int)(entity.width*21)+4f,
+                   (int)entity.height*20,hpColor.getRGB());
+        }
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
         GlStateManager.disableBlend();
@@ -1011,7 +1017,7 @@ public class RenderUtil implements IMC {
         GL11.glPushMatrix();
         GlStateManager.enableBlend();
         GL11.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        GlStateManager.translate(posX, posY + entity.height*1.5f- (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
+        GlStateManager.translate(posX, posY + entity.height*1.35f- (entity.isChild() ? entity.height * 0.1f : 0.0f), posZ);
         GL11.glRotatef(-RenderManager.playerViewY, 0.0f, 1.0f, 0.0f);
         GL11.glRotatef(RenderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GL11.glScalef(-scale*0.2f, -scale*0.2f, -scale*0.2f);
@@ -1036,7 +1042,7 @@ public class RenderUtil implements IMC {
      * @param motion 动量
      */
     public static void drawUpNotification(String[] infos, FontDrawer[] fonts, Animation motion, Color iconColor) {
-        if(motion.getAnimationFactor()<=0.2)return;
+
         FontDrawer icon = fonts[2];
         FontDrawer title = fonts[1];
         FontDrawer msg = fonts[0];
@@ -1045,19 +1051,50 @@ public class RenderUtil implements IMC {
         float titleTextWidth = (title.getStringWidth(infos[1]) + icon.getStringWidth(infos[2])) / 2f;
         float scale = (float) motion.getAnimationFactor();
         float[] pos = {width() / 2f - margin - msgWidth / 2f, height() * 0.08f, width() / 2f + margin + msgWidth / 2f, (height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight()) * scale};
-        drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
-        BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
-        glPushMatrix();
-        glScalef(1, scale, scale);
-        icon.drawString(infos[2], width() / 2f - titleTextWidth, height() * 0.08 + margin * scale, iconColor.getRGB());
-        title.drawString(infos[1], width() / 2f - titleTextWidth + icon.getStringWidth(infos[2]) + margin / 4f, height() * 0.08 + margin + icon.getHeight() / 2f - margin / 2f * scale, iconColor.getRGB());
+        if(motion.getAnimationFactor()>0.6f) {
+            drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
+            BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
+            glPushMatrix();
 
-        msg.drawCenteredString(infos[0], width() / 2f, height() * 0.08 + margin * 2 + icon.getHeight() * scale, -1);
-        glPopMatrix();
+            glScalef(1, scale, scale);
+            icon.drawString(infos[2], width() / 2f - titleTextWidth, height() * 0.08 + margin * scale, iconColor.getRGB());
+            title.drawString(infos[1], width() / 2f - titleTextWidth + icon.getStringWidth(infos[2]) + margin / 4f, height() * 0.08 + margin + icon.getHeight() / 2f - margin / 2f * scale, iconColor.getRGB());
+
+            msg.drawCenteredString(infos[0], width() / 2f, height() * 0.08 + margin * 2 + icon.getHeight() * scale, -1);
+            glPopMatrix();
+        }
     }
 
     public static void drawBorderedRect(int x, int y, int width, int height, float borderWidth, int borderColor, int bgColor) {
         Gui.drawRect(x, y, width, height, bgColor);
+        float a = (borderColor >> 24 & 0xFF) / 255.0f;
+        float r = (borderColor >> 16 & 0xFF) / 255.0f;
+        float g = (borderColor >> 8 & 0xFF) / 255.0f;
+        float b = (borderColor & 0xFF) / 255.0f;
+        glPushMatrix();
+        glEnable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_LINE_SMOOTH);
+        glPushMatrix();
+        glColor4f(r, g, b, a);
+        glLineWidth(borderWidth);
+        glBegin(1);
+        glVertex2d(x, y);
+        glVertex2d(x, height);
+        glVertex2d(width, height);
+        glVertex2d(width, y);
+        glVertex2d(x, y);
+        glVertex2d(width, y);
+        glVertex2d(x, height);
+        glVertex2d(width, height);
+        glEnd();
+        glPopMatrix();
+        glEnable(GL_TEXTURE_2D);
+        glDisable(GL_BLEND);
+        glDisable(GL_LINE_SMOOTH);
+        glPopMatrix();
+    }public static void drawBorder(int x, int y, int width, int height, float borderWidth, int borderColor) {
         float a = (borderColor >> 24 & 0xFF) / 255.0f;
         float r = (borderColor >> 16 & 0xFF) / 255.0f;
         float g = (borderColor >> 8 & 0xFF) / 255.0f;
