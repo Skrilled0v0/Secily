@@ -1347,11 +1347,11 @@ public class RenderUtil implements IMC {
 
     }
 
-    public static void doScissor(int x, int y, int width, int height) {
+    public static void doScissor(int x, int y, int x1, int y1) {
         ScaledResolution scale = new ScaledResolution(mc);
         int factor = scale.getScaleFactor();
-        GL11.glScissor(x * factor, (scale.getScaledHeight() - height) * factor, (width + x) * factor, (height - y) * factor);
         GL11.glEnable(GL_SCISSOR_TEST);
+        GL11.glScissor(x * factor, (scale.getScaledHeight() - y1) * factor, (x1 - x) * factor, (y1 - y) * factor);
     }
 
 }

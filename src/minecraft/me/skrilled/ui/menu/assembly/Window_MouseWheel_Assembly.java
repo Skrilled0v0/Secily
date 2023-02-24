@@ -11,14 +11,14 @@ import static org.lwjgl.opengl.GL11.*;
 public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     public Animation animation = new Animation(200, false, Easing.LINEAR);
     public ArrayList<T> contents;
+    public float lastSkipFactor = 0f;
     float skipAim;
-    float wheelsToNext = 33f;
+    float wheelsToNext;
     float numOfContent2Render;
     float currentSkip = 0f;
-    private float lastSkipFactor = 0f;
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render, float wheelsToNext,String assemblyName) {
-        super(pos, fatherWindow,assemblyName);
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, ArrayList<T> contents, float numOfContent2Render, float wheelsToNext, String assemblyName) {
+        super(pos, fatherWindow, assemblyName);
         this.contents = contents;
         this.numOfContent2Render = numOfContent2Render;
         this.wheelsToNext = wheelsToNext;
@@ -66,7 +66,14 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             }
         }
         glPushMatrix();
-        RenderUtil.doScissor((int) calcAbsX(), (int) calcAbsY() - 1, (int) (calcAbsX() + deltaX()), (int) (calcAbsY() + deltaY()) + 1);
+        float calcAbsX = calcAbsX();
+        float calcAbsY = calcAbsY();
+        float deltaX = deltaX();
+        float deltaY = deltaY();
+        if (fatherWindow instanceof Window_Values_Assembly) {
+            Math.min(1, 2);
+        }
+        RenderUtil.doScissor((int) calcAbsX, (int) calcAbsY, (int) (calcAbsX + deltaX), (int) (calcAbsY + deltaY) + 1);
         float result = super.draw();
         glDisable(GL_SCISSOR_TEST);
         glPopMatrix();

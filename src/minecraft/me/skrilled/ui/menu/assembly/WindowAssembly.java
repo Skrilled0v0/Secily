@@ -17,6 +17,10 @@ public class WindowAssembly extends Assembly {
         this.assemblyName = assemblyName;
     }
 
+    public static WindowAssembly getVoidWindow() {
+        return new WindowAssembly(new float[4], null, "");
+    }
+
     public void addAssembly(Assembly assembly) {
         if (assemblies == null) assemblies = new ArrayList<>();
         assemblies.add(assembly);
@@ -93,9 +97,6 @@ public class WindowAssembly extends Assembly {
             if (assembly == assembly1) {
                 float deltaX = deltaX();
                 float deltaY = deltaY();
-                if (assembly instanceof IconAssembly) {
-                    System.out.println("97");
-                }
                 return (assembly.pos[2] < 0 || assembly.pos[3] < 0 || assembly.pos[0] > deltaX || assembly.pos[1] > deltaY);
             }
         }
@@ -106,6 +107,9 @@ public class WindowAssembly extends Assembly {
     }
 
     public ArrayList<Assembly> getAssembliesByMousePos(int mouseX, int mouseY) {
+        if (this instanceof Window_Values_Assembly) {
+            Math.min(1, 2);
+        }
         ArrayList<Assembly> result = new ArrayList<>();
         float[] absPos = this.calcAbsPos();
         //本窗口
@@ -122,6 +126,9 @@ public class WindowAssembly extends Assembly {
         }
         //子窗口的组件
         for (WindowAssembly subWindow : subWindows) {
+            if (subWindow.fatherWindow instanceof Window_Values_Assembly) {
+                Math.max(1, 2);
+            }
             for (Assembly assembly : subWindow.getAssembliesByMousePos(mouseX, mouseY)) {
                 result.add(assembly);
             }

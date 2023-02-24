@@ -100,18 +100,6 @@ public class IconAssembly extends Assembly {
                     aimingPos = count;
                     anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
                     anim.setState(true);
-                } else if (assemblyName.equalsIgnoreCase("pageBar")) {
-                    Assembly assembly = SecilyUserInterface.mainGui.getAssemblyByName("valuesWindow");
-                    Window_Values_Assembly windowValuesAssembly = (Window_Values_Assembly) assembly;
-                    windowValuesAssembly.page = Integer.valueOf(icon);
-
-                    if (anim.getAnimationFactor() < 1D) {
-                        float deltaPos = (aimingPos - currentPos);
-                        currentPos += deltaPos * anim.getAnimationFactor();
-                    }
-                    aimingPos = count;
-                    anim = new Animation(anim.length, anim.initialState, Easing.LINEAR);
-                    anim.setState(true);
                 }
             }
         }

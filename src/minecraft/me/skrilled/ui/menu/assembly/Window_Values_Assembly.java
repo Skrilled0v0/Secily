@@ -13,18 +13,14 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Window_Values_Assembly extends WindowAssembly {
-    public IconAssembly pageBar;
     public ArrayList<IconAssembly> icons = new ArrayList<>();
-    public ArrayList<WindowAssembly> subWindows = new ArrayList<>();
-    WindowAssembly valuesEditZoneWindow;
-    ArrayList<WindowAssembly> valuesEditZoneWindows = new ArrayList<>();
     ModuleHeader module;
     boolean needInit = true;
-    int page = 1;
     int lastEndIndexOfValues = 0;
+    Window_MouseWheel_Assembly valueEditZone;
 
-    public Window_Values_Assembly(float[] pos, WindowAssembly fatherWindow, ModuleHeader module,String assemblyName) {
-        super(pos, fatherWindow,assemblyName);
+    public Window_Values_Assembly(float[] pos, WindowAssembly fatherWindow, ModuleHeader module, String assemblyName) {
+        super(pos, fatherWindow, assemblyName);
         this.module = module;
     }
 
@@ -41,15 +37,8 @@ public class Window_Values_Assembly extends WindowAssembly {
     public WindowAssembly initWindowForNextPage(ArrayList<ValueHeader> values) {
 
         //计算并添加编辑区窗口
-        float[] valuesEditZoneWindowPos = {0.04032185676732705007373212797333f, 0.14363413672126383093562516866995f, 0.95967814323267294992626787202667f, 0.94615017334080670943098544767599f};
-        WindowAssembly valuesEditZoneWindow = new WindowAssembly(valuesEditZoneWindowPos, this,"valuesEditZoneWindow"+(valuesEditZoneWindows.size()+1));
-        //添加编辑区背景
-        BGAssembly valuesEditZoneBG = new BGAssembly(new float[]{0, 0, 1, 1}, valuesEditZoneWindow, new Color(161, 161, 161, 64), BackGroundType.RoundRect, false, 9.2f);
-        valuesEditZoneWindow.addAssembly(valuesEditZoneBG);
-        //计算，初始化并添加分割线组件
-        float[] linePos = {0.499545454545f, 0.02348802317760877438046458689017f, 0.500454545455f, 0.94071084898339282942728542604377f};
-        BGAssembly valuesEditZoneLine = new BGAssembly(linePos, valuesEditZoneWindow, new Color(204, 204, 204), BackGroundType.Rect);
-        valuesEditZoneWindow.addAssembly(valuesEditZoneLine);
+        float[] valuesEditZoneWindowPos = {0, 0, 1, 1};
+        WindowAssembly valuesEditZoneWindow = new WindowAssembly(valuesEditZoneWindowPos, valueEditZone, "valuesEditZoneWindow" + (subWindows.size() + 1));
 
         //开始排版values,到valuesEditZoneWindow
         float lMargin = 0.02883006025440749832626645837983f;
@@ -204,17 +193,8 @@ public class Window_Values_Assembly extends WindowAssembly {
     public float draw() {
         if (needInit) {
             init();
-            return deltaY();
         }
-        if (page > valuesEditZoneWindows.size() + 1) page = valuesEditZoneWindows.size() + 1;
-        this.valuesEditZoneWindow = valuesEditZoneWindows.get(page - 1);
-        if (!subWindows.contains(valuesEditZoneWindow)) {
-            subWindows.clear();
-            subWindows.add(valuesEditZoneWindow);
-        }
-        super.draw();
-        valuesEditZoneWindow.draw();
-        return deltaY();
+        return super.draw();
     }
 
     public void init() {
@@ -231,39 +211,42 @@ public class Window_Values_Assembly extends WindowAssembly {
         bindAssembly.assemblyName = "bindAssembly" + "." + module.toString();
         this.addAssembly(bindAssembly);
         //初始化ArrayList显示与否
-//        StringWithoutBGAssembly renderedInArrayListAssembly = new StringWithoutBGAssembly(new float[]{0.93947554016798102199140860421876f * deltaX(), 0.02951983558572585165348446160553f * deltaY(), 0.9809450535359363980252612681926f * this.deltaX(), 0.06414377945236760706649228789105f * this.deltaY()}, this, module.isCanView() ? "J" : "K", Main.fontLoader.ICON42, Color.black);
         StringAssembly renderedInArrayListAssembly = new StringAssembly(new float[]{0.93947554016798102199140860421876f, 0, 0.9809450535359363980252612681926f, 0.07414377945236760706649228789105f}, this, module.isCanView() ? "J" : "K", new boolean[]{true, true}, new Color(255, 255, 255, 0), Color.BLACK, Main.fontLoader.ICON64, 5f);
         renderedInArrayListAssembly.assemblyName = "renderedInArrayListAssembly" + "." + module.toString();
         this.addAssembly(renderedInArrayListAssembly);
         ArrayList<ValueHeader> values = module.getValueList();
-        valuesEditZoneWindows = new ArrayList<>();
+        subWindows = new ArrayList<>();
 
         //初始化module的values组件
-        while (lastEndIndexOfValues < values.size()) {
-            valuesEditZoneWindows.add(initWindowForNextPage(values));
-        }
 
-        //初始化翻页按钮
-        if (valuesEditZoneWindows.size() == 0)
-            valuesEditZoneWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this,"valuesEditZoneWindowForNoValueIn"));
-        FontDrawer font = Main.fontLoader.EN24;
-        float halfHeight = font.getHeight() * 0.5f / deltaY();
-        float a = valuesEditZoneWindows.size() - 0.5f;
-        float[] pageBarPos = {0.5f - 2 * a * halfHeight, 0.95046735587801789458387826700712f, 1 - 2 * halfHeight, 0.5f + 2 * a * halfHeight, 0.99746735587801789458387826700712f};
-        ArrayList<String> pageNumberList = new ArrayList<>();
-        for (int i = 0; i < valuesEditZoneWindows.size(); i++) {
-            pageNumberList.add(Integer.toString(i + 1));
+        float deltaPosYArg = 0;
+        ArrayList<WindowAssembly> tempList = new ArrayList<>();
+        float[] valuesEditZoneWindowPos = {0.04032185676732705007373212797333f, 0.14363413672126383093562516866995f, 0.95967814323267294992626787202667f, 0.94615017334080670943098544767599f};
+        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, tempList, 1, 99, "valueEditZone_MouseWheelWindow");
+        while (lastEndIndexOfValues < values.size()) {
+            WindowAssembly windowAssembly = initWindowForNextPage(values);
+            float windowDeltaPosYArg = windowAssembly.positionArgs[3] - windowAssembly.positionArgs[1];
+            windowAssembly.positionArgs[1] += deltaPosYArg;
+            windowAssembly.positionArgs[3] += deltaPosYArg;
+            deltaPosYArg += windowDeltaPosYArg;
+            windowAssembly.updateRenderPos();
+            tempList.add(windowAssembly);
         }
-        String[] pageNumbers = new String[pageNumberList.size()];
-        for (int i = 0; i < pageNumbers.length; i++) {
-            pageNumbers[i] = pageNumberList.get(i);
+        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, tempList, 1, 99, "valueEditZone_MouseWheelWindow");
+        this.addWindow(valueEditZone);
+        //添加背景
+        this.addAssembly(new BGAssembly(valuesEditZoneWindowPos, this, new Color(161, 161, 161, 64), BackGroundType.RoundRect, false, 9.2f));
+        //添加分割线组件
+        float[] linePos = {0.49958211077846149900621914470732f, 0.16248365198978638599987544373171f, 0.50041788922153850099378085529268f, 0.89856967885242158144941977538353f};
+        BGAssembly valuesEditZoneLine = new BGAssembly(linePos, this, new Color(204, 204, 204), BackGroundType.Rect);
+        this.addAssembly(valuesEditZoneLine);
+
+        for (WindowAssembly windowAssembly : tempList) {
+            windowAssembly.fatherWindow = valueEditZone;
+            valueEditZone.addWindow(windowAssembly);
         }
-        Color bgColor = new Color(23, 23, 23, 59);
-        Color selectedColor = new Color(204, 204, 204);
-        Color fontColor = Color.white;
-        pageBar = new IconAssembly(pageBarPos, this, font, pageNumbers, Integer.toString(page), 1.5f / deltaY(), new Animation(400, false, Easing.LINEAR), fontColor, bgColor, selectedColor, true);
-        pageBar.assemblyName = "pageBar";
-        this.addAssembly(pageBar);
+        if (subWindows.size() == 0)
+            subWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this, "valuesEditZoneWindowForNoValueIn"));
         needInit = false;
     }
 
@@ -280,65 +263,9 @@ public class Window_Values_Assembly extends WindowAssembly {
         pos[3] = pos[1] + height;
     }
 
-    @Override
-    public void addAssembly(Assembly assembly) {
-        this.currentUsedHeight += assembly.draw();
-        super.addAssembly(assembly);
-    }
-
     public void setModule(ModuleHeader module) {
         reset();
         this.module = module;
-        page = 1;
         needInit = true;
-    }
-
-    @Override
-    public void reset() {
-        super.reset();
-    }
-
-    @Override
-    public ArrayList<Assembly> getAssembliesByMousePos(int mouseX, int mouseY) {
-        ArrayList<Assembly> result = (ArrayList<Assembly>) (valuesEditZoneWindow.getAssembliesByMousePos(mouseX, mouseY).clone());
-        for (Assembly assemblyByMousePos : super.getAssembliesByMousePos(mouseX, mouseY)) {
-            if (!result.contains(assemblyByMousePos)) {
-                result.add(assemblyByMousePos);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public ArrayList<Assembly> getAssembliesCanDrag() {
-        ArrayList<Assembly> result = new ArrayList<>();
-        if (valuesEditZoneWindows.size() > 0) {
-            for (Assembly assembly : this.valuesEditZoneWindows.get(page - 1).assemblies) {
-                if (assembly.canDrag) result.add(assembly);
-            }
-            for (WindowAssembly windowAssembly : this.valuesEditZoneWindows.get(page - 1).subWindows) {
-                for (Assembly assembly : windowAssembly.getAssembliesCanDrag()) {
-                    result.add(assembly);
-                }
-            }
-        }
-        for (Assembly assembly : super.getAssembliesCanDrag()) {
-            result.add(assembly);
-        }
-        return result;
-    }
-
-    @Override
-    public ArrayList<Assembly> getAssembliesByClass(Class T) {
-        ArrayList<Assembly> result = new ArrayList<>();
-        for (Assembly assembly : this.assemblies) {
-            if (assembly.getClass().getName().equals(T.getName())) result.add(assembly);
-        }
-        for (WindowAssembly editZoneWindow : this.valuesEditZoneWindows) {
-            for (Assembly assembliesByClass : editZoneWindow.getAssembliesByClass(T)) {
-                result.add(assembliesByClass);
-            }
-        }
-        return result;
     }
 }

@@ -163,13 +163,13 @@ public class SecilyUserInterface extends GuiScreen {
         //获取 当前moduleType 的 modules
         ArrayList<ModuleHeader> tempList = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType);
         //初始化 ModulesWindow
-        WindowAssembly modulesWindow = new Window_MouseWheel_SwitchContents_Assembly<>(modulesWindowPos, leftSideBar, tempList, 6,"modulesWindow");
+        WindowAssembly modulesWindow = new Window_MouseWheel_SwitchContents_Assembly<>(modulesWindowPos, leftSideBar, tempList, 6, "modulesWindow");
         //添加 modulesWindow 至 leftSideBar
         leftSideBar.addWindow(modulesWindow);
         //计算 valuesWindow pos
         float[] valuesWindowPos = {0.31461039502426172650114221873906f, 0.16415950900836773754725636280232f, 0.96479965316569675343082489870104f, 0.92612980274917350796437779781395f};
         //初始化valuesWindow
-        valuesWindow = new Window_Values_Assembly(valuesWindowPos, mainGui, currentModule,"valuesWindow");
+        valuesWindow = new Window_Values_Assembly(valuesWindowPos, mainGui, currentModule, "valuesWindow");
         mainGui.addWindow(valuesWindow);
         super.initGui();
     }
@@ -278,14 +278,22 @@ public class SecilyUserInterface extends GuiScreen {
         if (mouseWheel != 0) {
             int mouseWheelFactor = mouseWheel / 16;
             ArrayList<Assembly> targetAssemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
+            int c = 0;
             for (Assembly assembly : targetAssemblies) {
-                //Module列的滚轮处理
-                if (assembly.assemblyName.equalsIgnoreCase("modulesWindow")) {
-                    ((Window_MouseWheel_SwitchContents_Assembly<ModuleHeader>) assembly).mouseWheel(mouseWheelFactor);
+                if (assembly instanceof Window_MouseWheel_Assembly) {
+                    int[] val = new int[]{0};
+                    assembly.getOldestFatherWindow(val);
+                    c = Math.max(val[0], c);
                 }
-                //枚举类型的滚轮处理
-                if (assembly.assemblyName.startsWith("enumAssembly")) {
-                    ((Window_MouseWheel_Assembly) ((EnumAssembly) assembly).subWindows.get(0)).mouseWheel(mouseWheelFactor);
+            }
+            for (Assembly assembly : targetAssemblies) {
+                int[] val = new int[]{0};
+                assembly.getOldestFatherWindow(val);
+                if (val[0] == c) {
+                    if (assembly instanceof Window_MouseWheel_Assembly) {
+                        ((Window_MouseWheel_Assembly) assembly).mouseWheel(mouseWheelFactor);
+                        break;
+                    }
                 }
             }
         }

@@ -5,7 +5,7 @@ public abstract class Assembly {
     /**
      * 拖动时重新计算坐标的比值(相对fatherWindow的deltaPos
      */
-    final float[] positionArgs;
+    public float[] positionArgs;
     /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
@@ -38,9 +38,6 @@ public abstract class Assembly {
     }
 
     public boolean isMouseInside(Assembly assembly, int Mx, int My, float x1, float y1, float x2, float y2) {
-        if (assembly instanceof IconAssembly){
-            System.out.println();
-        }
         return Mx > x1 && My > y1 && Mx < x2 && My < y2;
     }
 
@@ -96,9 +93,11 @@ public abstract class Assembly {
         this.pos = new float[]{dX * positionArgs[0], dY * positionArgs[1], dX * positionArgs[2], dY * positionArgs[3]};
     }
 
-    public WindowAssembly getOldestFatherWindow() {
-        if (fatherWindow != null) return fatherWindow.getOldestFatherWindow();
-        else {
+    public WindowAssembly getOldestFatherWindow(int[] count) {
+        if (fatherWindow != null) {
+            count[0]++;
+            return fatherWindow.getOldestFatherWindow(count);
+        } else {
             return (WindowAssembly) this;
         }
     }
