@@ -38,7 +38,7 @@ public class StringWithoutBGAssembly extends Assembly {
 
     @Override
     public float draw() {
-        return RenderUtil.drawCenteredString_P(calcAbsPos(), font, value,fontColor.getRGB(), centered);
+        return RenderUtil.drawCenteredString_P(calcAbsPos(), font, value, fontColor.getRGB(), centered);
     }
 
     @Override

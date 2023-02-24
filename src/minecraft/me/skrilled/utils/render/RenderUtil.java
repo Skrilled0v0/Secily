@@ -28,10 +28,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Consumer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -1384,11 +1383,30 @@ public class RenderUtil implements IMC {
 
     }
 
+    public volatile static ArrayList<ScissorPos> scissors = new ArrayList<>();
+
     public static void doScissor(int x, int y, int x1, int y1) {
         ScaledResolution scale = new ScaledResolution(mc);
         int factor = scale.getScaleFactor();
         GL11.glEnable(GL_SCISSOR_TEST);
         GL11.glScissor(x * factor, (scale.getScaledHeight() - y1) * factor, (x1 - x) * factor, (y1 - y) * factor);
+        scissors.add(new ScissorPos(x,y,x1,y1));
+    }
+    public static void reScissor(int x, int y, int x1, int y1) {
+        ScaledResolution scale = new ScaledResolution(mc);
+        int factor = scale.getScaleFactor();
+        GL11.glEnable(GL_SCISSOR_TEST);
+        GL11.glScissor(x * factor, (scale.getScaledHeight() - y1) * factor, (x1 - x) * factor, (y1 - y) * factor);
+    }
+
+    public static void deScissor() {
+        glDisable(GL_SCISSOR_TEST);
+        scissors.remove(scissors.size()-1);
+        if (scissors.size()>0) {
+            int i = scissors.size() - 1;
+            ScissorPos p = scissors.get(i);
+            reScissor(p.x,p.y,p.x1,p.y1);
+        }
     }
 
 }

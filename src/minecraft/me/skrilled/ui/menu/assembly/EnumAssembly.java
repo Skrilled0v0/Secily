@@ -11,6 +11,7 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
 import me.skrilled.utils.render.RenderUtil;
+import me.skrilled.utils.render.ScissorPos;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
@@ -18,6 +19,9 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.ArrayList;
+
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class EnumAssembly extends WindowAssembly {
 
@@ -33,7 +37,7 @@ public class EnumAssembly extends WindowAssembly {
 
 
     public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> contents, String currentValue, Animation animation) {
-        super(pos, fatherWindow,"enumAssembly");
+        super(pos, fatherWindow, "enumAssembly");
         this.font = font;
         this.bgColor = bgColor;
         this.fontColor = fontColor;
@@ -66,7 +70,7 @@ public class EnumAssembly extends WindowAssembly {
         for (String s : restChoice) {
             contents.add(s);
         }
-        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, 1, 1}, this, contents, 3, font.getHeight() + udMargin,"enumWindow"));
+        this.addWindow(new Window_MouseWheel_Assembly<>(new float[]{0, 0, 1, 1}, this, "enumWindow", contents, 3, font.getHeight() + udMargin * deltaY()));
         Window_MouseWheel_Assembly enumWindow = (Window_MouseWheel_Assembly) subWindows.get(0);
         enumWindow.addAssembly(new BGAssembly(new float[]{0, 0, 1, 1}, enumWindow, new Color(82, 82, 89), BackGroundType.RoundRect, false, 4.6f));
         float fontHeight = font.getHeight() / enumWindow.deltaY();
@@ -101,17 +105,21 @@ public class EnumAssembly extends WindowAssembly {
 
     @Override
     public float draw() {
-        float absX = calcAbsX(), absY = calcAbsY();
+        float absX = calcAbsX(), absY = calcAbsY(), deltaX = deltaX(), deltaY = deltaY();
+        ScissorPos p = RenderUtil.scissors.get(RenderUtil.scissors.size() - 1);
+        double x = max(absX, p.x), y = max(absY, p.y), x1 = min(absX + deltaX, p.x1), y1 = min(absY + (deltaY * (1 + 2 * animation.getAnimationFactor()) / 3f), p.y1);
+        if (x1 <= x || y1 <= y) {
+            return deltaY;
+        }
         GL11.glPushMatrix();
-        RenderUtil.doScissor((int) absX, (int) absY-1, (int) (absX + deltaX()), (int) (absY + (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f)));
+        RenderUtil.doScissor((int) x, (int) y, (int) x1 + 1, (int) y1 + 1);
         subWindows.get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
         subWindows.get(0).getAssembliesByClass(BGAssembly.class).get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
 
         float result = 0f;
         result += super.draw();
 
-
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+        RenderUtil.deScissor();
         GL11.glPopMatrix();
         return result;
     }

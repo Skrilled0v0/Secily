@@ -46,9 +46,9 @@ public class NumberAssembly extends Assembly {
     public float draw() {
         float absX = calcAbsX(), absY = calcAbsY();
         FontDrawer valueRenderFont = Main.fontLoader.EN18;
-        String str = (new BigDecimal(doubles[1]).setScale(scaleNum,roundingMode)).toString();
+        String str = (new BigDecimal(doubles[1]).setScale(scaleNum, roundingMode)).toString();
         float halfStrWidth = valueRenderFont.getStringWidth(str) / 2f;
-        float[] valueRenderPos = new float[]{(float) (pos[0] + barLRMargin + (deltaX() - 2 * barLRMargin) * (doubles[1] - doubles[0]) / (doubles[2] - doubles[0])), pos[1] - valueRenderFont.getHeight(), pos[2], pos[3]};
+        float[] valueRenderPos = new float[]{(float) (pos[0] + barLRMargin + (deltaX() - 2 * barLRMargin) * (doubles[1] - doubles[0]) / (doubles[2] - doubles[0])), pos[1] - 0.9f * valueRenderFont.getHeight(), pos[2], pos[3]};
         valueRenderPos[0] += fatherWindow.calcAbsX() - halfStrWidth;
         valueRenderPos[1] += fatherWindow.calcAbsY();
         valueRenderPos[2] += fatherWindow.calcAbsX() - halfStrWidth;

@@ -18,6 +18,14 @@ public class Window_Values_Assembly extends WindowAssembly {
     boolean needInit = true;
     int lastEndIndexOfValues = 0;
     Window_MouseWheel_Assembly valueEditZone;
+    float width_default = 0.44632894443204641821022093282749f;
+    float height_default = 0.1086450411299084277510476486109f;
+    float lMargin = 0.02883006025440749832626645837983f;
+    float rMargin = 0.01412910064717696942646730640482f;
+    float uMargin = 0.04697604635521754876092917378033f;
+    float dMargin = 0.02883006025440749832626645837983f;
+    float rSpacing = 0.04067172506137022985940638250391f;
+    float uSpacing = 0.02077189714936106368668839567489f;
 
     public Window_Values_Assembly(float[] pos, WindowAssembly fatherWindow, ModuleHeader module, String assemblyName) {
         super(pos, fatherWindow, assemblyName);
@@ -39,17 +47,7 @@ public class Window_Values_Assembly extends WindowAssembly {
         //计算并添加编辑区窗口
         float[] valuesEditZoneWindowPos = {0, 0, 1, 1};
         WindowAssembly valuesEditZoneWindow = new WindowAssembly(valuesEditZoneWindowPos, valueEditZone, "valuesEditZoneWindow" + (subWindows.size() + 1));
-
-        //开始排版values,到valuesEditZoneWindow
-        float lMargin = 0.02883006025440749832626645837983f;
-        float rMargin = 0.01412910064717696942646730640482f;
-        float uMargin = 0.04697604635521754876092917378033f;
-        float dMargin = 0.02883006025440749832626645837983f;
-
         boolean inLeftHalfZone = true;
-        //一般value(name+盒)大小
-        float width_default = 0.44632894443204641821022093282749f;
-        float height_default = 0.1086450411299084277510476486109f;
         //留出上边距,翻到右半边的时候重置
         valuesEditZoneWindow.currentUsedHeight = uMargin;
         //定义ValueName显示字体
@@ -59,9 +57,8 @@ public class Window_Values_Assembly extends WindowAssembly {
             ValueHeader valueHeader = values.get(lastEndIndexOfValues);
             float yUsedValueBox = 0f;
             float yUsedValueName;
+
             //value调控组件
-            float rSpacing = 0.04067172506137022985940638250391f;
-            float uSpacing = 0.02077189714936106368668839567489f;
             switch (valueHeader.getValueType()) {
                 case BOOLEAN: {
                     //以下大家一样(除了宽高计算系数)
@@ -222,7 +219,7 @@ public class Window_Values_Assembly extends WindowAssembly {
         float deltaPosYArg = 0;
         ArrayList<WindowAssembly> tempList = new ArrayList<>();
         float[] valuesEditZoneWindowPos = {0.04032185676732705007373212797333f, 0.14363413672126383093562516866995f, 0.95967814323267294992626787202667f, 0.94615017334080670943098544767599f};
-        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, tempList, 1, 99, "valueEditZone_MouseWheelWindow");
+        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, "valueEditZone_MouseWheelWindow", 1, 1, 99);
         while (lastEndIndexOfValues < values.size()) {
             WindowAssembly windowAssembly = initWindowForNextPage(values);
             float windowDeltaPosYArg = windowAssembly.positionArgs[3] - windowAssembly.positionArgs[1];
@@ -232,7 +229,7 @@ public class Window_Values_Assembly extends WindowAssembly {
             windowAssembly.updateRenderPos();
             tempList.add(windowAssembly);
         }
-        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, tempList, 1, 99, "valueEditZone_MouseWheelWindow");
+        valueEditZone = new Window_MouseWheel_Assembly(valuesEditZoneWindowPos, this, "valueEditZone_MouseWheelWindow", 1, valueEditZone.deltaY(), 1);
         this.addWindow(valueEditZone);
         //添加背景
         this.addAssembly(new BGAssembly(valuesEditZoneWindowPos, this, new Color(161, 161, 161, 64), BackGroundType.RoundRect, false, 9.2f));
@@ -241,12 +238,26 @@ public class Window_Values_Assembly extends WindowAssembly {
         BGAssembly valuesEditZoneLine = new BGAssembly(linePos, this, new Color(204, 204, 204), BackGroundType.Rect);
         this.addAssembly(valuesEditZoneLine);
 
-        for (WindowAssembly windowAssembly : tempList) {
-            windowAssembly.fatherWindow = valueEditZone;
-            valueEditZone.addWindow(windowAssembly);
+        float maxY = 0;
+        for (int i = 0; i < tempList.size(); i++) {
+            WindowAssembly windowAssembly = tempList.get(i);
+            for (Assembly assembly : windowAssembly.assemblies) {
+                assembly.positionArgs[1] += windowAssembly.positionArgs[1] - i * (dMargin + uMargin);
+                assembly.positionArgs[3] += windowAssembly.positionArgs[1] - i * (dMargin + uMargin);
+                assembly.fatherWindow = valueEditZone;
+                valueEditZone.addAssembly(assembly);
+                maxY = Math.max(maxY, assembly.positionArgs[3]);
+            }
+            for (WindowAssembly subWindow : windowAssembly.subWindows) {
+                subWindow.positionArgs[1] += windowAssembly.positionArgs[1] - i * (dMargin + uMargin);
+                subWindow.positionArgs[3] += windowAssembly.positionArgs[1] - i * (dMargin + uMargin);
+                subWindow.fatherWindow = valueEditZone;
+                valueEditZone.addWindow(subWindow);
+                maxY = Math.max(maxY, subWindow.positionArgs[3]);
+            }
         }
-        if (subWindows.size() == 0)
-            subWindows.add(new WindowAssembly(new float[]{0, 0, 0, 0}, this, "valuesEditZoneWindowForNoValueIn"));
+        valueEditZone.updateRenderPos();
+        valueEditZone.pages = maxY + dMargin;
         needInit = false;
     }
 

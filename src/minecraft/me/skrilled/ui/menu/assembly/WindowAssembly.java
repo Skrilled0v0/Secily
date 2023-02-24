@@ -64,7 +64,7 @@ public class WindowAssembly extends Assembly {
         for (WindowAssembly windowAssembly : subWindows) {
             currentUsedHeight += windowAssembly.draw();
         }
-        return currentUsedHeight > deltaY() ? currentUsedHeight : deltaY();
+        return Math.max(currentUsedHeight, deltaY());
     }
 
     @Override

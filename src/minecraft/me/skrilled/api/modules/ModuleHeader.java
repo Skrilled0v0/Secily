@@ -111,8 +111,6 @@ public class ModuleHeader implements IMC {
         } else if (HUD.moduleNotType.getCurrentEnumType().equalsIgnoreCase("LEFT")) {
             posType = Notification.posType.LEFT;
         }
-        if(HUD.togSound.isOptionOpen())
-            mc.thePlayer.playSound("random.click", 1.0F, isEnabled ? 0.9F : 0.4F);
         this.Enabled = isEnabled;
         arrayWidth.setState(isEnabled);
         if (isEnabled) this.onEnabled();

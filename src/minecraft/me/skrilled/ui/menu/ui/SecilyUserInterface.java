@@ -102,11 +102,11 @@ public class SecilyUserInterface extends GuiScreen {
         mainGui.addAssembly(bigBg);
 
         //实例化边线(用于拖动缩放mainGui
-        Color edgeLineColorForMainGui = new Color(255, 198, 128, 255);
-        LineAssembly lineDownForMainGui = new LineAssembly(new float[]{0.018f, 1, 0.982f, 1}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.ROUNDED_SIDE, SideOfBoundedWindow.DOWN);
+        Color edgeLineColorForMainGui = new Color(50, 50, 50, 188);
+        LineAssembly lineDownForMainGui = new LineAssembly(new float[]{0.018f, 1, 0.982f, 1}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.SIMPLE, SideOfBoundedWindow.DOWN);
         lineDownForMainGui.canDrag = true;
         mainGui.addAssembly(lineDownForMainGui);
-        LineAssembly lineRightForMainGui = new LineAssembly(new float[]{1, 0.018f, 1, 0.982f}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.ROUNDED_SIDE, SideOfBoundedWindow.RIGHT);
+        LineAssembly lineRightForMainGui = new LineAssembly(new float[]{1, 0.018f, 1, 0.982f}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.SIMPLE, SideOfBoundedWindow.RIGHT);
         lineRightForMainGui.canDrag = true;
         mainGui.addAssembly(lineRightForMainGui);
 
@@ -254,15 +254,7 @@ public class SecilyUserInterface extends GuiScreen {
         if (mainGuiDrag) {
             mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
             ArrayList<Assembly> assemblies1 = mainGui.getAssembliesByClass(ColorAssembly.class);
-            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
-                ((Color_h_Assembly) assembliesByClass).init = false;
-            }
-            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_sb_Assembly.class)) {
-                ((Color_sb_Assembly) assembliesByClass).init = false;
-            }
-            for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_alpha_Assembly.class)) {
-                ((Color_alpha_Assembly) assembliesByClass).init = false;
-            }
+            updateColorPoints();
             posInClickX = mouseX;
             posInClickY = mouseY;
         }
@@ -276,7 +268,7 @@ public class SecilyUserInterface extends GuiScreen {
         //滚轮处理
         int mouseWheel = Mouse.getDWheel();
         if (mouseWheel != 0) {
-            int mouseWheelFactor = mouseWheel / 16;
+            int mouseWheelFactor = mouseWheel / 32;
             ArrayList<Assembly> targetAssemblies = mainGui.getAssembliesByMousePos(mouseX, mouseY);
             int c = 0;
             for (Assembly assembly : targetAssemblies) {
@@ -317,6 +309,18 @@ public class SecilyUserInterface extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (closed) {
             if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) mc.displayGuiScreen(null);
+        }
+    }
+
+    public static void updateColorPoints() {
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
+            ((Color_h_Assembly) assembliesByClass).init = false;
+        }
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_sb_Assembly.class)) {
+            ((Color_sb_Assembly) assembliesByClass).init = false;
+        }
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_alpha_Assembly.class)) {
+            ((Color_alpha_Assembly) assembliesByClass).init = false;
         }
     }
 

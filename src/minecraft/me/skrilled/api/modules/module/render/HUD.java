@@ -103,28 +103,5 @@ public class HUD extends ModuleHeader {
         if (not.isOptionOpen()) Notification.drawNotifications();
 
 
-        GL11.glPushMatrix();
-        RenderUtil.doScissor(110,110,210,210);
-        RenderUtil.drawRoundRect(0,0,w/2,h/2,5, Color.orange.getRGB());
-
-        {
-            GL11.glPushMatrix();
-            RenderUtil.doScissor(10, 150, 170, 170);
-            RenderUtil.drawRoundRect(10,110,210,210, 5 , Color.white.getRGB());
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
-            GL11.glPopMatrix();
-        }
-        {
-            GL11.glPushMatrix();
-            RenderUtil.doScissor(w/2, h/2, w/2+100, h/2+200);
-            RenderUtil.drawRoundRect(w/2+10,h/2+110,w/2+210,h/2+210, 5, Color.black.getRGB());
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
-            GL11.glPopMatrix();
-        }
-
-        RenderUtil.drawRoundRect(w/2+10,h/2+110,w/2+210,h/2+210, 5, Color.magenta.getRGB());
-
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GL11.glPopMatrix();
     }
 }
