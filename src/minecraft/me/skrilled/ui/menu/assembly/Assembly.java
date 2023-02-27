@@ -1,5 +1,7 @@
 package me.skrilled.ui.menu.assembly;
 
+import me.skrilled.utils.math.Vec3f;
+
 public abstract class Assembly {
 
     /**
@@ -37,8 +39,25 @@ public abstract class Assembly {
         this.assemblyName = this.getClass().getSimpleName() + (fatherWindow == null ? "" : " father: " + fatherWindow.assemblyName);
     }
 
+    /**
+     * pls note that the four value of the second arg must form a convex quadrilateral
+     * @param points four points to decide the convex quadrilateral
+     * @return true if point0 is inside the quadrilateral decided by the points
+     */
+    public static boolean isPoint0InsideRect2D(Vec3f point0, Vec3f[] points) {
+        double LU2MouseCrossLD2Mouse = points[0].sub(point0).cross(points[1].sub(point0)).getZ();
+        double LD2MouseCrossRD2Mouse = points[1].sub(point0).cross(points[2].sub(point0)).getZ();
+        double RD2MouseCrossRU2Mouse = points[2].sub(point0).cross(points[3].sub(point0)).getZ();
+        double RU2MouseCrossLU2Mouse = points[3].sub(point0).cross(points[0].sub(point0)).getZ();
+
+        if (LU2MouseCrossLD2Mouse * LD2MouseCrossRD2Mouse < 0) return false;
+        if (LD2MouseCrossRD2Mouse * RD2MouseCrossRU2Mouse < 0) return false;
+        if (RD2MouseCrossRU2Mouse * RU2MouseCrossLU2Mouse < 0) return false;
+        return true;
+    }
+
     public boolean isMouseInside(Assembly assembly, int Mx, int My, float x1, float y1, float x2, float y2) {
-        return Mx > x1 && My > y1 && Mx < x2 && My < y2;
+        return isPoint0InsideRect2D(new Vec3f(Mx, My), new Vec3f[]{new Vec3f(x1, y1), new Vec3f(x1, y2), new Vec3f(x2, y2), new Vec3f(x2, y1)});
     }
 
     public float deltaX() {
@@ -72,7 +91,6 @@ public abstract class Assembly {
     }
 
     public abstract void mouseEventHandle(int mouseX, int mouseY, int button);
-
 
     public void onDrag(float mouseDeltaX, float mouseDeltaY) {
         this.pos[0] += mouseDeltaX;

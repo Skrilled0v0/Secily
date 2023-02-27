@@ -1239,16 +1239,15 @@ public class RenderUtil implements IMC {
 
         Color color;
         float x, y;
+        glBegin(GL_POINTS);
         for (ColorPoint colorPoint : colorPoints) {
             color = colorPoint.color;
             x = colorPoint.pos[0];
             y = colorPoint.pos[1];
             glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f);
-            glBegin(GL_POINTS);
             glVertex2d(x, y);
-            glEnd();
         }
-
+        glEnd();
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);
         glDisable(GL_LINE_SMOOTH);
@@ -1265,18 +1264,17 @@ public class RenderUtil implements IMC {
 
         Color color;
         float x, y;
+        glBegin(GL_POINTS);
         for (int t = 0; t < 2f * thickness; t++) {
             for (ColorPoint colorPoint : colorPoints) {
                 color = colorPoint.color;
                 x = colorPoint.pos[0];
                 y = colorPoint.pos[1];
                 glColor4f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
-                glBegin(GL_POINTS);
                 glVertex2d(x, y + t / 2f);
-                glEnd();
             }
         }
-
+        glEnd();
 
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_BLEND);

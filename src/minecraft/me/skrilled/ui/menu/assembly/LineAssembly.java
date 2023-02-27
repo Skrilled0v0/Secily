@@ -49,22 +49,7 @@ public class LineAssembly extends Assembly {
         Vec3f mouse = new Vec3f(Mx, My);
         Vec3f[] points = mode.calcPoints(this);
 
-        double LU2MouseCrossLD2Mouse = points[0].sub(mouse).cross(points[1].sub(mouse)).getZ();
-        double LD2MouseCrossRD2Mouse = points[1].sub(mouse).cross(points[2].sub(mouse)).getZ();
-        double RD2MouseCrossRU2Mouse = points[2].sub(mouse).cross(points[3].sub(mouse)).getZ();
-        double RU2MouseCrossLU2Mouse = points[3].sub(mouse).cross(points[0].sub(mouse)).getZ();
-
-        if (LU2MouseCrossLD2Mouse == 0) return true;
-        if (LD2MouseCrossRD2Mouse == 0) return true;
-        if (RD2MouseCrossRU2Mouse == 0) return true;
-        if (RU2MouseCrossLU2Mouse == 0) return true;
-
-        boolean isPositive1 = (LU2MouseCrossLD2Mouse / abs(LU2MouseCrossLD2Mouse)) == 1;
-        boolean isPositive2 = (LD2MouseCrossRD2Mouse / abs(LD2MouseCrossRD2Mouse)) == 1;
-        boolean isPositive3 = (RD2MouseCrossRU2Mouse / abs(RD2MouseCrossRU2Mouse)) == 1;
-        boolean isPositive4 = (RU2MouseCrossLU2Mouse / abs(RU2MouseCrossLU2Mouse)) == 1;
-        boolean result = isPositive1 == isPositive2 && isPositive2 == isPositive3 && isPositive3 == isPositive4;
-        return result;
+        return isPoint0InsideRect2D(mouse, points);
     }
 
     @Override

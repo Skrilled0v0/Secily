@@ -57,7 +57,6 @@ public class Color_alpha_Assembly extends Assembly {
         absX = calcAbsX();
         absY = calcAbsY();
         RenderUtil.drawRect(absX, absY, absX + deltaX(), absY + deltaY() - 1, Color.black.getRGB());
-        ;
         RenderUtil.drawColorPointsWithYThickness(colorPoints, deltaY());
         cicleAssembly.draw();
         return deltaY();

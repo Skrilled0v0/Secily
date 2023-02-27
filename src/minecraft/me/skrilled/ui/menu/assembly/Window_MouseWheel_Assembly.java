@@ -21,26 +21,26 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     public float pages;
     float skipAim;
     float heightOfOnePage;
-    float numOfContent2Render;
+    float numOfPages2Render;
     /**
      * 滚动速度(倍率
      */
     public float coefficient = 2.5f;
     float currentSkip = 0f;
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, String assemblyName, ArrayList<T> contents, float numOfContent2Render, float heightOfOnePage) {
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, String assemblyName, ArrayList<T> contents, float numOfPages2Render, float heightOfOnePage) {
         super(pos, fatherWindow, assemblyName);
         this.contents = contents;
-        this.numOfContent2Render = numOfContent2Render;
+        this.numOfPages2Render = numOfPages2Render;
         this.heightOfOnePage = heightOfOnePage;
         mode = 0;
     }
 
-    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, String assemblyName, float pages, float heightOfOnePage, float numOfContent2Render) {
+    public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, String assemblyName, float pages, float heightOfOnePage, float numOfPages2Render) {
         super(pos, fatherWindow, assemblyName);
         this.heightOfOnePage = heightOfOnePage;
         this.pages = pages;
-        this.numOfContent2Render = numOfContent2Render;
+        this.numOfPages2Render = numOfPages2Render;
         mode = 1;
     }
 
@@ -118,10 +118,10 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         float restPages = 0;
         switch (mode) {
             case 0:
-                restPages = contents.size() - numOfContent2Render;
+                restPages = contents.size() - numOfPages2Render;
                 break;
             case 1:
-                restPages = pages - numOfContent2Render;
+                restPages = pages - numOfPages2Render;
                 break;
         }
         //判定ENUM 框是否展开
@@ -150,5 +150,16 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
             animation = new Animation(animation.length, animation.initialState, Easing.LINEAR);
             animation.setState(true);
         }
+    }
+
+    public float getMaxPositionArg(){
+        float result = 0;
+        for (Assembly assembly : assemblies) {
+            result = Math.max(result,assembly.positionArgs[3]);
+        }
+        for (WindowAssembly subWindow : subWindows) {
+            result = Math.max(result,subWindow.positionArgs[3]);
+        }
+        return result;
     }
 }
