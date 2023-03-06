@@ -9,6 +9,12 @@ public abstract class Assembly {
      */
     public float[] positionArgs;
     /**
+     * the first float for the widthRate of it's fWindow,
+     * the second float for the heightRate of it's fWindow,
+     * gonna to be null if it's father r dead
+     */
+    public float[] shapeArgs;
+    /**
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
     public float[] pos;
@@ -30,8 +36,10 @@ public abstract class Assembly {
         if (fatherWindow == null) {
             this.pos = pos;
             this.positionArgs = null;
+            this.shapeArgs = null;
         } else {
             this.positionArgs = pos;
+            this.shapeArgs = new float[]{pos[2] - pos[0], pos[3] - pos[1]};
             float dX = fatherWindow.deltaX();
             float dY = fatherWindow.deltaY();
             this.pos = new float[]{dX * pos[0], dY * pos[1], dX * pos[2], dY * pos[3]};
@@ -41,6 +49,7 @@ public abstract class Assembly {
 
     /**
      * pls note that the four value of the second arg must form a convex quadrilateral
+     *
      * @param points four points to decide the convex quadrilateral
      * @return true if point0 is inside the quadrilateral decided by the points
      */

@@ -14,6 +14,9 @@ public class WindowAssembly extends Assembly {
     public WindowAssembly(float[] pos, WindowAssembly fatherWindow, ArrayList<WindowAssembly> subWindows, String assemblyName) {
         super(pos, fatherWindow);
         this.subWindows = subWindows;
+        for (WindowAssembly subWindow : subWindows) {
+            subWindow.fatherWindow = this;
+        }
         this.assemblyName = assemblyName;
     }
 
@@ -59,7 +62,8 @@ public class WindowAssembly extends Assembly {
             currentUsedHeight += icon.draw();
         }
         for (Assembly otherAssembly : assemblies) {
-            currentUsedHeight += otherAssembly.draw();
+            if (otherAssembly instanceof BGAssembly) otherAssembly.draw();
+            else currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
             currentUsedHeight += windowAssembly.draw();

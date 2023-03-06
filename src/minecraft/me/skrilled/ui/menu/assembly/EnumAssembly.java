@@ -34,6 +34,7 @@ public class EnumAssembly extends WindowAssembly {
     String currentValue;
     Animation animation;
     float udMargin;
+    boolean animationedValueCalc = false;
 
 
     public EnumAssembly(float[] pos, WindowAssembly fatherWindow, FontDrawer font, Color bgColor, Color fontColor, ArrayList<String> contents, String currentValue, Animation animation) {
@@ -46,7 +47,7 @@ public class EnumAssembly extends WindowAssembly {
         this.animation = animation;
         restChoice = getRestContents(contents, currentValue);
 
-        udMargin = (0.3333f - font.getHeight() * 0.3333f / deltaY())/2;
+        udMargin = (0.3333f - font.getHeight() * 0.3333f / deltaY()) / 2;
         initSubWindow(font);
     }
 
@@ -120,8 +121,8 @@ public class EnumAssembly extends WindowAssembly {
         }
         GL11.glPushMatrix();
         RenderUtil.doScissor((int) x, (int) y, (int) x1 + 1, (int) y1 + 1);
-        subWindows.get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
-        subWindows.get(0).getAssembliesByClass(BGAssembly.class).get(0).pos[3] = (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
+        subWindows.get(0).pos[3] = (float) (deltaY * (1 + 2 * animation.getAnimationFactor()) / 3f);
+        subWindows.get(0).getAssembliesByClass(BGAssembly.class).get(0).pos[3] = (float) (deltaY * (1 + 2 * animation.getAnimationFactor()) / 3f);
 
         float result = 0f;
         result += super.draw();
