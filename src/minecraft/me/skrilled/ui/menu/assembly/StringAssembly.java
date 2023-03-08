@@ -91,6 +91,17 @@ public class StringAssembly extends Assembly implements IMC {
     }
 
     @Override
+    public float getDrawHeight() {
+        switch (mode) {
+            case 0:
+                return max(font.getHeight(),deltaY());
+            case 1:
+                return Math.max(stringWithoutBGAssembly.pos[3], bgAssembly.pos[3]) - Math.min(stringWithoutBGAssembly.pos[1], bgAssembly.pos[1]);
+        }
+        return 0;
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         switch (mode) {
             case 0:

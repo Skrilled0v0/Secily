@@ -22,12 +22,14 @@ public class Window_Values_Assembly extends WindowAssembly {
     final static float dMargin = 0.02883006025440749832626645837983f;
     final static float rSpacing = 0.08134345012274045971881276500782f;
     final static float uSpacing = 0.02077189714936106368668839567489f;
-    public ArrayList<IconAssembly> icons = new ArrayList<>();
     ModuleHeader module;
+    ArrayList<ValueRenderGroup> valueRenderGroupLs = new ArrayList<>();
+    ArrayList<ValueRenderGroup> valueRenderGroupRs = new ArrayList<>();
     boolean needInit = true;
     int indexOfValues = 0;
     WindowAssembly valueEditZoneL;
     WindowAssembly valueEditZoneR;
+    Window_MouseWheel_Assembly valueEditZone;
 
     public Window_Values_Assembly(float[] pos, WindowAssembly fatherWindow, ModuleHeader module, String assemblyName) {
         super(pos, fatherWindow, assemblyName);
@@ -43,12 +45,20 @@ public class Window_Values_Assembly extends WindowAssembly {
         if (needInit) {
             init();
         }
+        update();
         return super.draw();
+    }
+
+    @Override
+    public float getDrawHeight() {
+        return super.getDrawHeight();
     }
 
     @Override
     public void reset() {
         super.reset();
+        valueRenderGroupLs.clear();
+        valueRenderGroupRs.clear();
         currentUsedHeight = 0f;
         indexOfValues = 0;
     }
@@ -132,13 +142,86 @@ public class Window_Values_Assembly extends WindowAssembly {
         return result;
     }
 
+    public Assembly updateValueBox(ValueHeader valueHeader, WindowAssembly valuesEditZoneWindow) {
+        float[] pos = new float[4];
+        Assembly result = null;
+
+        switch (valueHeader.getValueType()) {
+            case BOOLEAN: {
+                //以下大家一样(除了宽高计算系数)
+                float width = 2 * 0.09649073867440303503682213791564f;
+                float height = 0.06710124683118630037767085726111f;
+                calcPos(pos, valuesEditZoneWindow, width, height, rSpacing, uSpacing);
+
+                Animation anim = new Animation(500, valueHeader.isOptionOpen(), Easing.CUBIC_OUT);
+                Color bgColor = new Color(65, 64, 68, 181);
+                Color trueColor = new Color(126, 183, 247);
+                Color falseColor = new Color(204, 204, 204);
+                String valueInfo = module.toString() + "." + valueHeader.getValueName();
+                BooleanAssembly booleanAssembly = new BooleanAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.isOptionOpen(), anim, bgColor, trueColor, falseColor, valueInfo);
+                result = booleanAssembly;
+                break;
+            }
+            case ENUM_TYPE: {
+                float width = 2 * 0.13659060477571970542289667484936f;
+                float height = 0.2550313001189921879041854208702f;
+                calcPos(pos, valuesEditZoneWindow, width, height, rSpacing, uSpacing);
+                FontDrawer font = Main.fontLoader.EN16;
+                Color bgColor = new Color(82, 82, 89);
+                Color fontColor = Color.white;
+                ArrayList<String> enumValues = valueHeader.getEnumTypes();
+                String currentValue = valueHeader.getCurrentEnumType();
+                Animation animation = new Animation(500f, false, Easing.LINEAR);
+                EnumAssembly enumAssembly = new EnumAssembly(pos.clone(), valuesEditZoneWindow, font, bgColor, fontColor, enumValues, currentValue, animation);
+                enumAssembly.assemblyName = "enumAssembly." + module.toString() + "." + valueHeader.getValueName();
+                result = enumAssembly;
+                break;
+            }
+            case DOUBLE: {
+                float width = 2 * 0.20942925686230752064271367998215f;
+                float height = 0.04027626881887319571628123544932f;
+                calcPos(pos, valuesEditZoneWindow, width, height, rSpacing, (uSpacing * 1.5f));
+                double[] doubles = valueHeader.getDoubles();
+                Animation animation = new Animation(100, false, Easing.LINEAR);
+                Color bgColor = new Color(255, 255, 255, 61);
+                Color ugColor = new Color(204, 204, 204, 255);
+                Color buttonColor = new Color(126, 183, 247, 255);
+                NumberAssembly numberAssembly = new NumberAssembly(pos.clone(), valuesEditZoneWindow, doubles.clone(), animation, bgColor, ugColor, buttonColor);
+                numberAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                result = numberAssembly;
+                break;
+            }
+            case STRING: {
+                float width = 2 * 0.24942925686230752064271367998215f;
+                float height = 0.0569093072585234621553106730819f;
+                calcPos(pos, valuesEditZoneWindow, width, height, rSpacing, uSpacing);
+                Color bgColorOut = new Color(0, 0, 0, 64);
+                Color bgColorIn = new Color(0, 0, 0, 128);
+                Color fontColor = new Color(255, 189, 189, 254);
+                FontDrawer font = Main.fontLoader.EN16;
+                KeyTypeStringAssembly keyTypeStringAssembly = new KeyTypeStringAssembly(pos.clone(), valuesEditZoneWindow, valueHeader.getStrValue(), new boolean[]{true, true}, bgColorOut, bgColorIn, fontColor, false, font);
+                keyTypeStringAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                result = keyTypeStringAssembly;
+                break;
+            }
+            case COLOR: {
+                float width = 2 * 0.24310979692033028341887971434948f;
+                float height = width * valuesEditZoneWindow.deltaX() * 1.2f / valuesEditZoneWindow.deltaY();
+                calcPos(pos, valuesEditZoneWindow, width, height, rSpacing, uSpacing);
+                Color color = valueHeader.getColorValue();
+                float[] hsbAlpha = new float[4];
+                Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbAlpha);
+                hsbAlpha[3] = color.getAlpha() / 255f;
+                ColorAssembly colorAssembly = new ColorAssembly(pos.clone(), valuesEditZoneWindow, hsbAlpha[0], hsbAlpha[1], hsbAlpha[2], hsbAlpha[3]);
+                colorAssembly.assemblyName = module.toString() + "." + valueHeader.getValueName();
+                result = colorAssembly;
+                break;
+            }
+        }
+        return result;
+    }
+
     public void init() {
-        //valueName将不计入高度计算
-        //高度计算的变化将是max(valueName,valueBox)
-        //将分左右边进行绘制
-        //左右的区别：组件名末尾
-
-
         this.reset();
         //初始化背景，标题
         BGAssembly thisBG = new BGAssembly(new float[]{0, 0, 1, 1}, this, new Color(204, 204, 204, 82), BackGroundType.RoundRect, false, 8.23f);
@@ -158,7 +241,8 @@ public class Window_Values_Assembly extends WindowAssembly {
         //初始化module的values组件
 
         float[] valuesEditZoneWindowPos = {0.04032185676732705007373212797333f, 0.14363413672126383093562516866995f, 0.95967814323267294992626787202667f, 0.94615017334080670943098544767599f};
-        Window_MouseWheel_Assembly valueEditZone = new Window_MouseWheel_Assembly<>(valuesEditZoneWindowPos, this, "valueEditZone_MouseWheelWindow", 1, (valuesEditZoneWindowPos[3] - valuesEditZoneWindowPos[1]) * this.deltaY(), 1);
+
+        valueEditZone = new Window_MouseWheel_Assembly<>(valuesEditZoneWindowPos, this, "valueEditZone_MouseWheelWindow", 1, (valuesEditZoneWindowPos[3] - valuesEditZoneWindowPos[1]) * this.deltaY(), 1);
         this.addWindow(valueEditZone);
 
         valueEditZoneL = new WindowAssembly(new float[]{0f, 0f, 0.5f, 1f}, valueEditZone, "valueEditZoneL");
@@ -182,6 +266,7 @@ public class Window_Values_Assembly extends WindowAssembly {
             if (valueBox instanceof WindowAssembly) targetWindow.addWindow((WindowAssembly) valueBox);
             else targetWindow.addAssembly(valueBox);
 
+            (targetWindow == valueEditZoneL ? valueRenderGroupLs : valueRenderGroupRs).add(new ValueRenderGroup(valueBox, valueName));
 
             //targetWindow的currentUsedHeight处理
             targetWindow.currentUsedHeight += Math.max(valueName.deltaY(), valueBox.deltaY()) + uMargin * targetWindow.deltaY();
@@ -204,6 +289,26 @@ public class Window_Values_Assembly extends WindowAssembly {
         needInit = false;
     }
 
+    void update() {
+        float yL = 0;
+        float yR = 0;
+        for (ValueRenderGroup valueRenderGroup : valueRenderGroupLs) {
+            yL += uMargin * valueEditZone.deltaY();
+            valueRenderGroup.setStartY(yL);
+            yL += valueRenderGroup.getMaxDrawHeight();
+        }
+        yL += uMargin * valueEditZone.deltaY();
+
+        for (ValueRenderGroup valueRenderGroup : valueRenderGroupRs) {
+            yR += uMargin * valueEditZone.deltaY();
+            valueRenderGroup.setStartY(yR);
+            yR += valueRenderGroup.getMaxDrawHeight();
+        }
+        yR += uMargin * valueEditZone.deltaY();
+
+        valueEditZone.pages = Math.max(yL, yR) / valueEditZone.deltaY();
+    }
+
     @Override
     public void updateRenderPos() {
         super.updateRenderPos();
@@ -221,5 +326,31 @@ public class Window_Values_Assembly extends WindowAssembly {
         reset();
         this.module = module;
         needInit = true;
+    }
+}
+
+class ValueRenderGroup {
+    Assembly valueBox;
+    StringWithoutBGAssembly valueName;
+
+    public ValueRenderGroup(Assembly valueBox, StringWithoutBGAssembly valueName) {
+        this.valueBox = valueBox;
+        this.valueName = valueName;
+    }
+
+    public float getMaxDrawHeight() {
+        return Math.max(valueBox.getDrawHeight(), valueName.getDrawHeight());
+    }
+
+    public void setStartY(float y) {
+        float dragY = y - valueName.pos[1];
+        valueName.onDrag(0, dragY);
+        valueBox.onDrag(0, dragY);
+        if (valueBox instanceof ColorAssembly) {
+            ColorAssembly colorAssembly = (ColorAssembly) valueBox;
+            colorAssembly.color_h_assembly.init = false;
+            colorAssembly.color_sb_assembly.init = false;
+            colorAssembly.color_alpha_assembly.init = false;
+        }
     }
 }

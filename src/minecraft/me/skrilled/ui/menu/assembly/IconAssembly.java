@@ -76,6 +76,11 @@ public class IconAssembly extends Assembly {
     }
 
     @Override
+    public float getDrawHeight() {
+        return boxWidth;
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         float absX = calcAbsX(), absY = calcAbsY();
         int count = 0;

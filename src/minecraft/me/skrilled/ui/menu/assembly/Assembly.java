@@ -87,6 +87,7 @@ public abstract class Assembly {
      * 返回用去的高度
      */
     public abstract float draw();
+    public abstract float getDrawHeight();
 
     public float calcAbsX() {
         float x = pos[0];

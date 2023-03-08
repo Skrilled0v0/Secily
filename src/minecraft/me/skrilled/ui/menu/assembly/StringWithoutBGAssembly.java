@@ -42,6 +42,11 @@ public class StringWithoutBGAssembly extends Assembly {
     }
 
     @Override
+    public float getDrawHeight() {
+        return font.getHeight();
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (fatherWindow != null) {
             //Enum组件下的点击

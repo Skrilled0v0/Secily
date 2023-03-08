@@ -68,6 +68,11 @@ public class BGAssembly extends Assembly {
     }
 
     @Override
+    public float getDrawHeight() {
+        return 0;
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         if (currentBgMotion != null) {
             currentBgMotion.setState(true);

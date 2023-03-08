@@ -19,14 +19,15 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
     public ArrayList<T> contents;
     public float lastSkipFactor = 0f;
     public float pages;
-    float skipAim;
-    float heightOfOnePage;
-    float numOfPages2Render;
     /**
      * 滚动速度(倍率
      */
     public float coefficient = 2.5f;
+    float skipAim;
+    float heightOfOnePage;
+    float numOfPages2Render;
     float currentSkip = 0f;
+    ScissorPos p;
 
     public Window_MouseWheel_Assembly(float[] pos, WindowAssembly fatherWindow, String assemblyName, ArrayList<T> contents, float numOfPages2Render, float heightOfOnePage) {
         super(pos, fatherWindow, assemblyName);
@@ -88,13 +89,14 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         }
         double x = calcAbsX(), y = calcAbsY(), x1 = calcAbsX() + deltaX(), y1 = calcAbsY() + deltaY();
         if (RenderUtil.scissors.size() > 0) {
-            ScissorPos p = RenderUtil.scissors.get(RenderUtil.scissors.size() - 1);
+
+            p = RenderUtil.scissors.get(RenderUtil.scissors.size() - 1);
             x = max(x, p.x);
             y = max(y, p.y);
             x1 = min(x1, p.x1);
             y1 = min(y1, p.y1);
             if (x1 <= x || y1 <= y) {
-                return deltaY();
+                return 0f;
             }
         }
         glPushMatrix();
@@ -103,6 +105,17 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         RenderUtil.deScissor();
         glPopMatrix();
         return result;
+    }
+
+    /**
+     * @return 剪裁的高度
+     */
+    @Override
+    public float getDrawHeight() {
+        double y = calcAbsY(), y1 = calcAbsY() + deltaY();
+        y = max(y, p.y);
+        y1 = min(y1, p.y1);
+        return (float) (y1 - y);
     }
 
     float getSkipFactor() {
@@ -152,13 +165,13 @@ public class Window_MouseWheel_Assembly<T> extends WindowAssembly {
         }
     }
 
-    public float getMaxPositionArg(){
+    public float getMaxPositionArg() {
         float result = 0;
         for (Assembly assembly : assemblies) {
-            result = Math.max(result,assembly.positionArgs[3]);
+            result = Math.max(result, assembly.positionArgs[3]);
         }
         for (WindowAssembly subWindow : subWindows) {
-            result = Math.max(result,subWindow.positionArgs[3]);
+            result = Math.max(result, subWindow.positionArgs[3]);
         }
         return result;
     }

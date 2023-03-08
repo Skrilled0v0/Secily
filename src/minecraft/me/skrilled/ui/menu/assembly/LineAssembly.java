@@ -57,6 +57,11 @@ public class LineAssembly extends Assembly {
         return mode.draw(this);
     }
 
+    @Override
+    public float getDrawHeight() {
+        return deltaY();
+    }
+
     /**
      * 对拖拽做处理,摁住rShift等比例缩放
      */

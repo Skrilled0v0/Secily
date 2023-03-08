@@ -132,6 +132,11 @@ public class EnumAssembly extends WindowAssembly {
         return result;
     }
 
+    @Override
+    public float getDrawHeight() {
+        return (float) (deltaY() * (1 + 2 * animation.getAnimationFactor()) / 3f);
+    }
+
     public void setDropDown(boolean flag) {
         for (Assembly assembly : subWindows.get(0).assemblies) {
             if (assembly instanceof StringWithoutBGAssembly) {

@@ -57,6 +57,11 @@ public class NumberAssembly extends Assembly {
         return RenderUtil.drawNumberBar(absX, absY, deltaX(), deltaY(), getAnimValue(), bgColor.getRGB(), ugColor.getRGB(), buttonColor.getRGB());
     }
 
+    @Override
+    public float getDrawHeight() {
+        return deltaY();
+    }
+
     //动起来后计算动画量值
     public double getAnimValue() {
         if (anim.getAnimationFactor() == 1D) {

@@ -72,6 +72,11 @@ public class WindowAssembly extends Assembly {
     }
 
     @Override
+    public float getDrawHeight() {
+        return deltaY();
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
 
     }

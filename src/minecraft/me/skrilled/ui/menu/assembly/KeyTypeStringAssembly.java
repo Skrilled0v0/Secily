@@ -6,6 +6,8 @@ import me.skrilled.ui.menu.ui.SecilyUserInterface;
 
 import java.awt.*;
 
+import static java.lang.Math.max;
+
 public class KeyTypeStringAssembly extends StringAssembly {
     Color bgColorIn;
     Color bgColorOut;
@@ -24,6 +26,11 @@ public class KeyTypeStringAssembly extends StringAssembly {
             this.bgColor = bgColorOut;
         }
         return super.draw();
+    }
+
+    @Override
+    public float getDrawHeight() {
+        return max(deltaY(),font.getHeight());
     }
 
     public void keyTyped(char typedChar, int keyCode) {

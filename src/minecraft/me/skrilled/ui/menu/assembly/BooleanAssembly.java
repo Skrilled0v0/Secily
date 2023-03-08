@@ -40,6 +40,11 @@ public class BooleanAssembly extends Assembly {
     }
 
     @Override
+    public float getDrawHeight() {
+        return deltaY();
+    }
+
+    @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
         SenseHeader.getSense.getModuleManager();
         String[] valueInfo = this.assemblyName.split("\\.");

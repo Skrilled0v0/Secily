@@ -35,6 +35,11 @@ public class Window_MouseWheel_SwitchContents_Assembly<T> extends Window_MouseWh
         return super.draw();
     }
 
+    @Override
+    public float getDrawHeight() {
+        return super.getDrawHeight();
+    }
+
     public void init() {
         this.assemblies = new ArrayList<>();
 
