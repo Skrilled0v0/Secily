@@ -108,9 +108,11 @@ public class StringAssembly extends Assembly implements IMC {
                         value = "K";
                     }
                 }
+                break;
             case 1:
                 stringWithoutBGAssembly.mouseEventHandle(mouseX, mouseY, button);
                 bgAssembly.mouseEventHandle(mouseX, mouseY, button);
+                break;
         }
     }
 }

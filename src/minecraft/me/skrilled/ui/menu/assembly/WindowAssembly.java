@@ -62,7 +62,7 @@ public class WindowAssembly extends Assembly {
             currentUsedHeight += icon.draw();
         }
         for (Assembly otherAssembly : assemblies) {
-            if (otherAssembly instanceof BGAssembly) otherAssembly.draw();
+            if (otherAssembly instanceof BGAssembly || otherAssembly instanceof StringWithoutBGAssembly) otherAssembly.draw();
             else currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
@@ -111,9 +111,6 @@ public class WindowAssembly extends Assembly {
     }
 
     public ArrayList<Assembly> getAssembliesByMousePos(int mouseX, int mouseY) {
-        if (this instanceof Window_Values_Assembly) {
-            Math.min(1, 2);
-        }
         ArrayList<Assembly> result = new ArrayList<>();
         float[] absPos = this.calcAbsPos();
         //本窗口
@@ -130,9 +127,6 @@ public class WindowAssembly extends Assembly {
         }
         //子窗口的组件
         for (WindowAssembly subWindow : subWindows) {
-            if (subWindow.fatherWindow instanceof Window_Values_Assembly) {
-                Math.max(1, 2);
-            }
             for (Assembly assembly : subWindow.getAssembliesByMousePos(mouseX, mouseY)) {
                 result.add(assembly);
             }

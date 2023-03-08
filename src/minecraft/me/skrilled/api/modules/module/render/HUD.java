@@ -19,21 +19,18 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
-
-import static org.lwjgl.opengl.GL11.*;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
     public static ValueHeader fontReplace = new ValueHeader("FontReplace", true);
     public static ValueHeader not = new ValueHeader("Notifications", true);
+    public static ValueHeader togSound = new ValueHeader("toggleSound", true);
     static ArrayList<String> notType = new ArrayList<>();
     public static ValueHeader moduleNotType = new ValueHeader("Prompt", "LEFT", notType);
     ArrayList<String> markType = new ArrayList<>();
@@ -47,7 +44,6 @@ public class HUD extends ModuleHeader {
     ValueHeader diType = new ValueHeader("DiDiType", "Blue", didis);
     ValueHeader markText = new ValueHeader("MarkText", markStr);
     ValueHeader iconSize = new ValueHeader("FlowerSize", size);
-  public static   ValueHeader togSound=new ValueHeader("toggleSound",true);
     BoundedAnimation angle = new BoundedAnimation(0, 360, 5000f, false, Easing.LINEAR);
 
     public HUD() {
@@ -105,6 +101,6 @@ public class HUD extends ModuleHeader {
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
-
+        ModuleHeader PerspectiveModifier = SenseHeader.getSense.moduleManager.getModuleByClass(me.skrilled.api.modules.module.render.PerspectiveModifier.class);
     }
 }

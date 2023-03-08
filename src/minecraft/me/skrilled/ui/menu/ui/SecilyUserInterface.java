@@ -18,6 +18,7 @@ import me.skrilled.ui.menu.assembly.color.Color_h_Assembly;
 import me.skrilled.ui.menu.assembly.color.Color_sb_Assembly;
 import me.skrilled.ui.menu.assembly.enums.FillingMode;
 import me.skrilled.ui.menu.assembly.enums.SideOfBoundedWindow;
+import me.skrilled.ui.menu.assembly.Window_Values_Assembly;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
@@ -90,6 +91,18 @@ public class SecilyUserInterface extends GuiScreen {
         String s1 = s.substring(0, 1);
         String s2 = s.substring(1);
         return s1.toUpperCase() + s2.toLowerCase();
+    }
+
+    public static void updateColorPoints() {
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
+            ((Color_h_Assembly) assembliesByClass).init = false;
+        }
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_sb_Assembly.class)) {
+            ((Color_sb_Assembly) assembliesByClass).init = false;
+        }
+        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_alpha_Assembly.class)) {
+            ((Color_alpha_Assembly) assembliesByClass).init = false;
+        }
     }
 
     @Override
@@ -255,7 +268,6 @@ public class SecilyUserInterface extends GuiScreen {
         //mainGui拖动
         if (mainGuiDrag) {
             mainGui.onDrag(mouseX - posInClickX, mouseY - posInClickY);
-            ArrayList<Assembly> assemblies1 = mainGui.getAssembliesByClass(ColorAssembly.class);
             updateColorPoints();
             posInClickX = mouseX;
             posInClickY = mouseY;
@@ -290,6 +302,10 @@ public class SecilyUserInterface extends GuiScreen {
                     }
                 }
             }
+//            for (Assembly targetAssembly : targetAssemblies) {
+//                if (targetAssembly instanceof Window_MouseWheel_Assembly)
+//                    ((Window_MouseWheel_Assembly) targetAssembly).mouseWheel(mouseWheelFactor);
+//            }
         }
         //切换ModuleType
         if (onModuleTypeSwitching) {
@@ -311,18 +327,6 @@ public class SecilyUserInterface extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
         if (closed) {
             if (MenuMotion.getMenuMotion().getAnimationFactor() == 0) mc.displayGuiScreen(null);
-        }
-    }
-
-    public static void updateColorPoints() {
-        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_h_Assembly.class)) {
-            ((Color_h_Assembly) assembliesByClass).init = false;
-        }
-        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_sb_Assembly.class)) {
-            ((Color_sb_Assembly) assembliesByClass).init = false;
-        }
-        for (Object assembliesByClass : mainGui.getAssembliesByClass(Color_alpha_Assembly.class)) {
-            ((Color_alpha_Assembly) assembliesByClass).init = false;
         }
     }
 

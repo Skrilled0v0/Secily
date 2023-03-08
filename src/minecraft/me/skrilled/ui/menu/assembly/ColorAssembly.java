@@ -53,6 +53,14 @@ public class ColorAssembly extends WindowAssembly {
 
     }
 
+    @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        color_h_assembly.init = false;
+        color_sb_assembly.init = false;
+        color_alpha_assembly.init = false;
+    }
+
     public Color getColorClicked_hsb(int[] mouseABSPos) {
         for (ArrayList<ColorPoint> colorPoints : color_sb_assembly.colorPointLists) {
             if (mouseABSPos[0] == Math.floor(colorPoints.get(0).pos[0])) {

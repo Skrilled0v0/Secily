@@ -18,6 +18,11 @@ public abstract class Assembly {
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
     public float[] pos;
+
+    public float getCurrentUsedHeight() {
+        return currentUsedHeight;
+    }
+
     /**
      * 这个窗口中已经用了的高度,最大值参考currentUsedHeight
      */

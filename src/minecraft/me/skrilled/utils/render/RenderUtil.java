@@ -97,25 +97,32 @@ public class RenderUtil implements IMC {
 
     /**
      * 这个方法绘制的圆角矩形可以使用透明度
+     *
+     * 绘制原理：gl的多边形绘制，从右下往右上逆时针给点, 注意屏幕坐标系与数学坐标系有区别
      */
-    public static void drawRoundRect(float startX, float startY, float width, float height, float radius, int rgba) {
-        if ((width - startX) < 2 * radius) return;
+    public static void drawRoundRect(float startX, float startY, float endX, float endY, float radius, int rgba) {
+        if ((endX - startX) < 1.999f * radius) {
+            return;
+        }
+        if ((endY - startY) < 1.999f * radius) {
+            return;
+        }
         float z;
-        if (startX > width) {
+        if (startX > endX) {
             z = startX;
-            startX = width;
-            width = z;
+            startX = endX;
+            endX = z;
         }
 
-        if (startY > height) {
+        if (startY > endY) {
             z = startY;
-            startY = height;
-            height = z;
+            startY = endY;
+            endY = z;
         }
         double x1 = startX + radius;
         double y1 = startY + radius;
-        double x2 = width - radius;
-        double y2 = height - radius;
+        double x2 = endX - radius;
+        double y2 = endY - radius;
         Color color = new Color(rgba, true);
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
@@ -131,22 +138,18 @@ public class RenderUtil implements IMC {
         glColor4f(r, g, b, a);
         double degree = Math.PI / 180;
         for (double i = 0; i <= 90; i += 1) {
-            glColor4f(r, g, b, a);
             glVertex2d(x2 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
         }
 
         for (double i = 90; i <= 180; i += 1) {
-            glColor4f(r, g, b, a);
             glVertex2d(x2 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
         }
 
         for (double i = 180; i <= 270; i += 1) {
-            glColor4f(r, g, b, a);
             glVertex2d(x1 + Math.sin(i * degree) * radius, y1 + Math.cos(i * degree) * radius);
         }
 
         for (double i = 270; i <= 360; i += 1) {
-            glColor4f(r, g, b, a);
             glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
         }
 
