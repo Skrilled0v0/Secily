@@ -4,6 +4,7 @@ import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
 import me.skrilled.ui.menu.ui.SecilyUserInterface;
 import me.skrilled.utils.render.BlurUtil;
 import me.skrilled.utils.render.RenderUtil;
+import me.skrilled.utils.render.ScissorPos;
 import me.surge.animation.Animation;
 
 import java.awt.*;
@@ -13,6 +14,7 @@ public class BGAssembly extends Assembly {
     BackGroundType bgType;
     boolean canBlur = false;
     Animation currentBgMotion;
+    ScissorPos scissorPos;
     float radius = 2.5f;
 
     /**
@@ -44,6 +46,16 @@ public class BGAssembly extends Assembly {
         this.canBlur = canBlur;
         this.radius = radius;
     }
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur, float radius,ScissorPos scissorPos) {
+        super(pos, fatherWindow);
+        this.color = color;
+        this.bgType = bgType;
+        this.canBlur = canBlur;
+        this.radius = radius;
+        this.scissorPos = scissorPos;
+    }
+
+
 
     @Override
     public float draw() {

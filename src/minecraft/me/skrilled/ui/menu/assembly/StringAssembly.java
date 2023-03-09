@@ -11,6 +11,7 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.ui.menu.ui.KeyBindingGui;
 import me.skrilled.utils.IMC;
 import me.skrilled.utils.render.RenderUtil;
+import me.skrilled.utils.render.ScissorPos;
 
 import java.awt.*;
 
@@ -35,6 +36,8 @@ public class StringAssembly extends Assembly implements IMC {
      * for mode:1
      */
     BGAssembly bgAssembly;
+    ScissorPos scissorAbsPos;
+    float[] scissorPos;
 
     public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColor, Color fontColor, FontDrawer font, float radius) {
         super(pos, fatherWindow);
@@ -44,6 +47,22 @@ public class StringAssembly extends Assembly implements IMC {
         this.fontColor = fontColor;
         this.font = font;
         this.radius = radius;
+        mode = 0;
+    }
+
+    /**
+     * @param scissorPos 采用相对值，把超出对应矩形区域的部分舍弃(例如画一个上半有圆角，下半没有圆角的矩形
+     */
+    public StringAssembly(float[] pos, WindowAssembly fatherWindow, String value, boolean[] centered, Color bgColor, Color fontColor, FontDrawer font, float radius, float[] scissorPos) {
+        super(pos, fatherWindow);
+        this.value = value;
+        this.centered = centered;
+        this.bgColor = bgColor;
+        this.fontColor = fontColor;
+        this.font = font;
+        this.radius = radius;
+        this.scissorPos = scissorPos;
+        calScissorPos(fatherWindow, scissorPos);
         mode = 0;
     }
 
@@ -78,9 +97,29 @@ public class StringAssembly extends Assembly implements IMC {
     }
 
     @Override
+    public void updateRenderPos() {
+        super.updateRenderPos();
+        if (scissorPos != null) {
+            calScissorPos(fatherWindow, scissorPos);
+        }
+    }
+
+    private void calScissorPos(WindowAssembly fatherWindow, float[] scissorPos) {
+        float[] scissorPosAbs = {fatherWindow.calcAbsX() + scissorPos[0] * fatherWindow.deltaX(), fatherWindow.calcAbsY() + scissorPos[1] * fatherWindow.deltaY(), fatherWindow.calcAbsX() + scissorPos[2] * fatherWindow.deltaX(), fatherWindow.calcAbsY() + scissorPos[3] * fatherWindow.deltaY()};
+        this.scissorAbsPos = new ScissorPos((int) scissorPosAbs[0], (int) scissorPosAbs[1], (int) scissorPosAbs[2], (int) scissorPosAbs[3]);
+    }
+
+    @Override
     public float draw() {
         switch (mode) {
             case 0:
+                if (scissorAbsPos != null) {
+                    updateRenderPos();
+                    RenderUtil.doScissor(scissorAbsPos.x, scissorAbsPos.y, scissorAbsPos.x1, scissorAbsPos.y1);
+                    float result = RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius, centered);
+                    RenderUtil.deScissor();
+                    return result;
+                }
                 return RenderUtil.drawCenteredStringBox_P(calcAbsPos(), font, value, bgColor.getRGB(), fontColor.getRGB(), radius, centered);
             case 1:
                 bgAssembly.draw();
@@ -94,7 +133,7 @@ public class StringAssembly extends Assembly implements IMC {
     public float getDrawHeight() {
         switch (mode) {
             case 0:
-                return max(font.getHeight(),deltaY());
+                return max(font.getHeight(), deltaY());
             case 1:
                 return Math.max(stringWithoutBGAssembly.pos[3], bgAssembly.pos[3]) - Math.min(stringWithoutBGAssembly.pos[1], bgAssembly.pos[1]);
         }

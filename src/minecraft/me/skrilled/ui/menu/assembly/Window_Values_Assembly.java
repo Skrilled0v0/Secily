@@ -4,6 +4,7 @@ import me.fontloader.FontDrawer;
 import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.value.ValueHeader;
 import me.skrilled.ui.menu.assembly.bgType.BackGroundType;
+import me.skrilled.utils.render.ScissorPos;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
@@ -226,7 +227,7 @@ public class Window_Values_Assembly extends WindowAssembly {
         //初始化背景，标题
         BGAssembly thisBG = new BGAssembly(new float[]{0, 0, 1, 1}, this, new Color(204, 204, 204, 82), BackGroundType.RoundRect, false, 8.23f);
         this.addAssembly(thisBG);
-        StringAssembly valuesTitleAssembly = new StringAssembly(new float[]{0, 0, 1, 0.1125573477818604554607543957983f}, this, this.module.toString(), new boolean[]{true, false}, new Color(255, 255, 255, 61), Color.white, Main.fontLoader.EN24, 8.28f);
+        StringAssembly valuesTitleAssembly = new StringAssembly(new float[]{0, 0, 1, 0.1325573477818604554607543957983f}, this, this.module.toString(), new boolean[]{true, false}, new Color(255, 255, 255, 61), Color.white, Main.fontLoader.EN24, 8.28f,new float[]{0, 0, 1, 0.1225573477818604554607543957983f});
         this.addAssembly(valuesTitleAssembly);
         //初始化绑定键位组件
         StringAssembly bindAssembly = new StringAssembly(new float[]{0.43473680836058216323651984355966f, 0.06273484046417969317639243528264f, 0.56526319163941783676348015644034f, 0.1125573477818604554607543957983f}, this, "Bind:" + (module.getKey() == 0 ? "N/A" : Keyboard.getKeyName(module.getKey())), new boolean[]{true, true}, new Color(200, 200, 200, 160), Color.black, Main.fontLoader.EN12, 5f);
