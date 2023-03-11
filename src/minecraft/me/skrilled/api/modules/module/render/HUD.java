@@ -101,6 +101,6 @@ public class HUD extends ModuleHeader {
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
-        ModuleHeader PerspectiveModifier = SenseHeader.getSense.moduleManager.getModuleByClass(me.skrilled.api.modules.module.render.PerspectiveModifier.class);
+
     }
 }

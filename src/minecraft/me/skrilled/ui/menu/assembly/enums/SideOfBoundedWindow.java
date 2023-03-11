@@ -4,7 +4,9 @@ public enum SideOfBoundedWindow {
     LEFT {
         @Override
         public float[] calcDeltaPos(int deltaMouseX, int deltaMouseY, boolean shift, float[] boundedWindowDeltaPos) {
-            return new float[]{deltaMouseX, shift ? deltaMouseX * boundedWindowDeltaPos[1] / boundedWindowDeltaPos[0] : 0, 0, 0};
+            float[] floats;
+            floats = new float[]{deltaMouseX, shift ? deltaMouseX * boundedWindowDeltaPos[1] / boundedWindowDeltaPos[0] : 0, 0, 0};
+            return floats;
         }
     }, DOWN {
         @Override

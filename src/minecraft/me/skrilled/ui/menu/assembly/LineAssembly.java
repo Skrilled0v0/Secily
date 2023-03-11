@@ -7,8 +7,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
-import static java.lang.Math.abs;
-
 public class LineAssembly extends Assembly {
     public float width;
     /**
@@ -72,7 +70,8 @@ public class LineAssembly extends Assembly {
         } else {
             //点了的之后
             boolean shift = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
-            boundedWindow.posUpdateByDelta(sideOfBoundedWindow.calcDeltaPos(mouseX - lastMouseX, mouseY - lastMouseY, shift, new float[]{boundedWindow.deltaX(), boundedWindow.deltaY()}));
+            boolean f = boundedWindow.posUpdateByDelta(sideOfBoundedWindow.calcDeltaPos(mouseX - lastMouseX, mouseY - lastMouseY, shift, new float[]{boundedWindow.deltaX(), boundedWindow.deltaY()}));
+            if (!f) return;
             boundedWindow.updateRenderPos();
         }
         this.lastMouseX = mouseX;

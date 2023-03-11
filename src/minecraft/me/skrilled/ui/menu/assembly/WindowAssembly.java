@@ -1,5 +1,7 @@
 package me.skrilled.ui.menu.assembly;
 
+import me.skrilled.ui.menu.ui.SecilyUserInterface;
+
 import java.util.ArrayList;
 
 public class WindowAssembly extends Assembly {
@@ -62,7 +64,8 @@ public class WindowAssembly extends Assembly {
             currentUsedHeight += icon.draw();
         }
         for (Assembly otherAssembly : assemblies) {
-            if (otherAssembly instanceof BGAssembly || otherAssembly instanceof StringWithoutBGAssembly) otherAssembly.draw();
+            if (otherAssembly instanceof BGAssembly || otherAssembly instanceof StringWithoutBGAssembly)
+                otherAssembly.draw();
             else currentUsedHeight += otherAssembly.draw();
         }
         for (WindowAssembly windowAssembly : subWindows) {
@@ -170,10 +173,16 @@ public class WindowAssembly extends Assembly {
         return result;
     }
 
-    public void posUpdateByDelta(float[] deltaPos) {
+    public boolean posUpdateByDelta(float[] deltaPos) {
+        float newDeltaX = deltaX() + deltaPos[2] - deltaPos[0];
+        float newDeltaY = deltaY() + deltaPos[3] - deltaPos[1];
+        if (newDeltaX < SecilyUserInterface.minAbsWidth) return false;
+        if (newDeltaY < SecilyUserInterface.minAbsHeight) return false;
+
         this.pos[0] += deltaPos[0];
         this.pos[1] += deltaPos[1];
         this.pos[2] += deltaPos[2];
         this.pos[3] += deltaPos[3];
+        return true;
     }
 }

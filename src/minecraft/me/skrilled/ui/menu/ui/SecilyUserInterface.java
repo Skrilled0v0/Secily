@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class SecilyUserInterface extends GuiScreen {
+    public static final float minAbsWidth = 582.5f;
+    public static final float minAbsHeight = 295.5f;
     public static ModuleType currentModuleType = ModuleType.COMBAT;
     public static boolean onModuleTypeSwitching = false;
     public static ModuleHeader currentModule = SenseHeader.getSense.getModuleManager().getModuleListByModuleType(currentModuleType).get(0);
