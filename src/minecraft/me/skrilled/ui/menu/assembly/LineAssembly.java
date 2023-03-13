@@ -1,5 +1,6 @@
 package me.skrilled.ui.menu.assembly;
 
+import me.skrilled.SenseHeader;
 import me.skrilled.ui.menu.assembly.enums.FillingMode;
 import me.skrilled.ui.menu.assembly.enums.SideOfBoundedWindow;
 import me.skrilled.utils.math.Vec3f;
@@ -65,7 +66,7 @@ public class LineAssembly extends Assembly {
      */
     @Override
     public void mouseEventHandle(int mouseX, int mouseY, int button) {
-        if (!onDrag) {
+        if (!isOnDrag()) {
             //刚点
         } else {
             //点了的之后

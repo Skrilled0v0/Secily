@@ -97,10 +97,10 @@ public class RenderUtil implements IMC {
 
     /**
      * 这个方法绘制的圆角矩形可以使用透明度
-     *
+     * <p>
      * 绘制原理：gl的多边形绘制，从右下往右上逆时针给点, 注意屏幕坐标系与数学坐标系有区别
      */
-    public static void drawRoundRect(float startX, float startY, float endX, float endY, float radius, int rgba) {
+    public static void drawRoundRect(float startX, float startY, float endX, float endY, float radius, int rgba, boolean filled) {
         if ((endX - startX) < 1.999f * radius) {
             return;
         }
@@ -134,7 +134,13 @@ public class RenderUtil implements IMC {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_LINE_SMOOTH);
 
-        glBegin(GL_POLYGON);
+        if (filled) {
+            glBegin(GL_POLYGON);
+        } else {
+            glLineWidth(5f);
+            glBegin(GL_LINE_STRIP);
+        }
+
         glColor4f(r, g, b, a);
         double degree = Math.PI / 180;
         for (double i = 0; i <= 90; i += 1) {
@@ -152,6 +158,7 @@ public class RenderUtil implements IMC {
         for (double i = 270; i <= 360; i += 1) {
             glVertex2d(x1 + Math.sin(i * degree) * radius, y2 + Math.cos(i * degree) * radius);
         }
+        glVertex2d(x2, y2 + radius);
 
         glEnd();
         glEnable(GL_TEXTURE_2D);
@@ -221,7 +228,7 @@ public class RenderUtil implements IMC {
             color = falseColor;
         } else color = tureColor;
         float radius = buttonHeight / 2f;
-        RenderUtil.drawRoundRect(posX, posY, posX + buttonWidth, posY + buttonHeight, radius, bgColor);
+        RenderUtil.drawRoundRect(posX, posY, posX + buttonWidth, posY + buttonHeight, radius, bgColor, true);
         RenderUtil.drawCircle(posX + radius + (buttonWidth - buttonHeight) * motion, posY + radius, radius, color);
         return buttonHeight;
     }
@@ -258,7 +265,7 @@ public class RenderUtil implements IMC {
         //盒子宽度
         float boxWidth = maxStringWidth + lrMargin * 2;
         //总盒子高度=上下边距*2+字体高度+行距*行数-1
-        drawRoundRect(posX, posY, posX + maxStringWidth + lrMargin * 2, posY + fontHeight + udMargin * 2 + (fontHeight + lineSpace) * motion * list.size(), 5, bgColor);
+        drawRoundRect(posX, posY, posX + maxStringWidth + lrMargin * 2, posY + fontHeight + udMargin * 2 + (fontHeight + lineSpace) * motion * list.size(), 5, bgColor, true);
         //第一个字体的高度=上下边距
         font.drawString(currentStr, posX + (boxWidth - font.getStringWidth(currentStr)) / 2f, posY + udMargin, fontColor);
         if (motion > 0) {
@@ -288,9 +295,9 @@ public class RenderUtil implements IMC {
         float barLRMargin = barWidth / 20;
         float barUDMargin = barHeight / 4;
         float buttonPos = (float) (posX + barLRMargin + (barWidth - barLRMargin * 2) * motion);
-        drawRoundRect(posX, posY, posX + barWidth, posY + barHeight, barHeight / 2f, bgColor);
-        drawRoundRect(posX + barLRMargin, posY + barUDMargin, posX + barWidth - barLRMargin, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, ugColor);
-        drawRoundRect(posX + barLRMargin, posY + barUDMargin, buttonPos, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, buttonColor);
+        drawRoundRect(posX, posY, posX + barWidth, posY + barHeight, barHeight / 2f, bgColor, true);
+        drawRoundRect(posX + barLRMargin, posY + barUDMargin, posX + barWidth - barLRMargin, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, ugColor, true);
+        drawRoundRect(posX + barLRMargin, posY + barUDMargin, buttonPos, posY + barHeight - barUDMargin, barHeight / 2f - barUDMargin, buttonColor, true);
         drawCircle(buttonPos, posY + barHeight / 2f, barHeight / 2.5f, buttonColor);
         return barHeight;
     }
@@ -327,7 +334,7 @@ public class RenderUtil implements IMC {
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
         //画背景
-        RenderUtil.drawRoundRect(posX, posY, posX + maxStringWidth + 2 * lrMargin, posY + boxHeight, font.getHeight() / 2f, bgColor);
+        RenderUtil.drawRoundRect(posX, posY, posX + maxStringWidth + 2 * lrMargin, posY + boxHeight, font.getHeight() / 2f, bgColor, true);
         //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             font.drawString(str.substring(split.get(i), split.get(i + 1)), posX + lrMargin, posY + udMargin + i * (fontHeight + lineSpacing), fontColor);
@@ -369,7 +376,7 @@ public class RenderUtil implements IMC {
         }
         boxHeight = row * (fontHeight + lineSpacing) - lineSpacing + 2 * udMargin;
         //画背景
-        RenderUtil.drawRoundRect(posX, posY, posX + maxStringWidth + 2 * lrMargin, posY + boxHeight, font.getHeight() / 2, bgColor);
+        RenderUtil.drawRoundRect(posX, posY, posX + maxStringWidth + 2 * lrMargin, posY + boxHeight, font.getHeight() / 2, bgColor, true);
         //画文字前row-1行
         for (int i = 0; i < row - 1; i++) {
             String s1 = str.substring(split.get(i), split.get(i + 1));
@@ -401,7 +408,7 @@ public class RenderUtil implements IMC {
         float boxHeight;
         float maxStringWidth = pos[2] - pos[0];
         boxHeight = (fontHeight + lineSpacing) - lineSpacing;
-        drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor);
+        drawRoundRect(pos[0], pos[1], pos[2], pos[3], radius, bgColor, true);
         font.drawString(str, pos[0] + ((centered[0]) ? ((maxStringWidth - font.getStringWidth(str)) / 2f) : lrMargin), pos[1] + (centered[1] ? ((pos[3] - pos[1] - fontHeight) / 2f) : udMargin), fontColor);
         return boxHeight;
     }
@@ -1053,7 +1060,7 @@ public class RenderUtil implements IMC {
         float scale = (float) motion.getAnimationFactor();
         float[] pos = {width() / 2f - margin - msgWidth / 2f, height() * 0.08f, width() / 2f + margin + msgWidth / 2f, (height() * 0.08f + margin * 3 + icon.getHeight() + msg.getHeight()) * scale};
         if (motion.getAnimationFactor() > 0.6f) {
-            drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB());
+            drawRoundRect(pos[0], pos[1], pos[2], pos[3], 10, new Color(0, 0, 0, 40).getRGB(), true);
             BlurUtil.blurAreaRounded(pos[0], pos[1], pos[2], pos[3], 10, 20);
             glPushMatrix();
 
@@ -1180,10 +1187,10 @@ public class RenderUtil implements IMC {
         int count = 0;
         if (isTransverse) {
             for (String icon : icons) {
-                drawRoundRect(posX + (spacing + boxWidth) * count, posY, posX + boxWidth + (spacing + boxWidth) * count, posY + boxWidth, boxWidth / 8f, bgColor);
+                drawRoundRect(posX + (spacing + boxWidth) * count, posY, posX + boxWidth + (spacing + boxWidth) * count, posY + boxWidth, boxWidth / 8f, bgColor, true);
                 count++;
             }
-            drawRoundRect(posX + (motion - 1) * (spacing + boxWidth), posY, posX + (motion - 1) * (spacing + boxWidth) + boxWidth, posY + boxWidth, boxWidth / 8f, currentColor);
+            drawRoundRect(posX + (motion - 1) * (spacing + boxWidth), posY, posX + (motion - 1) * (spacing + boxWidth) + boxWidth, posY + boxWidth, boxWidth / 8f, currentColor, true);
             count = 0;
             for (String icon : icons) {
                 font.drawCenteredString(icon, posX + boxWidth / 2f + (spacing + boxWidth) * count, posY - (font.getHeight()) / 12f, iconColor);
@@ -1191,10 +1198,10 @@ public class RenderUtil implements IMC {
             }
         } else {
             for (String icon : icons) {
-                drawRoundRect(posX, posY + spacing * count, posX + boxWidth, posY + boxWidth + spacing * count, boxWidth / 8f, bgColor);
+                drawRoundRect(posX, posY + spacing * count, posX + boxWidth, posY + boxWidth + spacing * count, boxWidth / 8f, bgColor, true);
                 count++;
             }
-            drawRoundRect(posX, posY + (motion - 1) * spacing, posX + boxWidth, posY + (motion - 1) * spacing + boxWidth, boxWidth / 8f, currentColor);
+            drawRoundRect(posX, posY + (motion - 1) * spacing, posX + boxWidth, posY + (motion - 1) * spacing + boxWidth, boxWidth / 8f, currentColor, true);
             count = 0;
             for (String icon : icons) {
                 font.drawCenteredString(icon, posX + boxWidth / 2f, posY + (boxWidth - font.getHeight()) / 2f + spacing * count, iconColor);

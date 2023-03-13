@@ -18,7 +18,6 @@ import me.skrilled.ui.menu.assembly.color.Color_h_Assembly;
 import me.skrilled.ui.menu.assembly.color.Color_sb_Assembly;
 import me.skrilled.ui.menu.assembly.enums.FillingMode;
 import me.skrilled.ui.menu.assembly.enums.SideOfBoundedWindow;
-import me.skrilled.ui.menu.assembly.Window_Values_Assembly;
 import me.surge.animation.Animation;
 import me.surge.animation.Easing;
 import net.minecraft.client.Minecraft;
@@ -116,14 +115,17 @@ public class SecilyUserInterface extends GuiScreen {
         //添加 大背景 至 底层窗口
         mainGui.addAssembly(bigBg);
 
+        UnfilledRoundRect bigBG_Liners = new UnfilledRoundRect(new float[]{0, 0, 1.0f, 1.0f}, mainGui, Color.WHITE, 0.018f * mainGui.deltaY(), 5f);
+        mainGui.addAssembly(bigBG_Liners);
+
         //实例化边线(用于拖动缩放mainGui
         Color edgeLineColorForMainGui = new Color(255, 255, 233, 198);
         LineAssembly lineDownForMainGui = new LineAssembly(new float[]{0.018f, 1, 0.982f, 1}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.SIMPLE, SideOfBoundedWindow.DOWN);
         lineDownForMainGui.canDrag = true;
-        mainGui.addAssembly(lineDownForMainGui);
+//        mainGui.addAssembly(lineDownForMainGui);
         LineAssembly lineRightForMainGui = new LineAssembly(new float[]{1, 0.018f, 1, 0.982f}, mainGui, 2.5f, edgeLineColorForMainGui, FillingMode.SIMPLE, SideOfBoundedWindow.RIGHT);
         lineRightForMainGui.canDrag = true;
-        mainGui.addAssembly(lineRightForMainGui);
+//        mainGui.addAssembly(lineRightForMainGui);
 
         //实例化 currentModuleType string
         StringWithoutBGAssembly stringWithoutBGAssembly = new StringWithoutBGAssembly(new float[]{0, 0, 1, 0.12455626829420190571090490128916f}, mainGui, upperHeadLowerOther(currentModuleType.name()), Main.fontLoader.EN36, Color.white, new boolean[]{true, true});
@@ -216,7 +218,7 @@ public class SecilyUserInterface extends GuiScreen {
 
             //通用的处理
             assembly.mouseEventHandle(mouseX, mouseY, mouseButton);
-            if (assembly.canDrag) assembly.onDrag = true;
+            if (assembly.canDrag) assembly.setOnDrag(true);
             //组件点击特殊处理
             if (!assembly.assemblyName.equalsIgnoreCase("defaultName")) {
                 //点到module的处理
@@ -277,7 +279,7 @@ public class SecilyUserInterface extends GuiScreen {
         //其他组件拖动
         ArrayList<Assembly> assembliesCanDrag = mainGui.getAssembliesCanDrag();
         for (Assembly assembly : assembliesCanDrag) {
-            if (assembly.onDrag) {
+            if (assembly.isOnDrag()) {
                 assembly.mouseEventHandle(mouseX, mouseY, 0);
             }
         }
@@ -336,7 +338,7 @@ public class SecilyUserInterface extends GuiScreen {
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         mainGuiDrag = false;
         for (Assembly assembly : mainGui.getAssembliesCanDrag()) {
-            assembly.onDrag = false;
+            assembly.setOnDrag(false);
         }
         super.mouseReleased(mouseX, mouseY, state);
     }

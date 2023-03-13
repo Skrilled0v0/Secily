@@ -18,11 +18,6 @@ public abstract class Assembly {
      * 这个（子）窗口的相对父窗口的坐标（x,y）
      */
     public float[] pos;
-
-    public float getCurrentUsedHeight() {
-        return currentUsedHeight;
-    }
-
     /**
      * 这个窗口中已经用了的高度,最大值参考currentUsedHeight
      */
@@ -33,9 +28,8 @@ public abstract class Assembly {
     public float maxHeight = 0;
     public WindowAssembly fatherWindow;
     public String assemblyName;
-    public boolean onDrag = false;
+    private boolean onDrag = false;
     public boolean canDrag = false;
-
     public Assembly(float[] pos, WindowAssembly fatherWindow) {
         this.fatherWindow = fatherWindow;
         if (fatherWindow == null) {
@@ -70,6 +64,10 @@ public abstract class Assembly {
         return true;
     }
 
+    public float getCurrentUsedHeight() {
+        return currentUsedHeight;
+    }
+
     public boolean isMouseInside(Assembly assembly, int Mx, int My, float x1, float y1, float x2, float y2) {
         return isPoint0InsideRect2D(new Vec3f(Mx, My), new Vec3f[]{new Vec3f(x1, y1), new Vec3f(x1, y2), new Vec3f(x2, y2), new Vec3f(x2, y1)});
     }
@@ -87,6 +85,7 @@ public abstract class Assembly {
      * 返回用去的高度
      */
     public abstract float draw();
+
     public abstract float getDrawHeight();
 
     public float calcAbsX() {
@@ -124,6 +123,14 @@ public abstract class Assembly {
         float dX = fatherWindow.deltaX();
         float dY = fatherWindow.deltaY();
         this.pos = new float[]{dX * positionArgs[0], dY * positionArgs[1], dX * positionArgs[2], dY * positionArgs[3]};
+    }
+
+    public boolean isOnDrag() {
+        return onDrag;
+    }
+
+    public void setOnDrag(boolean onDrag) {
+        this.onDrag = onDrag;
     }
 
     public WindowAssembly getOldestFatherWindow(int[] count) {

@@ -98,7 +98,7 @@ public class MouseOverlyRender extends ModuleHeader {
             }
             float[] rectPos = {w / 2, h / 2, w / 2 + font.getStringWidth(overlyName) + 10 + (mouseEnt != null ? 10 : 0), h / 2 + font.getHeight() + 10};
             if (mc.objectMouseOver != null && !overlyName.equalsIgnoreCase("Wait For Searching")) {
-                RenderUtil.drawRoundRect(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 3, new Color(0, 0, 0, 40).getRGB());
+                RenderUtil.drawRoundRect(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 3, new Color(0, 0, 0, 40).getRGB(),true);
                 BlurUtil.blurAreaRounded(rectPos[0], rectPos[1], rectPos[2], rectPos[3], 3, 5);
                 font.drawString(overlyName, w / 2 + 5 + (mouseEnt != null ? 10 : 0), h / 2 + 5, -1);
                 if (mouseEnt != null) {

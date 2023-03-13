@@ -19,12 +19,16 @@ import me.skrilled.utils.render.RenderUtil;
 import me.surge.animation.BoundedAnimation;
 import me.surge.animation.Easing;
 import net.minecraft.client.main.Main;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 @ModuleInitialize(name = "HUD", type = ModuleType.RENDER, key = Keyboard.KEY_H)
 public class HUD extends ModuleHeader {
@@ -101,6 +105,7 @@ public class HUD extends ModuleHeader {
         }
         if (not.isOptionOpen()) Notification.drawNotifications();
 
+//        RenderUtil.drawRoundRect(172.0f, 125.0f, 784.5f, 421.0f,5.3279f,-1,false);
 
     }
 }

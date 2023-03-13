@@ -341,7 +341,7 @@ public abstract class GuiSlot {
                 int j1 = this.left + this.width / 2 + this.getListWidth() / 2;
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
                 GlStateManager.disableTexture2D();
-                RenderUtil.drawRoundRect(i1 - 2, k - 2, j1 + 2, k + l + 2, 3, new Color(0, 0, 0, 35).getRGB());
+                RenderUtil.drawRoundRect(i1 - 2, k - 2, j1 + 2, k + l + 2, 3, new Color(0, 0, 0, 35).getRGB(),true);
                 BlurUtil.blurAreaRounded(i1 - 2, k - 2, j1 + 2, k + l + 2, 3, 10);
                 GlStateManager.enableTexture2D();
             }

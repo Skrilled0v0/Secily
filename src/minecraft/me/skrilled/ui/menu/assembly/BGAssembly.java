@@ -46,7 +46,8 @@ public class BGAssembly extends Assembly {
         this.canBlur = canBlur;
         this.radius = radius;
     }
-    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur, float radius,ScissorPos scissorPos) {
+
+    public BGAssembly(float[] pos, WindowAssembly fatherWindow, Color color, BackGroundType bgType, boolean canBlur, float radius, ScissorPos scissorPos) {
         super(pos, fatherWindow);
         this.color = color;
         this.bgType = bgType;
@@ -73,7 +74,7 @@ public class BGAssembly extends Assembly {
             case RoundRect:
                 if (canBlur)
                     BlurUtil.blurAreaRounded(absX, absY, absX + deltaX() * motion, absY + deltaY(), radius, 20);
-                RenderUtil.drawRoundRect(absX, absY, absX + deltaX() * motion, absY + deltaY(), radius, color.getRGB());
+                RenderUtil.drawRoundRect(absX, absY, absX + deltaX() * motion, absY + deltaY(), radius, color.getRGB(),true);
                 return 0f;
         }
         return 0f;

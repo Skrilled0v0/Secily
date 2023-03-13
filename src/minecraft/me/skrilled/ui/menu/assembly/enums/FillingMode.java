@@ -44,7 +44,7 @@ public enum FillingMode {
             float[] p = lineAssembly.calcAbsPos();
             Vec3f[] points = calcPoints(lineAssembly);
             Color color = new Color(lineAssembly.color.getRed(), lineAssembly.color.getGreen(), lineAssembly.color.getBlue());
-            drawPolygon(points[0], points[1], points[2], points[3], color);
+            drawPolygon(points[0], points[1], points[2], points[3], lineAssembly.color);
             RenderUtil.drawCircle(p[0], p[1], lineAssembly.width / 2, color.getRGB());
             RenderUtil.drawCircle(p[2], p[3], lineAssembly.width / 2, color.getRGB());
             return lineAssembly.deltaY();

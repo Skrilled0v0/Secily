@@ -91,7 +91,7 @@ public class GuiButton extends Gui implements IMC {
 
             startMotion(hovered);
             this.hovered = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-            RenderUtil.drawRoundRect((float) (this.xPosition - 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition - 2f * motion.getAnimationFactor()) + yMotion, (float) (this.xPosition + width + 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition + height + 2f * motion.getAnimationFactor()) + yMotion, 5, rectMotion.getColour().getRGB());
+            RenderUtil.drawRoundRect((float) (this.xPosition - 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition - 2f * motion.getAnimationFactor()) + yMotion, (float) (this.xPosition + width + 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition + height + 2f * motion.getAnimationFactor()) + yMotion, 5, rectMotion.getColour().getRGB(),true);
             BlurUtil.blurAreaRounded((float) (this.xPosition - 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition - 2f * motion.getAnimationFactor()) + yMotion, (float) (this.xPosition + width + 4f * motion.getAnimationFactor()) + xMotion, (float) (this.yPosition + height + 2f * motion.getAnimationFactor()) + yMotion, 5, 10);
 
             this.mouseDragged(mc, mouseX, mouseY);
