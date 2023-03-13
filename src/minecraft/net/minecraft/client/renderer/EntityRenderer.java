@@ -6,7 +6,6 @@ import com.google.gson.JsonSyntaxException;
 import me.skrilled.SenseHeader;
 import me.skrilled.api.event.EventRender3D;
 import me.skrilled.api.modules.module.combat.Reach;
-import me.skrilled.api.modules.module.render.MouseOverlyRender;
 import me.skrilled.api.modules.module.render.RenderModifier;
 import me.skrilled.api.modules.module.render.WorldRenderEditor;
 import net.minecraft.block.Block;
@@ -719,7 +718,7 @@ public class EntityRenderer implements IResourceManagerReloadListener {
     }
 
     private void renderHand(float partialTicks, int xOffset) {
-        this.renderHand(partialTicks, xOffset, true, true, false);
+            this.renderHand(partialTicks, xOffset, true, true, false);
     }
 
     public void renderHand(float p_renderHand_1_, int p_renderHand_2_, boolean p_renderHand_3_, boolean p_renderHand_4_, boolean p_renderHand_5_) {

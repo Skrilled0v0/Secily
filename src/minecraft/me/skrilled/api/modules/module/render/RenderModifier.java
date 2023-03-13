@@ -9,6 +9,7 @@ import me.skrilled.api.modules.ModuleHeader;
 import me.skrilled.api.modules.ModuleType;
 import me.skrilled.api.modules.module.ModuleInitialize;
 import me.skrilled.api.value.ValueHeader;
+import net.optifine.shaders.Shaders;
 
 @ModuleInitialize(name = "RenderModifier", type = ModuleType.RENDER)
 public class RenderModifier extends ModuleHeader {
@@ -19,11 +20,15 @@ public class RenderModifier extends ModuleHeader {
     public static ValueHeader fovEdit = new ValueHeader("FovEditor", false);
     public static ValueHeader noPumpkinblur = new ValueHeader("AntiPumpkin", false);
     public static ValueHeader fovDouble = new ValueHeader("Fov", fov);
+    public static ValueHeader noHand=new ValueHeader("NoHand",false);
+
     private final float old = mc.gameSettings.gammaSetting;
     ValueHeader highlight = new ValueHeader("NightVision", false);
 
     @Override
     public void onEnabled() {
+        if(noHand.isOptionOpen())
+            Shaders.setSkipRenderHands(false,true);
         if (highlight.isOptionOpen()) mc.gameSettings.gammaSetting = 114514;
     }
 

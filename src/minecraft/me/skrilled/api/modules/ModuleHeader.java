@@ -116,6 +116,8 @@ public class ModuleHeader implements IMC {
         if (isEnabled) this.onEnabled();
         else this.onDisabled();
         if (!moduleName.equals("SettingMenu") && mc.theWorld != null) {
+            if(HUD.togSound.isOptionOpen())
+                mc.thePlayer.playSound("random.click",1.0f, isEnabled?1.5f:0.8f);
             Notification.sendNotification(getModuleName() + (this.Enabled ? " Was Enabled!" : " Was Disabled!"), 1500, (this.Enabled ? Notification.infoType.SUCCESS : Notification.infoType.WARNING), posType);
         }
     }

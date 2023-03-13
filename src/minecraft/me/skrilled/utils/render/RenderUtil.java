@@ -973,12 +973,12 @@ public class RenderUtil implements IMC {
         glDisable(GL_DEPTH_TEST);
         glDepthMask(false);
         if (bkbg) {
-            drawBorder(-(int) (entity.width * 21), -(int) entity.height * 22, (int) (entity.width * 21), (int) entity.height * 20, 6, Colors.BLACK.c);
+            drawBorder(- (entity.width * 20), - entity.height * 13.5f, (entity.width * 20),  entity.height * 13.5f, 6, Colors.BLACK.c);
         }
-        drawBorder(-(int) (entity.width * 20), -(int) entity.height * 22, (int) (entity.width * 20), (int) entity.height * 20, 2, bgLineColor.getRGB());
+        drawBorder(-(entity.width * 20), - entity.height * 13.5f,(entity.width * 20), entity.height * 13.5f, 2, bgLineColor.getRGB());
         if (hpLine) {
-            drawRect((int) (entity.width * 21) + 2.7f, -(int) entity.height * 22 - 0.3f, (int) (entity.width * 21) + 4.3f, (int) entity.height * 20 + 0.3f, Colors.BLACK.c);
-            drawRect((int) (entity.width * 21) + 3f, (int) entity.height * 20 - ((int) entity.height * 20 + (int) entity.height * 22) * hpFloat, (int) (entity.width * 21) + 4f, (int) entity.height * 20, hpColor.getRGB());
+            drawRect((entity.width * 21) + 2.7f, - entity.height * 13.5f - 0.3f,  (entity.width * 21) + 4.3f,  entity.height * 13.5f + 0.3f, Colors.BLACK.c);
+            drawRect((entity.width * 21) + 3f,  entity.height * 13.5f - (entity.height * 13.5f +  entity.height * 13.5f) * hpFloat, (entity.width * 21) + 4f, entity.height * 13.5f, hpColor.getRGB());
         }
         glEnable(GL_DEPTH_TEST);
         glDepthMask(true);
@@ -1104,7 +1104,7 @@ public class RenderUtil implements IMC {
         glPopMatrix();
     }
 
-    public static void drawBorder(int x, int y, int width, int height, float borderWidth, int borderColor) {
+    public static void drawBorder(float x, float y, float width, float height, float borderWidth, int borderColor) {
         float a = (borderColor >> 24 & 0xFF) / 255.0f;
         float r = (borderColor >> 16 & 0xFF) / 255.0f;
         float g = (borderColor >> 8 & 0xFF) / 255.0f;

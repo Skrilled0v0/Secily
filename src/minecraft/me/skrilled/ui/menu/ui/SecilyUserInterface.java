@@ -30,6 +30,11 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+// TODO: 2023/2/25 目前未完善：
+//  边界限制（窗口边界不能超出游戏窗口）
+//  EnumType展开关闭与上下Value间隔自适应
+//  浮动窗口式ColorValue调色板（可同时存在多个
+//
 
 public class SecilyUserInterface extends GuiScreen {
     public static final float minAbsWidth = 582.5f;
@@ -322,6 +327,7 @@ public class SecilyUserInterface extends GuiScreen {
                 onModuleTypeSwitching = false;
             }
         }
+
         //绘制
         GL11.glPushMatrix();
         float motion = (float) MenuMotion.getMenuMotion().getAnimationFactor();

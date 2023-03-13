@@ -1,5 +1,6 @@
 package net.minecraft.client.renderer;
 
+import me.skrilled.api.modules.module.render.RenderModifier;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -293,6 +294,7 @@ public class ItemRenderer {
 
             if (this.itemToRender != null) {
                 if (this.itemToRender.getItem() instanceof ItemMap) {
+
                     this.renderItemMap(player, f2, f, f1);
                 } else if (player.getItemInUseCount() > 0) {
                     EnumAction enumaction = this.itemToRender.getItemUseAction();
@@ -322,7 +324,8 @@ public class ItemRenderer {
                 }
 
                 this.renderItem(player, this.itemToRender, ItemCameraTransforms.TransformType.FIRST_PERSON);
-            } else if (!player.isInvisible()) {
+            } else if (!player.isInvisible() && !RenderModifier.noHand.isOptionOpen()) {
+
                 this.renderPlayerArm(player, f, f1);
             }
 
